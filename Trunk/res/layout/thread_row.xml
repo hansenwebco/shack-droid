@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+android:id="@+id/LinearLayoutThreadRow"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:orientation="vertical"
+xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<TextView
+		android:id="@+id/TextViewThreadPreview"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:padding="5px"
+		android:textSize="10sp"
+		android:typeface="monospace" 
+		>
+	</TextView>
+
+</LinearLayout>
+
+<!-- android:typeface="monospace"  -->
