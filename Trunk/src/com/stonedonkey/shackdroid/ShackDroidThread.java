@@ -246,11 +246,12 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 
-		menu.add(1, 0, 1, "Reply").setIcon(R.drawable.menu_reply);
-		menu.add(1, 1, 2, "Settings").setIcon(R.drawable.menu_settings);
-		//menu.add(2, 2, 3, "INF");
-		//menu.add(2, 3, 4, "LOL");
-		//menu.add(2, 4, 5, "Mark");
+		menu.add(1, 0, 0, "Reply").setIcon(R.drawable.menu_reply);
+		menu.add(1, 1, 3, "Settings").setIcon(R.drawable.menu_settings);
+		menu.add(1, 2, 2, "Back").setIcon(R.drawable.menu_back);
+		menu.add(2, 3, 1, "Refresh").setIcon(R.drawable.menu_reload);
+		menu.add(2, 4, 4, "LOL/INF").setIcon(R.drawable.menu_lolinf);
+		menu.add(2, 5, 5, "Mark").setIcon(R.drawable.menu_mark);
 
 		return true;
 	}
@@ -278,6 +279,10 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 			startActivity(intent);
 			return true;
 		case 2:
+			finish();
+			return true;
+		case 3:
+			this.fillSaxData(postID);
 			return true;
 		}
 		return false;
