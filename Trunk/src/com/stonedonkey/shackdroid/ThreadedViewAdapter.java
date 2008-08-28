@@ -3,6 +3,7 @@ package com.stonedonkey.shackdroid;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,11 @@ public class ThreadedViewAdapter extends BaseAdapter {
 		
 		// bind the TextViews to the items in our datasource
 		TextView threadPreview = (TextView)v.findViewById(R.id.TextViewThreadPreview);
+		
+		//Typeface face = Typeface.createFromAsset(context.getAssets(), "fonts/andalemo.ttf");
+		//threadPreview.setTypeface(face);
+		
+		
 		if (threadPreview != null)
 		{
 			// TODO: This is ATROCIOUS find a better way.
