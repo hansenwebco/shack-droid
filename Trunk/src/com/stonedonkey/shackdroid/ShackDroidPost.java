@@ -65,7 +65,162 @@ public class ShackDroidPost extends Activity {
 				
 			}
 		});
+		
+		SetShackTagAttributes();
 
+
+	}
+	
+	// Add Listeners for Tag Buttons
+	private void SetShackTagAttributes()
+	{
+		// shacktag : red
+		final Button tagRed = (Button) findViewById(R.id.ButtonRed);
+		tagRed.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				ShackTagText("r{","}r");
+			}
+		});
+		// shacktag : green
+		final Button tagGreen = (Button) findViewById(R.id.ButtonGreen);
+		tagGreen.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				ShackTagText("g{","}g");
+			}
+		});
+		// shacktag : blue
+		final Button tagBlue = (Button) findViewById(R.id.ButtonBlue);
+		tagBlue.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				ShackTagText("b{","}b");
+			}
+		});
+		// shacktag : yellow
+		final Button tagYellow = (Button) findViewById(R.id.ButtonYellow);
+		tagYellow.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				ShackTagText("y{","}y");
+			}
+		});
+		// shacktag : lime
+		final Button tagLime = (Button) findViewById(R.id.ButtonLime);
+		tagLime.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				ShackTagText("l[","]l");
+			}
+		});
+		// shacktag : orange
+		final Button tagOrange = (Button) findViewById(R.id.ButtonOrange);
+		tagOrange.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				ShackTagText("n[","]n");
+			}
+		});
+		// shacktag : multisync (pink)
+		final Button tagMultiSync = (Button) findViewById(R.id.ButtonMultisync);
+		tagMultiSync.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				ShackTagText("p[","]p");
+			}
+		});
+		// shacktag : olive
+		final Button tagOlive = (Button) findViewById(R.id.ButtonOlive);
+		tagOlive.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				ShackTagText("e[","]e");
+			}
+		});
+		// shacktag : italics
+		final Button tagItalics = (Button) findViewById(R.id.ButtonItalics);
+		tagItalics.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				ShackTagText("/[","]/");
+			}
+		});
+		// shacktag : italics
+		final Button tagBold = (Button) findViewById(R.id.ButtonBold);
+		tagBold.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				ShackTagText("b[","]b");
+			}
+		});
+		// shacktag : quote
+		final Button tagQuote = (Button) findViewById(R.id.ButtonQuote);
+		tagQuote.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				ShackTagText("q[","]q");
+			}
+		});
+		// shacktag : quote
+		final Button tagSample = (Button) findViewById(R.id.ButtonSample);
+		tagSample.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				ShackTagText("s[","]s");
+			}
+		});
+		// shacktag : underline
+		final Button tagUnderline = (Button) findViewById(R.id.ButtonUnderline);
+		tagUnderline.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				ShackTagText("_[","]_");
+			}
+		});
+		// shacktag : strike
+		final Button tagStrike = (Button) findViewById(R.id.ButtonStike);
+		tagStrike.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				ShackTagText("-[","]-");
+			}
+		});
+		// shacktag : strike
+		final Button tagSpoiler = (Button) findViewById(R.id.ButtonSpoil);
+		tagSpoiler.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				ShackTagText("o[","]o");
+			}
+		});
+		// shacktag : code
+		final Button tagCode = (Button) findViewById(R.id.ButtonCode);
+		tagCode.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				ShackTagText("/{{","}}/");
+			}
+		});
+	}
+	
+	private void ShackTagText(String tagOpen, String tagClose)
+	{	
+		// if we have selected text we shack tag it...
+		TextView tv = (TextView)findViewById(R.id.EditTextPost);
+		if (tv.hasSelection())
+		{
+			Integer start = tv.getSelectionStart();
+			Integer end = tv.getSelectionEnd();
+			
+			// selections can be made backwards, in which case
+			// the start becomes > the end.. lets flip them.
+			if (start > end)
+				{
+					Integer hold = end;
+					end = start;
+					start = hold;
+				}
+			// get selected text	
+			String selection = tagOpen +  tv.getText().toString().substring(start,end) + tagClose;
+			
+			// get all text
+			String text =  tv.getText().toString();
+			
+			// replace with shack tag
+			text = text.substring(0, start) + selection + text.substring(end);
+			
+			tv.setText(text);
+			
+		}
+		// if not prompt
+		
+		
+		return;
 	}
 
 	private void DoShackPost() {
