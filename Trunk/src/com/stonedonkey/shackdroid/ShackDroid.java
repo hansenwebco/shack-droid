@@ -29,11 +29,17 @@ import android.widget.ListView;
  */
 public class ShackDroid extends ListActivity implements Runnable {
 
+
+
+
+
 	private ArrayList<ShackPost> posts;
 	private ProgressDialog pd;
 	private String storyID = null;
 	private String storyName;
 	private String errorText = "";
+	private Integer currentPage = 1;
+	private Integer storyPages = 1;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -47,8 +53,6 @@ public class ShackDroid extends ListActivity implements Runnable {
 			// // TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-
 	}
 
 	// Override the onCreateOptionsMenu to provide our own custome
@@ -56,14 +60,40 @@ public class ShackDroid extends ListActivity implements Runnable {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-
-		menu.add(0, 0, 0, "New Post");
-		menu.add(0, 1, 0, "Refresh");
-		menu.add(0, 2, 0, "Settings");
-		menu.add(0, 3, 0, "Next Page");
-		menu.add(0, 4, 0, "Prev Page");
+		
+		menu.add(1, 5, 1, "Prev Page");
+		menu.add(1, 4, 2, "Next Page");
+		menu.add(1, 3, 3, "Home");
+		menu.add(2, 0, 4, "New Post");
+		menu.add(2, 1, 5, "Refresh");
+		menu.add(2, 2, 6, "Settings");
+		
+		menu.findItem(5).setEnabled(false);
 		
 		return true;
+	}
+
+	@Override
+	public boolean onMenuOpened(int featureId, Menu menu) {
+
+		
+		if (this.currentPage  <= 1) // previous enabled
+			{
+			menu.findItem(3).setEnabled(false); // home
+			menu.findItem(5).setEnabled(false); // previous
+			}
+		else
+		{
+			menu.findItem(3).setEnabled(true); // home
+			menu.findItem(5).setEnabled(true); // previous
+		}
+		
+		if (this.currentPage >= this.storyPages) // next enabled
+			menu.findItem(4).setEnabled(false); // next
+		else
+			menu.findItem(4).setEnabled(true); // next
+		
+		return super.onMenuOpened(featureId, menu);
 	}
 
 	@Override
@@ -71,29 +101,45 @@ public class ShackDroid extends ListActivity implements Runnable {
 		//Context context = this;
 		Intent intent;
 		switch (item.getItemId()) {
-		case 0:
-
-			// Launch post form
+		case 0:	// Launch post form
 			intent = new Intent();
 			intent.setClass(this, ShackDroidPost.class);
 			intent.putExtra("storyID", storyID);
 			intent.putExtra("postID","");
 			startActivity(intent);			
-
 			return true;
-		case 1:
+		case 1: // refresh
 			fillDataSAX();
 			return true;
-		case 2:
-			// show settings dialog
+		case 2:	// show settings dialog
 			intent = new Intent();
 			intent.setClass(this, ShackDroidPreferences.class);
 			startActivity(intent);
 			return true;
+		case 3: // home
+			currentPage =1;
+			fillDataSAX();
+			return true;			
+		case 4: // forward a page
+			SetPaging(1);
+			fillDataSAX();
+			return true;
+		case 5: // previous page
+			SetPaging(-1);
+			fillDataSAX();
+			return true;			
 		}
 		return false;
 	}
 
+	private void SetPaging(Integer increment)
+	{
+		// set current page
+		if ( (currentPage + increment >= 1) && (currentPage + increment <= storyPages))
+		currentPage = currentPage + increment;
+
+	}
+	
 	private void fillDataSAX() {
 
 		// show a progress dialog
@@ -109,7 +155,13 @@ public class ShackDroid extends ListActivity implements Runnable {
 
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			String feedURL = prefs.getString("shackFeedURL", "http://shackchatty.com");
-			URL url = new URL(feedURL + "/index.xml");
+			URL url;
+			
+			if(currentPage > 1)
+				url = new URL(feedURL + "/" + this.storyID + "." + this.currentPage.toString() + ".xml");
+			else
+				url = new URL(feedURL + "/index.xml");
+
 
 			/* Get a SAXParser from the SAXPArserFactory. */
 			SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -129,6 +181,7 @@ public class ShackDroid extends ListActivity implements Runnable {
 			posts = saxHandler.GetParsedPosts();
 			storyID = saxHandler.getStoryID();
 			storyName= saxHandler.getStoryTitle(); 
+			storyPages = saxHandler.getStoryPageCount();
 
 		} catch (Exception ex) {
 			ex.printStackTrace(System.out);
@@ -152,7 +205,7 @@ public class ShackDroid extends ListActivity implements Runnable {
 		if (posts != null)
 		{	
 			// storyName is set during FillData above
-			setTitle("ShackDroid - " + storyName );
+			setTitle("ShackDroid - " + storyName + " - Page " + currentPage.toString() );
 			
 			// this is where we bind our fancy ArrayList of posts
 			TopicViewAdapter tva = new TopicViewAdapter(this, R.layout.topic_row,posts);
