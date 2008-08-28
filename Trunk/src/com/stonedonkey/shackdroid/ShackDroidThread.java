@@ -9,13 +9,16 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.util.Linkify;
 import android.view.Menu;
@@ -34,6 +37,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 	private String storyID;
 	private String postID;
 	private ProgressDialog pd;
+	private String errorText = "";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -72,7 +76,10 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 	public void run() {
 		
 		try {
-			URL url = new URL("http://shackchatty.com/thread/" + postID	+ ".xml");
+			
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			String feedURL = prefs.getString("shackFeedURL", "http://shackchatty.com");
+			URL url = new URL(feedURL + "/thread/" + postID	+ ".xml");
 
 			/* Get a SAXParser from the SAXPArserFactory. */
 			SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -93,6 +100,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 
 		} catch (Exception ex) {
 			ex.printStackTrace(System.out);
+			errorText = "An error occurred connecting to API.";
 		}
 		progressBarHandler.sendEmptyMessage(0);
 	}
@@ -109,6 +117,8 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 	
 	private void ShowData() {
 	
+		if (posts != null)
+		{
 		// this is where we bind our fancy ArrayList of posts
 		ThreadedViewAdapter tva = new ThreadedViewAdapter(this,
 				R.layout.thread_row, posts);
@@ -134,13 +144,17 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		String postCat = post.getPostCategory();
 		setPostCategoryIcon(postCat);
 		
-		 
-			
-		
-		
 		// set the post background color to be more "shack" like
 		RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayoutThread);
 		layout.setBackgroundColor(Color.parseColor("#222222"));
+		}
+		else
+		{
+			if (errorText.length() > 0) {
+				new AlertDialog.Builder(this).setTitle("Error").setPositiveButton("OK", null)
+				.setMessage(errorText).show();
+				}
+		}
 	}
 
 
