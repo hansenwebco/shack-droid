@@ -53,7 +53,7 @@
 	<ListView 
 		android:id="@android:id/list" 
 		android:layout_width="fill_parent"
-		android:layout_height="229px" 
+		android:layout_height="fill_parent" 
 		android:background="#000000"
 		android:layout_below="@+id/textAreaScroller"
 		android:choiceMode="singleChoice"
