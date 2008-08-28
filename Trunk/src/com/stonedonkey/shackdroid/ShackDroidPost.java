@@ -316,8 +316,8 @@ public class ShackDroidPost extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 	
-		menu.add(1, 0, 0, "Settings");
-		menu.add(1, 1, 0, "Tags");
+		menu.add(1, 0, 0, "Settings").setIcon(R.drawable.menu_settings);
+		menu.add(1, 1, 0, "Tags").setIcon(R.drawable.menu_shacktags);
 
 		return true;
 	}
