@@ -147,7 +147,7 @@ public class ShackDroid extends ListActivity implements Runnable {
 
 		// show a progress dialog
 		
-		pd = ProgressDialog.show(this, null, "loading chatty, please wait...", true,false); 
+		pd = ProgressDialog.show(this, null, "loading, please wait...", true,false); 
 		//pd.setIcon(R.drawable.shack_logo);
 		
 		// use the class run() method to do work
