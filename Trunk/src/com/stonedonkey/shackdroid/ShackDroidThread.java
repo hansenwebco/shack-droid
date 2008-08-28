@@ -81,7 +81,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 			/* Get the XMLReader of the SAXParser we created. */
 			XMLReader xr = sp.getXMLReader();
 			/* Create a new ContentHandler and apply it to the XML-Reader */
-			TopicViewSaxHandler saxHandler = new TopicViewSaxHandler();
+			TopicViewSaxHandler saxHandler = new TopicViewSaxHandler(this);
 			xr.setContentHandler(saxHandler);
 
 			/* Parse the xml-data from our URL. */

@@ -6,6 +6,10 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 public class TopicViewSaxHandler extends DefaultHandler
 {
 	private ArrayList<ShackPost> posts = new ArrayList<ShackPost>();	
@@ -13,6 +17,12 @@ public class TopicViewSaxHandler extends DefaultHandler
 	
 	private boolean body = false;
 
+	Boolean allowNWS = true;
+	Boolean allowPolitical = true;
+	Boolean allowStupid =  true;
+	Boolean allowInteresting = true;
+	Boolean allowOffTopic = true;
+	
 	private String bodyText = "";
 	private String posterName = "";
 	private String postID = "";
@@ -26,7 +36,23 @@ public class TopicViewSaxHandler extends DefaultHandler
 	private boolean comments = false;
 	@SuppressWarnings("unused")
 	private boolean comment = false;
+	@SuppressWarnings("unused")
+	private Context context = null;
 	
+	public TopicViewSaxHandler(Context context)
+	{
+		this.context = context;
+		
+		// set our preferences
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		allowNWS = prefs.getBoolean("allowNWS", true);
+		allowPolitical = prefs.getBoolean("allowPolitical", true);
+		allowStupid = prefs.getBoolean("allowStupid", true);
+		allowInteresting = prefs.getBoolean("allowInteresting", true);
+		allowOffTopic = prefs.getBoolean("allowOffTopic", true);
+	}
+
+
 	public ArrayList<ShackPost> GetParsedPosts()
 	{
 		return this.posts;
@@ -91,8 +117,8 @@ public class TopicViewSaxHandler extends DefaultHandler
 		
 			
 			// this handles determining how far in a reply is indented
-			// TODO: find a way to disable this logic during the main view
-			// the threaded view only needs it
+			// TODO: Pass in a bit in the constructor to turn this off
+			//       when not using threaded mose.
 			Integer currentIndent;
 			if (indent.size() > 0)
 			 currentIndent = indent.size();
@@ -113,10 +139,25 @@ public class TopicViewSaxHandler extends DefaultHandler
 				indent.add(Integer.parseInt(replyCount));
 			// end indention code
 				
-			// add new post to collection
-			ShackPost currentPost = new ShackPost( posterName, postDate, preview,postID, bodyText, replyCount, currentIndent,postCategory);
-
-			posts.add(currentPost);
+		
+			// check to see if it passes the persons filters, if it does not
+			// then we don't add it
+			if ( 
+					(postCategory.equals("nws") && allowNWS != true) ||
+					(postCategory.equals("offtopic") && allowOffTopic != true) ||
+					(postCategory.equals("political") && allowPolitical != true) ||
+					(postCategory.equals("stupid") && allowStupid != true) ||
+					(postCategory.equals("informative") && allowInteresting != true) 
+				)
+			{
+				//do nothing
+			}
+			else {
+				// add new post to collection
+				ShackPost currentPost = new ShackPost( posterName, postDate, preview,postID, bodyText, replyCount, currentIndent,postCategory);
+				posts.add(currentPost);
+			}
+			
 		}
 					
 	}

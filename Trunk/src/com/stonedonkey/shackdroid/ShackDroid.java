@@ -114,7 +114,7 @@ public class ShackDroid extends ListActivity implements Runnable {
 			/* Get the XMLReader of the SAXParser we created. */
 			XMLReader xr = sp.getXMLReader();
 			/* Create a new ContentHandler and apply it to the XML-Reader */
-			TopicViewSaxHandler saxHandler = new TopicViewSaxHandler();
+			TopicViewSaxHandler saxHandler = new TopicViewSaxHandler(this);
 			xr.setContentHandler(saxHandler);
 
 			/* Parse the xml-data from our URL. */
@@ -124,7 +124,11 @@ public class ShackDroid extends ListActivity implements Runnable {
 			/* Our ExampleHandler now provides the parsed data to us. */
 			posts = saxHandler.GetParsedPosts();
 			storyID = saxHandler.getStoryID();
-			storyName= saxHandler.getStoryTitle();
+			storyName= saxHandler.getStoryTitle(); 
+			
+			
+
+			
 
 		} catch (Exception ex) {
 			ex.printStackTrace(System.out);
