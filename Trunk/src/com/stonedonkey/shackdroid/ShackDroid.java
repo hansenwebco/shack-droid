@@ -9,12 +9,15 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +33,7 @@ public class ShackDroid extends ListActivity implements Runnable {
 	private ProgressDialog pd;
 	private String storyID = null;
 	private String storyName;
+	private String errorText = "";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -102,10 +106,10 @@ public class ShackDroid extends ListActivity implements Runnable {
 	
 	public void run() {
 		try {
-			//SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-			//String feedURL = prefs.getString("shackFeedURL", "");
-			
-			URL url = new URL("http://shackchatty.com" + "/index.xml");
+
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			String feedURL = prefs.getString("shackFeedURL", "http://shackchatty.com");
+			URL url = new URL(feedURL + "/index.xml");
 
 			/* Get a SAXParser from the SAXPArserFactory. */
 			SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -125,13 +129,10 @@ public class ShackDroid extends ListActivity implements Runnable {
 			posts = saxHandler.GetParsedPosts();
 			storyID = saxHandler.getStoryID();
 			storyName= saxHandler.getStoryTitle(); 
-			
-			
-
-			
 
 		} catch (Exception ex) {
 			ex.printStackTrace(System.out);
+			errorText = "An error occurred connecting to API.";
 		}
 		progressBarHandler.sendEmptyMessage(0);
 	}
@@ -147,15 +148,24 @@ public class ShackDroid extends ListActivity implements Runnable {
 	};
 	
 	private void ShowData() {
-		
-		// storyName is set during FillData above
-		setTitle("ShackDroid - " + storyName );
-		
-		// this is where we bind our fancy ArrayList of posts
-		TopicViewAdapter tva = new TopicViewAdapter(this, R.layout.topic_row,
-				posts);
 
-		setListAdapter(tva);
+		if (posts != null)
+		{	
+			// storyName is set during FillData above
+			setTitle("ShackDroid - " + storyName );
+			
+			// this is where we bind our fancy ArrayList of posts
+			TopicViewAdapter tva = new TopicViewAdapter(this, R.layout.topic_row,posts);
+			setListAdapter(tva);
+		}
+		else
+		{
+			if (errorText.length() > 0) {
+			new AlertDialog.Builder(this).setTitle("Error").setPositiveButton("OK", null)
+			.setMessage(errorText).show();
+			}
+		}
+	
 	}
 
 	
