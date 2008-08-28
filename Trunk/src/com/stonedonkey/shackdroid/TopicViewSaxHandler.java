@@ -32,6 +32,7 @@ public class TopicViewSaxHandler extends DefaultHandler
 	private String storyID = "";
 	private String storyName = "";
 	private String postCategory = "";
+	private Integer storyPageCount = 0;
 	@SuppressWarnings("unused")
 	private boolean comments = false;
 	@SuppressWarnings("unused")
@@ -65,6 +66,10 @@ public class TopicViewSaxHandler extends DefaultHandler
 	{
 		return this.storyName;
 	}
+	public Integer getStoryPageCount()
+	{
+		return this.storyPageCount;
+	}
 	
 	@Override
 	public void startElement(final String nsURL, final String localName,
@@ -77,6 +82,10 @@ public class TopicViewSaxHandler extends DefaultHandler
 			 
 			if (storyName.length() == 0 && attributes.getValue("story_name") != null ) // only the first node has it
 				storyName = attributes.getValue("story_name");
+			
+			if (storyPageCount == 0 && attributes.getValue("last_page") != null  ) // only the first node has it
+				if (attributes.getValue("last_page").length() > 0)
+					storyPageCount = Integer.parseInt(attributes.getValue("last_page"));
 			
 			comments = true; 
 		}
