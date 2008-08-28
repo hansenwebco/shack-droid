@@ -246,12 +246,11 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 
-		menu.add(1, 0, 0, "Reply");
-		menu.add(1, 1, 0, "Settings");
-		menu.add(1, 2, 0, "Tools");
-		//menu.add(2, 2, 0, "INF");
-		//menu.add(2, 3, 0, "LOL");
-		//menu.add(2, 4, 0, "ShackMark");
+		menu.add(1, 0, 1, "Reply").setIcon(R.drawable.menu_reply);
+		menu.add(1, 1, 2, "Settings").setIcon(R.drawable.menu_settings);
+		//menu.add(2, 2, 3, "INF");
+		//menu.add(2, 3, 4, "LOL");
+		//menu.add(2, 4, 5, "Mark");
 
 		return true;
 	}

@@ -61,12 +61,15 @@ public class ShackDroid extends ListActivity implements Runnable {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		
-		menu.add(1, 5, 1, "Prev Page");
-		menu.add(1, 4, 2, "Next Page");
-		menu.add(1, 3, 3, "Home");
-		menu.add(2, 0, 4, "New Post");
-		menu.add(2, 1, 5, "Refresh");
-		menu.add(2, 2, 6, "Settings");
+		menu.add(1, 5, 1, "Prev Page").setIcon(R.drawable.menu_back);
+		menu.add(1, 4, 2, "Next Page").setIcon(R.drawable.menu_forward);
+		menu.add(1, 3, 3, "Home").setIcon(R.drawable.menu_home);
+		menu.add(2, 0, 4, "New Post").setIcon(R.drawable.menu_addpost);
+		menu.add(2, 1, 5, "Refresh").setIcon(R.drawable.menu_reload);
+		menu.add(2, 2, 6, "Settings").setIcon(R.drawable.menu_settings);
+		
+		
+		
 		
 		menu.findItem(5).setEnabled(false);
 		
@@ -143,7 +146,9 @@ public class ShackDroid extends ListActivity implements Runnable {
 	private void fillDataSAX() {
 
 		// show a progress dialog
-		pd = ProgressDialog.show(this, null, "Loading chatty...", true,	false); 
+		
+		pd = ProgressDialog.show(this, null, "loading chatty, please wait...", true,false); 
+		//pd.setIcon(R.drawable.shack_logo);
 		
 		// use the class run() method to do work
 		Thread thread = new Thread(this); 
