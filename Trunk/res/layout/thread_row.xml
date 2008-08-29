@@ -6,7 +6,7 @@ android:layout_height="fill_parent"
 android:orientation="vertical"
 xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<TextView
+	<CheckedTextView 
 		android:id="@+id/TextViewThreadPreview"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
@@ -15,7 +15,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:typeface="monospace" 
 		android:textColor="#FFFFFF"
 		>
-	</TextView>
+	</CheckedTextView >
 
 </LinearLayout>
 
