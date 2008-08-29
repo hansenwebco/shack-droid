@@ -61,8 +61,8 @@ public class ThreadedViewAdapter extends BaseAdapter {
 			
 			String postText= post.getPostPreview();
 			
-			if (postText.length() > 46)
-				postText = pad + post.getPostPreview().substring(0, 47-(post.getIndent() * 2)) + "...";
+			if (postText.length() >= 40)
+				postText = pad + post.getPostPreview().substring(0, 40-(post.getIndent() * 2)) + "...";
 			else
 				postText= pad + post.getPostPreview();
 

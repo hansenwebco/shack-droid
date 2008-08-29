@@ -40,6 +40,7 @@ android:layout_height="fill_parent">
 	android:paddingRight="3px"
 	android:textSize="13sp"
 	android:layout_below="@+id/TextViewPosterName"
+	android:textColor="#FFFFFF"
 	/>
 
 	<TextView
