@@ -296,6 +296,12 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 				new AlertDialog.Builder(this).setTitle("ShackNote").setPositiveButton("OK", null)
 				.setMessage("There was a problem saving your note.").show();
 		
+			//ListView lv = (ListView)findViewById(R.layout.notes);
+			//lv.setAdapter((ListAdapter) nm.GetAllNotes());
+			//setContentView(lv);
+		
+			nm.close();
+			
 		}
 		return false;
 	}
