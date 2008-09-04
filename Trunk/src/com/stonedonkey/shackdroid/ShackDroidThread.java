@@ -284,6 +284,18 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		case 3:
 			this.fillSaxData(postID);
 			return true;
+		case 5: // set the note
+			ShackDroidNotesManager nm = new ShackDroidNotesManager(this);
+			nm.open();
+			
+			long result = nm.CreateNote("9999", "Donks test post", "stonedonkey", "9/1/2008 8:54:03 PM","NWS");
+			if (result > 0)
+				new AlertDialog.Builder(this).setTitle("ShackNote").setPositiveButton("OK", null)
+				.setMessage("This post has been saved to your notes").show();
+			else
+				new AlertDialog.Builder(this).setTitle("ShackNote").setPositiveButton("OK", null)
+				.setMessage("There was a problem saving your note.").show();
+		
 		}
 		return false;
 	}

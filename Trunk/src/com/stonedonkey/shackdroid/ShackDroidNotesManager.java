@@ -3,9 +3,9 @@ package com.stonedonkey.shackdroid;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
 public class ShackDroidNotesManager {
 
@@ -15,26 +15,26 @@ public class ShackDroidNotesManager {
 	public static final String POST_DATE = "postDate";
 	public static final String POST_CATEGORY = "postCategory";
 
-	// private DatabaseHelper mDbHelper;
-	private SQLiteDatabase mDb;
 
-	/**
-	 * Database creation sql statement
-	 */
+	private DatabaseHelper mDbHelper;
+	private SQLiteDatabase mDb;
+	private final Context _context;
+
+	
+	// Database creation sql statement
 	private static final String DATABASE_CREATE = "create table ShackDroidNotes (_id integer primary key autoincrement, "
 			+ "threadID text not null, messagePreview text not null,"
 			+ "posterName text not null, postDate text not null,"
 			+ "postCategory text not null)";
 
-	//private static final String DATABASE_NAME = "ShackDroidNotes";
-	private static final String DATABASE_TABLE = "notes";
-	//private static final int DATABASE_VERSION = 2;
+	private static final String DATABASE_NAME = "ShackDroid";
+	private static final String DATABASE_TABLE = "ShackDroidNotes";
+	private static final int DATABASE_VERSION = 2;
 
 	public static class DatabaseHelper extends SQLiteOpenHelper {
 
-		public DatabaseHelper(Context context, String name,
-				CursorFactory factory, int version) {
-			super(context, name, factory, version);
+		public DatabaseHelper(Context context) {
+			super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		}
 
 		@Override
@@ -52,7 +52,7 @@ public class ShackDroidNotesManager {
 
 	}
 
-	public long CreateNote(Integer threadID, String messagePreview,
+	public long CreateNote(String threadID, String messagePreview,
 			String posterName, String postDate, String postCategory) {
 
 		ContentValues initialValues = new ContentValues();
@@ -60,6 +60,7 @@ public class ShackDroidNotesManager {
 		initialValues.put(MESSAGE_PREVIEW, messagePreview);
 		initialValues.put(POSTER_NAME, posterName);
 		initialValues.put(POST_DATE, postDate);
+		initialValues.put(POST_CATEGORY, postCategory);
 
 		return mDb.insert(DATABASE_TABLE, null, initialValues);
 
@@ -75,5 +76,17 @@ public class ShackDroidNotesManager {
 	                MESSAGE_PREVIEW, POSTER_NAME,POST_DATE}, null, null, null, null, null);
 	}
 	
-
+	public ShackDroidNotesManager(Context context) {
+		this._context = context;
+	}
+	
+    public ShackDroidNotesManager open() throws SQLException {
+        mDbHelper = new DatabaseHelper(_context);
+        mDb = mDbHelper.getWritableDatabase();
+        return this;
+    }
+    
+    public void close() {
+        mDbHelper.close();
+    }
 }
