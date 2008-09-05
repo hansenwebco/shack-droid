@@ -288,17 +288,22 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 			ShackDroidNotesManager nm = new ShackDroidNotesManager(this);
 			nm.open();
 			
-			long result = nm.CreateNote("9999", "Donks test post", "stonedonkey", "9/1/2008 8:54:03 PM","NWS");
-			if (result > 0)
-				new AlertDialog.Builder(this).setTitle("ShackNote").setPositiveButton("OK", null)
-				.setMessage("This post has been saved to your notes").show();
-			else
-				new AlertDialog.Builder(this).setTitle("ShackNote").setPositiveButton("OK", null)
-				.setMessage("There was a problem saving your note.").show();
+			//long result = nm.CreateNote("9999", "Donks test post", "stonedonkey", "9/1/2008 8:54:03 PM","NWS");
+			//if (result > 0)
+			//	new AlertDialog.Builder(this).setTitle("ShackNote").setPositiveButton("OK", null)
+			//	.setMessage("This post has been saved to your notes").show();
+			//else
+			//	new AlertDialog.Builder(this).setTitle("ShackNote").setPositiveButton("OK", null)
+			//	.setMessage("There was a problem saving your note.").show();
 		
-			//ListView lv = (ListView)findViewById(R.layout.notes);
-			//lv.setAdapter((ListAdapter) nm.GetAllNotes());
-			//setContentView(lv);
+			setContentView(R.layout.notes);
+			
+			//CursorAdapter ca = (CursorAdapter) nm.GetAllNotes();
+	
+			
+			//TopicViewAdapter tva = new TopicViewAdapter(this, R.layout.topic_row,posts);
+			//setListAdapter(ca);
+			
 		
 			nm.close();
 			
