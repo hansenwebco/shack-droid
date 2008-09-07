@@ -12,6 +12,7 @@ import org.xml.sax.XMLReader;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -285,31 +286,38 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 			this.fillSaxData(postID);
 			return true;
 		case 5: // set the note
+			
 			ShackDroidNotesManager nm = new ShackDroidNotesManager(this);
 			nm.open();
 			
-			//long result = nm.CreateNote("9999", "Donks test post", "stonedonkey", "9/1/2008 8:54:03 PM","NWS");
-			//if (result > 0)
-			//	new AlertDialog.Builder(this).setTitle("ShackNote").setPositiveButton("OK", null)
-			//	.setMessage("This post has been saved to your notes").show();
-			//else
-			//	new AlertDialog.Builder(this).setTitle("ShackNote").setPositiveButton("OK", null)
-			//	.setMessage("There was a problem saving your note.").show();
-		
-			setContentView(R.layout.notes);
+			TextView tv = (TextView) findViewById(R.id.TextViewPost);
 			
-			//CursorAdapter ca = (CursorAdapter) nm.GetAllNotes();
-	
+			long result = nm.CreateNote(postID, tv.getText().toString(), "stonedonkey", "9/1/2008 8:54:03 PM","NWS");
 			
-			//TopicViewAdapter tva = new TopicViewAdapter(this, R.layout.topic_row,posts);
-			//setListAdapter(ca);
+			// notes manager returns an ID if it worked
+			if (result > 0)
+				new AlertDialog.Builder(this).setTitle("ShackNote").setPositiveButton("OK", 
+						new DialogInterface.OnClickListener() {
+                    	public void onClick(DialogInterface dialog, int whichButton) {
+                    		Intent intent = new Intent();
+                    		//intent.setClass(this, ShackDroidNotes.class);
+                    		startActivity(intent);
+                    }})
+				.setMessage("This post has been saved to your notes").show();
+			else
+				new AlertDialog.Builder(this).setTitle("ShackNote").setPositiveButton("OK", null)
+				.setMessage("There was a problem saving your note.").show();
 			
-		
 			nm.close();
+
+
+			return true;			
 			
 		}
 		return false;
 	}
+	
+
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
