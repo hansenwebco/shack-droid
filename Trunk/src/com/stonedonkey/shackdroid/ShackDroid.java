@@ -67,6 +67,7 @@ public class ShackDroid extends ListActivity implements Runnable {
 		menu.add(2, 0, 4, "New Post").setIcon(R.drawable.menu_addpost);
 		menu.add(2, 1, 5, "Refresh").setIcon(R.drawable.menu_reload);
 		menu.add(2, 2, 6, "Settings").setIcon(R.drawable.menu_settings);
+		menu.add(2, 6, 7, "Notes").setIcon(R.drawable.menu_addpost);
 		
 		
 		
@@ -130,7 +131,12 @@ public class ShackDroid extends ListActivity implements Runnable {
 		case 5: // previous page
 			SetPaging(-1);
 			fillDataSAX();
-			return true;			
+			return true;	
+		case 6:
+			intent = new Intent();
+			intent.setClass(this, ShackDroidNotes.class);
+			startActivity(intent);
+			return true;
 		}
 		return false;
 	}
