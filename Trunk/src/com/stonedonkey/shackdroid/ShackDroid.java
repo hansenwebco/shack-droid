@@ -67,7 +67,7 @@ public class ShackDroid extends ListActivity implements Runnable {
 		menu.add(2, 0, 4, "New Post").setIcon(R.drawable.menu_addpost);
 		menu.add(2, 1, 5, "Refresh").setIcon(R.drawable.menu_reload);
 		menu.add(2, 2, 6, "Settings").setIcon(R.drawable.menu_settings);
-		menu.add(2, 6, 7, "Notes").setIcon(R.drawable.menu_addpost);
+		menu.add(2, 6, 7, "ShackMarks").setIcon(R.drawable.menu_addpost);
 		
 		
 		

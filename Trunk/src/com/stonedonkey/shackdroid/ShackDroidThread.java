@@ -12,7 +12,6 @@ import org.xml.sax.XMLReader;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -24,6 +23,7 @@ import android.text.Html;
 import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -251,9 +251,17 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		menu.add(1, 1, 3, "Settings").setIcon(R.drawable.menu_settings);
 		menu.add(1, 2, 2, "Back").setIcon(R.drawable.menu_back);
 		menu.add(2, 3, 1, "Refresh").setIcon(R.drawable.menu_reload);
-		menu.add(2, 4, 4, "LOL/INF").setIcon(R.drawable.menu_lolinf);
-		menu.add(2, 5, 5, "Mark").setIcon(R.drawable.menu_mark);
+		//menu.add(2, 4, 4, "LOL/INF").setIcon(R.drawable.menu_lolinf);
+		//menu.add(2, 5, 5, "Mark").setIcon(R.drawable.menu_mark);
 
+		SubMenu sub = menu.addSubMenu(2, 4, 4, "LOL/INF").setIcon(R.drawable.menu_lolinf);
+		sub.add(0,8,0,"LOL Post");
+		sub.add(0,9,1, "INF Post");
+		
+		sub = menu.addSubMenu(2, 5, 5, "ShackMarks").setIcon(R.drawable.menu_mark);
+		sub.add(0,6,0,"View ShackMarks");
+		sub.add(0,7,1, "ShackMark Post");
+		
 		return true;
 	}
 	@Override
@@ -285,7 +293,10 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		case 3:
 			this.fillSaxData(postID);
 			return true;
-		case 5: // set the note
+		case 6:
+			LaunchNotesIntent();
+			return true;
+		case 7: //sub menu for ShackMarks
 			
 			ShackDroidNotesManager nm = new ShackDroidNotesManager(this);
 			nm.open();
@@ -296,15 +307,17 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 			
 			// notes manager returns an ID if it worked
 			if (result > 0)
-				new AlertDialog.Builder(this).setTitle("ShackNote").setPositiveButton("OK", 
-						new DialogInterface.OnClickListener() {
-                    	public void onClick(DialogInterface dialog, int whichButton) {
-                    		LaunchNotesIntent();
-                    }})
-				.setMessage("This post has been saved to your notes").show();
+//				new AlertDialog.Builder(this).setTitle("ShackMark").setPositiveButton("OK", 
+//						new DialogInterface.OnClickListener() {
+//                    	public void onClick(DialogInterface dialog, int whichButton) {
+//                    		LaunchNotesIntent();
+//                    }})
+//				.setMessage("This post has been saved to your marks").show();
+				new AlertDialog.Builder(this).setTitle("ShackMark").setPositiveButton("OK", null)
+				.setMessage("This post has been saved to your ShackMarks.").show();
 			else
-				new AlertDialog.Builder(this).setTitle("ShackNote").setPositiveButton("OK", null)
-				.setMessage("There was a problem saving your note.").show();
+				new AlertDialog.Builder(this).setTitle("ShackMark").setPositiveButton("OK", null)
+				.setMessage("There was a problem saving your mark.").show();
 			
 			nm.close();
 
