@@ -13,6 +13,8 @@ public class ShackDroidNotes extends ListActivity {
 		
 		setContentView(R.layout.notes);
 		
+		this.setTitle("ShackMarks");
+		
 		ShackDroidNotesManager nm = new ShackDroidNotesManager(this);
 		nm.open();
 		

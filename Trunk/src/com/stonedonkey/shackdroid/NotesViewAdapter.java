@@ -45,13 +45,24 @@ public class NotesViewAdapter extends BaseAdapter {
 		LayoutInflater inflate = LayoutInflater.from(context);
 		noteList.moveToPosition(position);
 		
-		String test =noteList.getString(0);
+		
 		
 		View v = inflate.inflate(rowResouceID,parent,false);
 		
+		//MESSAGE_PREVIEW,POST_DATE,POSTER_NAME,POST_CATEGORY,THREAD_ID,"_ID"
+		
 		// bind the TextViews to the items in our datasource
+		String noteValue = noteList.getString(noteList.getColumnIndexOrThrow("messagePreview"));
 		TextView notePreview = (TextView)v.findViewById(R.id.TextViewNotesPreview);
-		notePreview.setText(test);
+		notePreview.setText(noteValue);
+		
+		noteValue = noteList.getString(noteList.getColumnIndexOrThrow("postDate"));
+		TextView noteDate = (TextView)v.findViewById(R.id.TextViewNotesDatePosted);
+		noteDate.setText(noteValue);
+		
+		noteValue = noteList.getString(noteList.getColumnIndexOrThrow("posterName"));
+		TextView notePoster = (TextView)v.findViewById(R.id.TextViewNotesPosterName);
+		notePoster.setText(noteValue);
 		
 		return v;
 	}

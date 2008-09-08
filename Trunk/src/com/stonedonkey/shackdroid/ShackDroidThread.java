@@ -302,8 +302,11 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 			nm.open();
 			
 			TextView tv = (TextView) findViewById(R.id.TextViewPost);
+			TextView poster = (TextView)findViewById(R.id.TextViewThreadAuthor);
+			TextView postDate = (TextView)findViewById(R.id.TextViewThreadViewPostDate);
 			
-			long result = nm.CreateNote(postID, tv.getText().toString(), "stonedonkey", "9/1/2008 8:54:03 PM","NWS");
+			
+			long result = nm.CreateNote(postID, tv.getText().toString(), poster.toString(), postDate.toString(),"NWS");
 			
 			// notes manager returns an ID if it worked
 			if (result > 0)
