@@ -14,6 +14,7 @@ public class ShackDroidNotesManager {
 	public static final String POSTER_NAME = "posterName";
 	public static final String POST_DATE = "postDate";
 	public static final String POST_CATEGORY = "postCategory";
+	public static final String STORY_ID = "storyID";
 
 
 	private DatabaseHelper mDbHelper;
@@ -25,7 +26,7 @@ public class ShackDroidNotesManager {
 	private static final String DATABASE_CREATE = "create table ShackDroidNotes (_id integer primary key autoincrement, "
 			+ "threadID text not null, messagePreview text not null,"
 			+ "posterName text not null, postDate text not null,"
-			+ "postCategory text not null)";
+			+ "postCategory text not null, storyID text not null)";
 
 	private static final String DATABASE_NAME = "ShackDroid";
 	private static final String DATABASE_TABLE = "ShackDroidNotes";
@@ -53,7 +54,7 @@ public class ShackDroidNotesManager {
 	}
 
 	public long CreateNote(String threadID, String messagePreview,
-			String posterName, String postDate, String postCategory) {
+			String posterName, String postDate, String postCategory,String storyID) {
 
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(THREAD_ID, threadID);
@@ -61,6 +62,7 @@ public class ShackDroidNotesManager {
 		initialValues.put(POSTER_NAME, posterName);
 		initialValues.put(POST_DATE, postDate);
 		initialValues.put(POST_CATEGORY, postCategory);
+		initialValues.put(STORY_ID, storyID);
 
 		return mDb.insert(DATABASE_TABLE, null, initialValues);
 
@@ -75,7 +77,7 @@ public class ShackDroidNotesManager {
 	        //return mDb.query(DATABASE_TABLE, new String[] {"_id", THREAD_ID,
 	         //       MESSAGE_PREVIEW, POSTER_NAME,POST_DATE}, null, null, null, null, null);
 		
-		return mDb.query(DATABASE_TABLE,new String[] { MESSAGE_PREVIEW,POST_DATE,POSTER_NAME,POST_CATEGORY,THREAD_ID,"_ID" }, null, null, null, null, POST_DATE, null);
+		return mDb.query(DATABASE_TABLE,new String[] { MESSAGE_PREVIEW,POST_DATE,POSTER_NAME,POST_CATEGORY,THREAD_ID,STORY_ID,"_ID" }, null, null, null, null, POST_DATE, null);
 	}
 	
 	public ShackDroidNotesManager(Context context) {
