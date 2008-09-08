@@ -54,15 +54,15 @@ public class NotesViewAdapter extends BaseAdapter {
 		// bind the TextViews to the items in our datasource
 		String noteValue = noteList.getString(noteList.getColumnIndexOrThrow("messagePreview"));
 		TextView notePreview = (TextView)v.findViewById(R.id.TextViewNotesPreview);
-		notePreview.setText(noteValue);
+		notePreview.setText(noteValue.toString());
 		
 		noteValue = noteList.getString(noteList.getColumnIndexOrThrow("postDate"));
 		TextView noteDate = (TextView)v.findViewById(R.id.TextViewNotesDatePosted);
-		noteDate.setText(noteValue);
+		noteDate.setText(noteValue.toString());
 		
 		noteValue = noteList.getString(noteList.getColumnIndexOrThrow("posterName"));
 		TextView notePoster = (TextView)v.findViewById(R.id.TextViewNotesPosterName);
-		notePoster.setText(noteValue);
+		notePoster.setText(noteValue.toString());
 		
 		return v;
 	}
