@@ -299,9 +299,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 				new AlertDialog.Builder(this).setTitle("ShackNote").setPositiveButton("OK", 
 						new DialogInterface.OnClickListener() {
                     	public void onClick(DialogInterface dialog, int whichButton) {
-                    		Intent intent = new Intent();
-                    		//intent.setClass(this, ShackDroidNotes.class);
-                    		startActivity(intent);
+                    		LaunchNotesIntent();
                     }})
 				.setMessage("This post has been saved to your notes").show();
 			else
@@ -317,7 +315,12 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		return false;
 	}
 	
-
+	private void LaunchNotesIntent()
+	{
+		Intent intent = new Intent();
+		intent.setClass(this, ShackDroidNotes.class);
+		startActivity(intent);
+	}
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

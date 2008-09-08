@@ -1,6 +1,7 @@
 package com.stonedonkey.shackdroid;
 
 import android.app.ListActivity;
+import android.database.Cursor;
 import android.os.Bundle;
 
 public class ShackDroidNotes extends ListActivity {
@@ -11,6 +12,16 @@ public class ShackDroidNotes extends ListActivity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.notes);
+		
+		ShackDroidNotesManager nm = new ShackDroidNotesManager(this);
+		nm.open();
+		
+		Cursor cur = nm.GetAllNotes();
+		
+
+			NotesViewAdapter nva = new NotesViewAdapter(this,R.layout.notes_row,cur);	
+			setListAdapter(nva);
+	
 	}
 
 }

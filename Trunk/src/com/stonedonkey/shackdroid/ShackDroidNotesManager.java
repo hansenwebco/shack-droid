@@ -75,7 +75,7 @@ public class ShackDroidNotesManager {
 	        //return mDb.query(DATABASE_TABLE, new String[] {"_id", THREAD_ID,
 	         //       MESSAGE_PREVIEW, POSTER_NAME,POST_DATE}, null, null, null, null, null);
 		
-		return mDb.query(DATABASE_TABLE,new String[] { MESSAGE_PREVIEW }, null, null, null, null, null, null);
+		return mDb.query(DATABASE_TABLE,new String[] { MESSAGE_PREVIEW }, null, null, null, null, POST_DATE, null);
 	}
 	
 	public ShackDroidNotesManager(Context context) {
