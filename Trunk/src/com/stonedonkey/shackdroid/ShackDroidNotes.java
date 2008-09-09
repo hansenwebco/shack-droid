@@ -5,15 +5,16 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnCreateContextMenuListener;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 public class ShackDroidNotes extends ListActivity {
 
 	private Cursor notesCursor;
+	private long itemPosition;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,36 +43,43 @@ public class ShackDroidNotes extends ListActivity {
 					@Override
 					public void onCreateContextMenu(ContextMenu menu, View v,
 							ContextMenuInfo menuInfo) {
+						menu.setHeaderTitle("ShackMark Options");
 						menu.add(0, 0, 0, "View ShackMark");
-						menu.add(0, 0, 0, "Delete ShackMark");
+						menu.add(0, 1, 0, "Delete ShackMark");
 					}
-				});
-		// Add click action
-		getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-					@Override
-					public void onItemClick(AdapterView<?> parent, View v,	int position, long id) {
-						// Clicking an item starts editing it
-						
-							DeleteShackMark(id);
-							
-						
-					}
-
 				});
 
 	}
 
-	private void DeleteShackMark(Long deleteID)
-	{
-		
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+
+		switch (item.getItemId()) {
+		case 0:
+			ShowShackNotePost(itemPosition);
+			return true;
+		case 1: // delete note
+			DeleteShackNote(itemPosition);
+			return true;
+		}
+		return false;
+
+		// return super.onContextItemSelected(item);
 	}
-	
+
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 
-		notesCursor.moveToPosition(position);
+		ShowShackNotePost(itemPosition);
+
+	}
+
+
+
+	private void ShowShackNotePost(long position) {
+		notesCursor.moveToPosition(Integer.valueOf((int) position));
 
 		String postID = notesCursor.getString(notesCursor
 				.getColumnIndexOrThrow("threadID"));
@@ -83,7 +91,26 @@ public class ShackDroidNotes extends ListActivity {
 		intent.putExtra("postID", postID); // the value must be a string
 		intent.putExtra("storyID", storyID);
 		startActivity(intent);
-
 	}
 
+	public void DeleteShackNote(long position) {
+		// long testing = getListView().getSelectedItemPosition();
+
+		ShackDroidNotesManager nm = new ShackDroidNotesManager(this);
+		nm.open();
+
+		notesCursor.moveToPosition(Integer.valueOf((int) position));
+		long rowID = notesCursor.getLong(notesCursor
+				.getColumnIndexOrThrow("_id"));
+
+		nm.DeleteNote(rowID);
+
+		notesCursor = nm.GetAllNotes();
+		NotesViewAdapter nva = new NotesViewAdapter(this, R.layout.notes_row,
+				notesCursor);
+		setListAdapter(nva);
+
+		nm.close();
+
+	}
 }
