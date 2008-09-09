@@ -259,8 +259,8 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		sub.add(0,9,1, "INF Post");
 		
 		sub = menu.addSubMenu(2, 5, 5, "ShackMarks").setIcon(R.drawable.menu_mark);
-		sub.add(0,6,0,"View ShackMarks");
-		sub.add(0,7,1, "ShackMark Post");
+		sub.add(0,6,0,"View saved ShackMarks");
+		sub.add(0,7,1, "Save to ShackMarks").setIcon(R.drawable.menu_shacktags);
 		
 		return true;
 	}
