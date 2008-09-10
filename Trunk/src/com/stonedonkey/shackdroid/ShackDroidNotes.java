@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.ListView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class ShackDroidNotes extends ListActivity {
 
@@ -48,13 +49,19 @@ public class ShackDroidNotes extends ListActivity {
 						menu.add(0, 1, 0, "Delete ShackMark");
 					}
 				});
-
+ 
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
-
+		
+		// get a reference tot he ContextMenu it tells you what
+		// position on  the listview was clicked.
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+			
+		itemPosition = info.position;
+		
 		switch (item.getItemId()) {
 		case 0:
 			ShowShackNotePost(itemPosition);
