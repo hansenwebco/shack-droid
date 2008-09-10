@@ -19,7 +19,6 @@ public class ShackDroidNotes extends ListActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.notes);
@@ -49,12 +48,10 @@ public class ShackDroidNotes extends ListActivity {
 						menu.add(0, 1, 0, "Delete ShackMark");
 					}
 				});
- 
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
 		
 		// get a reference tot he ContextMenu it tells you what
 		// position on  the listview was clicked.
@@ -72,18 +69,13 @@ public class ShackDroidNotes extends ListActivity {
 		}
 		return false;
 
-		// return super.onContextItemSelected(item);
 	}
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-
-		ShowShackNotePost(itemPosition);
-
+		ShowShackNotePost(position);
 	}
-
-
 
 	private void ShowShackNotePost(long position) {
 		notesCursor.moveToPosition(Integer.valueOf((int) position));
@@ -101,7 +93,6 @@ public class ShackDroidNotes extends ListActivity {
 	}
 
 	public void DeleteShackNote(long position) {
-		// long testing = getListView().getSelectedItemPosition();
 
 		ShackDroidNotesManager nm = new ShackDroidNotesManager(this);
 		nm.open();
@@ -118,6 +109,5 @@ public class ShackDroidNotes extends ListActivity {
 		setListAdapter(nva);
 
 		nm.close();
-
 	}
 }
