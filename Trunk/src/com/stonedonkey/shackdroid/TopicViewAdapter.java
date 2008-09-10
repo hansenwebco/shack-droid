@@ -3,6 +3,7 @@ package com.stonedonkey.shackdroid;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,13 @@ public class TopicViewAdapter extends BaseAdapter {
 	private Context context;
 	private List<ShackPost> topicList;
 	private int rowResouceID;
+	private String shackLogin;
 	
-	public TopicViewAdapter(Context context,int rowResouceID, List<ShackPost> topicList ){
+	public TopicViewAdapter(Context context,int rowResouceID, List<ShackPost> topicList, String shackLogin ){
 		this.context = context;
 		this.topicList = topicList;
 		this.rowResouceID = rowResouceID;
+		this.shackLogin = shackLogin;
 	}
 	
 	@Override
@@ -48,6 +51,9 @@ public class TopicViewAdapter extends BaseAdapter {
 		TextView posterName = (TextView)v.findViewById(R.id.TextViewPosterName);
 		if (posterName != null)
 			posterName.setText(post.getPosterName());
+		
+		if (shackLogin.equalsIgnoreCase(post.getPosterName()))
+			posterName.setTextColor(Color.parseColor("#00BFF3"));
 		
 		TextView postDate = (TextView)v.findViewById(R.id.TextViewDatePosted);
 		if (postDate != null)
