@@ -65,10 +65,7 @@ public class ShackDroidPost extends Activity {
 				
 			}
 		});
-		
 		SetShackTagAttributes();
-
-
 	}
 	
 	// Add Listeners for Tag Buttons
@@ -231,8 +228,6 @@ public class ShackDroidPost extends Activity {
 
 		EditText ev = (EditText) findViewById(R.id.EditTextPost);
 		String postText = ev.getText().toString();
-
-
 		
 		// create a URL to post to
 		try {
@@ -304,7 +299,6 @@ public class ShackDroidPost extends Activity {
 			}
 	
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			TextView errorText = (TextView)findViewById(R.id.TextViewPostError);
 			errorText.setText("There was an error submitting your post.");
 			e.printStackTrace();
