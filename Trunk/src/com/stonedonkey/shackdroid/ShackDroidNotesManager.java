@@ -40,17 +40,13 @@ public class ShackDroidNotesManager {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			// TODO Auto-generated method stub
 			db.execSQL(DATABASE_CREATE);
-
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			// TODO Auto-generated method stub
-
 		}
-
 	}
 
 	public long CreateNote(String threadID, String messagePreview,
@@ -65,7 +61,6 @@ public class ShackDroidNotesManager {
 		initialValues.put(STORY_ID, storyID);
 
 		return mDb.insert(DATABASE_TABLE, null, initialValues);
-
 	}
 
 	public boolean DeleteNote(long rowId) {
@@ -73,10 +68,6 @@ public class ShackDroidNotesManager {
 	}
 	public Cursor GetAllNotes()
 	{
-	
-	        //return mDb.query(DATABASE_TABLE, new String[] {"_id", THREAD_ID,
-	         //       MESSAGE_PREVIEW, POSTER_NAME,POST_DATE}, null, null, null, null, null);
-		
 		return mDb.query(DATABASE_TABLE,new String[] { MESSAGE_PREVIEW,POST_DATE,POSTER_NAME,POST_CATEGORY,THREAD_ID,STORY_ID,"_ID" }, null, null, null, null, POST_DATE, null);
 	}
 	
