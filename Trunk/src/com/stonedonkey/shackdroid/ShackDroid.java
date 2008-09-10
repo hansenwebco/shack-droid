@@ -218,8 +218,11 @@ public class ShackDroid extends ListActivity implements Runnable {
 			// storyName is set during FillData above
 			setTitle("ShackDroid - " + storyName + " - Page " + currentPage.toString() );
 			
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			String login = prefs.getString("shackLogin", "");
+			
 			// this is where we bind our fancy ArrayList of posts
-			TopicViewAdapter tva = new TopicViewAdapter(this, R.layout.topic_row,posts);
+			TopicViewAdapter tva = new TopicViewAdapter(this, R.layout.topic_row,posts,login);
 			setListAdapter(tva);
 		}
 		else
