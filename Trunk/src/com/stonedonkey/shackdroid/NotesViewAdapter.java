@@ -20,9 +20,6 @@ public class NotesViewAdapter extends BaseAdapter {
 		this.rowResouceID = rowResouceID;
 	}
 	
-	
-	
-
 	@Override
 	public int getCount() {
 		return noteList.getCount();
@@ -44,12 +41,8 @@ public class NotesViewAdapter extends BaseAdapter {
 		
 		LayoutInflater inflate = LayoutInflater.from(context);
 		noteList.moveToPosition(position);
-		
-		
-		
+	
 		View v = inflate.inflate(rowResouceID,parent,false);
-		
-		//MESSAGE_PREVIEW,POST_DATE,POSTER_NAME,POST_CATEGORY,THREAD_ID,"_ID"
 		
 		// bind the TextViews to the items in our datasource
 		String noteValue = noteList.getString(noteList.getColumnIndexOrThrow("messagePreview"));
@@ -66,5 +59,4 @@ public class NotesViewAdapter extends BaseAdapter {
 		
 		return v;
 	}
-
 }
