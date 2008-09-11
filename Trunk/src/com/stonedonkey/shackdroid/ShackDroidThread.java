@@ -136,8 +136,16 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 
 		ShackPost post = posts.get(0);
 
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		String login = prefs.getString("shackLogin", "");		
+		
 		TextView posterName = (TextView) findViewById(R.id.TextViewThreadAuthor);
 		posterName.setText(post.getPosterName());
+		
+		if (login.equalsIgnoreCase(post.getPosterName()))
+			posterName.setTextColor(Color.parseColor("#00BFF3"));
+		else
+			posterName.setTextColor(Color.parseColor("#FFBA00"));
 
 		TextView postDate = (TextView) findViewById(R.id.TextViewThreadViewPostDate);
 		postDate.setText(post.getPostDate());
@@ -180,9 +188,17 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		tv.setText(Html.fromHtml(postText));
 		Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
 
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		String login = prefs.getString("shackLogin", "");
+		
 		TextView posterName = (TextView) findViewById(R.id.TextViewThreadAuthor);
 		posterName.setText(posts.get(position).getPosterName());
 
+		if (login.equalsIgnoreCase(posts.get(position).getPosterName()))
+			posterName.setTextColor(Color.parseColor("#00BFF3"));
+		else
+			posterName.setTextColor(Color.parseColor("#FFBA00"));
+		
 		TextView postDate = (TextView) findViewById(R.id.TextViewThreadViewPostDate);
 		postDate.setText(posts.get(position).getPostDate());
 		
