@@ -3,6 +3,7 @@ package com.stonedonkey.shackdroid;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,8 +49,8 @@ public class ThreadedViewAdapter extends BaseAdapter {
 		// bind the TextViews to the items in our datasource
 		TextView threadPreview = (TextView)v.findViewById(R.id.TextViewThreadPreview);
 		
-		//Typeface face = Typeface.createFromAsset(context.getAssets(), "fonts/andalemo.ttf");
-		//threadPreview.setTypeface(face);
+		Typeface face = Typeface.createFromAsset(context.getAssets(), "fonts/Monospace821.TTF");
+		threadPreview.setTypeface(face);
 		
 		
 		if (threadPreview != null)
@@ -61,7 +62,7 @@ public class ThreadedViewAdapter extends BaseAdapter {
 			
 			String postText= post.getPostPreview();
 			
-			if (postText.length() >= 40)
+			if (postText.length() >= 39)
 				postText = pad + post.getPostPreview().substring(0, 40-(post.getIndent() * 2)) + "...";
 			else
 				postText= pad + post.getPostPreview();
