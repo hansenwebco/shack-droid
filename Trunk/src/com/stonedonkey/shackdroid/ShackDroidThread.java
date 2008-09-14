@@ -39,6 +39,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 	private String postID;
 	private ProgressDialog pd;
 	private String errorText = "";
+	private Integer currentPosition = 0;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -139,6 +140,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		String login = prefs.getString("shackLogin", "");		
 		
+		
 		TextView posterName = (TextView) findViewById(R.id.TextViewThreadAuthor);
 		posterName.setText(post.getPosterName());
 		
@@ -171,6 +173,8 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 
+		currentPosition = position;
+		
 		//l.setChoiceMode(1);
 		l.setItemChecked(position, true);
 				
@@ -317,12 +321,14 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 			ShackDroidNotesManager nm = new ShackDroidNotesManager(this);
 			nm.open();
 			
-			TextView tv = (TextView) findViewById(R.id.TextViewPost);
+			//TextView tv = (TextView) findViewById(R.id.TextViewPost);
 			TextView poster = (TextView)findViewById(R.id.TextViewThreadAuthor);
 			TextView postDate = (TextView)findViewById(R.id.TextViewThreadViewPostDate);
 			
+			ShackPost shackPost= posts.get(currentPosition);
+			String previewText = shackPost.getPostPreview();
 			
-			long result = nm.CreateNote(postID, tv.getText().toString(), poster.getText().toString(), postDate.getText().toString(),"NWS",storyID);
+			long result = nm.CreateNote(postID, previewText, poster.getText().toString(), postDate.getText().toString(),"NWS",storyID);
 			
 			// notes manager returns an ID if it worked
 			if (result > 0)
