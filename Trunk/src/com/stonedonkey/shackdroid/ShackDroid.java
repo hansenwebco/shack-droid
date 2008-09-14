@@ -60,7 +60,7 @@ public class ShackDroid extends ListActivity implements Runnable {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		
+		 
 		menu.add(1, 5, 1, "Prev Page").setIcon(R.drawable.menu_back);
 		menu.add(1, 4, 2, "Next Page").setIcon(R.drawable.menu_forward);
 		menu.add(1, 3, 3, "Home").setIcon(R.drawable.menu_home);
