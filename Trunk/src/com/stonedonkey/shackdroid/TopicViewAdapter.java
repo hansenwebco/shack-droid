@@ -1,5 +1,9 @@
 package com.stonedonkey.shackdroid;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -58,6 +62,18 @@ public class TopicViewAdapter extends BaseAdapter {
 		TextView postDate = (TextView)v.findViewById(R.id.TextViewDatePosted);
 		if (postDate != null)
 			postDate.setText(post.getPostDate());
+		
+	
+		// Sep 14, 2008 2:31pm CST  
+		//DateFormat dfm = new SimpleDateFormat("MMM d, y hh:mmaa z");
+		//Date conDate = null;
+		//try {  
+		//	conDate = dfm.parse(post.getPostDate());
+		//} catch (ParseException e) {
+		//	// TODO Auto-generated catch block
+		//	e.printStackTrace();
+		//}   
+	
 		
 		TextView postReplyCount = (TextView)v.findViewById(R.id.TextViewReplyCount);
 		if (postReplyCount !=null)
