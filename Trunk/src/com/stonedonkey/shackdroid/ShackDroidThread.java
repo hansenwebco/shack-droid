@@ -49,6 +49,8 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		setContentView(R.layout.thread);
 		this.setTitle("ShackDroid - View Thread");
 		
+		
+		
 		if (savedInstanceState != null) {
 			// savedInstanceState.getLong("storyID");
 			postID = savedInstanceState.getString("postID");
