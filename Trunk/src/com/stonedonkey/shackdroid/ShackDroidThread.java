@@ -289,6 +289,8 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent;
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		String login = "";
 		switch (item.getItemId()) {
 		case 0:
 		
@@ -349,8 +351,17 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 			nm.close();
 
 
-			return true;			
-			
+			return true;
+		case 8:
+			// lol post
+			login = prefs.getString("shackLogin", "");	
+			ExtendedSitesHandler.INFLOLPost(this,login,postID,"LOL");
+			return true;
+		case 9:
+			// inf post
+			login = prefs.getString("shackLogin", "");	
+			ExtendedSitesHandler.INFLOLPost(this,login,postID,"INF");
+			return true;
 		}
 		return false;
 	}
