@@ -269,18 +269,18 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 
-		menu.add(1, 0, 0, "Reply").setIcon(R.drawable.menu_reply);
-		menu.add(1, 1, 3, "Settings").setIcon(R.drawable.menu_settings);
+		menu.add(1, 0, 3, "Reply").setIcon(R.drawable.menu_reply);
+		menu.add(1, 1, 1, "Settings").setIcon(R.drawable.menu_settings);
 		menu.add(1, 2, 2, "Back").setIcon(R.drawable.menu_back);
-		menu.add(2, 3, 1, "Refresh").setIcon(R.drawable.menu_reload);
+		menu.add(1, 3, 4, "Refresh").setIcon(R.drawable.menu_reload);
 		//menu.add(2, 4, 4, "LOL/INF").setIcon(R.drawable.menu_lolinf);
 		//menu.add(2, 5, 5, "Mark").setIcon(R.drawable.menu_mark);
 
-		SubMenu sub = menu.addSubMenu(2, 4, 4, "LOL/INF").setIcon(R.drawable.menu_lolinf);
+		SubMenu sub = menu.addSubMenu(1, 4, 1, "LOL/INF").setIcon(R.drawable.menu_lolinf);
 		sub.add(0,8,0,"LOL Post");
 		sub.add(0,9,1, "INF Post");
 		
-		sub = menu.addSubMenu(2, 5, 5, "ShackMarks").setIcon(R.drawable.menu_mark);
+		sub = menu.addSubMenu(1, 5, 5, "ShackMarks").setIcon(R.drawable.menu_mark);
 		sub.add(0,6,0,"View saved ShackMarks");
 		sub.add(0,7,1, "Save to ShackMarks").setIcon(R.drawable.menu_shacktags);
 		
