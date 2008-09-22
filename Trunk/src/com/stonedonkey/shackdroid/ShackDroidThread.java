@@ -51,22 +51,23 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		
 		
 		
-		if (savedInstanceState != null) {
+		//if (savedInstanceState != null) {
 			// savedInstanceState.getLong("storyID");
-			postID = savedInstanceState.getString("postID");
-			storyID = savedInstanceState.getString("storyID");
-		} 
-		else 
-		{
+		//	postID = savedInstanceState.getString("postID");
+		//	storyID = savedInstanceState.getString("storyID");
+		//} 
+		//else 
+		//{
 			Bundle extras = this.getIntent().getExtras();
 			postID = extras.getString("postID");
 			storyID = extras.getString("storyID");
-		}
+		//}
 
 		fillSaxData(postID);
 
 	}
-	
+
+
 	private void fillSaxData(String postID) {
 		// show a progress dialog
 		pd = ProgressDialog.show(this, null, "Loading thread...", true,	true); 
