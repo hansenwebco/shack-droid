@@ -10,10 +10,12 @@ public class ShackPost {
 	private String replyCount =null;
 	private Integer indent = 0;
 	private String postCategory;
+	private Integer postIndex = null;
+	private Integer orderID = 0;
 	
 
 	public ShackPost(String posterName, String postDate, String postPreview,
-			String postID, String postText,String replyCount,Integer indent,String postCategory) {
+			String postID, String postText,String replyCount,Integer indent,String postCategory, Integer postIndex,Integer orderID) {
 		this.posterName = posterName;
 		this.postDate = postDate;
 		this.postPreview = postPreview;
@@ -22,9 +24,23 @@ public class ShackPost {
 		this.replyCount = replyCount; 
 		this.indent = indent;
 		this.postCategory = postCategory;
+		this.postIndex = postIndex;
+		this.orderID = orderID; 
 	}
 
-	
+	public Integer getOrderID()
+	{
+		return orderID;
+	}
+	public void setPostIndex(Integer postIndex)
+	{
+		this.postIndex = postIndex;
+	}
+	public Integer getPostIndex()
+	{
+		return postIndex;
+	}
+
 	public String getPostCategory()
 	{
 		return postCategory;

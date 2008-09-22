@@ -2,6 +2,8 @@ package com.stonedonkey.shackdroid;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -80,6 +82,9 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 	@Override
 	public void run() {
 		
+		Comparator<ShackPost> byPostID = new SortByPostIDComparator();
+		Comparator<ShackPost> byOrderID = new SortByOrderIDComparator();
+		
 		try {
 			
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -102,6 +107,22 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 
 			/* Our ExampleHandler now provides the parsed data to us. */
 			posts = saxHandler.GetParsedPosts();
+			
+			// sort our posts by PostID
+			Collections.sort(posts,byPostID);
+			
+			// set the index on them based on order
+			ShackPost tempPost = null;
+			for (int x=0;x<posts.size();x++)
+			{
+				tempPost = posts.get(x);
+				tempPost.setPostIndex(x);
+			}
+			
+			// set the order back to the orginal sort
+			Collections.sort(posts,byOrderID);
+
+			
 
 		} catch (Exception ex) {
 			ex.printStackTrace(System.out);
@@ -387,4 +408,20 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		}
 	}
 
+}
+class SortByPostIDComparator implements Comparator<ShackPost>
+{
+	@Override
+	public int compare(ShackPost object1, ShackPost object2) {
+		return Integer.valueOf(object2.getPostID()) - Integer.valueOf(object1.getPostID());
+	}
+}
+class SortByOrderIDComparator implements Comparator<ShackPost>
+{
+
+	@Override
+	public int compare(ShackPost object1, ShackPost object2) {
+		return object1.getOrderID() - object2.getOrderID();
+	}
+	
 }
