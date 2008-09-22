@@ -15,7 +15,7 @@
                 android:password="true"/>
     </PreferenceCategory>
     <PreferenceCategory
-            android:title="Chatty Settings">    
+            android:title="Chatty Filters">    
     
     		<CheckBoxPreference 
     		android:key="allowNWS" 
@@ -48,6 +48,14 @@
     		android:summary="Country songs backwards."/>    
     
     </PreferenceCategory>
+ <PreferenceCategory
+            android:title="Chatty Settings">
+         	<CheckBoxPreference 
+    		android:key="highlightUserThreads" 
+    		android:title="Highlight Threads"
+    		android:defaultValue="true" 
+    		android:summary="Highlight my posts blue in threaded view."/>    
+ </PreferenceCategory>    
      <PreferenceCategory
             android:title="Advanced">
         <EditTextPreference
