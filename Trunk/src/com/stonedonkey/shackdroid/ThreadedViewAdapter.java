@@ -71,6 +71,10 @@ public class ThreadedViewAdapter extends BaseAdapter {
 			Boolean highlightThread = prefs.getBoolean("highlightUserThreads", true);
 			 
 			// show this users posts as blue
+			if (post.getPostIndex() > 9)
+				threadPreview.setTextColor(Color.parseColor("#777777"));
+			
+			
 			if (highlightThread == true)
 				if (post.getPosterName().toString().equalsIgnoreCase(login))
 					threadPreview.setTextColor(Color.parseColor("#00BFF3"));

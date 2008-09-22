@@ -124,10 +124,7 @@ public class TopicViewSaxHandler extends DefaultHandler
 		{
 			body = false;
 		
-			
 			// this handles determining how far in a reply is indented
-			// TODO: Pass in a bit in the constructor to turn this off
-			//       when not using threaded mose.
 			Integer currentIndent;
 			if (indent.size() > 0)
 			 currentIndent = indent.size();
@@ -163,13 +160,14 @@ public class TopicViewSaxHandler extends DefaultHandler
 			}
 			else {
 				// add new post to collection
-				ShackPost currentPost = new ShackPost( posterName, postDate, preview,postID, bodyText, replyCount, currentIndent,postCategory);
+				ShackPost currentPost = new ShackPost( posterName, postDate, preview,postID, bodyText, replyCount, currentIndent,postCategory,0,posts.size());
 				posts.add(currentPost);
 			}
 			
 		}
 					
 	}
+
 		
 	@Override
 	public void characters(char[] ch, int start, int length)
