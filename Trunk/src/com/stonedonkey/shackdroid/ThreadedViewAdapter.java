@@ -3,7 +3,10 @@ package com.stonedonkey.shackdroid;
 import java.util.List;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +56,7 @@ public class ThreadedViewAdapter extends BaseAdapter {
 		threadPreview.setTypeface(face);
 		
 		
+		
 		if (threadPreview != null)
 		{
 			// TODO: This is ATROCIOUS find a better way.
@@ -61,8 +65,17 @@ public class ThreadedViewAdapter extends BaseAdapter {
 				pad = pad + "  ";	
 			
 			String postText= post.getPostPreview();
+		
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+			String login = prefs.getString("shackLogin", "");
+			Boolean highlightThread = prefs.getBoolean("highlightUserThreads", true);
+			 
+			// show this users posts as blue
+			if (highlightThread == true)
+				if (post.getPosterName().toString().equalsIgnoreCase(login))
+					threadPreview.setTextColor(Color.parseColor("#00BFF3"));
 			
-			if (postText.length() >= 39)
+			if (pad.length() + postText.length() >= 39)
 				postText = pad + post.getPostPreview().substring(0, 40-(post.getIndent() * 2)) + "...";
 			else
 				postText= pad + post.getPostPreview();
