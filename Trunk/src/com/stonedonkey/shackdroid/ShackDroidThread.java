@@ -245,6 +245,8 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 	}
 	private void SpoilerTextView()
 	{
+		// We have to use the Spannable interface to handle spoilering text
+		// not the best but works.
 		TextView tv = (TextView) findViewById(R.id.TextViewPost);
 		String text = tv.getText().toString();
 		Integer end = 0;
