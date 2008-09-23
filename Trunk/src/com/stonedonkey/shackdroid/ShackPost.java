@@ -16,6 +16,7 @@ public class ShackPost {
 
 	public ShackPost(String posterName, String postDate, String postPreview,
 			String postID, String postText,String replyCount,Integer indent,String postCategory, Integer postIndex,Integer orderID) {
+		
 		this.posterName = posterName;
 		this.postDate = postDate;
 		this.postPreview = postPreview;
