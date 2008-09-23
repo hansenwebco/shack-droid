@@ -79,14 +79,23 @@ public class ThreadedViewAdapter extends BaseAdapter {
 				if (post.getPosterName().toString().equalsIgnoreCase(login))
 					threadPreview.setTextColor(Color.parseColor("#00BFF3"));
 			
-			if (pad.length() >= 39)
-				postText = pad.substring(0,36) + "...";
-			else if (pad.length() + postText.length() >= 39)
-				postText = pad + post.getPostPreview().substring(0, 40-(post.getIndent() * 2)) + "...";
-			else
-				postText= pad + post.getPostPreview();
 
-			threadPreview.setText(postText);
+			try
+			{
+				if (pad.length() >= 39)
+					postText = pad.substring(0,36) + "...";
+				else if (pad.length() + postText.length() >= 39)
+					postText = pad + postText.substring(0, 39-(post.getIndent() * 2)) + "...";
+				else
+					postText= pad + postText;
+				
+				threadPreview.setText(postText);
+			}
+			catch (Exception ex)
+			{
+				// something went bad with parsing this text.. empty post
+			}
+			
 		}
 		return v;
 	}
