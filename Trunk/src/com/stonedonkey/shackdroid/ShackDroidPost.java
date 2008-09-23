@@ -30,6 +30,7 @@ public class ShackDroidPost extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.post);
+		setTitle("ShackDroid - Post");
 
 		if (savedInstanceState != null) {
 			// savedInstanceState.getLong("storyID");
@@ -213,9 +214,13 @@ public class ShackDroidPost extends Activity {
 			
 			tv.setText(text);
 			
+
 		}
 		// if not prompt
 		
+		TableLayout tvTags = (TableLayout)findViewById(R.id.TableLayoutShackTags);
+		tvTags.setVisibility(2);
+	
 		
 		return;
 	}
