@@ -216,7 +216,7 @@ public class ShackDroid extends ListActivity implements Runnable {
 		if (posts != null)
 		{	
 			// storyName is set during FillData above
-			setTitle("ShackDroid - " + storyName + " - Page " + currentPage.toString() );
+			setTitle("ShackDroid - " + storyName + " - " + currentPage.toString() + " of " + this.storyPages.toString() );
 			
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			String login = prefs.getString("shackLogin", "");
