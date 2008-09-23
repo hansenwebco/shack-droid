@@ -55,7 +55,7 @@
 	
 	<TableLayout
 	android:id="@+id/TableLayoutShackTags"
-	android:visibility="gone"
+	android:visibility="visible"
 	android:paddingTop="8px"
 	android:layout_x="0px"
 	android:layout_y="280px"

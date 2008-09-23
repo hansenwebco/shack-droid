@@ -8,10 +8,14 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +28,8 @@ public class ShackDroidPost extends Activity {
 
 	private String postID;
 	private String storyID;
+	private String selectedShackTagOpen = "";
+	private String selectedShackTagClose = "";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -216,15 +222,20 @@ public class ShackDroidPost extends Activity {
 			
 
 		}
-		// if not prompt
+		else // prompt
+		{
+			selectedShackTagOpen = tagOpen;
+			selectedShackTagClose = tagClose;
+			showDialog(1);
+		}
 		
-		TableLayout tvTags = (TableLayout)findViewById(R.id.TableLayoutShackTags);
-		tvTags.setVisibility(2);
-	
 		
-		return;
+		
+		
+		
+		//return;
 	}
-
+	
 	private void DoShackPost() {
 		// get the login and password for user out of our preferences
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -310,6 +321,54 @@ public class ShackDroidPost extends Activity {
 		}
 
 	}
+	 
+	@Override
+	 protected Dialog onCreateDialog(int id)
+	 {
+		switch (id) {
+		case 1:
+		 	// Ripped from AlertDialogSamples.java SDK examples
+			// This example shows how to add a custom layout to an AlertDialog
+	        LayoutInflater factory = LayoutInflater.from(this);
+	        final View textEntryView = factory.inflate(R.layout.text_entry_dialog, null);
+	        return new AlertDialog.Builder(ShackDroidPost.this)
+	            .setTitle("Enter text to ShackTag")
+	            .setView(textEntryView)
+	            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+	                public void onClick(DialogInterface dialog, int whichButton) {
+
+	                    /* User clicked OK so do some stuff */
+	                	EditText tv = (EditText)findViewById(R.id.EditTextPost);
+	                	String text = tv.getText().toString();
+	                	
+	                	TextView shackTag = (TextView)textEntryView.findViewById(R.id.TextViewShackTagText);
+	                	String shackTagText = shackTag.getText().toString();
+	                	shackTag.setText(""); // reset entry box
+               	
+	                	Integer cursorPosition = tv.getSelectionStart();
+	                	
+	                	text = text.substring(0,cursorPosition) + selectedShackTagOpen + shackTagText + selectedShackTagClose + text.substring(cursorPosition);
+	                	tv.setText(text);
+	                	
+	                	tv.setSelection(text.length());
+	                	
+	                	
+	                }
+	            })
+	            .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+	                public void onClick(DialogInterface dialog, int whichButton) {
+
+	                    /* User clicked cancel so do some stuff */
+	                }
+	            }).create();	
+    
+        
+	        
+		}
+		return null;
+	
+	 }
+	 
 	// menu creation
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
