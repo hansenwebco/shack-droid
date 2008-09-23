@@ -79,7 +79,8 @@ public class ThreadedViewAdapter extends BaseAdapter {
 				if (post.getPosterName().toString().equalsIgnoreCase(login))
 					threadPreview.setTextColor(Color.parseColor("#00BFF3"));
 			
-
+			// we can use the epipsize on the actual layout but it looks pretty
+			// crappy.. this looks better ATM
 			try
 			{
 				if (pad.length() >= 39)

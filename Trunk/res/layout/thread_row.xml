@@ -11,12 +11,19 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:padding="5px"
+		android:paddingRight="20px"
 		android:textSize="11sp"
 		android:typeface="monospace" 
 		android:textColor="#FFFFFF"
+
 		>
 	</CheckedTextView >
 
 </LinearLayout>
-
+<!-- 
+		// these tags will autoelipse things at the end of the line
+		// but it looks bad... might work with it more later
+		android:ellipsize="end"
+		android:singleLine="true"
+ -->
 <!-- android:typeface="monospace"  -->
