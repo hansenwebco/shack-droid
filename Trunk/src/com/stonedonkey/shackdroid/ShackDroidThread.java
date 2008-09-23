@@ -22,6 +22,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.style.BackgroundColorSpan;
 import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +34,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.TextView.BufferType;
 
 public class ShackDroidThread extends ListActivity implements Runnable {
 
@@ -156,7 +159,16 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		// TODO: Consolidate this with the call when the list view is
 		// clicked.. to sloppy
 		String postText = ParseShackText(posts.get(0).getPostText());
-		tv.setText(Html.fromHtml(postText));
+		tv.setText(Html.fromHtml(postText),BufferType.EDITABLE);
+		// add spoilers
+		String text = tv.getText().toString();
+		if (text.indexOf("!!-") > 0)
+		{
+			Integer start = text.indexOf("!!-");
+			Integer end = text.indexOf("-!!");
+			Spannable str = (Spannable) tv.getText();
+			str.setSpan(new BackgroundColorSpan(Color.parseColor("#383838")), start, end+3,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		}
 		Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
 
 		ShackPost post = posts.get(0);
@@ -211,9 +223,18 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		postID = posts.get(position).getPostID();
 		
 		postText = ParseShackText(postText);
-
+	
 		// TODO: Consolidate with the load to make this better, sloppy.
-		tv.setText(Html.fromHtml(postText));
+		tv.setText(Html.fromHtml(postText),BufferType.EDITABLE);
+		// add spoilers
+		String text = tv.getText().toString();
+		if (text.indexOf("!!-") > 0)
+		{
+			Integer start = text.indexOf("!!-");
+			Integer end = text.indexOf("-!!");
+			Spannable str = (Spannable) tv.getText();
+			str.setSpan(new BackgroundColorSpan(Color.parseColor("#383838")), start, end+3,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		}
 		Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -282,7 +303,12 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 				"<b>$1</b>");
 		text = text.replaceAll("<span class=\"jt_italic\">(.*?)</span>",
 				"<i>$1</i>");
-
+		
+		// You can only do "highlights" on the actual TextView itself, so we mark up spoilers 
+		// !!-text-!! like so, and then handle it on the appling text to the TextView
+		text = text.replaceAll("<span class=\"jt_spoiler\"(.*?)>(.*?)</span>",
+		"<font color=\"#383838\">!!-$2-!!</font>");  
+			
 		return text;
 	}
 
