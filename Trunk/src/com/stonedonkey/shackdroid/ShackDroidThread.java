@@ -36,6 +36,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
+/**
+ * @author markh
+ *
+ */
 public class ShackDroidThread extends ListActivity implements Runnable {
 
 	private static final int POST_REPLY = 0;
@@ -160,15 +164,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		// clicked.. to sloppy
 		String postText = ParseShackText(posts.get(0).getPostText());
 		tv.setText(Html.fromHtml(postText),BufferType.EDITABLE);
-		// add spoilers
-		String text = tv.getText().toString();
-		if (text.indexOf("!!-") > 0)
-		{
-			Integer start = text.indexOf("!!-");
-			Integer end = text.indexOf("-!!");
-			Spannable str = (Spannable) tv.getText();
-			str.setSpan(new BackgroundColorSpan(Color.parseColor("#383838")), start, end+3,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		}
+		SpoilerTextView();
 		Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
 
 		ShackPost post = posts.get(0);
@@ -226,15 +222,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 	
 		// TODO: Consolidate with the load to make this better, sloppy.
 		tv.setText(Html.fromHtml(postText),BufferType.EDITABLE);
-		// add spoilers
-		String text = tv.getText().toString();
-		if (text.indexOf("!!-") > 0)
-		{
-			Integer start = text.indexOf("!!-");
-			Integer end = text.indexOf("-!!");
-			Spannable str = (Spannable) tv.getText();
-			str.setSpan(new BackgroundColorSpan(Color.parseColor("#383838")), start, end+3,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		}
+		SpoilerTextView();
 		Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -255,6 +243,20 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		setPostCategoryIcon(postCat);
 
 	}
+	private void SpoilerTextView()
+	{
+		TextView tv = (TextView) findViewById(R.id.TextViewPost);
+		String text = tv.getText().toString();
+		Integer end = 0;
+		while (text.indexOf("!!-",end) > 0)
+		{
+			Integer start = text.indexOf("!!-",end);
+			end = text.indexOf("-!!",start);
+			Spannable str = (Spannable) tv.getText();
+			str.setSpan(new BackgroundColorSpan(Color.parseColor("#383838")), start, end+3,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		}
+	}
+
 	private void setPostCategoryIcon(String postCat)
 	{
 		ImageView img = (ImageView)findViewById(R.id.ImageViewCatTopic);
