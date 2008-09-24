@@ -75,7 +75,7 @@ public class TopicViewSaxHandler extends DefaultHandler
 	public void startElement(final String nsURL, final String localName,
 	final String rawName,final Attributes attributes) throws SAXException
 	{
-		if("comments".equalsIgnoreCase(rawName))
+		if("comments".equalsIgnoreCase(localName))
 		{
 			if (storyID.length() == 0 && attributes.getValue("story_id") != null ) // only the first node has it
 				storyID = attributes.getValue("story_id");
@@ -90,7 +90,7 @@ public class TopicViewSaxHandler extends DefaultHandler
 			comments = true; 
 		}
 				
-		if("comment".equalsIgnoreCase(rawName))
+		if("comment".equalsIgnoreCase(localName))
 		{
 			comment= true;
 			posterName = attributes.getValue("author");
@@ -101,7 +101,7 @@ public class TopicViewSaxHandler extends DefaultHandler
 			postCategory = attributes.getValue("category");
 		}
 		
-		if ("body".equalsIgnoreCase(rawName))
+		if ("body".equalsIgnoreCase(localName))
 			body = true;
 		
 	}
@@ -111,16 +111,16 @@ public class TopicViewSaxHandler extends DefaultHandler
             final String rawName)
 			throws SAXException {
 	
-		if ("comments".equalsIgnoreCase(rawName))
+		if ("comments".equalsIgnoreCase(localName))
 		{
 			comments = false;
 		}
-		if ("comment".equalsIgnoreCase(rawName))
+		if ("comment".equalsIgnoreCase(localName))
 		{
 			comment = false;
 		}			
-	
-		if ("body".equalsIgnoreCase(rawName)) 
+	 
+		if ("body".equalsIgnoreCase(localName)) 
 		{
 			body = false;
 		
