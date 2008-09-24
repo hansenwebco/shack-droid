@@ -162,11 +162,12 @@ public class TopicViewSaxHandler extends DefaultHandler
 				// add new post to collection
 				ShackPost currentPost = new ShackPost( posterName, postDate, preview,postID, bodyText, replyCount, currentIndent,postCategory,0,posts.size());
 				posts.add(currentPost);
+				bodyText= "";
 			}
 			
 		}
 					
-	}
+	} 
 
 		
 	@Override
@@ -176,7 +177,7 @@ public class TopicViewSaxHandler extends DefaultHandler
 		if (body)
 		{
 		// do stuff here
-			bodyText = new String(ch,start,length);
+			bodyText = bodyText + new String(ch,start,length);
 		}
 	}
 }
