@@ -17,6 +17,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -58,7 +59,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		setContentView(R.layout.thread);
 		this.setTitle("ShackDroid - View Thread");
 		
-		
+	
 		
 		//if (savedInstanceState != null) {
 			// savedInstanceState.getLong("storyID");
@@ -171,10 +172,14 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		String login = prefs.getString("shackLogin", "");		
+	
 		
+		Typeface face = Typeface.createFromAsset(this.getAssets(), "fonts/arial.ttf");
+		tv.setTypeface(face);
 		
 		TextView posterName = (TextView) findViewById(R.id.TextViewThreadAuthor);
 		posterName.setText(post.getPosterName());
+		posterName.setTypeface(face);
 		
 		if (login.equalsIgnoreCase(post.getPosterName()))
 			posterName.setTextColor(Color.parseColor("#00BFF3"));
@@ -183,6 +188,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 
 		TextView postDate = (TextView) findViewById(R.id.TextViewThreadViewPostDate);
 		postDate.setText(post.getPostDate());
+		postDate.setTypeface(face);
 
 		String postCat = post.getPostCategory();
 		setPostCategoryIcon(postCat);

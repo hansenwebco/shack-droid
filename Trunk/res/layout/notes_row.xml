@@ -39,7 +39,7 @@
 	android:layout_height="wrap_content"
 	android:paddingLeft="3px"
 	android:paddingRight="3px"
-	android:textSize="13sp"
+	android:textSize="12sp"
 	android:layout_below="@+id/TextViewNotesPosterName"
 	android:textColor="#FFFFFF"
 	/>

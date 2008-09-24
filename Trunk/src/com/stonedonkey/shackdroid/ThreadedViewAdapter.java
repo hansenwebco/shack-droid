@@ -18,11 +18,14 @@ public class ThreadedViewAdapter extends BaseAdapter {
 	private Context context;
 	private List<ShackPost> topicList;
 	private int rowResouceID;
+	static Typeface face;
 	
 	public ThreadedViewAdapter(Context context,int rowResouceID, List<ShackPost> topicList ){
 		this.context = context;
 		this.topicList = topicList;
 		this.rowResouceID = rowResouceID;
+		
+		face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
 	}
 	
 	@Override
@@ -51,18 +54,14 @@ public class ThreadedViewAdapter extends BaseAdapter {
 		
 		// bind the TextViews to the items in our datasource
 		TextView threadPreview = (TextView)v.findViewById(R.id.TextViewThreadPreview);
-		
-		Typeface face = Typeface.createFromAsset(context.getAssets(), "fonts/Monospace821.TTF");
 		threadPreview.setTypeface(face);
-		
-		
 		
 		if (threadPreview != null)
 		{
 			// TODO: This is ATROCIOUS find a better way.
 			String pad ="";
 			for(int i=0;i<post.getIndent();i++)
-				pad = pad + "  ";	
+				pad = pad + "   ";	
 			
 			String postText= post.getPostPreview();
 		
@@ -83,14 +82,15 @@ public class ThreadedViewAdapter extends BaseAdapter {
 			// crappy.. this looks better ATM
 			try
 			{
-				if (pad.length() >= 39)
-					postText = pad.substring(0,36) + "...";
-				else if (pad.length() + postText.length() >= 39)
-					postText = pad + postText.substring(0, 39-(post.getIndent() * 2)) + "...";
-				else
-					postText= pad + postText;
+//				if (pad.length() >= 39)
+//					postText = pad.substring(0,36) + "...";
+//				else if (pad.length() + postText.length() >= 39)
+//					postText = pad + postText.substring(0, 39-(post.getIndent() * 2)) + "...";
+//				else
+				postText= pad + postText;
 				
 				threadPreview.setText(postText);
+				
 			}
 			catch (Exception ex)
 			{

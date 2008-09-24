@@ -17,7 +17,7 @@ android:layout_height="fill_parent">
 	android:id="@+id/ImageViewCat"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
-	android:paddingLeft="3px"
+	android:paddingLeft="4px"
 	android:paddingTop="4px"
 	android:layout_toRightOf="@+id/TextViewPosterName"
 	/>
@@ -36,9 +36,9 @@ android:layout_height="fill_parent">
 	android:id="@+id/TextViewPostText"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
-	android:paddingLeft="3px"
-	android:paddingRight="3px"
-	android:textSize="13sp"
+	android:paddingLeft="4px"
+	android:paddingRight="4px"
+	android:textSize="12sp"
 	android:layout_below="@+id/TextViewPosterName"
 	android:textColor="#FFFFFF"
 	/>
