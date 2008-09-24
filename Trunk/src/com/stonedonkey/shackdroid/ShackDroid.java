@@ -68,6 +68,7 @@ public class ShackDroid extends ListActivity implements Runnable {
 		menu.add(2, 1, 5, "Refresh").setIcon(R.drawable.menu_reload);
 		menu.add(2, 2, 6, "Settings").setIcon(R.drawable.menu_settings);
 		menu.add(2, 6, 7, "ShackMarks").setIcon(R.drawable.menu_addpost);
+		menu.add(2,7,8,"Shack RSS").setIcon(R.drawable.menu_reload);
 		
 		
 		
@@ -137,6 +138,12 @@ public class ShackDroid extends ListActivity implements Runnable {
 			intent.setClass(this, ShackDroidNotes.class);
 			startActivity(intent);
 			return true;
+		case 7:
+			intent = new Intent();
+			intent.setClass(this, ShackDroidRSS.class);
+			startActivity(intent);
+			return true;
+			
 		}
 		return false;
 	}

@@ -12,6 +12,7 @@
         <activity android:name=".ShackDroidPreferences" android:label="ShackDroidPreferences"></activity>
         <activity android:name=".ShackDroidPost" android:label="ShackDroidPost"></activity>        
         <activity android:name="ShackDroidNotes" android:label="ShackDroidNotes"></activity>
+        <activity android:name="ShackDroidRSS" android:label="ShackDroidRSS"></activity>
 </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest> 
