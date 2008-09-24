@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +18,15 @@ public class TopicViewAdapter extends BaseAdapter {
 	private List<ShackPost> topicList;
 	private int rowResouceID;
 	private String shackLogin;
+	static Typeface face;
 	
 	public TopicViewAdapter(Context context,int rowResouceID, List<ShackPost> topicList, String shackLogin ){
 		this.context = context;
 		this.topicList = topicList;
 		this.rowResouceID = rowResouceID;
 		this.shackLogin = shackLogin;
+		
+		 face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
 	}
 	
 	@Override
@@ -45,10 +49,13 @@ public class TopicViewAdapter extends BaseAdapter {
 		ShackPost post = topicList.get(position);
 		LayoutInflater inflate = LayoutInflater.from(context);
 		
+		
 		View v = inflate.inflate(rowResouceID,parent,false);
-			
+	
+		
 		// bind the TextViews to the items in our datasource
 		TextView posterName = (TextView)v.findViewById(R.id.TextViewPosterName);
+		posterName.setTypeface(face);
 		if (posterName != null)
 			posterName.setText(post.getPosterName());
 		
@@ -56,6 +63,7 @@ public class TopicViewAdapter extends BaseAdapter {
 			posterName.setTextColor(Color.parseColor("#00BFF3"));
 		
 		TextView postDate = (TextView)v.findViewById(R.id.TextViewDatePosted);
+		postDate.setTypeface(face);
 		if (postDate != null)
 			postDate.setText(post.getPostDate());
 		
@@ -72,10 +80,12 @@ public class TopicViewAdapter extends BaseAdapter {
 	
 		
 		TextView postReplyCount = (TextView)v.findViewById(R.id.TextViewReplyCount);
+		postReplyCount.setTypeface(face);
 		if (postReplyCount !=null)
 			postReplyCount.setText(post.getReplyCount());
 		
 		TextView postText = (TextView)v.findViewById(R.id.TextViewPostText);
+		postText.setTypeface(face);
 		if (postText != null)
 			postText.setText(post.getPostPreview());
 				

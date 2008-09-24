@@ -2,6 +2,7 @@ package com.stonedonkey.shackdroid;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,14 @@ public class NotesViewAdapter extends BaseAdapter {
 	private Context context;
 	private Cursor noteList;
 	private int rowResouceID;
+	static Typeface face;
 	
 	public NotesViewAdapter(Context context,int rowResouceID, Cursor noteList){
 		this.context = context;
 		this.noteList = noteList;
 		this.rowResouceID = rowResouceID;
+		
+		face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
 	}
 	
 	@Override
@@ -48,10 +52,12 @@ public class NotesViewAdapter extends BaseAdapter {
 		String noteValue = noteList.getString(noteList.getColumnIndexOrThrow("messagePreview"));
 		TextView notePreview = (TextView)v.findViewById(R.id.TextViewNotesPreview);
 		notePreview.setText(noteValue.toString());
+		notePreview.setTypeface(face);
 		
 		noteValue = noteList.getString(noteList.getColumnIndexOrThrow("postDate"));
 		TextView noteDate = (TextView)v.findViewById(R.id.TextViewNotesDatePosted);
 		noteDate.setText(noteValue.toString());
+		noteDate.setTypeface(face);
 		
 		noteValue = noteList.getString(noteList.getColumnIndexOrThrow("posterName"));
 		TextView notePoster = (TextView)v.findViewById(R.id.TextViewNotesPosterName);
