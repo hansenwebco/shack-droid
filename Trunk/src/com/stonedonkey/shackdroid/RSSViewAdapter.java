@@ -61,7 +61,10 @@ public class RSSViewAdapter extends BaseAdapter {
 		date.setTypeface(face);		
 		
 		TextView desc = (TextView)v.findViewById(R.id.TextViewRssDescription);
-		desc.setText(Html.fromHtml(rss.getDescription().substring(0, 100)));
+		if (rss.getDescription().length() > 150)
+			desc.setText(Html.fromHtml(rss.getDescription().substring(0, 150)));
+		else
+			desc.setText(Html.fromHtml(rss.getDescription()));
 		desc.setTypeface(face);
 		
 		return v;
