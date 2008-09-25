@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,11 +59,15 @@ public class RSSViewAdapter extends BaseAdapter {
 		date.setText(rss.getDatePosted());
 		date.setTypeface(face);		
 		
+		String descText = rss.getDescription();
+		descText= descText.replaceAll("</?\\w++[^>]*+>", ""); // remove HTML tags
+		
+		if (descText.length() > 150)
+			descText = descText.substring(0, 150);
+			
+		
 		TextView desc = (TextView)v.findViewById(R.id.TextViewRssDescription);
-		if (rss.getDescription().length() > 150)
-			desc.setText(Html.fromHtml(rss.getDescription().substring(0, 150)));
-		else
-			desc.setText(Html.fromHtml(rss.getDescription()));
+		desc.setText(descText);
 		desc.setTypeface(face);
 		
 		return v;
