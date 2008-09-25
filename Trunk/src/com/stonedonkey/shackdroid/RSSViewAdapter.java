@@ -37,10 +37,16 @@ public class RSSViewAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		//TODO: return the article ID from the link
-		//ShackRSS rss = rssItems.get(position);
-		//return rss.getLink());
-		return 0;
+
+		ShackRSS rss = rssItems.get(position);
+		String link = rss.getLink();
+		
+		// TODO: lets think about this more later
+		String[] story = link.split("/");
+		long storyID = Long.parseLong(story[story.length-1]);
+		
+		return storyID;
+		
 	}
 
 	@Override
