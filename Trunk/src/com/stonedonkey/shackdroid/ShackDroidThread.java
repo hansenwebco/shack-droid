@@ -329,7 +329,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 
 		menu.add(1, 0, 3, "Reply").setIcon(R.drawable.menu_reply);
 		menu.add(1, 1, 1, "Settings").setIcon(R.drawable.menu_settings);
-		menu.add(1, 2, 2, "Home").setIcon(R.drawable.menu_home);
+		menu.add(1, 2, 2, "Back").setIcon(R.drawable.menu_back);
 		menu.add(1, 3, 4, "Refresh").setIcon(R.drawable.menu_reload);
 		//menu.add(2, 4, 4, "LOL/INF").setIcon(R.drawable.menu_lolinf);
 		//menu.add(2, 5, 5, "Mark").setIcon(R.drawable.menu_mark);
