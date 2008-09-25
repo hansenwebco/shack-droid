@@ -13,11 +13,17 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnCreateContextMenuListener;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class ShackDroidRSS extends ListActivity implements Runnable {
 
@@ -26,20 +32,43 @@ public class ShackDroidRSS extends ListActivity implements Runnable {
 	private Integer feedID = 0;
 	private String feedURL = "http://feed.shacknews.com/shackfeed.xml";
 	private String feedDesc = "Front Page";
+
 	
 	URL url;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
+				
+			setContentView(R.layout.rss);
+			fillSaxData();
+		
+			getListView().setOnCreateContextMenuListener(
+					new OnCreateContextMenuListener() {
+						@Override
+						public void onCreateContextMenu(ContextMenu menu, View v,
+								ContextMenuInfo menuInfo) {
+							menu.setHeaderTitle("RSS Story Options");
+							menu.add(0, 3, 0, "View Story");
+							menu.add(0, 4, 0, "View Comments");
+							menu.add(0, -1, 0, "Cancel");
+						}
+					});		
+			
 		super.onCreate(savedInstanceState);
 		
-		
-		setContentView(R.layout.rss);
-		fillSaxData();
-		
+	}
+	
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+	
+	
 		
 	}
+
+
+
 	private void fillSaxData() {
 		// show a progress dialog
 		pd = ProgressDialog.show(this, null, "Loading RSS feed...", true, true); 
@@ -127,6 +156,40 @@ public class ShackDroidRSS extends ListActivity implements Runnable {
 		return false;
 	}
 	 @Override
+	public boolean onContextItemSelected(MenuItem item) {
+
+		    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+			int itemPosition = info.position;
+			Intent intent;
+			
+
+			switch (item.getItemId()) {
+				case 3:
+					String storyURL = rssItems.get(itemPosition).getLink();
+					String storyTitle = rssItems.get(itemPosition).getTitle();
+					intent = new Intent();
+					intent.putExtra("URL",storyURL);
+					intent.putExtra("Title",storyTitle);
+					intent.setClass(this, ShackDroidWebView.class);
+					startActivity(intent);
+					return true;
+					
+				case 4: 
+					intent = new Intent();
+				
+					String link = rssItems.get(itemPosition).getLink();
+					String[] story = link.split("/");
+					String storyID = story[story.length-1];
+					intent.putExtra("StoryID",storyID );
+					intent.setClass(this, ShackDroid.class);
+					startActivity(intent);
+					return true;
+					
+			}
+			return false;
+			
+	}
+	@Override
 	    protected Dialog onCreateDialog(int id) {
 	        switch (id) 
 	        {

@@ -40,12 +40,17 @@ public class ShackDroid extends ListActivity implements Runnable {
 	private String errorText = "";
 	private Integer currentPage = 1;
 	private Integer storyPages = 1;
+	private String loadStoryID = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.topics);
 
+		Bundle extras = this.getIntent().getExtras();
+		if (extras != null)
+			loadStoryID = extras.getString("StoryID");
+		
 		
 		try {
 			fillDataSAX();
@@ -175,10 +180,22 @@ public class ShackDroid extends ListActivity implements Runnable {
 			String feedURL = prefs.getString("shackFeedURL", "http://shackchatty.com");
 			URL url;
 			
-			if(currentPage > 1)
-				url = new URL(feedURL + "/" + this.storyID + "." + this.currentPage.toString() + ".xml");
+			if (loadStoryID != null)
+			{
+				if(currentPage > 1)
+					url = new URL(feedURL + "/" + loadStoryID + "." + this.currentPage.toString() + ".xml");
+				else
+					url = new URL(feedURL + "/" + loadStoryID + ".xml");
+				
+				//loadStoryID= null; // we retreive the story after the load so were good now
+			}
 			else
-				url = new URL(feedURL + "/index.xml");
+			{
+				if(currentPage > 1)
+					url = new URL(feedURL + "/" + this.storyID + "." + this.currentPage.toString() + ".xml");
+				else
+					url = new URL(feedURL + "/index.xml");
+			}
 
 
 			/* Get a SAXParser from the SAXPArserFactory. */
