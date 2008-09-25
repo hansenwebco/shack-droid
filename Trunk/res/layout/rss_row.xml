@@ -4,7 +4,18 @@ android:id="@+id/TopicRowRss"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent">
 
-
+	<TextView
+	android:id="@+id/TextViewRssTitle"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:paddingLeft="4px"
+	android:paddingRight="4px"
+	android:paddingTop="4px"
+	android:textSize="12sp"
+	android:textStyle="bold"
+	android:textColor="#ffba00"
+	/>
+	
 	<TextView
 	android:id="@+id/TextViewRssDatePosted"
 	android:layout_width="fill_parent"
@@ -13,19 +24,11 @@ android:layout_height="fill_parent">
 	android:paddingLeft="4px"
 	android:gravity="left"
 	android:textSize="12sp"
-	/>
-
-	<TextView
-	android:id="@+id/TextViewRssTitle"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:paddingLeft="4px"
-	android:paddingRight="4px"
-	android:paddingTop="4px"
-	android:textSize="13sp"
-	android:layout_below="@+id/TextViewRssDatePosted"
+	android:layout_below="@+id/TextViewRssTitle"
 	android:textColor="#FFFFFF"
 	/>
+
+
 
 	<TextView
 	android:id="@+id/TextViewRssDescription"
@@ -33,9 +36,11 @@ android:layout_height="fill_parent">
 	android:layout_height="wrap_content"
 	android:paddingLeft="4px"
 	android:paddingRight="4px"
+	android:paddingBottom="4px"
 	android:textSize="12sp"
-	android:layout_below="@+id/TextViewRssTitle"
+	android:layout_below="@+id/TextViewRssDatePosted"
 	android:textColor="#FFFFFF"
+	android:textColorLink="#FFFFFF"
 	/>
 
 
