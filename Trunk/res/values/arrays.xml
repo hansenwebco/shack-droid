@@ -1,0 +1,18 @@
+<resources>
+	<string-array name="feeds">
+		<item>Front Page</item>
+		<item>Xbox 360</item>
+		<item>PC</item>
+		<item>Playstation 3</item>
+		<item>Nintendo Wii</item>
+		<item>Playstation 2</item>
+	</string-array>
+	<string-array name="feedsURls">
+		<item>http://feed.shacknews.com/shackfeed.xml</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/Xbox+360</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/PC</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/PlayStation+3</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/Nintendo+Wii</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/PlayStation+2</item>
+	</string-array>	
+</resources>
