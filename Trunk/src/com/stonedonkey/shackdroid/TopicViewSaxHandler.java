@@ -32,7 +32,7 @@ public class TopicViewSaxHandler extends DefaultHandler
 	private String storyID = "";
 	private String storyName = "";
 	private String postCategory = "";
-	private Integer storyPageCount = 0;
+	private int storyPageCount = 0;
 	@SuppressWarnings("unused")
 	private boolean comments = false;
 	@SuppressWarnings("unused")
@@ -66,7 +66,7 @@ public class TopicViewSaxHandler extends DefaultHandler
 	{
 		return this.storyName;
 	}
-	public Integer getStoryPageCount()
+	public int getStoryPageCount()
 	{
 		return this.storyPageCount;
 	}
@@ -125,7 +125,7 @@ public class TopicViewSaxHandler extends DefaultHandler
 			body = false;
 		
 			// this handles determining how far in a reply is indented
-			Integer currentIndent;
+			int currentIndent;
 			if (indent.size() > 0)
 			 currentIndent = indent.size();
 			else

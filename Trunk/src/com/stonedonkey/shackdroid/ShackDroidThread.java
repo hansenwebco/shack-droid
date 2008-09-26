@@ -49,7 +49,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 	private String postID;
 	private ProgressDialog pd;
 	private String errorText = "";
-	private Integer currentPosition = 0;
+	private int currentPosition = 0;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -255,10 +255,10 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		// not the best but works.
 		TextView tv = (TextView) findViewById(R.id.TextViewPost);
 		String text = tv.getText().toString();
-		Integer end = 0;
+		int end = 0;
 		while (text.indexOf("!!-",end) > 0)
 		{
-			Integer start = text.indexOf("!!-",end);
+			int start = text.indexOf("!!-",end);
 			end = text.indexOf("-!!",start);
 			Spannable str = (Spannable) tv.getText();
 			str.setSpan(new BackgroundColorSpan(Color.parseColor("#383838")), start, end+3,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

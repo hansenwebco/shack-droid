@@ -8,10 +8,10 @@ public class ShackPost {
 	private String postID = null;
 	private String postText = null;
 	private String replyCount =null;
-	private Integer indent = 0;
+	private int indent = 0;
 	private String postCategory;
-	private Integer postIndex = null;
-	private Integer orderID = 0;
+	private int postIndex;
+	private int orderID = 0;
 	
 
 	public ShackPost(String posterName, String postDate, String postPreview,
@@ -29,7 +29,7 @@ public class ShackPost {
 		this.orderID = orderID; 
 	}
 
-	public Integer getOrderID()
+	public int getOrderID()
 	{
 		return orderID;
 	}
@@ -37,7 +37,7 @@ public class ShackPost {
 	{
 		this.postIndex = postIndex;
 	}
-	public Integer getPostIndex()
+	public int getPostIndex()
 	{
 		return postIndex;
 	}
@@ -47,7 +47,7 @@ public class ShackPost {
 		return postCategory;
 	}
 	
-	public Integer getIndent()
+	public int getIndent()
 	{
 		return indent;
 	}
