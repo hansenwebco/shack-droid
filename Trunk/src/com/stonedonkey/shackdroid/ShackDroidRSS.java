@@ -29,7 +29,7 @@ public class ShackDroidRSS extends ListActivity implements Runnable {
 
 	private ArrayList<ShackRSS> rssItems = null; 
 	private ProgressDialog pd;
-	private Integer feedID = 0;
+	private int feedID = 0;
 	private String feedURL = "http://feed.shacknews.com/shackfeed.xml";
 	private String feedDesc = "Front Page";
 

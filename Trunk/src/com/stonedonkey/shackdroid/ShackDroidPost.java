@@ -198,8 +198,8 @@ public class ShackDroidPost extends Activity {
 		TextView tv = (TextView)findViewById(R.id.EditTextPost);
 		if (tv.hasSelection())
 		{
-			Integer start = tv.getSelectionStart();
-			Integer end = tv.getSelectionEnd();
+			int start = tv.getSelectionStart();
+			int end = tv.getSelectionEnd();
 			
 			// selections can be made backwards, in which case
 			// the start becomes > the end.. lets flip them.
