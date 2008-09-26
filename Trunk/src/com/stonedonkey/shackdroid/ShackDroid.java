@@ -217,6 +217,9 @@ public class ShackDroid extends ListActivity implements Runnable {
 			storyID = saxHandler.getStoryID();
 			storyName= saxHandler.getStoryTitle(); 
 			storyPages = saxHandler.getStoryPageCount();
+			
+			if (storyPages ==0)
+				storyPages = 1;
 
 		} catch (Exception ex) {
 			ex.printStackTrace(System.out);
