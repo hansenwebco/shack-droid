@@ -199,8 +199,8 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		
 		// set the post background color to be more "shack" like
 		RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayoutThread);
-		
-		layout.setOnCreateContextMenuListener(
+		TextView tvpost = (TextView)findViewById(R.id.TextViewPost);
+		tvpost.setOnCreateContextMenuListener(
 				new OnCreateContextMenuListener() {
 					@Override
 					public void onCreateContextMenu(ContextMenu menu, View v,
