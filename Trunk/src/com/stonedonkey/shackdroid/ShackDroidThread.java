@@ -26,10 +26,13 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.style.BackgroundColorSpan;
 import android.text.util.Linkify;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnCreateContextMenuListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -50,6 +53,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 	private ProgressDialog pd;
 	private String errorText = "";
 	private int currentPosition = 0;
+	private boolean spoilerText= false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -163,7 +167,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 
 		// TODO: Consolidate this with the call when the list view is
 		// clicked.. to sloppy
-		String postText = ParseShackText(posts.get(0).getPostText());
+		String postText = ParseShackText(posts.get(0).getPostText(),true);
 		tv.setText(Html.fromHtml(postText),BufferType.EDITABLE);
 		SpoilerTextView();
 		Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
@@ -195,6 +199,22 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		
 		// set the post background color to be more "shack" like
 		RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayoutThread);
+		
+		layout.setOnCreateContextMenuListener(
+				new OnCreateContextMenuListener() {
+					@Override
+					public void onCreateContextMenu(ContextMenu menu, View v,
+							ContextMenuInfo menuInfo) {
+						if (spoilerText == true) {
+						menu.setHeaderTitle("Post Options");
+						menu.add(0, 10, 0, "Remove Spoiler");
+						//menu.add(0, 11, 0, "Copy Text"); // might be useful one day
+						menu.add(0, -1, 0, "Cancel");
+						}
+					}
+				});		
+		
+		
 		layout.setBackgroundColor(Color.parseColor("#222222"));
 		}
 		else
@@ -224,7 +244,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		String postText = posts.get(position).getPostText();
 		postID = posts.get(position).getPostID();
 		
-		postText = ParseShackText(postText);
+		postText = ParseShackText(postText,true);
 	
 		// TODO: Consolidate with the load to make this better, sloppy.
 		tv.setText(Html.fromHtml(postText),BufferType.EDITABLE);
@@ -249,10 +269,26 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		setPostCategoryIcon(postCat);
 
 	}
+	private void RemoveSpoiler()
+	{
+		
+		TextView tv = (TextView) findViewById(R.id.TextViewPost);
+		String postText = posts.get(currentPosition).getPostText();
+		postText = ParseShackText(postText,false);
+		
+		// TODO: Consolidate with the load to make this better, sloppy.
+		tv.setText(Html.fromHtml(postText),BufferType.EDITABLE);
+		//SpoilerTextView();
+		Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
+		
+	
+		
+	}
 	private void SpoilerTextView()
 	{
 		// We have to use the Spannable interface to handle spoilering text
 		// not the best but works.
+		spoilerText = false;
 		TextView tv = (TextView) findViewById(R.id.TextViewPost);
 		String text = tv.getText().toString();
 		int end = 0;
@@ -262,6 +298,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 			end = text.indexOf("-!!",start);
 			Spannable str = (Spannable) tv.getText();
 			str.setSpan(new BackgroundColorSpan(Color.parseColor("#383838")), start, end+3,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			spoilerText = true;
 		}
 	}
 
@@ -288,7 +325,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		else
 			img.setImageResource(-1);
 	}
-	private String ParseShackText(String text) {
+	private String ParseShackText(String text,boolean addSpoilerMarkers) {
 
 		// TODO: probably a better way of doing this than a mass replace
 		text = text.replaceAll("<span class=\"jt_red\">(.*?)</span>",
@@ -316,8 +353,10 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		
 		// You can only do "highlights" on the actual TextView itself, so we mark up spoilers 
 		// !!-text-!! like so, and then handle it on the appling text to the TextView
+		if (addSpoilerMarkers == true) {
 		text = text.replaceAll("<span class=\"jt_spoiler\"(.*?)>(.*?)</span>",
-		"<font color=\"#383838\">!!-$2-!!</font>");  
+		"<font color=\"#383838\">!!-$2-!!</font>");
+		}
 			
 		return text;
 	}
@@ -420,10 +459,24 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 			login = prefs.getString("shackLogin", "");	
 			ExtendedSitesHandler.INFLOLPost(this,login,postID,"INF");
 			return true;
+		
 		}
 		return false;
 	}
 	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		switch (item.getItemId())
+		{
+		case 10: 
+			RemoveSpoiler();
+			return true;
+		
+		}
+		return false;
+	}
+
+
 	private void LaunchNotesIntent()
 	{
 		Intent intent = new Intent();
