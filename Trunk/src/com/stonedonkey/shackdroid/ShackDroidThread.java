@@ -229,13 +229,14 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
+		//super.onListItemClick(l, v, position, id);
 
 		currentPosition = position;
-		
+		l.setFocusableInTouchMode(true);
 		//l.setChoiceMode(1);
-		l.setItemChecked(position, true);
-				
+		//l.setItemChecked(position, true);
+		//l.setSelection(position);
+		
 		ScrollView sv = (ScrollView) findViewById(R.id.textAreaScroller);
 		sv.scrollTo(0, 0); 
 
