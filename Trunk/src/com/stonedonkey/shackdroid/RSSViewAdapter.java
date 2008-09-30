@@ -67,6 +67,7 @@ public class RSSViewAdapter extends BaseAdapter {
 		
 		String descText = rss.getDescription();
 		descText= descText.replaceAll("</?\\w++[^>]*+>", ""); // remove HTML tags
+		descText = descText.replaceAll("(\r\n|\r|\n|\n\r)", "");
 		
 		if (descText.length() > 150)
 			descText = descText.substring(0, 150);
