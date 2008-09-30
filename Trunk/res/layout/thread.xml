@@ -42,10 +42,11 @@
 			android:layout_width="fill_parent" 
 			android:layout_height="fill_parent"
 			android:text="" 
-
+			android:minHeight="180px"
 			android:textSize="12sp" 
 			android:paddingLeft="3px"
 			android:paddingRight="1px"
+			android:paddingBottom="10px"
 			android:textColorLink="#FFFFFF"
 			android:textColor="#FFFFFF"
 			>
