@@ -1,1 +1,1 @@
-stonedonkey = Mark Hansen <stonedonkey@gmail.com>
+stonedonkey = stonedonkey <stonedonkey@gmail.com>
