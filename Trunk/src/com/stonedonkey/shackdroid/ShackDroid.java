@@ -29,10 +29,6 @@ import android.widget.ListView;
  */
 public class ShackDroid extends ListActivity implements Runnable {
 
-
-
-
-
 	private ArrayList<ShackPost> posts;
 	private ProgressDialog pd;
 	private String storyID = null;
@@ -51,12 +47,11 @@ public class ShackDroid extends ListActivity implements Runnable {
 		if (extras != null)
 			loadStoryID = extras.getString("StoryID");
 		
-		
 		try {
 			fillDataSAX();
 		} catch (Exception e) {
-			// // TODO Auto-generated catch block
-			e.printStackTrace();
+			new AlertDialog.Builder(this).setTitle("Error").setPositiveButton("OK", null)
+			.setMessage("There was an error connection to the API.").show();
 		}
 	}
 
@@ -73,25 +68,20 @@ public class ShackDroid extends ListActivity implements Runnable {
 		menu.add(2, 1, 5, "Refresh").setIcon(R.drawable.menu_reload);
 		menu.add(2, 2, 6, "Settings").setIcon(R.drawable.menu_settings);
 		menu.add(2, 6, 7, "ShackMarks").setIcon(R.drawable.menu_addpost);
-		menu.add(2,7,8,"Shack RSS").setIcon(R.drawable.menu_reload);
-		
-		
-		
-		
+		menu.add(2, 7, 8, "Shack RSS").setIcon(R.drawable.menu_reload);
+			
 		menu.findItem(5).setEnabled(false);
 		
 		return true;
 	}
-
 	@Override
 	public boolean onMenuOpened(int featureId, Menu menu) {
-
 		
 		if (this.currentPage  <= 1) // previous enabled
-			{
+		{
 			menu.findItem(3).setEnabled(false); // home
 			menu.findItem(5).setEnabled(false); // previous
-			}
+		}
 		else
 		{
 			menu.findItem(3).setEnabled(true); // home
@@ -99,9 +89,9 @@ public class ShackDroid extends ListActivity implements Runnable {
 		}
 		
 		if (this.currentPage >= this.storyPages) // next enabled
-			menu.findItem(4).setEnabled(false); // next
+			menu.findItem(4).setEnabled(false); 
 		else
-			menu.findItem(4).setEnabled(true); // next
+			menu.findItem(4).setEnabled(true); 
 		
 		return super.onMenuOpened(featureId, menu);
 	}
@@ -148,7 +138,6 @@ public class ShackDroid extends ListActivity implements Runnable {
 			intent.setClass(this, ShackDroidRSS.class);
 			startActivity(intent);
 			return true;
-			
 		}
 		return false;
 	}
@@ -158,15 +147,12 @@ public class ShackDroid extends ListActivity implements Runnable {
 		// set current page
 		if ( (currentPage + increment >= 1) && (currentPage + increment <= storyPages))
 		currentPage = currentPage + increment;
-
 	}
 	
 	private void fillDataSAX() {
-
-		// show a progress dialog
-		
+	
 		pd = ProgressDialog.show(this, null, "loading, please wait...", true,false); 
-		//pd.setIcon(R.drawable.shack_logo);
+		pd.setIcon(R.drawable.shack_logo);
 		
 		// use the class run() method to do work
 		Thread thread = new Thread(this); 
@@ -186,8 +172,6 @@ public class ShackDroid extends ListActivity implements Runnable {
 					url = new URL(feedURL + "/" + loadStoryID + "." + this.currentPage.toString() + ".xml");
 				else
 					url = new URL(feedURL + "/" + loadStoryID + ".xml");
-				
-				//loadStoryID= null; // we retreive the story after the load so were good now
 			}
 			else
 			{
@@ -198,27 +182,26 @@ public class ShackDroid extends ListActivity implements Runnable {
 			}
 
 
-			/* Get a SAXParser from the SAXPArserFactory. */
+			// Get a SAXParser from the SAXPArserFactory.
 			SAXParserFactory spf = SAXParserFactory.newInstance();
 			SAXParser sp = spf.newSAXParser();
 
-			/* Get the XMLReader of the SAXParser we created. */
+			// Get the XMLReader of the SAXParser we created. 
 			XMLReader xr = sp.getXMLReader();
-			/* Create a new ContentHandler and apply it to the XML-Reader */
+			// Create a new ContentHandler and apply it to the XML-Reader
 			TopicViewSaxHandler saxHandler = new TopicViewSaxHandler(this);
 			xr.setContentHandler(saxHandler);
 
-			/* Parse the xml-data from our URL. */
+			// Parse the xml-data from our URL. 
 			xr.parse(new InputSource(url.openStream()));
-			/* Parsing has finished. */
 
-			/* Our ExampleHandler now provides the parsed data to us. */
+			// Our ExampleHandler now provides the parsed data to us. 
 			posts = saxHandler.GetParsedPosts();
 			storyID = saxHandler.getStoryID();
 			storyName= saxHandler.getStoryTitle(); 
 			storyPages = saxHandler.getStoryPageCount();
 			
-			if (storyPages ==0)
+			if (storyPages ==0) // XML returns a 0 for stories with only one page
 				storyPages = 1;
 
 		} catch (Exception ex) {
