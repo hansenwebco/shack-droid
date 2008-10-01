@@ -1,6 +1,6 @@
 package com.stonedonkey.shackdroid;
 
-public class ShackRSS {
+public final class ShackRSS {
 
 	private String title;
 	private String description;
@@ -14,7 +14,6 @@ public class ShackRSS {
 		this.link = link;
 		this.datePosted = datePosted;
 	}
-
 	public String getTitle() {
 		return title;
 	}
@@ -27,5 +26,4 @@ public class ShackRSS {
 	public  String getDatePosted() {
 		return datePosted;
 	}
-	
 }

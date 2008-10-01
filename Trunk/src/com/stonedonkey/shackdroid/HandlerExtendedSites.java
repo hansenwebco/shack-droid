@@ -12,7 +12,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 
-public class ExtendedSitesHandler extends Activity {
+public class HandlerExtendedSites extends Activity {
 
 	public static void INFLOLPost(Context ctx, String shackName, String postID, String tag) {
 

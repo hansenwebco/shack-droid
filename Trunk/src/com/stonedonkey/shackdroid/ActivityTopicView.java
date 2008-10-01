@@ -27,7 +27,7 @@ import android.widget.ListView;
  * @author stonedonkey
  * 
  */
-public class ShackDroid extends ListActivity implements Runnable {
+public class ActivityTopicView extends ListActivity implements Runnable {
 
 	private ArrayList<ShackPost> posts;
 	private ProgressDialog pd;
@@ -103,7 +103,7 @@ public class ShackDroid extends ListActivity implements Runnable {
 		switch (item.getItemId()) {
 		case 0:	// Launch post form
 			intent = new Intent();
-			intent.setClass(this, ShackDroidPost.class);
+			intent.setClass(this, ActivityPost.class);
 			intent.putExtra("storyID", storyID);
 			intent.putExtra("postID","");
 			startActivity(intent);			
@@ -113,7 +113,7 @@ public class ShackDroid extends ListActivity implements Runnable {
 			return true;
 		case 2:	// show settings dialog
 			intent = new Intent();
-			intent.setClass(this, ShackDroidPreferences.class);
+			intent.setClass(this, ActivityPreferences.class);
 			startActivity(intent);
 			return true;
 		case 3: // home
@@ -130,12 +130,12 @@ public class ShackDroid extends ListActivity implements Runnable {
 			return true;	
 		case 6:
 			intent = new Intent();
-			intent.setClass(this, ShackDroidNotes.class);
+			intent.setClass(this, ActivityNotes.class);
 			startActivity(intent);
 			return true;
 		case 7:
 			intent = new Intent();
-			intent.setClass(this, ShackDroidRSS.class);
+			intent.setClass(this, ActivityRSS.class);
 			startActivity(intent);
 			return true;
 		}
@@ -189,7 +189,7 @@ public class ShackDroid extends ListActivity implements Runnable {
 			// Get the XMLReader of the SAXParser we created. 
 			XMLReader xr = sp.getXMLReader();
 			// Create a new ContentHandler and apply it to the XML-Reader
-			TopicViewSaxHandler saxHandler = new TopicViewSaxHandler(this);
+			SaxHandlerTopicView saxHandler = new SaxHandlerTopicView(this);
 			xr.setContentHandler(saxHandler);
 
 			// Parse the xml-data from our URL. 
@@ -232,7 +232,7 @@ public class ShackDroid extends ListActivity implements Runnable {
 			String login = prefs.getString("shackLogin", "");
 			
 			// this is where we bind our fancy ArrayList of posts
-			TopicViewAdapter tva = new TopicViewAdapter(this, R.layout.topic_row,posts,login);
+			AdapterTopicView tva = new AdapterTopicView(this, R.layout.topic_row,posts,login);
 			setListAdapter(tva);
 		}
 		else
@@ -251,7 +251,7 @@ public class ShackDroid extends ListActivity implements Runnable {
 		super.onListItemClick(l, v, position, id);
 		
 		Intent intent = new Intent();
-		intent.setClass(this, ShackDroidThread.class);
+		intent.setClass(this, ActivityThreadedView.class);
 		intent.putExtra("postID", Long.toString(id)); // the value must be a string
 		intent.putExtra("storyID", storyID);
 		startActivity(intent);

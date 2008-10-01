@@ -25,7 +25,7 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
-public class ShackDroidRSS extends ListActivity implements Runnable {
+public class ActivityRSS extends ListActivity implements Runnable {
 
 	private ArrayList<ShackRSS> rssItems = null; 
 	private ProgressDialog pd;
@@ -96,7 +96,7 @@ public class ShackDroidRSS extends ListActivity implements Runnable {
 			XMLReader xr = sp.getXMLReader();
 			
 			// Create a new ContentHandler and apply it to the XML-Reader 
-			RSSFeedSaxHandler saxHandler = new RSSFeedSaxHandler(this);
+			SaxHandlerRSSFeed saxHandler = new SaxHandlerRSSFeed(this);
 			xr.setContentHandler(saxHandler);
 
 			// Parse the xml-data from our URL. 
@@ -125,7 +125,7 @@ public class ShackDroidRSS extends ListActivity implements Runnable {
 	
 	private void ShowData() {
 		// this is where we bind our fancy ArrayList of posts
-		RSSViewAdapter tva = new RSSViewAdapter(this, rssItems,R.layout.rss_row);
+		AdapterRSSView tva = new AdapterRSSView(this, rssItems,R.layout.rss_row);
 		setListAdapter(tva);
 	}
 
@@ -170,7 +170,7 @@ public class ShackDroidRSS extends ListActivity implements Runnable {
 					intent = new Intent();
 					intent.putExtra("URL",storyURL);
 					intent.putExtra("Title",storyTitle);
-					intent.setClass(this, ShackDroidWebView.class);
+					intent.setClass(this, ActivityWebView.class);
 					startActivity(intent);
 					return true;
 					
@@ -181,7 +181,7 @@ public class ShackDroidRSS extends ListActivity implements Runnable {
 					String[] story = link.split("/");
 					String storyID = story[story.length-1];
 					intent.putExtra("StoryID",storyID );
-					intent.setClass(this, ShackDroid.class);
+					intent.setClass(this, ActivityTopicView.class);
 					startActivity(intent);
 					return true;
 					
@@ -194,7 +194,7 @@ public class ShackDroidRSS extends ListActivity implements Runnable {
 	        switch (id) 
 	        {
 	        case 1:
-	        	return new AlertDialog.Builder(ShackDroidRSS.this)
+	        	return new AlertDialog.Builder(ActivityRSS.this)
                 .setTitle("Choose Feed")
                 .setSingleChoiceItems(R.array.feeds, 0, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {

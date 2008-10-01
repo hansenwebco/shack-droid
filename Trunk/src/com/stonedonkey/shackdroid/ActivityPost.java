@@ -24,7 +24,7 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-public class ShackDroidPost extends Activity {
+public class ActivityPost extends Activity {
 
 	private String postID;
 	private String storyID;
@@ -308,7 +308,7 @@ public class ShackDroidPost extends Activity {
 				else  // back to the main view
 				{
 					Intent intent = new Intent();
-					intent.setClass(this, ShackDroid.class);
+					intent.setClass(this, ActivityTopicView.class);
 					startActivity(intent);
 				}
 				finish(); // this will be replaced with an intent
@@ -331,7 +331,7 @@ public class ShackDroidPost extends Activity {
 			// This example shows how to add a custom layout to an AlertDialog
 	        LayoutInflater factory = LayoutInflater.from(this);
 	        final View textEntryView = factory.inflate(R.layout.text_entry_dialog, null);
-	        return new AlertDialog.Builder(ShackDroidPost.this)
+	        return new AlertDialog.Builder(ActivityPost.this)
 	            .setTitle("Enter text to ShackTag")
 	            .setView(textEntryView)
 	            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -386,7 +386,7 @@ public class ShackDroidPost extends Activity {
 		case 0:
 			// show settings dialog
 			intent = new Intent();
-			intent.setClass(this, ShackDroidPreferences.class);
+			intent.setClass(this, ActivityPreferences.class);
 			startActivity(intent);
 			return true;
 		

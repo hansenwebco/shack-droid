@@ -10,13 +10,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class RSSViewAdapter extends BaseAdapter {
+public class AdapterRSSView extends BaseAdapter {
 	private Context context;
 	private ArrayList<ShackRSS> rssItems;
 	private int rowResouceID;
 	static Typeface face;
 	
-	public RSSViewAdapter(Context context, ArrayList<ShackRSS> rssItems, int rowResouceID)
+	public AdapterRSSView(Context context, ArrayList<ShackRSS> rssItems, int rowResouceID)
 	{
 		this.context = context;
 		this.rssItems = rssItems;
