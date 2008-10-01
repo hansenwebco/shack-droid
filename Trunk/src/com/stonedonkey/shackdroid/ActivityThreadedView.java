@@ -44,7 +44,7 @@ import android.widget.TextView.BufferType;
  * @author markh
  *
  */
-public class ShackDroidThread extends ListActivity implements Runnable {
+public class ActivityThreadedView extends ListActivity implements Runnable {
 
 	private static final int POST_REPLY = 0;
 	private ArrayList<ShackPost> posts;
@@ -99,7 +99,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		//  Get the XMLReader of the SAXParser we created./
 			XMLReader xr = sp.getXMLReader();
 			//* Create a new ContentHandler and apply it to the XML-Reader/
-			TopicViewSaxHandler saxHandler = new TopicViewSaxHandler(this);
+			SaxHandlerTopicView saxHandler = new SaxHandlerTopicView(this);
 			xr.setContentHandler(saxHandler);
 
 		//* Parse the xml-data from our URL./
@@ -182,7 +182,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		if (posts != null)
 		{
 		// this is where we bind our fancy ArrayList of posts
-		ThreadedViewAdapter tva = new ThreadedViewAdapter(this,	R.layout.thread_row, posts);
+		AdapterThreadedView tva = new AdapterThreadedView(this,	R.layout.thread_row, posts);
 		setListAdapter(tva);
 
 		UpdatePostText(0,true);
@@ -324,7 +324,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		switch (item.getItemId()) {
 		case 0:	// Launch post form
 			intent = new Intent();
-			intent.setClass(this, ShackDroidPost.class);
+			intent.setClass(this, ActivityPost.class);
 			intent.putExtra("storyID", storyID);
 			intent.putExtra("postID",postID);
 			startActivityForResult(intent,POST_REPLY);
@@ -332,7 +332,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		case 1:
 			// show settings dialog
 			intent = new Intent();
-			intent.setClass(this, ShackDroidPreferences.class);
+			intent.setClass(this, ActivityPreferences.class);
 			startActivity(intent);
 			return true;
 		case 2:
@@ -369,12 +369,12 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 		case 8:
 			// lol post
 			login = prefs.getString("shackLogin", "");	
-			ExtendedSitesHandler.INFLOLPost(this,login,postID,"LOL");
+			HandlerExtendedSites.INFLOLPost(this,login,postID,"LOL");
 			return true;
 		case 9:
 			// inf post
 			login = prefs.getString("shackLogin", "");	
-			ExtendedSitesHandler.INFLOLPost(this,login,postID,"INF");
+			HandlerExtendedSites.INFLOLPost(this,login,postID,"INF");
 			return true;
 		
 		}
@@ -396,7 +396,7 @@ public class ShackDroidThread extends ListActivity implements Runnable {
 	private void LaunchNotesIntent()
 	{
 		Intent intent = new Intent();
-		intent.setClass(this, ShackDroidNotes.class);
+		intent.setClass(this, ActivityNotes.class);
 		startActivity(intent);
 	}
 	

@@ -1,6 +1,6 @@
 package com.stonedonkey.shackdroid;
 
-public class ShackPost {
+public final class ShackPost {
 
 	private String posterName = null;
 	private String postDate = null;
@@ -13,7 +13,6 @@ public class ShackPost {
 	private int postIndex;
 	private int orderID = 0;
 	
-
 	public ShackPost(String posterName, String postDate, String postPreview,
 			String postID, String postText,String replyCount,Integer indent,String postCategory, Integer postIndex,Integer orderID) {
 		

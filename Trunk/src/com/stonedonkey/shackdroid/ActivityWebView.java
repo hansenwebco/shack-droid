@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebView;
 
-public class ShackDroidWebView extends Activity {
+public class ActivityWebView extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

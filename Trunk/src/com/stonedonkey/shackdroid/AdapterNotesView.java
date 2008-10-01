@@ -9,14 +9,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class NotesViewAdapter extends BaseAdapter {
+public class AdapterNotesView extends BaseAdapter {
 
 	private Context context;
 	private Cursor noteList;
 	private int rowResouceID;
 	static Typeface face;
 	
-	public NotesViewAdapter(Context context,int rowResouceID, Cursor noteList){
+	public AdapterNotesView(Context context,int rowResouceID, Cursor noteList){
 		this.context = context;
 		this.noteList = noteList;
 		this.rowResouceID = rowResouceID;

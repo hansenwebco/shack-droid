@@ -12,7 +12,7 @@ import android.view.View.OnCreateContextMenuListener;
 import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
-public class ShackDroidNotes extends ListActivity {
+public class ActivityNotes extends ListActivity {
 
 	private Cursor notesCursor;
 	private long itemPosition;
@@ -30,7 +30,7 @@ public class ShackDroidNotes extends ListActivity {
 
 		notesCursor = nm.GetAllNotes();
 
-		NotesViewAdapter nva = new NotesViewAdapter(this, R.layout.notes_row,
+		AdapterNotesView nva = new AdapterNotesView(this, R.layout.notes_row,
 				notesCursor);
 		setListAdapter(nva);
 
@@ -86,7 +86,7 @@ public class ShackDroidNotes extends ListActivity {
 				.getColumnIndexOrThrow("storyID"));
 
 		Intent intent = new Intent();
-		intent.setClass(this, ShackDroidThread.class);
+		intent.setClass(this, ActivityThreadedView.class);
 		intent.putExtra("postID", postID); // the value must be a string
 		intent.putExtra("storyID", storyID);
 		startActivity(intent);
@@ -104,7 +104,7 @@ public class ShackDroidNotes extends ListActivity {
 		nm.DeleteNote(rowID);
 
 		notesCursor = nm.GetAllNotes();
-		NotesViewAdapter nva = new NotesViewAdapter(this, R.layout.notes_row,
+		AdapterNotesView nva = new AdapterNotesView(this, R.layout.notes_row,
 				notesCursor);
 		setListAdapter(nva);
 

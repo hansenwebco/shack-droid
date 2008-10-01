@@ -8,7 +8,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import android.content.Context;
 
-public class RSSFeedSaxHandler extends DefaultHandler {
+public class SaxHandlerRSSFeed extends DefaultHandler {
 
 	@SuppressWarnings("unused")
 	private Context context = null;
@@ -27,7 +27,7 @@ public class RSSFeedSaxHandler extends DefaultHandler {
 	private String datePostedText = "";
 
 	
-	public RSSFeedSaxHandler(Context context) {
+	public SaxHandlerRSSFeed(Context context) {
 		this.context =context;
 	}
 

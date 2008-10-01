@@ -10,7 +10,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public class TopicViewSaxHandler extends DefaultHandler
+public class SaxHandlerTopicView extends DefaultHandler
 {
 	private ArrayList<ShackPost> posts = new ArrayList<ShackPost>();	
 	private ArrayList<Integer> indent = new ArrayList<Integer>();
@@ -40,7 +40,7 @@ public class TopicViewSaxHandler extends DefaultHandler
 	@SuppressWarnings("unused")
 	private Context context = null;
 	
-	public TopicViewSaxHandler(Context context)
+	public SaxHandlerTopicView(Context context)
 	{
 		this.context = context;
 		

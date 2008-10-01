@@ -13,14 +13,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class ThreadedViewAdapter extends BaseAdapter {
+public class AdapterThreadedView extends BaseAdapter {
 
 	private Context context;
 	private List<ShackPost> topicList;
 	private int rowResouceID;
 	static Typeface face;
 	
-	public ThreadedViewAdapter(Context context,int rowResouceID, List<ShackPost> topicList ){
+	public AdapterThreadedView(Context context,int rowResouceID, List<ShackPost> topicList ){
 		this.context = context;
 		this.topicList = topicList;
 		this.rowResouceID = rowResouceID;

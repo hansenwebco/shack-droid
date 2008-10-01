@@ -12,7 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class TopicViewAdapter extends BaseAdapter {
+public class AdapterTopicView extends BaseAdapter {
 
 	private Context context;
 	private List<ShackPost> topicList;
@@ -20,7 +20,7 @@ public class TopicViewAdapter extends BaseAdapter {
 	private String shackLogin;
 	static Typeface face;
 	
-	public TopicViewAdapter(Context context,int rowResouceID, List<ShackPost> topicList, String shackLogin ){
+	public AdapterTopicView(Context context,int rowResouceID, List<ShackPost> topicList, String shackLogin ){
 		this.context = context;
 		this.topicList = topicList;
 		this.rowResouceID = rowResouceID;
