@@ -116,7 +116,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			
 			// set the index on them based on order
 			ShackPost tempPost = null;
-			for (int x=0;x<posts.size();x++)
+			int postsSize = posts.size();
+			for (int x=0;x<postsSize;x++)
 			{
 				tempPost = posts.get(x);
 				tempPost.setPostIndex(x);
