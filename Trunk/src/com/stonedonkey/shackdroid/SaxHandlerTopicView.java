@@ -33,16 +33,11 @@ public class SaxHandlerTopicView extends DefaultHandler
 	private String storyName = "";
 	private String postCategory = "";
 	private int storyPageCount = 0;
-	@SuppressWarnings("unused")
-	private boolean comments = false;
-	@SuppressWarnings("unused")
-	private boolean comment = false;
-	@SuppressWarnings("unused")
-	private Context context = null;
+
 	
 	public SaxHandlerTopicView(Context context)
 	{
-		this.context = context;
+		//this.context = context;
 		
 		// set our preferences
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -87,12 +82,12 @@ public class SaxHandlerTopicView extends DefaultHandler
 				if (attributes.getValue("last_page").length() > 0)
 					storyPageCount = Integer.parseInt(attributes.getValue("last_page"));
 			
-			comments = true; 
+		
 		}
 				
 		if("comment".equalsIgnoreCase(localName))
 		{
-			comment= true;
+			
 			posterName = attributes.getValue("author");
 			postDate = attributes.getValue("date");
 			preview = attributes.getValue("preview");
@@ -110,16 +105,7 @@ public class SaxHandlerTopicView extends DefaultHandler
 	public void endElement(final String nsURI, final String localName,
             final String rawName)
 			throws SAXException {
-	
-		if ("comments".equalsIgnoreCase(localName))
-		{
-			comments = false;
-		}
-		if ("comment".equalsIgnoreCase(localName))
-		{
-			comment = false;
-		}			
-	 
+		 
 		if ("body".equalsIgnoreCase(localName)) 
 		{
 			body = false;
@@ -148,19 +134,15 @@ public class SaxHandlerTopicView extends DefaultHandler
 		
 			// check to see if it passes the persons filters, if it does not
 			// then we don't add it
-			if ( 
-					(postCategory.equals("nws") && allowNWS != true) ||
-					(postCategory.equals("offtopic") && allowOffTopic != true) ||
-					(postCategory.equals("political") && allowPolitical != true) ||
-					(postCategory.equals("stupid") && allowStupid != true) ||
-					(postCategory.equals("informative") && allowInteresting != true) 
-				)
+			if ( ((postCategory.equals("nws") && allowNWS == true) ||
+				 (postCategory.equals("offtopic") && allowOffTopic == true) ||
+				 (postCategory.equals("political") && allowPolitical == true) ||
+				 (postCategory.equals("stupid") && allowStupid == true) ||
+				 (postCategory.equals("informative") && allowInteresting == true)) ||
+				 (postCategory.equals("ontopic")))
 			{
-				//do nothing
-			}
-			else {
 				// add new post to collection
-				ShackPost currentPost = new ShackPost( posterName, postDate, preview,postID, bodyText, replyCount, currentIndent,postCategory,0,posts.size());
+				ShackPost currentPost = new ShackPost( posterName, postDate, preview ,postID, bodyText, replyCount, currentIndent,postCategory,0,posts.size());
 				posts.add(currentPost);
 				bodyText= "";
 			}
@@ -168,16 +150,12 @@ public class SaxHandlerTopicView extends DefaultHandler
 		}
 					
 	} 
-
 		
 	@Override
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
 
 		if (body)
-		{
-		// do stuff here
 			bodyText = bodyText + new String(ch,start,length);
-		}
 	}
 }
