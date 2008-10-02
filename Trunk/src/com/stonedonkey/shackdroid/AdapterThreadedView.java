@@ -58,12 +58,14 @@ public class AdapterThreadedView extends BaseAdapter {
 		
 		if (threadPreview != null)
 		{
+		
 			// TODO: This is ATROCIOUS find a better way.
 			String pad ="";
-			for(int i=0;i<post.getIndent();i++)
+			int postIndent = post.getIndent(); // avoid multiple lookups
+			for(int i=0;i<postIndent;i++)
 				pad = pad + "   ";	
 			
-			String postText= post.getPostPreview();
+			String postText = post.getPostPreview();
 		
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 			String login = prefs.getString("shackLogin", "");
@@ -77,25 +79,10 @@ public class AdapterThreadedView extends BaseAdapter {
 			if (highlightThread == true)
 				if (post.getPosterName().toString().equalsIgnoreCase(login))
 					threadPreview.setTextColor(Color.parseColor("#00BFF3"));
-			
-			// we can use the epipsize on the actual layout but it looks pretty
-			// crappy.. this looks better ATM
-			try
-			{
-//				if (pad.length() >= 39)
-//					postText = pad.substring(0,36) + "...";
-//				else if (pad.length() + postText.length() >= 39)
-//					postText = pad + postText.substring(0, 39-(post.getIndent() * 2)) + "...";
-//				else
-				postText= pad + postText;
-				
-				threadPreview.setText(postText);
-				
-			}
-			catch (Exception ex)
-			{
-				// something went bad with parsing this text.. empty post
-			}
+
+		
+			postText = pad + postText;
+			threadPreview.setText(postText);
 			
 		}
 		return v;

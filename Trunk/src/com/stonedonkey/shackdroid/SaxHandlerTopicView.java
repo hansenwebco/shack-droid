@@ -112,17 +112,21 @@ public class SaxHandlerTopicView extends DefaultHandler
 		
 			// this handles determining how far in a reply is indented
 			int currentIndent;
-			if (indent.size() > 0)
-			 currentIndent = indent.size();
+			int indentSize = indent.size();
+			
+			
+			if (indentSize > 0)
+			 currentIndent = indentSize;
 			else
 			 currentIndent = 0;
 			
-			for (int i = 0 ; i < indent.size() ; i++)
+			for (int i = 0 ; i < indentSize ; i++)
 			{
 				indent.set(i, indent.get(i) - 1 );
 				if (indent.get(i) == 0)
 				{
 					indent.remove(i);
+					indentSize--;
 					i--;
 				}
 			}
