@@ -1,5 +1,6 @@
 package com.stonedonkey.shackdroid;
 
+import java.util.Hashtable;
 import java.util.List;
 
 import android.content.Context;
@@ -19,12 +20,14 @@ public class AdapterTopicView extends BaseAdapter {
 	private int rowResouceID;
 	private String shackLogin;
 	static Typeface face;
+	private Hashtable<String,String> d;
 	
-	public AdapterTopicView(Context context,int rowResouceID, List<ShackPost> topicList, String shackLogin ){
+	public AdapterTopicView(Context context,int rowResouceID, List<ShackPost> topicList, String shackLogin,Hashtable<String,String> d ){
 		this.context = context;
 		this.topicList = topicList;
 		this.rowResouceID = rowResouceID;
 		this.shackLogin = shackLogin;
+		this.d = d;
 		
 		 face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
 	}
@@ -78,11 +81,15 @@ public class AdapterTopicView extends BaseAdapter {
 		//	e.printStackTrace();
 		//}   
 	
-		
+		// TODO: this is getting called too late... updating ActivityTopicView
 		TextView postReplyCount = (TextView)v.findViewById(R.id.TextViewReplyCount);
 		postReplyCount.setTypeface(face);
 		if (postReplyCount !=null)
-			postReplyCount.setText(post.getReplyCount());
+			if (d.get(post.getPostID()) != null  && Long.parseLong(d.get(post.getPostID())) < Long.parseLong(post.getReplyCount())   )
+				postReplyCount.setText(post.getReplyCount() + "(x)");
+				else
+					postReplyCount.setText(post.getReplyCount());	
+			
 		
 		TextView postText = (TextView)v.findViewById(R.id.TextViewPostText);
 		postText.setTypeface(face);
