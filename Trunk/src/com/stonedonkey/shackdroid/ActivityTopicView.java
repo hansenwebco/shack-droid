@@ -2,6 +2,7 @@ package com.stonedonkey.shackdroid;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -37,12 +38,14 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 	private Integer currentPage = 1;
 	private Integer storyPages = 1;
 	private String loadStoryID = null;
+	private Hashtable<String, String> d = new Hashtable<String,String>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.topics);
 
+	
 		Bundle extras = this.getIntent().getExtras();
 		if (extras != null)
 			loadStoryID = extras.getString("StoryID");
@@ -232,8 +235,19 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			String login = prefs.getString("shackLogin", "");
 			
 			// this is where we bind our fancy ArrayList of posts
-			AdapterTopicView tva = new AdapterTopicView(this, R.layout.topic_row,posts,login);
+			AdapterTopicView tva = new AdapterTopicView(this, R.layout.topic_row,posts,login,d);
 			setListAdapter(tva);
+			
+			// TODO: this is getting set before the list is bound.. why?
+			for (int i=0; i < tva.getCount(); i++)
+			{
+				ShackPost sp = (ShackPost) tva.getItem(i); 
+				String replyCount = sp.getReplyCount();
+				String postID = sp.getPostID();
+				d.put(postID, replyCount);
+			}
+	
+			
 		}
 		else
 		{
