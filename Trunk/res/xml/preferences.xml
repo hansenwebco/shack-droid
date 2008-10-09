@@ -63,6 +63,7 @@
                 android:title="Shack API URL"
                 android:summary="Change the API Url"
                 android:dialogTitle="Shack Api URL" 
+                android:textSize="12sp"
                 android:defaultValue="http://shackchatty.com"/>
                 
             
