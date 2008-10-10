@@ -1,0 +1,26 @@
+<resources>
+	<string-array name="feeds">
+		<item>Front Page</item>
+		<item>Latest Features</item>
+		<item>Xbox 360</item>
+		<item>PC</item>
+		<item>Playstation 3</item>
+		<item>Nintendo Wii</item>
+		<item>Playstation 2</item>
+		<item>PSP</item>
+		<item>XBLA</item>
+		<item>Rumor</item>
+	</string-array>
+	<string-array name="feedsURls">
+		<item>http://feed.shacknews.com/shackfeed.xml</item>
+		<item>http://www.shacknews.com/shackfeed_content.xml</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/Xbox+360</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/PC</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/PlayStation+3</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/Nintendo+Wii</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/PlayStation+2</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/PSP</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/XBLA</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/Rumor</item>
+	</string-array>	
+</resources>
