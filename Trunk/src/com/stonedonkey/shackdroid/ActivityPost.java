@@ -308,6 +308,7 @@ public class ActivityPost extends Activity {
 				else  // back to the main view
 				{
 					Intent intent = new Intent();
+					intent.putExtra("StoryID",storyID );
 					intent.setClass(this, ActivityTopicView.class);
 					startActivity(intent);
 				}
