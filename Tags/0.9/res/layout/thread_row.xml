@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+android:id="@+id/LinearLayoutThreadRow"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:orientation="vertical"
+xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<CheckedTextView 
+		android:id="@+id/TextViewThreadPreview"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:padding="5px"
+		android:paddingRight="20px"
+		android:textSize="11sp"
+		android:typeface="monospace" 
+		android:textColor="#FFFFFF"
+
+		>
+	</CheckedTextView >
+
+</LinearLayout>
+<!-- 
+		// these tags will autoelipse things at the end of the line
+		// but it looks bad... might work with it more later
+		android:ellipsize="end"
+		android:singleLine="true"
+ -->
+<!-- android:typeface="monospace"  -->
