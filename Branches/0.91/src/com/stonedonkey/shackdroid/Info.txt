@@ -1,7 +1,0 @@
-C:\Program Files\Java\jdk1.6.0_07\bin>
-
-keytool -genkey -alias stonedonkey -keystore c:\temp\key -validity 3650
-
-jarsigner -keystore c:\temp\key c:\temp\ShackDroid.apk stonedonkey
-or 
-jarsigner -keystore c:\temp\key -storepass <password> -keypass <password> c:\temp\ShackDroid.apk stonedonkey
