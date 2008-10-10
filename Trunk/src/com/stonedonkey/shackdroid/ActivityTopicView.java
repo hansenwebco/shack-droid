@@ -2,7 +2,6 @@ package com.stonedonkey.shackdroid;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Hashtable;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -38,27 +37,61 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 	private Integer currentPage = 1;
 	private Integer storyPages = 1;
 	private String loadStoryID = null;
-	private Hashtable<String, String> d = new Hashtable<String,String>();
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.topics);
 
-	
 		Bundle extras = this.getIntent().getExtras();
 		if (extras != null)
 			loadStoryID = extras.getString("StoryID");
 		
-		try {
-			fillDataSAX();
-		} catch (Exception e) {
-			new AlertDialog.Builder(this).setTitle("Error").setPositiveButton("OK", null)
-			.setMessage("There was an error connection to the API.").show();
+		if (savedInstanceState == null) 
+			{
+			try 
+			{
+				fillDataSAX();
+			} 
+			catch (Exception e) 
+			{
+				new AlertDialog.Builder(this).setTitle("Error").setPositiveButton("OK", null)
+				.setMessage("There was an error connection to the API.").show();
+			}
 		}
 	}
+	
+	@Override 
+	public void onSaveInstanceState(Bundle savedInstanceState)
+	{
+		// Dear Android devs... please make this more of a pain in the ass for
+		// orientation changes.. KAHNNN!!!!
+		savedInstanceState.putSerializable("posts", posts);
+		savedInstanceState.putString("storyName", storyName);
+		savedInstanceState.putInt("currentPage", currentPage);
+		savedInstanceState.putInt("storyPages", storyPages);
+		savedInstanceState.putString("storyID", storyID);
+		
+	}
 
-	// Override the onCreateOptionsMenu to provide our own custome
+	 // TODO: How do I make typesafe check.. how is typecheck formed?
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) 
+	{
+			storyName = savedInstanceState.getString("storyName");
+			currentPage = savedInstanceState.getInt("currentPage");
+			storyPages = savedInstanceState.getInt("storyPages");
+			storyID = savedInstanceState.getString("storyID");
+			posts = (ArrayList<ShackPost>) savedInstanceState.getSerializable("posts");
+					
+			savedInstanceState.clear();  // we'll resave it if we do something again
+			ShowData();
+	}
+
+
+	// Override the onCreateOptionsMenu to provide our own custom
 	// buttons.
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -235,17 +268,10 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			String login = prefs.getString("shackLogin", "");
 			
 			// this is where we bind our fancy ArrayList of posts
-			AdapterTopicView tva = new AdapterTopicView(this, R.layout.topic_row,posts,login,d);
+			AdapterTopicView tva = new AdapterTopicView(this, R.layout.topic_row,posts,login);
 			setListAdapter(tva);
 			
-			// TODO: this is getting set before the list is bound.. why?
-			for (int i=0; i < tva.getCount(); i++)
-			{
-				ShackPost sp = (ShackPost) tva.getItem(i); 
-				String replyCount = sp.getReplyCount();
-				String postID = sp.getPostID();
-				d.put(postID, replyCount);
-			}
+
 	
 			
 		}
