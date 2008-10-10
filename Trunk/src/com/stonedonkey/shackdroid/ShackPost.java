@@ -1,7 +1,14 @@
 package com.stonedonkey.shackdroid;
 
-public final class ShackPost {
+import java.io.Serializable;
 
+public final class ShackPost implements Serializable
+ {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String posterName = null;
 	private String postDate = null;
 	private String postPreview = null;
