@@ -82,9 +82,7 @@ public class ActivityRSS extends ListActivity implements Runnable {
 	@Override
 	public void run() {
 	
-		//SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		//String feedURL = prefs.getString("shackFeedURL", "http://shackchatty.com");
-		
+	
 		try {
 			url = new URL(feedURL);
 		
