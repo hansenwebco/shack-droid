@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">ShackDroid</string>
     <string name="version_name">ShackDroid v1.0</string>
+    <string name="default_api">http://shackapi.stonedonkey.com</string>
 </resources>

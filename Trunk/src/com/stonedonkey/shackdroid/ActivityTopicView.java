@@ -199,7 +199,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 		try {
 
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-			String feedURL = prefs.getString("shackFeedURL", "http://shackchatty.com");
+			String feedURL = prefs.getString("shackFeedURL",getString(R.string.default_api));
 			URL url;
 			
 			if (loadStoryID != null)

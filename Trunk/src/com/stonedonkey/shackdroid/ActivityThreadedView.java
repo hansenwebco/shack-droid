@@ -89,7 +89,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		try {
 			
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-			String feedURL = prefs.getString("shackFeedURL", "http://shackchatty.com");
+			String feedURL = prefs.getString("shackFeedURL", getString(R.string.default_api));
 			URL url = new URL(feedURL + "/thread/" + postID	+ ".xml");
 
 		//* Get a SAXParser from the SAXPArserFactory./
