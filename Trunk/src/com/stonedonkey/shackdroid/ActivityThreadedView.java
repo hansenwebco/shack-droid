@@ -54,6 +54,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	private String errorText = "";
 	private int currentPosition = 0;
 	private boolean spoilerText= false;
+	private View lastView = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,9 +67,46 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		Bundle extras = this.getIntent().getExtras();
 		postID = extras.getString("postID");
 		storyID = extras.getString("storyID");
-	
-		fillSaxData(postID);
+		
+		if (savedInstanceState == null) 
+			fillSaxData(postID);
 
+	}
+	
+	@Override 
+	public void onSaveInstanceState(Bundle savedInstanceState)
+	{
+		savedInstanceState.putSerializable("posts", posts);
+		savedInstanceState.putString("storyID", storyID);
+		savedInstanceState.putString("postID", postID);
+		savedInstanceState.putInt("currentPosition", currentPosition);
+
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) 
+	{
+		posts = (ArrayList<ShackPost>) savedInstanceState.getSerializable("posts");
+		storyID = savedInstanceState.getString("storyID");
+		postID = savedInstanceState.getString("postID");
+		currentPosition = savedInstanceState.getInt("currentPosition");
+		
+		// rebind our data
+		AdapterThreadedView tva = new AdapterThreadedView(this,	R.layout.thread_row, posts);
+		setListAdapter(tva);
+
+		// set it to the last post viewed
+		UpdatePostText(currentPosition, true);
+		
+		
+		// TODO: this isnt' selecting the proper thing... hrmmm
+		View v = tva.getView(currentPosition, null, null);
+		v.setBackgroundColor(Color.parseColor("#ffffff"));
+
+		savedInstanceState.clear();
+		
 	}
 
 	private void fillSaxData(String postID) {
@@ -92,21 +130,21 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			String feedURL = prefs.getString("shackFeedURL", getString(R.string.default_api));
 			URL url = new URL(feedURL + "/thread/" + postID	+ ".xml");
 
-		//* Get a SAXParser from the SAXPArserFactory./
+		    // Get a SAXParser from the SAXPArserFactory.
 			SAXParserFactory spf = SAXParserFactory.newInstance();
 			SAXParser sp = spf.newSAXParser();
 
-		//  Get the XMLReader of the SAXParser we created./
+		    //  Get the XMLReader of the SAXParser we created.
 			XMLReader xr = sp.getXMLReader();
-			//* Create a new ContentHandler and apply it to the XML-Reader/
+			// Create a new ContentHandler and apply it to the XML-Reader
 			SaxHandlerTopicView saxHandler = new SaxHandlerTopicView(this);
 			xr.setContentHandler(saxHandler);
 
-		//* Parse the xml-data from our URL./
+			// Parse the xml-data from our URL.
 			xr.parse(new InputSource(url.openStream()));
 		
 
-		//* Our ExampleHandler now provides the parsed data to us./
+			// Our ExampleHandler now provides the parsed data to us.
 			posts = saxHandler.GetParsedPosts();
 		
 			// the folowing sorts are what are used to highlight the last ten posts.  We add an index to the
@@ -222,6 +260,14 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 
+		if (lastView != null)
+			lastView.setBackgroundColor(Color.parseColor("#000000"));
+		
+		v.setBackgroundColor(Color.parseColor("#222222"));
+		lastView = v;
+		
+	
+		
 		currentPosition = position;
 		l.setFocusableInTouchMode(true);
 		//l.setChoiceMode(1);
@@ -277,8 +323,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		//Convert the shack spans into HTML fonts since our TextView can convert stuff to HTML
 		// not sure if this is the best or most efficent, but works.e
 		text = text.replaceAll("<span class=\"jt_red\">(.*?)</span>", "<font color=\"#ff0000\">$1</font>");	
-			text = text.replaceAll("<span class=\"jt_green\">(.*?)</span>",	"<font color=\"#8dc63f\">$1</font>");
-			text = text.replaceAll("<span class=\"jt_pink\">(.*?)</span>", "<font color=\"#f49ac1\">$1</font>");
+		text = text.replaceAll("<span class=\"jt_green\">(.*?)</span>",	"<font color=\"#8dc63f\">$1</font>");
+		text = text.replaceAll("<span class=\"jt_pink\">(.*?)</span>", "<font color=\"#f49ac1\">$1</font>");
 		text = text.replaceAll("<span class=\"jt_olive\">(.*?)</span>",	"<font color=\"#808000\">$1</font>");
 		text = text.replaceAll("<span class=\"jt_fuchsia\">(.*?)</span>", "<font color=\"#c0ffc0\">$1</font>");
 		text = text.replaceAll("<span class=\"jt_yellow\">(.*?)</span>", "<font color=\"#ffde00\">$1</font>");
