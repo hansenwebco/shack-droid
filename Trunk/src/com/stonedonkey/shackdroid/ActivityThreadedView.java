@@ -260,6 +260,9 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 
+		
+		// NOTE: ListView's don't show the current selection when in TouchMode
+		//       so horray for hacks... because this is "intended" behavior.
 		if (lastView != null)
 			lastView.setBackgroundColor(Color.parseColor("#000000"));
 		
