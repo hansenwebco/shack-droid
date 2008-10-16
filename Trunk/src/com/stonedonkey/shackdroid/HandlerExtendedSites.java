@@ -58,7 +58,7 @@ public class HandlerExtendedSites extends Activity {
     			{
     				// successful LOL or INF
     				new AlertDialog.Builder(ctx).setTitle(tag + "'d").setPositiveButton("OK", null)
-    				.setMessage("The post was successfully [ " + tag + "'d ]").show();
+    				.setMessage("The post was successfully\n[ " + tag + "'d ]").show();
     			}
     			else
     			{
