@@ -22,5 +22,13 @@
 		<item>http://feed.shacknews.com/extras/tag_rss.x/PSP</item>
 		<item>http://feed.shacknews.com/extras/tag_rss.x/XBLA</item>
 		<item>http://feed.shacknews.com/extras/tag_rss.x/Rumor</item>
+	</string-array>
+		<string-array name="shackAPIDesc">
+		<item>Squeegy's</item>
+		<item>stonedonkey's</item>
 	</string-array>	
+	<string-array name="shackAPIs">
+		<item>http://shackchatty.com</item>
+		<item>http://shackapi.stonedonkey.com</item>
+	</string-array>
 </resources>
