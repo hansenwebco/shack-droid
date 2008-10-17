@@ -58,15 +58,21 @@
  </PreferenceCategory>    
      <PreferenceCategory
             android:title="Advanced">
-        <EditTextPreference
-                android:key="shackFeedURL"
-                android:title="Shack API URL"
-                android:summary="Change the API Url"
-                android:dialogTitle="Shack Api URL" 
-                android:textSize="12sp"
-                android:defaultValue="@string/default_api"/>
-                
+
+
             
     
-    </PreferenceCategory>
+    <ListPreference
+     android:key="shackFeedURL"
+     android:entries="@array/shackAPIDesc"
+	 android:entryValues="@array/shackAPIs"
+	 android:dialogTitle="Choose Shack API"
+	 android:summary="Change the API Url"
+	 android:title="Shack API"
+	 android:defaultValue="http://shackchatty.com"
+	 android:textSize="12sp"
+    />
+    
+    
+</PreferenceCategory>
 </PreferenceScreen>
