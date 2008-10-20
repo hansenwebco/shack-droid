@@ -14,6 +14,7 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -43,7 +44,9 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.topics);
-
+		
+	
+		
 		Bundle extras = this.getIntent().getExtras();
 		if (extras != null)
 			loadStoryID = extras.getString("StoryID");
@@ -52,6 +55,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			{
 			try 
 			{
+				//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 				fillDataSAX();
 			} 
 			catch (Exception e) 
@@ -180,6 +184,9 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 
 	private void SetPaging(Integer increment)
 	{
+		
+		
+		
 		// set current page
 		if ( (currentPage + increment >= 1) && (currentPage + increment <= storyPages))
 		currentPage = currentPage + increment;
