@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +71,7 @@ public class AdapterThreadedView extends BaseAdapter {
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 			String login = prefs.getString("shackLogin", "");
 			Boolean highlightThread = prefs.getBoolean("highlightUserThreads", true);
+			int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
 			 
 			// show this users posts as blue
 			if (post.getPostIndex() > 9)
@@ -82,6 +84,7 @@ public class AdapterThreadedView extends BaseAdapter {
 
 		
 			postText = pad + postText;
+			threadPreview.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 			threadPreview.setText(postText);
 			
 		}

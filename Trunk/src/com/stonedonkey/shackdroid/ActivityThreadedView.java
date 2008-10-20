@@ -26,6 +26,7 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.style.BackgroundColorSpan;
 import android.text.util.Linkify;
+import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -92,6 +93,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		storyID = savedInstanceState.getString("storyID");
 		postID = savedInstanceState.getString("postID");
 		currentPosition = savedInstanceState.getInt("currentPosition");
+
 		
 		// rebind our data
 		AdapterThreadedView tva = new AdapterThreadedView(this,	R.layout.thread_row, posts);
@@ -194,10 +196,14 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		ShackPost post = posts.get(position);
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		String login = prefs.getString("shackLogin", "");		
-	
+		String login = prefs.getString("shackLogin", "");
+		
+		int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
+		tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+		
 		Typeface face = Typeface.createFromAsset(this.getAssets(), "fonts/arial.ttf");
 		tv.setTypeface(face);
+	
 		
 		TextView posterName = (TextView) findViewById(R.id.TextViewThreadAuthor);
 		posterName.setText(post.getPosterName());
