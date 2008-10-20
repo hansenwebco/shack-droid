@@ -401,26 +401,29 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			LaunchNotesIntent();
 			return true;
 		case 7: //sub menu for ShackMarks
-			ShackDroidNotesManager nm = new ShackDroidNotesManager(this);
-			nm.open();
 			
-			TextView poster = (TextView)findViewById(R.id.TextViewThreadAuthor);
-			TextView postDate = (TextView)findViewById(R.id.TextViewThreadViewPostDate);
+			HandlerExtendedSites.AddRemoveShackMark(this, postID,false);
 			
-			ShackPost shackPost= posts.get(currentPosition);
-			String previewText = shackPost.getPostPreview();
-			
-			long result = nm.CreateNote(postID, previewText, poster.getText().toString(), postDate.getText().toString(),"NWS",storyID);
-			
-			// notes manager returns an ID if it worked
-			if (result > 0)
-				new AlertDialog.Builder(this).setTitle("ShackMark").setPositiveButton("OK", null)
-				.setMessage("This post has been saved to your ShackMarks.").show();
-			else
-				new AlertDialog.Builder(this).setTitle("ShackMark").setPositiveButton("OK", null)
-				.setMessage("There was a problem saving your mark.").show();
-
-			nm.close();
+//			ShackDroidNotesManager nm = new ShackDroidNotesManager(this);
+//			nm.open();
+//			
+//			TextView poster = (TextView)findViewById(R.id.TextViewThreadAuthor);
+//			TextView postDate = (TextView)findViewById(R.id.TextViewThreadViewPostDate);
+//			
+//			ShackPost shackPost= posts.get(currentPosition);
+//			String previewText = shackPost.getPostPreview();
+//			
+//			long result = nm.CreateNote(postID, previewText, poster.getText().toString(), postDate.getText().toString(),"NWS",storyID);
+//			
+//			// notes manager returns an ID if it worked
+//			if (result > 0)
+//				new AlertDialog.Builder(this).setTitle("ShackMark").setPositiveButton("OK", null)
+//				.setMessage("This post has been saved to your ShackMarks.").show();
+//			else
+//				new AlertDialog.Builder(this).setTitle("ShackMark").setPositiveButton("OK", null)
+//				.setMessage("There was a problem saving your mark.").show();
+//
+//			nm.close();
 			return true;
 		case 8:
 			// lol post
