@@ -14,7 +14,6 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -273,9 +272,11 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			String login = prefs.getString("shackLogin", "");
+			int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
+			
 			
 			// this is where we bind our fancy ArrayList of posts
-			AdapterTopicView tva = new AdapterTopicView(this, R.layout.topic_row,posts,login);
+			AdapterTopicView tva = new AdapterTopicView(this, R.layout.topic_row,posts,login,fontSize);
 			setListAdapter(tva);
 			
 

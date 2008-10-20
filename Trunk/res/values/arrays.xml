@@ -31,4 +31,11 @@
 		<item>http://shackchatty.com</item>
 		<item>http://shackapi.stonedonkey.com</item>
 	</string-array>
+		<string-array name="fontSizes">
+		<item>12</item>
+		<item>14</item>
+		<item>16</item>
+		<item>18</item>
+		<item>20</item>
+	</string-array>
 </resources>

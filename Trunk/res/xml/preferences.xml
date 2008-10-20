@@ -48,31 +48,34 @@
     		android:summary="Country songs backwards."/>    
     
     </PreferenceCategory>
- <PreferenceCategory
-            android:title="Chatty Settings">
+ <PreferenceCategory android:title="Chatty Settings">
          	<CheckBoxPreference 
     		android:key="highlightUserThreads" 
     		android:title="Highlight Threads"
     		android:defaultValue="true" 
-    		android:summary="Highlight my posts blue in threaded view."/>    
+    		android:summary="Highlight my posts blue in threaded view."/>
+    		
+    		<ListPreference
+    			android:key="fontSize"
+    			android:entryValues ="@array/fontSizes"
+    			android:entries="@array/fontSizes"
+    			android:title="Font Size"
+    			android:summary="Set the font size post text."
+    			android:defaultValue="12"
+    		/>
+    		    
  </PreferenceCategory>    
-     <PreferenceCategory
-            android:title="Advanced">
+     <PreferenceCategory android:title="Advanced">
+	    <ListPreference
+	     android:key="shackFeedURL"
+	     android:entries="@array/shackAPIDesc"
+		 android:entryValues="@array/shackAPIs"
+		 android:dialogTitle="Choose Shack API"
+		 android:summary="Change the API Url"
+		 android:title="Shack API"
+		 android:defaultValue="http://shackchatty.com"
+		 android:textSize="12sp"
+	    />
 
-
-            
-    
-    <ListPreference
-     android:key="shackFeedURL"
-     android:entries="@array/shackAPIDesc"
-	 android:entryValues="@array/shackAPIs"
-	 android:dialogTitle="Choose Shack API"
-	 android:summary="Change the API Url"
-	 android:title="Shack API"
-	 android:defaultValue="http://shackchatty.com"
-	 android:textSize="12sp"
-    />
-    
-    
 </PreferenceCategory>
 </PreferenceScreen>

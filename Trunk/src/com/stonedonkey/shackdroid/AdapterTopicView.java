@@ -5,6 +5,7 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,16 +20,17 @@ public class AdapterTopicView extends BaseAdapter {
 	private int rowResouceID;
 	private String shackLogin;
 	static Typeface face;
-
+	private int fontSize = 12;
 	
-	public AdapterTopicView(Context context,int rowResouceID, List<ShackPost> topicList, String shackLogin ){
+	
+	public AdapterTopicView(Context context,int rowResouceID, List<ShackPost> topicList, String shackLogin,int fontSize ){
 		this.context = context;
 		this.topicList = topicList;
 		this.rowResouceID = rowResouceID;
 		this.shackLogin = shackLogin;
-	
-		
-		 face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
+		this.fontSize = fontSize;
+				
+	    face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
 	}
 	
 	@Override
@@ -52,12 +54,14 @@ public class AdapterTopicView extends BaseAdapter {
 		LayoutInflater inflate = LayoutInflater.from(context);
 		
 		
+		
 		View v = inflate.inflate(rowResouceID,parent,false);
 	
 		
 		// bind the TextViews to the items in our datasource
 		TextView posterName = (TextView)v.findViewById(R.id.TextViewPosterName);
 		posterName.setTypeface(face);
+		
 		if (posterName != null)
 			posterName.setText(post.getPosterName());
 		
@@ -87,6 +91,7 @@ public class AdapterTopicView extends BaseAdapter {
 			
 		
 		TextView postText = (TextView)v.findViewById(R.id.TextViewPostText);
+		postText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 		postText.setTypeface(face);
 		if (postText != null)
 			postText.setText(post.getPostPreview());
