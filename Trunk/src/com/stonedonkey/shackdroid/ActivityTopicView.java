@@ -169,7 +169,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			return true;	
 		case 6:
 			intent = new Intent();
-			intent.setClass(this, ActivityNotes.class);
+			intent.setClass(this, ActivityShackMarks.class);
 			startActivity(intent);
 			return true;
 		case 7:

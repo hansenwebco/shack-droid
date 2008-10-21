@@ -72,12 +72,12 @@ public class HandlerExtendedSites extends Activity {
 									.setPositiveButton("OK", null)
 									.setMessage("The post was successfully added to your ShackMarks")
 									.show();
-					else
-						new AlertDialog.Builder(ctx)
-							.setTitle("ShackMark Added")
-							.setPositiveButton("OK", null)
-							.setMessage("The post was successfully removed to your ShackMarks")
-							.show();					
+					//else
+					//	new AlertDialog.Builder(ctx)
+					//		.setTitle("ShackMark Removed")
+					//		.setPositiveButton("OK", null)
+					//		.setMessage("The post was successfully removed to your ShackMarks")
+					//		.show();					
 					
 				} else {
 					

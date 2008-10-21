@@ -15,6 +15,7 @@
         <activity android:name="ActivityRSS" android:label="ShackDroidRSS"></activity>
         <activity android:name="ActivityWebView" android:label="ShackDroidWebView"></activity>
         <activity android:name="ActivitySplashScreen" android:label="@string/app_name"></activity>
+        <activity android:name="ActivityShackMarks" android:label="ShackMarks"></activity>
 </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest> 
