@@ -455,7 +455,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	private void LaunchNotesIntent()
 	{
 		Intent intent = new Intent();
-		intent.setClass(this, ActivityNotes.class);
+		intent.setClass(this, ActivityShackMarks.class);
 		startActivity(intent);
 	}
 	

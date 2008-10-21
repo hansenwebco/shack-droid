@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ShackDroid</string>
-    <string name="version_name">ShackDroid v1.0</string>
+    <string name="version_name">ShackDroid v1.1</string>
     <string name="default_api">http://shackchatty.com</string>
 </resources>
