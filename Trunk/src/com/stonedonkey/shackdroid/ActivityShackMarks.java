@@ -60,13 +60,6 @@ public class ActivityShackMarks extends ListActivity implements Runnable {
 	private void fillSaxData()
 	{
 		
-		pd = ProgressDialog.show(this, null, "shackmarks loading, please wait...", true,false); 
-		pd.setIcon(R.drawable.shack_logo);
-		
-		// use the class run() method to do work
-		Thread thread = new Thread(this); 
-		thread.start();
-		
 		// TODO: could probably move this to a helper class
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		String shackLogin = prefs.getString("shackLogin", "");
@@ -78,6 +71,15 @@ public class ActivityShackMarks extends ListActivity implements Runnable {
 							"Please set your Login in settings.").show();
 			return;
 		}
+		
+		pd = ProgressDialog.show(this, null, "shackmarks loading, please wait...", true,false); 
+		pd.setIcon(R.drawable.shack_logo);
+		
+		// use the class run() method to do work
+		Thread thread = new Thread(this); 
+		thread.start();
+		
+
 	
 	
 	}
