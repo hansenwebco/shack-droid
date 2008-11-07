@@ -258,7 +258,19 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 		public void handleMessage(Message msg) {
 			// we implement a handler because most UI items 
 			// won't update within a thread
-			pd.dismiss();
+			try {
+				
+				pd.dismiss();	
+			}
+			catch (Exception ex)
+			{
+				// TODO : .dismiss is failing on the initial startup, something to do with the
+				//        windows manager... this is a hacky fix.. :(  
+				//String fail = ex.getMessage();
+				//fillDataSAX();
+			}
+			
+			
 			ShowData();
 		}
 	};
