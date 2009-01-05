@@ -16,11 +16,47 @@ import android.preference.PreferenceManager;
 
 public class HandlerExtendedSites extends Activity {
 
-	public static void AddRemoveShackMark(Context ctx, String id,Boolean delete) {
+	public static int VersionCheck(Context ctx) {
+
+		URL url;
+		try {
+			url = new URL("http://www.stonedonkey.com/ShackDroid/version.txt");
+			URLConnection conn = url.openConnection();
+			HttpURLConnection httpConnection = (HttpURLConnection) conn;
+
+			int responseCode = httpConnection.getResponseCode();
+			
+			if (responseCode == HttpURLConnection.HTTP_OK) {
+
+				InputStream is = httpConnection.getInputStream();
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(is));
+
+				String line = null;
+				line = reader.readLine();
+
+				if (line.equals(ctx.getString(R.string.version_id)))
+					return 0;
+				else
+					return 1;
+
+			}
+
+		} catch (Exception e) {
+
+			return -1;
+		}
+
+		return -1;
+
+	}
+
+	public static void AddRemoveShackMark(Context ctx, String id, Boolean delete) {
 
 		try {
 
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+			SharedPreferences prefs = PreferenceManager
+					.getDefaultSharedPreferences(ctx);
 			String shackLogin = prefs.getString("shackLogin", "");
 
 			// make sure they have their username set
@@ -28,7 +64,7 @@ public class HandlerExtendedSites extends Activity {
 				new AlertDialog.Builder(ctx).setTitle("Username Required")
 						.setPositiveButton("OK", null).setMessage(
 								"Please set your Login in settings.").show();
-			
+
 				return;
 			}
 
@@ -39,9 +75,13 @@ public class HandlerExtendedSites extends Activity {
 
 			URL url;
 			if (delete == false)
-				url = new URL("http://socksandthecity.net/shackmarks/shackmark.php?" + data);
+				url = new URL(
+						"http://socksandthecity.net/shackmarks/shackmark.php?"
+								+ data);
 			else
-				url = new URL("http://socksandthecity.net/shackmarks/unshackmark.php?" + data);
+				url = new URL(
+						"http://socksandthecity.net/shackmarks/unshackmark.php?"
+								+ data);
 
 			URLConnection conn = url.openConnection();
 			HttpURLConnection httpConnection = (HttpURLConnection) conn;
@@ -68,19 +108,21 @@ public class HandlerExtendedSites extends Activity {
 
 					if (delete == false)
 						new AlertDialog.Builder(ctx)
-									.setTitle("ShackMark Added")
-									.setPositiveButton("OK", null)
-									.setMessage("The post was successfully added to your ShackMarks")
-									.show();
-					//else
-					//	new AlertDialog.Builder(ctx)
-					//		.setTitle("ShackMark Removed")
-					//		.setPositiveButton("OK", null)
-					//		.setMessage("The post was successfully removed to your ShackMarks")
-					//		.show();					
-					
+								.setTitle("ShackMark Added")
+								.setPositiveButton("OK", null)
+								.setMessage(
+										"The post was successfully added to your ShackMarks")
+								.show();
+					// else
+					// new AlertDialog.Builder(ctx)
+					// .setTitle("ShackMark Removed")
+					// .setPositiveButton("OK", null)
+					// .setMessage(
+					// "The post was successfully removed to your ShackMarks")
+					// .show();
+
 				} else {
-					
+
 					new AlertDialog.Builder(ctx).setTitle("ShackMark Failed")
 							.setPositiveButton("OK", null).setMessage(
 									"ShackMark failed").show();

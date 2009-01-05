@@ -108,6 +108,8 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 		menu.add(2, 2, 6, "Settings").setIcon(R.drawable.menu_settings);
 		menu.add(2, 6, 7, "ShackMarks").setIcon(R.drawable.menu_addpost);
 		menu.add(2, 7, 8, "Shack RSS").setIcon(R.drawable.menu_reload);
+		menu.add(3, 8, 9,"Check Version");
+		
 			
 		menu.findItem(5).setEnabled(false);
 		
@@ -177,6 +179,22 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			intent.setClass(this, ActivityRSS.class);
 			startActivity(intent);
 			return true;
+		case 8:
+			String message = "Unable to complete version check, please try again later.";
+			
+			int result = HandlerExtendedSites.VersionCheck(this);
+			
+			if (result == 1)
+				message = "NEW SHACKDROID VERSION!\n http://www.stonedonkey.com/ShackDroid/Latest";
+			else if (result == 0)
+				message = "ShackDroid is up to date.";
+						
+			
+			new AlertDialog.Builder(this).setTitle("Version Check")
+			.setPositiveButton("OK", null).setMessage(
+					message).show();
+			
+			
 		}
 		return false;
 	}
