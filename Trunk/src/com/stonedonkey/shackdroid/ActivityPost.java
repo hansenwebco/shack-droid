@@ -10,10 +10,13 @@ import java.net.URLEncoder;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,12 +27,13 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-public class ActivityPost extends Activity {
+public class ActivityPost extends Activity implements Runnable {
 
 	private String postID;
 	private String storyID;
 	private String selectedShackTagOpen = "";
 	private String selectedShackTagClose = "";
+	private ProgressDialog pd;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -236,93 +240,7 @@ public class ActivityPost extends Activity {
 		//return;
 	}
 	
-	private void DoShackPost() {
-		// get the login and password for user out of our preferences
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		String login = prefs.getString("shackLogin", "");
-		String password = prefs.getString("shackPassword", "");
 
-		EditText ev = (EditText) findViewById(R.id.EditTextPost);
-		String postText = ev.getText().toString();
-		
-		// create a URL to post to
-		try {
-
-			String data = URLEncoder.encode("iuser", "UTF-8") + "="
-						+ URLEncoder.encode(login, "UTF-8") + "&"
-						+ URLEncoder.encode("ipass", "UTF-8") + "="
-						+ URLEncoder.encode(password, "UTF-8") + "&"
-						+ URLEncoder.encode("group", "UTF-8") + "="
-						+ URLEncoder.encode(storyID, "UTF-8") + "&"
-						+ URLEncoder.encode("body", "UTF-8") + "="
-						+ URLEncoder.encode(postText, "UTF-8");
-
-			if (postID.length() > 0)
-			{
-				data = data + "&" + URLEncoder.encode("parent", "UTF-8") + "="
-				+ URLEncoder.encode(postID, "UTF-8");
-			}
-			
-			// post to ShackNews
-			URL url = new URL("http://www.shacknews.com/extras/post_laryn_iphone.x");
-			URLConnection conn = url.openConnection();
-			conn.setDoOutput(true);
-
-			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-
-			wr.write(data);
-			wr.flush();
-
-			// Capture reponse for handling
-			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			String line;
-			String result = "";
-			while ((line = rd.readLine()) != null) {
-				result = result + line;
-			}
-			wr.close();
-			rd.close();
-
-			// show an error messages to the user if needed
-			// Shack sends back a <script> with a bunch of script.. so.. we look for error messages.. eh...
-			TextView errorText = (TextView)findViewById(R.id.TextViewPostError);
-			if (result.contains("You must be logged in to post") == true)
-				errorText.setText("Login failed, please check your username and password.");
-			else if (result.contains("Please post something with more than 5 characters.") == true)
-				errorText.setText("Please post something with more than 5 characters.");
-			else if (result.contains("Please wait a few minutes before trying to post again.") == true)
-				errorText.setText("Please wait a few minutes before trying to post again.");
-			else  // no errors
-			{
-				if (postID.length() > 0 && storyID.length() > 0) // back to thread
-				{
-					Intent intent = new Intent();
-					intent.putExtra("postID", postID);
-					intent.putExtra("storyID", storyID);
-					// pass a result back to the ShackDroidThread.java letting
-					// it know our work is done.
-					setResult(RESULT_OK,intent); 
-					finish();
-					return;
-				}
-				else  // back to the main view
-				{
-					Intent intent = new Intent();
-					intent.putExtra("StoryID",storyID );
-					intent.setClass(this, ActivityTopicView.class);
-					startActivity(intent);
-				}
-				finish(); // this will be replaced with an intent
-			}
-	
-		} catch (Exception e) {
-			TextView errorText = (TextView)findViewById(R.id.TextViewPostError);
-			errorText.setText("There was an error submitting your post.");
-			e.printStackTrace();
-		}
-
-	}
-	 
 	@Override
 	 protected Dialog onCreateDialog(int id)
 	 {
@@ -397,4 +315,170 @@ public class ActivityPost extends Activity {
 		}
 		return false;
 	}
+	private void DoShackPost() {
+		
+		pd = ProgressDialog.show(this, null, "Posting, please wait...", true,false); 
+		//pd.setIcon(R.drawable.shack_logo);
+		
+		// use the class run() method to do work
+		Thread thread = new Thread(this); 
+		thread.start();
+	}
+	 
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		// get the login and password for user out of our preferences
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		String login = prefs.getString("shackLogin", "");
+		String password = prefs.getString("shackPassword", "");
+
+		EditText ev = (EditText) findViewById(R.id.EditTextPost);
+		String postText = ev.getText().toString();
+		
+		// create a URL to post to
+		try {
+
+			String data = URLEncoder.encode("iuser", "UTF-8") + "="
+						+ URLEncoder.encode(login, "UTF-8") + "&"
+						+ URLEncoder.encode("ipass", "UTF-8") + "="
+						+ URLEncoder.encode(password, "UTF-8") + "&"
+						+ URLEncoder.encode("group", "UTF-8") + "="
+						+ URLEncoder.encode(storyID, "UTF-8") + "&"
+						+ URLEncoder.encode("body", "UTF-8") + "="
+						+ URLEncoder.encode(postText, "UTF-8");
+
+			if (postID.length() > 0)
+			{
+				data = data + "&" + URLEncoder.encode("parent", "UTF-8") + "="
+				+ URLEncoder.encode(postID, "UTF-8");
+			}
+			
+			// post to ShackNews
+			URL url = new URL("http://www.shacknews.com/extras/post_laryn_iphone.x");
+			URLConnection conn = url.openConnection();
+			conn.setDoOutput(true);
+
+			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+
+			wr.write(data);
+			wr.flush();
+
+			// Capture reponse for handling
+			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String line;
+			String result = "";
+			while ((line = rd.readLine()) != null) {
+				result = result + line;
+			}
+			wr.close();
+			rd.close();
+
+			// show an error messages to the user if needed
+			// Shack sends back a <script> with a bunch of script.. so.. we look for error messages.. eh...
+			
+			if (result.contains("You must be logged in to post") == true) {
+				//errorText.setText("Login failed, please check your username and password.");
+				errorPostHandler.sendEmptyMessage(0);
+			}
+			else if (result.contains("Please post something with more than 5 characters.") == true)
+				//errorText.setText("Please post something with more than 5 characters.");
+				errorPostHandler.sendEmptyMessage(1);
+			else if (result.contains("Please wait a few minutes before trying to post again.") == true)
+				//errorText.setText("Please wait a few minutes before trying to post again.");
+				errorPostHandler.sendEmptyMessage(2);
+			else  // no errors
+			{
+				if (postID.length() > 0 && storyID.length() > 0) // back to thread
+				{
+					Intent intent = new Intent();
+					intent.putExtra("postID", postID);
+					intent.putExtra("storyID", storyID);
+					// pass a result back to the ShackDroidThread.java letting
+					// it know our work is done.
+					setResult(RESULT_OK,intent); 
+					//finish();
+					progressBarHandler.sendEmptyMessage(0);
+					return;
+				}
+				else  // back to the main view
+				{
+					Intent intent = new Intent();
+					intent.putExtra("StoryID",storyID );
+					intent.setClass(this, ActivityTopicView.class);
+					startActivity(intent);
+				}
+				progressBarHandler.sendEmptyMessage(0);
+				//finish(); // this will be replaced with an intent
+			}
+	
+		} catch (Exception e) {
+			
+			errorPostHandler.sendEmptyMessage(3);
+			//TextView errorText = (TextView)findViewById(R.id.TextViewPostError);
+			//errorText.setText("There was an error submitting your post.");
+			//e.printStackTrace();
+		}
+	}
+	
+	private Handler progressBarHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			// we implement a handler because most UI items 
+			// won't update within a thread
+			try {
+				
+				pd.dismiss();	
+			}
+			catch (Exception ex)
+			{
+				// TODO : .dismiss is failing on the initial startup, something to do with the
+				//        windows manager... this is a hacky fix.. :(  
+				//String fail = ex.getMessage();
+				//fillDataSAX();
+				finish();
+				return;
+			}
+			
+			
+			finish();
+		}
+	};
+	
+	private Handler errorPostHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			// we implement a handler because most UI items 
+			// won't update within a thread
+			try {
+				pd.dismiss();
+				
+			}
+			catch (Exception ex)
+			{
+				// TODO : .dismiss is failing on the initial startup, something to do with the
+				//        windows manager... this is a hacky fix.. :(  
+				
+			}
+			TextView errorText = (TextView)findViewById(R.id.TextViewPostError);
+			switch (msg.what){
+			case 0:
+				errorText.setText("Login failed, please check your username and password.");
+				break;
+			case 1: 
+				errorText.setText("Please post something with more than 5 characters.");
+				break;
+			case 2:
+				errorText.setText("Please wait a few minutes before trying to post again.");
+				break;
+			case 3:
+				errorText.setText("There was an error submitting your post, try again later.");
+				break;
+			}
+			
+		
+		}
+	};
+	
+	
 }
