@@ -220,6 +220,9 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 
 		String postCat = post.getPostCategory();
 		setPostCategoryIcon(postCat);
+		
+		postID= post.getPostID();
+		
 	}
 	
 	private void ShowData() {
