@@ -12,6 +12,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -51,7 +52,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	private ArrayList<ShackPost> posts;
 	private String storyID;
 	private String postID;
-	private ProgressDialog pd;
 	private String errorText = "";
 	private int currentPosition = 0;
 	private boolean spoilerText= false;
@@ -77,6 +77,15 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	@Override 
 	public void onSaveInstanceState(Bundle savedInstanceState)
 	{
+		
+		try {
+
+			// pd.dismiss();
+			dismissDialog(1);
+		} catch (Exception ex) {
+			// dialog could not be killed for some reason
+		}
+		
 		savedInstanceState.putSerializable("posts", posts);
 		savedInstanceState.putString("storyID", storyID);
 		savedInstanceState.putString("postID", postID);
@@ -85,35 +94,54 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		
 	}
 	
-	@SuppressWarnings("unchecked")
+	//@SuppressWarnings("unchecked")
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) 
 	{
-		posts = (ArrayList<ShackPost>) savedInstanceState.getSerializable("posts");
+		//posts = (ArrayList<ShackPost>) savedInstanceState.getSerializable("posts");
 		storyID = savedInstanceState.getString("storyID");
 		postID = savedInstanceState.getString("postID");
 		currentPosition = savedInstanceState.getInt("currentPosition");
 
-		
-		// rebind our data
-		AdapterThreadedView tva = new AdapterThreadedView(this,	R.layout.thread_row, posts);
-		setListAdapter(tva);
+		fillSaxData(postID);
 
+		ShowData();
+	
+		// rebind our data
+		//AdapterThreadedView tva = new AdapterThreadedView(this,	R.layout.thread_row, posts);
+		//setListAdapter(tva);
+		
 		// set it to the last post viewed
-		UpdatePostText(currentPosition, true);
+		//UpdatePostText(currentPosition, true);
 		
 		
 		// TODO: this isnt' selecting the proper thing... hrmmm
-		View v = tva.getView(currentPosition, null, null);
-		v.setBackgroundColor(Color.parseColor("#ffffff"));
+		//View v = tva.getView(currentPosition, null, null);
+		//v.setBackgroundColor(Color.parseColor("#ffffff"));
 
 		savedInstanceState.clear();
 		
 	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case 1: {
+			ProgressDialog dialog = new ProgressDialog(this);
+			dialog.setMessage("loading, please wait...");
+			dialog.setTitle(null);
+			dialog.setIndeterminate(true);
+			dialog.setCancelable(false);
+			return dialog;
+		}
+		}
+		return null;
 
+	}
 	private void fillSaxData(String postID) {
 		// show a progress dialog
-		pd = ProgressDialog.show(this, null, "Loading thread...", true,	true); 
+		//pd = ProgressDialog.show(this, null, "Loading thread...", true,	true);
+		showDialog(1);
 		
 		// use the class run() method to do work
 		Thread thread = new Thread(this); 
@@ -178,7 +206,15 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		public void handleMessage(Message msg) {
 			// we implement a handler because most UI items 
 			// won't update within a thread
-			pd.dismiss();
+			try {
+				//pd.dismiss();
+				dismissDialog(1);
+			}
+			catch (Exception ex)
+			{
+				// dialog could not be killed for some reason
+			}
+			
 			ShowData();
 		}
 	};
@@ -233,7 +269,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		AdapterThreadedView tva = new AdapterThreadedView(this,	R.layout.thread_row, posts);
 		setListAdapter(tva);
 
-		UpdatePostText(0,true);
+		UpdatePostText(currentPosition,true);
 		
 		// set the post background color to be more "shack" like
 		RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayoutThread);

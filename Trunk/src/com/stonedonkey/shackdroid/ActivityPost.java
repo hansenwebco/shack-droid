@@ -33,7 +33,7 @@ public class ActivityPost extends Activity implements Runnable {
 	private String storyID;
 	private String selectedShackTagOpen = "";
 	private String selectedShackTagClose = "";
-	private ProgressDialog pd;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +77,33 @@ public class ActivityPost extends Activity implements Runnable {
 			}
 		});
 		SetShackTagAttributes();
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+
+		try {
+
+			// pd.dismiss();
+			dismissDialog(2);
+		} catch (Exception ex) {
+			// dialog could not be killed for some reason
+		}
+		
+		TextView tv = (TextView)findViewById(R.id.EditTextPost);
+		savedInstanceState.putString("postText", tv.getText().toString());
+		
+	}
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		Bundle extras = this.getIntent().getExtras();
+		postID = extras.getString("postID");
+		storyID = extras.getString("storyID");
+		
+		TextView tv = (TextView)findViewById(R.id.EditTextPost);
+		if (savedInstanceState != null)
+			tv.setText(savedInstanceState.getString("postText"));
+		
 	}
 	
 	// Add Listeners for Tag Buttons
@@ -280,7 +307,14 @@ public class ActivityPost extends Activity implements Runnable {
 	                    /* User clicked cancel so do some stuff */
 	                }
 	            }).create();	
-    
+	      case 2: {
+			ProgressDialog dialog = new ProgressDialog(this);
+			dialog.setMessage("Posting, please wait...");
+			dialog.setTitle(null);
+			dialog.setIndeterminate(true);
+			dialog.setCancelable(false);
+			return dialog;
+		}
         
 	        
 		}
@@ -317,8 +351,9 @@ public class ActivityPost extends Activity implements Runnable {
 	}
 	private void DoShackPost() {
 		
-		pd = ProgressDialog.show(this, null, "Posting, please wait...", true,false); 
+		//pd = ProgressDialog.show(this, null, "Posting, please wait...", true,false); 
 		//pd.setIcon(R.drawable.shack_logo);
+		showDialog(2);
 		
 		// use the class run() method to do work
 		Thread thread = new Thread(this); 
@@ -428,7 +463,8 @@ public class ActivityPost extends Activity implements Runnable {
 			// won't update within a thread
 			try {
 				
-				pd.dismiss();	
+				//pd.dismiss();
+				dismissDialog(2);
 			}
 			catch (Exception ex)
 			{
@@ -451,7 +487,8 @@ public class ActivityPost extends Activity implements Runnable {
 			// we implement a handler because most UI items 
 			// won't update within a thread
 			try {
-				pd.dismiss();
+				//pd.dismiss();
+				dismissDialog(2);
 				
 			}
 			catch (Exception ex)

@@ -140,7 +140,13 @@ public class ActivityShackMarks extends ListActivity implements Runnable {
 		public void handleMessage(Message msg) {
 			// we implement a handler because most UI items 
 			// won't update within a thread
+			try {
 			pd.dismiss();
+			}
+			catch (Exception ex)
+			{
+			
+			}
 			ShowData();
 		}
 	};
