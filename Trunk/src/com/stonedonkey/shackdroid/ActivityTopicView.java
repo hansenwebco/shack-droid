@@ -37,6 +37,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 	private Integer currentPage = 1;
 	private Integer storyPages = 1;
 	private String loadStoryID = null;
+	private Boolean threadLoaded = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -84,23 +85,27 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 		savedInstanceState.putInt("currentPage", currentPage);
 		savedInstanceState.putInt("storyPages", storyPages);
 		savedInstanceState.putString("storyID", storyID);
+		savedInstanceState.putBoolean("threadLoaded", threadLoaded);
 
 	}
 
 	// TODO: How do I make typesafe check.. how is typecheck formed?
-	//@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		storyName = savedInstanceState.getString("storyName");
 		currentPage = savedInstanceState.getInt("currentPage");
 		storyPages = savedInstanceState.getInt("storyPages");
 		storyID = savedInstanceState.getString("storyID");
-		//posts = (ArrayList<ShackPost>) savedInstanceState.getSerializable("posts");
-
+		posts = (ArrayList<ShackPost>) savedInstanceState.getSerializable("posts");
+		threadLoaded = savedInstanceState.getBoolean("threadLoaded");
+		
 		// TODO : If we change orientation in the middle of a thread loading we end up with 
 		//        the last loaded posts, this forces a new pull on orientation change.
-		fillDataSAX();  
-		
+		if (threadLoaded == false)
+			fillDataSAX();  
+
+		threadLoaded = true;
 		savedInstanceState.clear(); // we'll resave it if we do something again
 		ShowData();
 	}
@@ -242,6 +247,8 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 	}
 
 	public void run() {
+		
+		threadLoaded = false;
 		try {
 
 			SharedPreferences prefs = PreferenceManager
@@ -291,6 +298,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			ex.printStackTrace(System.out);
 			errorText = "An error occurred connecting to API.";
 		}
+		
 		progressBarHandler.sendEmptyMessage(0);
 	}
 
@@ -340,7 +348,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 						.show();
 			}
 		}
-
+		threadLoaded = true;
 	}
 
 	@Override
