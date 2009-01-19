@@ -14,17 +14,19 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class AdapterThreadedView extends BaseAdapter {
+public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 
 	private Context context;
 	private List<ShackPost> topicList;
 	private int rowResouceID;
 	static Typeface face;
+	private int selectedRow = 0;
 	
-	public AdapterThreadedView(Context context,int rowResouceID, List<ShackPost> topicList ){
+	public AdapterThreadedView(Context context,int rowResouceID, List<ShackPost> topicList,int selectedRow ){
 		this.context = context;
 		this.topicList = topicList;
 		this.rowResouceID = rowResouceID;
+		this.selectedRow = selectedRow;
 		
 		face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
 	}
@@ -81,6 +83,12 @@ public class AdapterThreadedView extends BaseAdapter {
 			if (highlightThread == true)
 				if (post.getPosterName().toString().equalsIgnoreCase(login))
 					threadPreview.setTextColor(Color.parseColor("#00BFF3"));
+
+			if (position == selectedRow){
+				threadPreview.setBackgroundColor(Color.parseColor("#222222"));
+			}
+				
+			
 
 		
 			postText = pad + postText;

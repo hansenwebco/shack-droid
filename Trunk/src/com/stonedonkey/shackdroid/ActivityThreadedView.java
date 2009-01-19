@@ -56,6 +56,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	private int currentPosition = 0;
 	private boolean spoilerText= false;
 	private View lastView = null;
+	private Boolean threadLoaded = true;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -90,35 +91,31 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		savedInstanceState.putString("storyID", storyID);
 		savedInstanceState.putString("postID", postID);
 		savedInstanceState.putInt("currentPosition", currentPosition);
-
-		
+		savedInstanceState.putBoolean("threadLoaded", threadLoaded);
+	
 	}
 	
-	//@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) 
 	{
-		//posts = (ArrayList<ShackPost>) savedInstanceState.getSerializable("posts");
+		posts = (ArrayList<ShackPost>) savedInstanceState.getSerializable("posts");
 		storyID = savedInstanceState.getString("storyID");
 		postID = savedInstanceState.getString("postID");
 		currentPosition = savedInstanceState.getInt("currentPosition");
-
-		fillSaxData(postID);
-
-		ShowData();
+		threadLoaded = savedInstanceState.getBoolean("threadLoaded");
+		
 	
-		// rebind our data
-		//AdapterThreadedView tva = new AdapterThreadedView(this,	R.layout.thread_row, posts);
-		//setListAdapter(tva);
+		if (threadLoaded == true && posts != null) { 
+			ShowData();
+			ListView lv = getListView();
+			lv.setSelection(currentPosition);
+		}
+		else
+		{
+			fillSaxData(postID);
+		}
 		
-		// set it to the last post viewed
-		//UpdatePostText(currentPosition, true);
-		
-		
-		// TODO: this isnt' selecting the proper thing... hrmmm
-		//View v = tva.getView(currentPosition, null, null);
-		//v.setBackgroundColor(Color.parseColor("#ffffff"));
-
 		savedInstanceState.clear();
 		
 	}
@@ -153,7 +150,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		
 		Comparator<ShackPost> byPostID = new SortByPostIDComparator();
 		Comparator<ShackPost> byOrderID = new SortByOrderIDComparator();
-		
+		threadLoaded = false;
 		try {
 			
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -198,6 +195,9 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			ex.printStackTrace(System.out);
 			errorText = "An error occurred connecting to API.";
 		}
+		threadLoaded = true;
+
+		
 		progressBarHandler.sendEmptyMessage(0);
 	}
 	
@@ -257,16 +257,17 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		String postCat = post.getPostCategory();
 		setPostCategoryIcon(postCat);
 		
-		postID= post.getPostID();
+		postID = post.getPostID();
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void ShowData() {
 	
 		if (posts != null)
 		{
 		// this is where we bind our fancy ArrayList of posts
-		AdapterThreadedView tva = new AdapterThreadedView(this,	R.layout.thread_row, posts);
+		AdapterThreadedView tva = new AdapterThreadedView(this,	R.layout.thread_row, posts,currentPosition);
 		setListAdapter(tva);
 
 		UpdatePostText(currentPosition,true);
@@ -299,17 +300,29 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 				.setMessage(errorText).show();
 				}
 		}
+		
 	}
 
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 
-		
+	
 		// NOTE: ListView's don't show the current selection when in TouchMode
 		//       so horray for hacks... because this is "intended" behavior.
 		if (lastView != null)
-			lastView.setBackgroundColor(Color.parseColor("#000000"));
+			lastView.setBackgroundColor(Color.TRANSPARENT);
+		else
+		{
+			TextView threadPreview = null;
+			View vi = (View) l.getChildAt(currentPosition);
+			if (vi != null)
+				threadPreview = (TextView)vi.findViewById(R.id.TextViewThreadPreview);
+			if (threadPreview != null)
+				threadPreview.setBackgroundColor(Color.TRANSPARENT);
+		}
+		
+	
 		
 		v.setBackgroundColor(Color.parseColor("#222222"));
 		lastView = v;
@@ -434,6 +447,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			finish();
 			return true;
 		case 3:
+			this.currentPosition =0;
 			this.fillSaxData(postID);
 			return true;
 		case 6:
