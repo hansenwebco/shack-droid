@@ -17,6 +17,8 @@ public class SaxHandlerSearchResults extends DefaultHandler {
 	private String id;
 	private String storyID;
 	private String resultText = "";
+	private String totalPages = "0";
+	private String totalResults = "0";
 	
 	private Boolean result = false;
 		
@@ -25,11 +27,26 @@ public class SaxHandlerSearchResults extends DefaultHandler {
 	public ArrayList<ShackSearch> getSearchResults() {
 		return searchResults;
 	}
+	public String getTotalPages()
+	{
+		return totalPages;
+	}
+	public String getTotalResults()
+	{
+		return totalResults;
+	}
 
 	@Override
 	public void startElement(final String nsURL, final String localName,
 	final String rawName,final Attributes attributes) throws SAXException
 	{
+		
+		if("searchresults".equalsIgnoreCase(localName))
+		{
+			totalPages= attributes.getValue("last_page");
+			totalResults = attributes.getValue("total_results");
+		}
+		
 		if("result".equalsIgnoreCase(localName))
 		{
 			author = attributes.getValue("author");
