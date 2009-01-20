@@ -16,6 +16,8 @@
         <activity android:screenOrientation="sensor" android:name="ActivityWebView" android:label="ShackDroidWebView"></activity>
         <activity android:screenOrientation="sensor" android:name="ActivitySplashScreen" android:label="@string/app_name"></activity>
         <activity android:screenOrientation="sensor" android:name="ActivityShackMarks" android:label="ShackMarks"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivitySearch" android:label="Search Shack"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivitySearchResults" android:label="Search Results"></activity>
 </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest> 

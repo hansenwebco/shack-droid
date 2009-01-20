@@ -54,7 +54,6 @@ public class ActivityShackMarks extends ListActivity implements Runnable {
 					}
 				});
 	
-		
 	}
 	
 	private void fillSaxData()

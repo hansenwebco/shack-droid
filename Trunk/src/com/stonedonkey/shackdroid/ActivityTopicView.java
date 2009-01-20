@@ -125,6 +125,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 		menu.add(2, 6, 7, "ShackMarks").setIcon(R.drawable.menu_addpost);
 		menu.add(2, 7, 8, "Shack RSS").setIcon(R.drawable.menu_reload);
 		menu.add(3, 8, 9, "Check Version");
+		menu.add(3, 9,10,"Shack Search");
 
 		menu.findItem(5).setEnabled(false);
 
@@ -205,8 +206,14 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 
 			new AlertDialog.Builder(this).setTitle("Version Check")
 					.setPositiveButton("OK", null).setMessage(message).show();
-
+			return true;
+		case 9:
+			intent = new Intent();
+			intent.setClass(this,ActivitySearch.class);
+			startActivity(intent);
+			return true;
 		}
+	
 		return false;
 	}
 
