@@ -55,7 +55,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	private String errorText = "";
 	private int currentPosition = 0;
 	private boolean spoilerText= false;
-	private View lastView = null;
 	private Boolean threadLoaded = true;
 	
 	@Override
@@ -320,38 +319,39 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	}
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 
-	
+
 		// NOTE: ListView's don't show the current selection when in TouchMode
 		//       so horray for hacks... because this is "intended" behavior.
-		if (lastView != null)
-			lastView.setBackgroundColor(Color.TRANSPARENT);
-		else
-		{
-			TextView threadPreview = null;
-			View vi = (View) l.getChildAt(currentPosition - l.getFirstVisiblePosition());
 
-			if (vi != null)
-				threadPreview = (TextView)vi.findViewById(R.id.TextViewThreadPreview);
-			if (threadPreview != null)
-				threadPreview.setBackgroundColor(Color.TRANSPARENT);
-		}
-		
-	
-		
-		v.setBackgroundColor(Color.parseColor("#222222"));
-		lastView = v;
-		
-	
-		
+		TextView threadPreview = null;
+		View vi = (View) l.getChildAt(currentPosition - l.getFirstVisiblePosition());
+
+		if (vi != null)
+			threadPreview = (TextView)vi.findViewById(R.id.TextViewThreadPreview);
+		if (threadPreview != null)
+			threadPreview.setBackgroundColor(Color.TRANSPARENT);
+
+		vi = (View) l.getChildAt(position - l.getFirstVisiblePosition());
+		if (vi != null)
+			threadPreview = (TextView)vi.findViewById(R.id.TextViewThreadPreview);
+		if (threadPreview != null)
+			threadPreview.setBackgroundColor(Color.parseColor("#274FD3"));
+
+		// tell our adapter what the current row is, this is used to rehighlight
+		// the current topic during scrolling
+		AdapterThreadedView tva = (AdapterThreadedView) getListAdapter();
+		tva.setSelectedRow(position);
+
 		currentPosition = position;
 		l.setFocusableInTouchMode(true);
 		//l.setChoiceMode(1);
 		//l.setItemChecked(position, true);
 		//l.setSelection(position);
-		
+
 		ScrollView sv = (ScrollView) findViewById(R.id.textAreaScroller);
 		sv.scrollTo(0, 0); 
 
@@ -541,6 +541,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			break;
 		}
 	}
+
 
 
 }/**
