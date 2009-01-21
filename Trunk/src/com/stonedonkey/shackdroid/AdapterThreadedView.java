@@ -22,6 +22,11 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 	static Typeface face;
 	private int selectedRow = 0;
 	
+	// this lets us know if the first load was done, we only highlight the selected
+	// post on the first load from the adapater view, this is because the ListView calls
+	// get view on scrolling
+	private Boolean firstLoad = true; 
+	
 	public AdapterThreadedView(Context context,int rowResouceID, List<ShackPost> topicList,int selectedRow ){
 		this.context = context;
 		this.topicList = topicList;
@@ -84,11 +89,12 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 				if (post.getPosterName().toString().equalsIgnoreCase(login))
 					threadPreview.setTextColor(Color.parseColor("#00BFF3"));
 
-			if (position == selectedRow){
+			if (position == selectedRow && firstLoad == true){
 				threadPreview.setBackgroundColor(Color.parseColor("#222222"));
+				firstLoad = false;
 			}
 				
-			
+		
 
 		
 			postText = pad + postText;

@@ -41,7 +41,7 @@ public class SaxHandlerSearchResults extends DefaultHandler {
 	final String rawName,final Attributes attributes) throws SAXException
 	{
 		
-		if("searchresults".equalsIgnoreCase(localName))
+		if("results".equalsIgnoreCase(localName))
 		{
 			totalPages= attributes.getValue("last_page");
 			totalResults = attributes.getValue("total_results");
