@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
@@ -28,6 +29,7 @@ public class ActivitySearchResults extends ListActivity implements Runnable {
 	private String parentAuthor = "";
 	private String totalPages = "1";
 	private String totalResults ="0";
+	private int currentPage = 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,7 @@ public class ActivitySearchResults extends ListActivity implements Runnable {
 	}
 	private void fillSaxData() {
 		// show a progress dialog
-		pd = ProgressDialog.show(this, null, "Searching the Shack...", true, true); 
+		pd = ProgressDialog.show(this, null, "Loading search results...", true, true); 
 			
 		// use the class run() method to do work
 		Thread thread = new Thread(this); 
@@ -57,7 +59,7 @@ public class ActivitySearchResults extends ListActivity implements Runnable {
 	public void run() {
 		try {
 			
-			URL url = new URL("http://shackapi.stonedonkey.com/search/?SearchTerm=" + URLEncoder.encode(searchTerm,"UTF-8") + "&Author="+ author + "&ParentAuthor=" + parentAuthor);
+			URL url = new URL("http://shackapi.stonedonkey.com/search/?SearchTerm=" + URLEncoder.encode(searchTerm,"UTF-8") + "&Author="+ author + "&ParentAuthor=" + parentAuthor + "&page=" + currentPage); 
 		
 			// Get a SAXParser from the SAXPArserFactory. 
 			SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -103,7 +105,7 @@ public class ActivitySearchResults extends ListActivity implements Runnable {
 	};
 	private void ShowData() {
 		
-		setTitle("Search Results - 1 of " + this.totalPages + " - " + this.totalResults + " results.");
+		setTitle("Search Results - " + currentPage + " of " + this.totalPages + " - " + this.totalResults + " results.");
 		
 		// this is where we bind our fancy ArrayList of posts
 		AdapterSearchResults tva = new AdapterSearchResults(this, searchResults,R.layout.searchresults_row);
@@ -133,10 +135,59 @@ public class ActivitySearchResults extends ListActivity implements Runnable {
 		menu.add(1, 0, 1, "Prev Page").setIcon(R.drawable.menu_back);
 		menu.add(1, 1, 2, "Next Page").setIcon(R.drawable.menu_forward);
 		menu.add(1, 2, 3, "Home").setIcon(R.drawable.menu_home);
-		menu.add(1, 3, 4, "Back").setIcon(R.drawable.menu_reload);
+		menu.add(1, 3, 4, "Back").setIcon(R.drawable.menu_search);
 		
 		menu.findItem(0).setEnabled(false);
 		
 		return true;
 	}
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Context context = this;
+		Intent intent;
+		switch (item.getItemId()) {
+		case 0: // prev page
+			SetPaging(-1);
+			fillSaxData();
+			return true;
+		case 1: // next page
+			SetPaging(1);
+			fillSaxData();
+			return true;
+		case 2: // back to main chatty
+			intent = new Intent();
+			intent.setClass(this, ActivityTopicView.class);
+			startActivity(intent);
+		case 3: // home
+			finish();
+			return true;
+		}
+		return false;
+	}
+	private void SetPaging(Integer increment) {
+
+		// set current page
+		if ((currentPage + increment >= 1) && (currentPage + increment <= Integer.parseInt(totalPages)))
+			currentPage = currentPage + increment;
+	
+		
+	}
+	@Override
+	public boolean onMenuOpened(int featureId, Menu menu) {
+		
+		// don't allow previous if on page 1
+		if (currentPage == 1)
+			menu.findItem(0).setEnabled(false);
+		else
+			menu.findItem(0).setEnabled(true);
+		
+		// don't allow paging past last item.
+		if (currentPage == Integer.parseInt(totalPages))
+			menu.findItem(1).setEnabled(false);
+		else
+			menu.findItem(1).setEnabled(true);
+			
+		
+		return super.onMenuOpened(featureId, menu);
+	}
+
 }

@@ -72,6 +72,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		
 		if (savedInstanceState == null) 
 			fillSaxData(postID);
+	
 
 	}
 	
@@ -215,6 +216,18 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 				// dialog could not be killed for some reason
 			}
 			
+			
+			// if we are provided a postID that is not the same as the first
+			// item we need to find it and setit
+			if (posts.size() > 0 )
+				if (postID.equalsIgnoreCase(posts.get(0).getPostID()) == false)
+					for(int x=0;x<posts.size();x++)
+						if (posts.get(x).getPostID().equalsIgnoreCase(postID)){
+							currentPosition = x;
+							break;
+						}
+			
+			
 			ShowData();
 		}
 	};
@@ -272,6 +285,9 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 
 		UpdatePostText(currentPosition,true);
 		
+		ListView lv = getListView();
+		lv.setSelection(currentPosition);
+		
 		// set the post background color to be more "shack" like
 		RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayoutThread);
 		layout.setBackgroundColor(Color.parseColor("#222222"));
@@ -315,7 +331,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		else
 		{
 			TextView threadPreview = null;
-			View vi = (View) l.getChildAt(currentPosition);
+			View vi = (View) l.getChildAt(currentPosition - l.getFirstVisiblePosition());
+
 			if (vi != null)
 				threadPreview = (TextView)vi.findViewById(R.id.TextViewThreadPreview);
 			if (threadPreview != null)
