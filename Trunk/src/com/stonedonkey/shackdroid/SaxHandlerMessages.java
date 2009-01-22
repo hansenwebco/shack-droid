@@ -6,34 +6,23 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class SaxHandlerSearchResults extends DefaultHandler {
-	
-	private ArrayList<ShackSearch> searchResults = new ArrayList<ShackSearch>();
-	
+public class SaxHandlerMessages extends DefaultHandler {
 	
 	private String author;
 	private String datePosted;
-	private String storyName;
+	private String subject;
 	private String id;
-	private String storyID;
-	private String resultText = "";
-	private String totalPages = "0";
-	private String totalResults = "0";
-	
+	private String messageStatus;
 	private Boolean result = false;
-		
+	//private String storyID;
+	private String resultText = "";
+	//private String totalPages = "0";
+	//private String totalResults = "0";
 	
-
-	public ArrayList<ShackSearch> getSearchResults() {
-		return searchResults;
-	}
-	public String getTotalPages()
-	{
-		return totalPages;
-	}
-	public String getTotalResults()
-	{
-		return totalResults;
+	private ArrayList<ShackMessage> messages = new ArrayList<ShackMessage>();
+	
+	public ArrayList<ShackMessage> getMessages() {
+		return messages;
 	}
 
 	@Override
@@ -41,19 +30,26 @@ public class SaxHandlerSearchResults extends DefaultHandler {
 	final String rawName,final Attributes attributes) throws SAXException
 	{
 		
-		if("results".equalsIgnoreCase(localName))
+		if("messages".equalsIgnoreCase(localName))
 		{
-			totalPages= attributes.getValue("last_page");
-			totalResults = attributes.getValue("total_results");
+			//totalPages= attributes.getValue("last_page");
+			//totalResults = attributes.getValue("total_results");
 		}
 		
-		if("result".equalsIgnoreCase(localName))
+		if("message".equalsIgnoreCase(localName))
 		{
 			author = attributes.getValue("author");
 			datePosted =  attributes.getValue("date");
-			storyName =  attributes.getValue("story_name");
+
+			String tSubject = attributes.getValue("subject");
+			if (tSubject.contains("Re:")) // clean up shacks notorius RE: RE: RE: RE: RE:
+				tSubject = "Re: " + tSubject.replace("Re:", "").trim();
+
+			
+			subject = tSubject;
 			id =  attributes.getValue("id");
-			storyID =  attributes.getValue("story_id");
+			messageStatus = attributes.getValue("status");
+			
 		}
 		if ("body".equalsIgnoreCase(localName))
 			result = true;
@@ -68,8 +64,8 @@ public class SaxHandlerSearchResults extends DefaultHandler {
 		{
 			result = false;
 			
-			ShackSearch ss = new ShackSearch(author, datePosted, storyName, id, storyID,  resultText);
-			searchResults.add(ss);
+			ShackMessage msg = new ShackMessage(author, subject, datePosted, resultText, id, messageStatus);
+			messages.add(msg);
 			resultText = "";
 			
 		}

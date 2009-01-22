@@ -18,6 +18,7 @@
         <activity android:screenOrientation="sensor" android:name="ActivityShackMarks" android:label="ShackMarks"></activity>
         <activity android:screenOrientation="sensor" android:name="ActivitySearch" android:label="Search Shack"></activity>
         <activity android:screenOrientation="sensor" android:name="ActivitySearchResults" android:label="Search Results"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivityMessages" android:label="Shack Messages"></activity>
 </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest> 
