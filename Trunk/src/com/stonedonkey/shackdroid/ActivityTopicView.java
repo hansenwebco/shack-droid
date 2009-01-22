@@ -126,6 +126,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 		menu.add(2, 7, 8, "Shack RSS").setIcon(R.drawable.menu_reload);
 		menu.add(3, 8, 9, "Check Version");
 		menu.add(3, 9,10,"Shack Search");
+		menu.add(3, 10,11,"Shack Messages");
 
 		menu.findItem(5).setEnabled(false);
 
@@ -210,6 +211,11 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 		case 9:
 			intent = new Intent();
 			intent.setClass(this,ActivitySearch.class);
+			startActivity(intent);
+			return true;
+		case 10:
+			intent = new Intent();
+			intent.setClass(this,ActivityMessages.class);
 			startActivity(intent);
 			return true;
 		}
