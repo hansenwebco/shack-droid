@@ -11,11 +11,14 @@ import org.xml.sax.XMLReader;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.view.View;
+import android.widget.ListView;
 
 public class ActivityMessages extends ListActivity implements Runnable {
 
@@ -26,7 +29,7 @@ public class ActivityMessages extends ListActivity implements Runnable {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-
+		setContentView(R.layout.messages);
 		fillSaxData();
 
 
@@ -99,6 +102,18 @@ public class ActivityMessages extends ListActivity implements Runnable {
 		// this is where we bind our fancy ArrayList of posts
 		AdapterMessages tva = new AdapterMessages(this, messages,R.layout.messages_row);
 		setListAdapter(tva);
+	}
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+		
+		
+		ShackMessage msg = messages.get(position);
+		
+		Intent intent = new Intent();
+		intent.setClass(this, ActivityViewMessage.class);
+		intent.putExtra("msg", msg);
+		startActivity(intent);
 	}
 
 }
