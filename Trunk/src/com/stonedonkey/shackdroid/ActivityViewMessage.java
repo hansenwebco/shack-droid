@@ -27,8 +27,10 @@ public class ActivityViewMessage extends Activity {
 	 date.setText(Html.fromHtml("<b><font color='#ffba00'>Date:</font></b> " + msg.getMsgDate()));
 	 
 	 TextView content =(TextView)findViewById(R.id.TextViewViewMsgContent);
-	 content.setText(Html.fromHtml(msg.getMsgText().replaceAll("<br/><br/>","<br/>")));
-		
+	 content.setText(Html.fromHtml(msg.getMsgText().replaceAll("(\r\n|\r|\n|\n\r)", "")));
+	 
+	 //TextView msglbl =(TextView)findViewById(R.id.TextViewViewMsgLabelMessage);
+	 //msglbl.setText(Html.fromHtml("<b>Message:</b>"));
 
 	}
 }	

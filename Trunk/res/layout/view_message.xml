@@ -12,6 +12,7 @@ android:layout_height="wrap_content"
 android:text="From:"
 android:layout_alignParentTop="true"
 android:layout_alignParentLeft="true"
+android:textSize="12sp"
 >
 </TextView>
 <TextView
@@ -21,6 +22,7 @@ android:layout_height="wrap_content"
 android:text="Date:"
 android:layout_below="@+id/TextViewViewMsgAuthor"
 android:layout_alignParentLeft="true"
+android:textSize="12sp"
 >
 </TextView>
 <TextView
@@ -30,24 +32,26 @@ android:layout_height="wrap_content"
 android:text="Subject:"
 android:layout_below="@+id/TextViewViewMsgDate"
 android:layout_alignParentLeft="true"
+android:textSize="12sp"
+android:paddingBottom="5sp"
 >
 </TextView>
-<TextView
-android:id="@+id/TextViewViewMsgLabelMessage"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:text="Message:"
-android:layout_below="@+id/TextViewViewMsgSubject"
-android:layout_alignParentLeft="true"
-android:textColor="#ffba00"
->
-</TextView>
+
+<View 	
+android:id="@+id/HorizontalRuleViewMessage"
+		android:layout_width="fill_parent" 
+		android:layout_height="1dip" 
+		android:background="#DDDDDD"
+		android:layout_below="@+id/TextViewViewMsgSubject"
+		android:paddingTop="5sp"
+/> 
 <ScrollView
 android:id="@+id/ScrollViewViewMsg"
 android:layout_width="fill_parent"
-android:layout_height="333px"
-android:layout_below="@+id/TextViewViewMsgLabelMessage"
+android:layout_height="355px"
+android:layout_below="@+id/HorizontalRuleViewMessage"
 android:layout_alignParentLeft="true"
+android:paddingTop="5sp"
 >
 <TextView
 android:id="@+id/TextViewViewMsgContent"
