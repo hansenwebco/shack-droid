@@ -1,7 +1,11 @@
 package com.stonedonkey.shackdroid;
 
-public class ShackMessage {
+import java.io.Serializable;
 
+public class ShackMessage implements Serializable{
+
+
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private String msgSubject;
 	private String msgDate;
