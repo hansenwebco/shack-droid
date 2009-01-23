@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
@@ -115,5 +117,42 @@ public class ActivityMessages extends ListActivity implements Runnable {
 		intent.putExtra("msg", msg);
 		startActivity(intent);
 	}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
 
+
+		menu.add(1, 0 ,0,"Prev").setIcon(R.drawable.menu_back);
+		menu.add(1, 1 ,1,"Next").setIcon(R.drawable.menu_forward);
+		menu.add(1, 2, 2, "Home").setIcon(R.drawable.menu_home);
+		menu.add(2, 3, 3, "Send Msg").setIcon(R.drawable.menu_message);
+		menu.add(2, 4, 4, "Refresh").setIcon(R.drawable.menu_reload);
+		menu.add(2, 5, 5, "Settings").setIcon(R.drawable.menu_settings);
+
+		menu.findItem(0).setEnabled(false);
+
+		return true;
+	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Context context = this;
+		Intent intent;
+		switch (item.getItemId()) {
+		case 0: // Launch post form
+			
+			return true;
+		case 1: // refresh
+			
+			return true;
+		case 2: // show settings dialog
+			intent = new Intent();
+			intent.setClass(this, ActivityTopicView.class);
+			startActivity(intent);
+			return true;
+		case 4:
+			fillSaxData();
+			return true;
+		}
+		return false;
+	}
 }
