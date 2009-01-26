@@ -5,6 +5,7 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.text.Html;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,7 +95,7 @@ public class AdapterTopicView extends BaseAdapter {
 		postText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 		postText.setTypeface(face);
 		if (postText != null)
-			postText.setText(post.getPostPreview());
+			postText.setText(Html.fromHtml(ParseShackText(post.getPostPreview(), false)));
 				
 		ImageView img = (ImageView)v.findViewById(R.id.ImageViewCat);
 				
@@ -118,5 +119,30 @@ public class AdapterTopicView extends BaseAdapter {
 			img.setImageResource(R.drawable.interesting);		
 				
 		return v;
+	}
+	// TODO: Quick fix, duplicated function in ThreadedView, need to move to own class
+	private String ParseShackText(String text,boolean addSpoilerMarkers) {
+
+		//Convert the shack spans into HTML fonts since our TextView can convert stuff to HTML
+		// not sure if this is the best or most efficent, but works.e
+		text = text.replaceAll("<span class=\"jt_red\">(.*?)</span>", "<font color=\"#ff0000\">$1</font>");	
+		text = text.replaceAll("<span class=\"jt_green\">(.*?)</span>",	"<font color=\"#8dc63f\">$1</font>");
+		text = text.replaceAll("<span class=\"jt_pink\">(.*?)</span>", "<font color=\"#f49ac1\">$1</font>");
+		text = text.replaceAll("<span class=\"jt_olive\">(.*?)</span>",	"<font color=\"#808000\">$1</font>");
+		text = text.replaceAll("<span class=\"jt_fuchsia\">(.*?)</span>", "<font color=\"#c0ffc0\">$1</font>");
+		text = text.replaceAll("<span class=\"jt_yellow\">(.*?)</span>", "<font color=\"#ffde00\">$1</font>");
+		text = text.replaceAll("<span class=\"jt_blue\">(.*?)</span>", "<font color=\"#44aedf\">$1</font>");
+		text = text.replaceAll("<span class=\"jt_lime\">(.*?)</span>",	"<font color=\"#c0ffc0\">$1</font>");
+		text = text.replaceAll("<span class=\"jt_orange\">(.*?)</span>", "<font color=\"#f7941c\">$1</font>");
+		text = text.replaceAll("<span class=\"jt_bold\">(.*?)</span>", "<b>$1</b>");
+		text = text.replaceAll("<span class=\"jt_italic\">(.*?)</span>", "<i>$1</i>");
+		
+		// You can only do "highlights" on the actual TextView itself, so we mark up spoilers 
+		// !!-text-!! like so, and then handle it on the appling text to the TextView
+		if (addSpoilerMarkers == true) {
+		text = text.replaceAll("<span class=\"jt_spoiler\"(.*?)>(.*?)</span>",
+		"<font color=\"#383838\">!!-$2-!!</font>");
+		}
+		return text;
 	}
 }
