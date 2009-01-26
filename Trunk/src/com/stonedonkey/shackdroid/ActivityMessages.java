@@ -9,6 +9,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -102,8 +103,17 @@ public class ActivityMessages extends ListActivity implements Runnable {
 		//setTitle("Search Results - " + currentPage + " of " + this.totalPages + " - " + this.totalResults + " results.");
 
 		// this is where we bind our fancy ArrayList of posts
+		if (messages != null) {
 		AdapterMessages tva = new AdapterMessages(this, messages,R.layout.messages_row);
 		setListAdapter(tva);
+		}
+		else
+		{
+			new AlertDialog.Builder(this).setTitle("Error")
+			.setPositiveButton("OK", null).setMessage(
+					"There was an error retrieving your messages, check your login information or try again later.")
+			.show();
+		}
 	}
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
@@ -122,14 +132,15 @@ public class ActivityMessages extends ListActivity implements Runnable {
 		super.onCreateOptionsMenu(menu);
 
 
-		menu.add(1, 0 ,0,"Prev").setIcon(R.drawable.menu_back);
-		menu.add(1, 1 ,1,"Next").setIcon(R.drawable.menu_forward);
+		//menu.add(1, 0 ,0,"Prev").setIcon(R.drawable.menu_back);
+		//menu.add(1, 1 ,1,"Next").setIcon(R.drawable.menu_forward);
 		menu.add(1, 2, 2, "Home").setIcon(R.drawable.menu_home);
-		menu.add(2, 3, 3, "Send Msg").setIcon(R.drawable.menu_message);
+		//menu.add(2, 3, 3, "Send Msg").setIcon(R.drawable.menu_message);
 		menu.add(2, 4, 4, "Refresh").setIcon(R.drawable.menu_reload);
 		menu.add(2, 5, 5, "Settings").setIcon(R.drawable.menu_settings);
-
-		menu.findItem(0).setEnabled(false);
+		menu.add(2, 6, 6, "Back").setIcon(R.drawable.menu_back);
+		
+		//menu.findItem(0).setEnabled(false);
 
 		return true;
 	}
@@ -152,6 +163,14 @@ public class ActivityMessages extends ListActivity implements Runnable {
 		case 4:
 			fillSaxData();
 			return true;
+		case 5: 
+			intent = new Intent();
+			intent.setClass(this, ActivityPreferences.class);
+			startActivity(intent);
+			return true;
+		case 6:
+			finish();
+			return true;			
 		}
 		return false;
 	}
