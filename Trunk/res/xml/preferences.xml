@@ -13,6 +13,12 @@
                 android:summary="Set ShackNews Password"
                 android:dialogTitle="ShackNews Password" 
                 android:password="true"/>
+        	<CheckBoxPreference 
+    		android:key="allowShackMessages" 
+    		android:title="Enable Shack Messages"
+    		android:defaultValue="false" 
+    		android:textSize="10sp"
+    		android:summary="NOTE: This will pass your info to the API not directly to ShackNews."/>                    
     </PreferenceCategory>
     <PreferenceCategory
             android:title="Chatty Filters">    

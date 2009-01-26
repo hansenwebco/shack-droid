@@ -213,11 +213,30 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			intent.setClass(this,ActivitySearch.class);
 			startActivity(intent);
 			return true;
-		case 10:
+		case 10:  // show shack messages if they enabled them
+			
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			boolean allowSMs = prefs.getBoolean("allowShackMessages", false);
+			
+			if (allowSMs)
+			{
 			intent = new Intent();
 			intent.setClass(this,ActivityMessages.class);
 			startActivity(intent);
 			return true;
+			}
+			else
+			{
+				new AlertDialog.Builder(this).setTitle("Information")
+				.setPositiveButton("OK", null).setMessage(
+						"Shack Messages posts your credentials to the API " +
+						"instead of directly ShackNews.\n\n If you agree with this " +
+						"you can enable this feature under \"Settings\"." )
+				.show();
+				
+			return true;
+			}
+				
 		}
 	
 		return false;
