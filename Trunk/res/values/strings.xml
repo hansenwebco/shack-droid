@@ -3,5 +3,5 @@
     <string name="app_name">ShackDroid</string>
     <string name="version_name">ShackDroid v1.5</string>
     <string name="default_api">http://shackchatty.com</string>
-    <string name="version_id">1.6</string>
+    <string name="version_id">1.5</string>
 </resources>
