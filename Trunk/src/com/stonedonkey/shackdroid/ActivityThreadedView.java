@@ -369,7 +369,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		TextView tv = (TextView) findViewById(R.id.TextViewPost);
 		String text = tv.getText().toString();
 		int end = 0;
-		while (text.indexOf("!!-",end) > 0)
+		while (text.indexOf("!!-",end) >= 0)
 		{
 			int start = text.indexOf("!!-",end);
 			end = text.indexOf("-!!",start);
