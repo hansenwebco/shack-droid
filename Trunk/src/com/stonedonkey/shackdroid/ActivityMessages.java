@@ -10,8 +10,10 @@ import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -27,14 +29,18 @@ public class ActivityMessages extends ListActivity implements Runnable {
 
 	private ProgressDialog pd;
 	private ArrayList<ShackMessage> messages;
+	private String box= "Inbox";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		setTitle("Shack Messages - " + box);
+		
 		setContentView(R.layout.messages);
 		fillSaxData();
 
+		
 
 	}
 	private void fillSaxData() {
@@ -54,7 +60,7 @@ public class ActivityMessages extends ListActivity implements Runnable {
 			String login = prefs.getString("shackLogin", "");
 			String password = prefs.getString("shackPassword", "");
 		
-			URL url = new URL("http://shackapi.stonedonkey.com/messages/?username=" + login + "&password=" + password );
+			URL url = new URL("http://shackapi.stonedonkey.com/messages/?username=" + login + "&password=" + password + "&box=" + box.toLowerCase());
 			
 
 			// Get a SAXParser from the SAXPArserFactory. 
@@ -101,6 +107,7 @@ public class ActivityMessages extends ListActivity implements Runnable {
 	private void ShowData() {
 
 		//setTitle("Search Results - " + currentPage + " of " + this.totalPages + " - " + this.totalResults + " results.");
+		setTitle("Shack Messages - " + box);
 
 		// this is where we bind our fancy ArrayList of posts
 		if (messages != null) {
@@ -138,7 +145,7 @@ public class ActivityMessages extends ListActivity implements Runnable {
 		//menu.add(2, 3, 3, "Send Msg").setIcon(R.drawable.menu_message);
 		menu.add(2, 4, 4, "Refresh").setIcon(R.drawable.menu_reload);
 		menu.add(2, 5, 5, "Settings").setIcon(R.drawable.menu_settings);
-		menu.add(2, 6, 6, "Back").setIcon(R.drawable.menu_back);
+		menu.add(2, 6, 6, "Folder").setIcon(R.drawable.menu_folder);
 		
 		//menu.findItem(0).setEnabled(false);
 
@@ -169,9 +176,56 @@ public class ActivityMessages extends ListActivity implements Runnable {
 			startActivity(intent);
 			return true;
 		case 6:
-			finish();
+			showDialog(1);
 			return true;			
 		}
 		return false;
 	}
+	@Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) 
+        {
+        case 1:
+        	
+        	String[] boxes = new String[3];
+        	boxes[0] = "Inbox";
+        	boxes[1] = "Outbox";
+        	boxes[2] = "Archived";
+        	
+        	return new AlertDialog.Builder(ActivityMessages.this)
+            .setTitle("Choose Feed")
+            .setSingleChoiceItems(boxes, 0, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                	switch (whichButton){
+                	case 1:
+                		box = "Outbox";
+                		break;
+                	case 2: 
+                		box = "Archive";
+                		break;
+                	default:
+                		box = "Inbox";
+                	}
+                }
+            }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+
+                    	
+                    	//String[] urls = getResources().getStringArray(R.array.feedsURls);
+                    	//feedURL = urls[feedID];
+                    	//String[] feeds = getResources().getStringArray(R.array.feeds);
+                    	//feedDesc = feeds[feedID];
+                    	fillSaxData(); // reload
+                  
+                }
+            }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+
+                    /* User clicked No so do some stuff */
+                }
+            }).create();
+        }
+		return null;
+    }	
+	
 }
