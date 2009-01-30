@@ -140,13 +140,13 @@ public class ActivityMessages extends ListActivity implements Runnable {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 
-
+		
 		menu.add(1, 0 ,0,"Prev").setIcon(R.drawable.menu_back);
 		menu.add(1, 1 ,1,"Next").setIcon(R.drawable.menu_forward);
-		menu.add(1, 2, 2, "Home").setIcon(R.drawable.menu_home);
+		menu.add(1, 2, 6, "Home").setIcon(R.drawable.menu_home);
 		menu.add(2, 3, 3, "Send Msg").setIcon(R.drawable.menu_message);
 		menu.add(2, 4, 4, "Refresh").setIcon(R.drawable.menu_reload);
-		menu.add(2, 6, 6, "Folder").setIcon(R.drawable.menu_folder);
+		menu.add(2, 6, 2, "Folder").setIcon(R.drawable.menu_folder);
 		
 		menu.findItem(0).setEnabled(false);
 

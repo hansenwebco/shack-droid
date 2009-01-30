@@ -64,7 +64,7 @@ public class ActivityViewMessage extends Activity {
 			intent.putExtra("message", msg);
 			startActivity(intent);
 			return true;
-		case 2:
+		case 1:
 			finish();
 			return true;
 			
