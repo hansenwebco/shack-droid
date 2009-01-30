@@ -30,7 +30,10 @@ public class ActivityMessages extends ListActivity implements Runnable {
 	private ProgressDialog pd;
 	private ArrayList<ShackMessage> messages;
 	private String box= "Inbox";
-
+	private int totalPages = 1;
+	private String totalResults = "0";
+	private int currentPage = 1;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,7 +63,7 @@ public class ActivityMessages extends ListActivity implements Runnable {
 			String login = prefs.getString("shackLogin", "");
 			String password = prefs.getString("shackPassword", "");
 		
-			URL url = new URL("http://shackapi.stonedonkey.com/messages/?username=" + login + "&password=" + password + "&box=" + box.toLowerCase());
+			URL url = new URL("http://shackapi.stonedonkey.com/messages/?username=" + login + "&password=" + password + "&box=" + box.toLowerCase() + "&page=" + currentPage);
 			
 
 			// Get a SAXParser from the SAXPArserFactory. 
@@ -79,8 +82,8 @@ public class ActivityMessages extends ListActivity implements Runnable {
 
 			// get the Message items
 			messages = saxHandler.getMessages();
-			//totalPages = saxHandler.getTotalPages();
-			//totalResults = saxHandler.getTotalResults();
+			totalPages = Integer.parseInt(saxHandler.getTotalPages());
+			totalResults = saxHandler.getTotalResults();
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -106,8 +109,7 @@ public class ActivityMessages extends ListActivity implements Runnable {
 	};
 	private void ShowData() {
 
-		//setTitle("Search Results - " + currentPage + " of " + this.totalPages + " - " + this.totalResults + " results.");
-		setTitle("Shack Messages - " + box);
+		setTitle("Shack Messages - " + box + " - " + currentPage + " of " + this.totalPages + " (" + this.totalResults + ")");
 
 		// this is where we bind our fancy ArrayList of posts
 		if (messages != null) {
@@ -139,15 +141,14 @@ public class ActivityMessages extends ListActivity implements Runnable {
 		super.onCreateOptionsMenu(menu);
 
 
-		//menu.add(1, 0 ,0,"Prev").setIcon(R.drawable.menu_back);
-		//menu.add(1, 1 ,1,"Next").setIcon(R.drawable.menu_forward);
+		menu.add(1, 0 ,0,"Prev").setIcon(R.drawable.menu_back);
+		menu.add(1, 1 ,1,"Next").setIcon(R.drawable.menu_forward);
 		menu.add(1, 2, 2, "Home").setIcon(R.drawable.menu_home);
-		//menu.add(2, 3, 3, "Send Msg").setIcon(R.drawable.menu_message);
+		menu.add(2, 3, 3, "Send Msg").setIcon(R.drawable.menu_message);
 		menu.add(2, 4, 4, "Refresh").setIcon(R.drawable.menu_reload);
-		menu.add(2, 5, 5, "Settings").setIcon(R.drawable.menu_settings);
 		menu.add(2, 6, 6, "Folder").setIcon(R.drawable.menu_folder);
 		
-		//menu.findItem(0).setEnabled(false);
+		menu.findItem(0).setEnabled(false);
 
 		return true;
 	}
@@ -157,14 +158,21 @@ public class ActivityMessages extends ListActivity implements Runnable {
 		Intent intent;
 		switch (item.getItemId()) {
 		case 0: // Launch post form
-			
+			this.SetPaging(-1);
+			fillSaxData();
 			return true;
 		case 1: // refresh
-			
+			this.SetPaging(1);
+			fillSaxData();
 			return true;
 		case 2: // show settings dialog
 			intent = new Intent();
 			intent.setClass(this, ActivityTopicView.class);
+			startActivity(intent);
+			return true;
+		case 3:
+			intent = new Intent();
+			intent.setClass(this, ActivityPostMessage.class);
 			startActivity(intent);
 			return true;
 		case 4:
@@ -182,10 +190,27 @@ public class ActivityMessages extends ListActivity implements Runnable {
 		return false;
 	}
 	@Override
+	public boolean onMenuOpened(int featureId, Menu menu) {
+
+		if (this.currentPage <= 1) // previous enabled
+			menu.findItem(0).setEnabled(false); // previous
+		 else 
+			menu.findItem(0).setEnabled(true); // previous
+
+
+		if (this.currentPage >= this.totalPages) // next enabled
+			menu.findItem(1).setEnabled(false);
+		else
+			menu.findItem(1).setEnabled(true);
+
+		return super.onMenuOpened(featureId, menu);
+	}	
+	@Override
     protected Dialog onCreateDialog(int id) {
         switch (id) 
         {
         case 1:
+        	
         	
         	String[] boxes = new String[3];
         	boxes[0] = "Inbox";
@@ -209,13 +234,8 @@ public class ActivityMessages extends ListActivity implements Runnable {
                 }
             }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
-
-                    	
-                    	//String[] urls = getResources().getStringArray(R.array.feedsURls);
-                    	//feedURL = urls[feedID];
-                    	//String[] feeds = getResources().getStringArray(R.array.feeds);
-                    	//feedDesc = feeds[feedID];
-                    	fillSaxData(); // reload
+                		currentPage =1;
+                      	fillSaxData(); // reload
                   
                 }
             }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -227,5 +247,11 @@ public class ActivityMessages extends ListActivity implements Runnable {
         }
 		return null;
     }	
-	
+	private void SetPaging(Integer increment) {
+
+		// set current page
+		if ((currentPage + increment >= 1)
+				&& (currentPage + increment <= totalPages))
+			currentPage = currentPage + increment;
+	}
 }

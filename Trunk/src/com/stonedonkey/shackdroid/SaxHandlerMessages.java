@@ -16,15 +16,23 @@ public class SaxHandlerMessages extends DefaultHandler {
 	private Boolean result = false;
 	//private String storyID;
 	private String resultText = "";
-	//private String totalPages = "0";
-	//private String totalResults = "0";
+	private String totalPages = "0";
+	private String totalResults = "0";
 	
 	private ArrayList<ShackMessage> messages = new ArrayList<ShackMessage>();
 	
 	public ArrayList<ShackMessage> getMessages() {
 		return messages;
 	}
-
+	public String getTotalPages()
+	{
+		return totalPages;
+	}
+	public String getTotalResults()
+	{
+		return totalResults;
+	}
+	
 	@Override
 	public void startElement(final String nsURL, final String localName,
 	final String rawName,final Attributes attributes) throws SAXException
@@ -32,8 +40,8 @@ public class SaxHandlerMessages extends DefaultHandler {
 		
 		if("messages".equalsIgnoreCase(localName))
 		{
-			//totalPages= attributes.getValue("last_page");
-			//totalResults = attributes.getValue("total_results");
+			totalPages= attributes.getValue("last_page");
+			totalResults = attributes.getValue("total_results");
 		}
 		
 		if("message".equalsIgnoreCase(localName))
