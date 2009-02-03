@@ -29,6 +29,7 @@ import android.text.style.BackgroundColorSpan;
 import android.text.util.Linkify;
 import android.util.TypedValue;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -540,6 +541,30 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			
 			break;
 		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		
+		ListView lv = getListView();
+		
+		
+		
+		if (keyCode == 54) {
+			if (lv.getCount() > currentPosition + 1){
+				currentPosition++;
+				this.UpdatePostText(currentPosition, true);
+				lv.setSelection(currentPosition);
+			}
+			
+		}
+		
+		
+		
+		
+		return super.onKeyDown(keyCode, event);
+		
 	}
 
 
