@@ -400,7 +400,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	private String ParseShackText(String text,boolean addSpoilerMarkers) {
 
 		//Convert the shack spans into HTML fonts since our TextView can convert stuff to HTML
-		// not sure if this is the best or most efficent, but works.e
+		// not sure if this is the best or most efficent, but works.
 		text = text.replaceAll("<span class=\"jt_red\">(.*?)</span>", "<font color=\"#ff0000\">$1</font>");	
 		text = text.replaceAll("<span class=\"jt_green\">(.*?)</span>",	"<font color=\"#8dc63f\">$1</font>");
 		text = text.replaceAll("<span class=\"jt_pink\">(.*?)</span>", "<font color=\"#f49ac1\">$1</font>");
@@ -412,6 +412,10 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		text = text.replaceAll("<span class=\"jt_orange\">(.*?)</span>", "<font color=\"#f7941c\">$1</font>");
 		text = text.replaceAll("<span class=\"jt_bold\">(.*?)</span>", "<b>$1</b>");
 		text = text.replaceAll("<span class=\"jt_italic\">(.*?)</span>", "<i>$1</i>");
+		text = text.replaceAll("<span class=\"jt_underline\">(.*?)</span>", "<u>$1</u>");
+		text = text.replaceAll("<span class=\"jt_strike\">(.*?)</span>", "<strike>$1</strike>");
+		
+				
 		
 		// You can only do "highlights" on the actual TextView itself, so we mark up spoilers 
 		// !!-text-!! like so, and then handle it on the appling text to the TextView
