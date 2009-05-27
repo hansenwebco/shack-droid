@@ -1,6 +1,7 @@
 package com.stonedonkey.shackdroid;
 
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 import javax.xml.parsers.SAXParser;
@@ -63,8 +64,15 @@ public class ActivityMessages extends ListActivity implements Runnable {
 			String login = prefs.getString("shackLogin", "");
 			String password = prefs.getString("shackPassword", "");
 		
-			URL url = new URL("http://shackapi.stonedonkey.com/messages/?username=" + login + "&password=" + password + "&box=" + box.toLowerCase() + "&page=" + currentPage);
+			//URL url = new URL("http://shackapi.stonedonkey.com/messages/?username=" + login + "&password=" + password + "&box=" + box.toLowerCase() + "&page=" + currentPage);
+			URL url = new URL ("http://shackapi.stonedonkey.com/messages");
+			String userPassword = login + ":" + password;
+
+			String encoding = Base64.encodeBytes(userPassword.getBytes());
 			
+			URLConnection uc = url.openConnection();
+			uc.setRequestProperty("Authorization", "Basic " + encoding);
+			 
 
 			// Get a SAXParser from the SAXPArserFactory. 
 			SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -72,13 +80,13 @@ public class ActivityMessages extends ListActivity implements Runnable {
 
 			// Get the XMLReader of the SAXParser we created. 
 			XMLReader xr = sp.getXMLReader();
-
+ 
 			// Create a new ContentHandler and apply it to the XML-Reader 
 			SaxHandlerMessages saxHandler = new SaxHandlerMessages();
 			xr.setContentHandler(saxHandler);
 
-			// Parse the xml-data from our URL. 
-			xr.parse(new InputSource(url.openStream()));
+			// Parse the xml-data from our URL.  
+			xr.parse(new InputSource(uc.getInputStream()));
 
 			// get the Message items
 			messages = saxHandler.getMessages();
