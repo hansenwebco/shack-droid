@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -27,6 +29,8 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.style.BackgroundColorSpan;
 import android.text.util.Linkify;
+import android.text.util.Linkify.MatchFilter;
+import android.text.util.Linkify.TransformFilter;
 import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
@@ -57,7 +61,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	private int currentPosition = 0;
 	private boolean spoilerText= false;
 	private Boolean threadLoaded = true;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -65,21 +69,21 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 
 		setContentView(R.layout.thread);
 		this.setTitle("ShackDroid - View Thread");
-		
+
 		Bundle extras = this.getIntent().getExtras();
 		postID = extras.getString("postID");
 		storyID = extras.getString("storyID");
-		
+
 		if (savedInstanceState == null) 
 			fillSaxData(postID);
-	
+
 
 	}
-	
+
 	@Override 
 	public void onSaveInstanceState(Bundle savedInstanceState)
 	{
-		
+
 		try {
 
 			// pd.dismiss();
@@ -87,15 +91,15 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		} catch (Exception ex) {
 			// dialog could not be killed for some reason
 		}
-		
+
 		savedInstanceState.putSerializable("posts", posts);
 		savedInstanceState.putString("storyID", storyID);
 		savedInstanceState.putString("postID", postID);
 		savedInstanceState.putInt("currentPosition", currentPosition);
 		savedInstanceState.putBoolean("threadLoaded", threadLoaded);
-	
+
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) 
@@ -105,8 +109,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		postID = savedInstanceState.getString("postID");
 		currentPosition = savedInstanceState.getInt("currentPosition");
 		threadLoaded = savedInstanceState.getBoolean("threadLoaded");
-		
-	
+
+
 		if (threadLoaded == true && posts != null) { 
 			ShowData();
 			ListView lv = getListView();
@@ -116,11 +120,11 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		{
 			fillSaxData(postID);
 		}
-		
+
 		savedInstanceState.clear();
-		
+
 	}
-	
+
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
@@ -140,29 +144,29 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		// show a progress dialog
 		//pd = ProgressDialog.show(this, null, "Loading thread...", true,	true);
 		showDialog(1);
-		
+
 		// use the class run() method to do work
 		Thread thread = new Thread(this); 
 		thread.start();
 	}
-	
+
 	@Override
 	public void run() {
-		
+
 		Comparator<ShackPost> byPostID = new SortByPostIDComparator();
 		Comparator<ShackPost> byOrderID = new SortByOrderIDComparator();
 		threadLoaded = false;
 		try {
-			
+
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			String feedURL = prefs.getString("shackFeedURL", getString(R.string.default_api));
 			URL url = new URL(feedURL + "/thread/" + postID	+ ".xml");
 
-		    // Get a SAXParser from the SAXPArserFactory.
+			// Get a SAXParser from the SAXPArserFactory.
 			SAXParserFactory spf = SAXParserFactory.newInstance();
 			SAXParser sp = spf.newSAXParser();
 
-		    //  Get the XMLReader of the SAXParser we created.
+			//  Get the XMLReader of the SAXParser we created.
 			XMLReader xr = sp.getXMLReader();
 			// Create a new ContentHandler and apply it to the XML-Reader
 			SaxHandlerTopicView saxHandler = new SaxHandlerTopicView(this);
@@ -170,16 +174,16 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 
 			// Parse the xml-data from our URL.
 			xr.parse(new InputSource(url.openStream()));
-		
+
 
 			// Our ExampleHandler now provides the parsed data to us.
 			posts = saxHandler.GetParsedPosts();
-		
+
 			// the folowing sorts are what are used to highlight the last ten posts.  We add an index to the
 			// array by sorting them by post id, then adding the index, then sorting them back	
 			// sort our posts by PostID
 			Collections.sort(posts,byPostID);
-			
+
 			// set the index on them based on order
 			ShackPost tempPost = null;
 			int postsSize = posts.size();
@@ -188,7 +192,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 				tempPost = posts.get(x);
 				tempPost.setPostIndex(x);
 			}
-			
+
 			// set the order back to the orginal sort
 			Collections.sort(posts,byOrderID);
 
@@ -198,10 +202,10 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		}
 		threadLoaded = true;
 
-		
+
 		progressBarHandler.sendEmptyMessage(0);
 	}
-	
+
 	private Handler progressBarHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -215,8 +219,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			{
 				// dialog could not be killed for some reason
 			}
-			
-			
+
+
 			// if we are provided a postID that is not the same as the first
 			// item we need to find it and setit
 			if (posts.size() > 0 )
@@ -226,8 +230,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 							currentPosition = x;
 							break;
 						}
-			
-			
+
+
 			ShowData();
 		}
 	};
@@ -237,27 +241,33 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		TextView tv = (TextView) findViewById(R.id.TextViewPost);
 		String postText = ParseShackText(posts.get(position).getPostText(),addSpoilerMarkers);
 		tv.setText(Html.fromHtml(postText),BufferType.EDITABLE);
-	
-			if (addSpoilerMarkers == true)
-			SpoilerTextView();
-			Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
-		
+
+		if (addSpoilerMarkers == true) 
+			SpoilerTextView();
+		
+		Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
+
+//		Pattern shackURLMatcher = Pattern.compile("href=\"http://www\\.shacknews\\.com/laryn\\.x\\?id=([0-9]*)#itemanchor_([0-9]*)(.*?)\">");
+//		String threadView = "content://com.stonedonkey.shackdroid/ActivityThreadedView";
+//		Linkify.addLinks(tv,shackURLMatcher,threadView,new ShackURLMatchFilter(), new ShackURLTransform());
+//		
+
 		ShackPost post = posts.get(position);
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		String login = prefs.getString("shackLogin", "");
-		
+
 		int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
 		tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-		
+
 		Typeface face = Typeface.createFromAsset(this.getAssets(), "fonts/arial.ttf");
 		tv.setTypeface(face);
-	
-		
+
+
 		TextView posterName = (TextView) findViewById(R.id.TextViewThreadAuthor);
 		posterName.setText(post.getPosterName());
 		posterName.setTypeface(face);
-		
+
 		if (login.equalsIgnoreCase(post.getPosterName()))
 			posterName.setTextColor(Color.parseColor("#00BFF3"));
 		else
@@ -269,44 +279,44 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 
 		String postCat = post.getPostCategory();
 		setPostCategoryIcon(postCat);
-		
+
 		postID = post.getPostID();
-		
+
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void ShowData() {
-	
+
 		if (posts != null)
 		{
-		// this is where we bind our fancy ArrayList of posts
-		AdapterThreadedView tva = new AdapterThreadedView(this,	R.layout.thread_row, posts,currentPosition);
-		setListAdapter(tva);
+			// this is where we bind our fancy ArrayList of posts
+			AdapterThreadedView tva = new AdapterThreadedView(this,	R.layout.thread_row, posts,currentPosition);
+			setListAdapter(tva);
 
-		UpdatePostText(currentPosition,true);
-		
-		ListView lv = getListView();
-		lv.setSelection(currentPosition);
-		
-		// set the post background color to be more "shack" like
-		RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayoutThread);
-		layout.setBackgroundColor(Color.parseColor("#222222"));
-		
-		// add a listner for removing spoilers and maybe adding "copy" functionality later
-		TextView tvpost = (TextView)findViewById(R.id.TextViewPost);
-		tvpost.setOnCreateContextMenuListener(
-				new OnCreateContextMenuListener() {
-					@Override
-					public void onCreateContextMenu(ContextMenu menu, View v,
-							ContextMenuInfo menuInfo) {
-						if (spoilerText == true) {
-						menu.setHeaderTitle("Post Options");
-						menu.add(0, 10, 0, "Remove Spoiler");
-						//menu.add(0, 11, 0, "Copy Text"); // might be useful one day
-						menu.add(0, -1, 0, "Cancel");
+			UpdatePostText(currentPosition,true);
+
+			ListView lv = getListView();
+			lv.setSelection(currentPosition);
+
+			// set the post background color to be more "shack" like
+			RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayoutThread);
+			layout.setBackgroundColor(Color.parseColor("#222222"));
+
+			// add a listner for removing spoilers and maybe adding "copy" functionality later
+			TextView tvpost = (TextView)findViewById(R.id.TextViewPost);
+			tvpost.setOnCreateContextMenuListener(
+					new OnCreateContextMenuListener() {
+						@Override
+						public void onCreateContextMenu(ContextMenu menu, View v,
+								ContextMenuInfo menuInfo) {
+							if (spoilerText == true) {
+								menu.setHeaderTitle("Post Options");
+								menu.add(0, 10, 0, "Remove Spoiler");
+								//menu.add(0, 11, 0, "Copy Text"); // might be useful one day
+								menu.add(0, -1, 0, "Cancel");
+							}
 						}
-					}
-				});		
+					});		
 
 		}
 		else
@@ -314,9 +324,9 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			if (errorText.length() > 0) {
 				new AlertDialog.Builder(this).setTitle("Error").setPositiveButton("OK", null)
 				.setMessage(errorText).show();
-				}
+			}
 		}
-		
+
 	}
 
 
@@ -414,14 +424,14 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		text = text.replaceAll("<span class=\"jt_italic\">(.*?)</span>", "<i>$1</i>");
 		text = text.replaceAll("<span class=\"jt_underline\">(.*?)</span>", "<u>$1</u>");
 		text = text.replaceAll("<span class=\"jt_strike\">(.*?)</span>", "<strike>$1</strike>");
-		
-				
-		
+
+
+
 		// You can only do "highlights" on the actual TextView itself, so we mark up spoilers 
 		// !!-text-!! like so, and then handle it on the appling text to the TextView
 		if (addSpoilerMarkers == true) {
-		text = text.replaceAll("<span class=\"jt_spoiler\"(.*?)>(.*?)</span>",
-		"<font color=\"#383838\">!!-$2-!!</font>");
+			text = text.replaceAll("<span class=\"jt_spoiler\"(.*?)>(.*?)</span>",
+			"<font color=\"#383838\">!!-$2-!!</font>");
 		}
 		return text;
 	}
@@ -439,11 +449,11 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		SubMenu sub = menu.addSubMenu(1, 4, 1, "LOL/INF").setIcon(R.drawable.menu_lolinf);
 		sub.add(0,8,0,"LOL Post");
 		sub.add(0,9,1, "INF Post");
-		
+
 		sub = menu.addSubMenu(1, 5, 5, "ShackMarks").setIcon(R.drawable.menu_mark);
 		sub.add(0,6,0,"View saved ShackMarks");
 		sub.add(0,7,1, "Save to ShackMarks").setIcon(R.drawable.menu_shacktags);
-		
+
 		return true;
 	}
 	@Override
@@ -476,29 +486,29 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			LaunchNotesIntent();
 			return true;
 		case 7: //sub menu for ShackMarks
-			
+
 			HandlerExtendedSites.AddRemoveShackMark(this, postID,false);
-			
-//			ShackDroidNotesManager nm = new ShackDroidNotesManager(this);
-//			nm.open();
-//			
-//			TextView poster = (TextView)findViewById(R.id.TextViewThreadAuthor);
-//			TextView postDate = (TextView)findViewById(R.id.TextViewThreadViewPostDate);
-//			
-//			ShackPost shackPost= posts.get(currentPosition);
-//			String previewText = shackPost.getPostPreview();
-//			
-//			long result = nm.CreateNote(postID, previewText, poster.getText().toString(), postDate.getText().toString(),"NWS",storyID);
-//			
-//			// notes manager returns an ID if it worked
-//			if (result > 0)
-//				new AlertDialog.Builder(this).setTitle("ShackMark").setPositiveButton("OK", null)
-//				.setMessage("This post has been saved to your ShackMarks.").show();
-//			else
-//				new AlertDialog.Builder(this).setTitle("ShackMark").setPositiveButton("OK", null)
-//				.setMessage("There was a problem saving your mark.").show();
-//
-//			nm.close();
+
+			//			ShackDroidNotesManager nm = new ShackDroidNotesManager(this);
+			//			nm.open();
+			//			
+			//			TextView poster = (TextView)findViewById(R.id.TextViewThreadAuthor);
+			//			TextView postDate = (TextView)findViewById(R.id.TextViewThreadViewPostDate);
+			//			
+			//			ShackPost shackPost= posts.get(currentPosition);
+			//			String previewText = shackPost.getPostPreview();
+			//			
+			//			long result = nm.CreateNote(postID, previewText, poster.getText().toString(), postDate.getText().toString(),"NWS",storyID);
+			//			
+			//			// notes manager returns an ID if it worked
+			//			if (result > 0)
+			//				new AlertDialog.Builder(this).setTitle("ShackMark").setPositiveButton("OK", null)
+			//				.setMessage("This post has been saved to your ShackMarks.").show();
+			//			else
+			//				new AlertDialog.Builder(this).setTitle("ShackMark").setPositiveButton("OK", null)
+			//				.setMessage("There was a problem saving your mark.").show();
+			//
+			//			nm.close();
 			return true;
 		case 8:
 			// lol post
@@ -510,11 +520,11 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			login = prefs.getString("shackLogin", "");	
 			HandlerExtendedSites.INFLOLPost(this,login,postID,"INF");
 			return true;
-		
+
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId())
@@ -533,16 +543,16 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		intent.setClass(this, ActivityShackMarks.class);
 		startActivity(intent);
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		
+
 		switch(requestCode){
 		case POST_REPLY:
 			if (resultCode == RESULT_OK) // only refresh on posts
 				fillSaxData(postID);
-			
+
 			break;
 		}
 	}
@@ -550,27 +560,27 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
-	/*	
+		/*	
 		ListView lv = getListView();
-		
-		
-		
+
+
+
 		if (keyCode == 54) {
 			if (lv.getCount() >= currentPosition+2 ){
 				currentPosition++;
 				this.UpdatePostText(currentPosition, true);
 				lv.setSelection(currentPosition);
 			}
-			
-		}
-		*/
 
-		
-		
-		
-		
+		}
+		 */
+
+
+
+
+
 		return super.onKeyDown(keyCode, event);
-		
+
 	}
 
 
@@ -586,14 +596,31 @@ class SortByPostIDComparator implements Comparator<ShackPost>
 		return Integer.valueOf(object2.getPostID()) - Integer.valueOf(object1.getPostID());
 	}
 
-/**
- * Used to sort the post array based on the OrderID
- */}
+	/**
+	 * Used to sort the post array based on the OrderID
+	 */}
 class SortByOrderIDComparator implements Comparator<ShackPost>
 {
 	@Override
 	public int compare(ShackPost object1, ShackPost object2) {
 		return object1.getOrderID() - object2.getOrderID();
 	}
-	
+
 }
+class ShackURLMatchFilter implements MatchFilter {
+	@Override
+	public boolean acceptMatch(CharSequence s, int start, int end) {
+		return true;
+	}
+}
+class ShackURLTransform implements TransformFilter {
+
+	@Override
+	public String transformUrl(Matcher match, String url) {
+
+		String test = url;
+		
+		return null;
+	}
+}
+
