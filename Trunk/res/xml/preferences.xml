@@ -5,6 +5,7 @@
                 android:key="shackLogin"
                 android:title="Login"
                 android:summary="Set ShackNews Login"
+                android:singleLine="true"
                 android:dialogTitle="ShackNews Login" />
             
         <EditTextPreference
@@ -12,6 +13,7 @@
                 android:title="Password"
                 android:summary="Set ShackNews Password"
                 android:dialogTitle="ShackNews Password" 
+                android:singleLine="true"
                 android:password="true"/>
         	<CheckBoxPreference 
     		android:key="allowShackMessages" 
