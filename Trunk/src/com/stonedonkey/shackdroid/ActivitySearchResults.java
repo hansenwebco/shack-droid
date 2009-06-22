@@ -13,9 +13,11 @@ import org.xml.sax.XMLReader;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,7 +61,10 @@ public class ActivitySearchResults extends ListActivity implements Runnable {
 	public void run() {
 		try {
 			
-			URL url = new URL("http://shackapi.stonedonkey.com/search/?SearchTerm=" + URLEncoder.encode(searchTerm,"UTF-8") + "&Author="+ author + "&ParentAuthor=" + parentAuthor + "&page=" + currentPage); 
+			URL url = new URL("http://shackapi.stonedonkey.com/search/?SearchTerm=" + URLEncoder.encode(searchTerm,"UTF-8") + "&Author="+ author + "&ParentAuthor=" + parentAuthor + "&page=" + currentPage);
+			
+			//SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			//URL url = new URL(prefs.getString("shackFeedURL",getString(R.string.default_api)) + "/search/?SearchTerm=" + URLEncoder.encode(searchTerm,"UTF-8") + "&Author="+ author + "&ParentAuthor=" + parentAuthor + "&page=" + currentPage);
 		
 			// Get a SAXParser from the SAXPArserFactory. 
 			SAXParserFactory spf = SAXParserFactory.newInstance();
