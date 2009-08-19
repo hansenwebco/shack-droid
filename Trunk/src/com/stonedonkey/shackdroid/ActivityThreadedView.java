@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -618,7 +617,7 @@ class ShackURLTransform implements TransformFilter {
 	@Override
 	public String transformUrl(Matcher match, String url) {
 
-		String test = url;
+		//String test = url;
 		
 		return null;
 	}

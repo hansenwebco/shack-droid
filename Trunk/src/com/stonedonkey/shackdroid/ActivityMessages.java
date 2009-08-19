@@ -65,7 +65,7 @@ public class ActivityMessages extends ListActivity implements Runnable {
 			String password = prefs.getString("shackPassword", "");
 		
 			//URL url = new URL("http://shackapi.stonedonkey.com/messages/?username=" + login + "&password=" + password + "&box=" + box.toLowerCase() + "&page=" + currentPage);
-			URL url = new URL ("http://shackapi.stonedonkey.com/messages");
+			URL url = new URL ("http://shackapi.stonedonkey.com/messages/?box=" + box.toLowerCase() + "&page=" + currentPage);
 			String userPassword = login + ":" + password;
 
 			String encoding = Base64.encodeBytes(userPassword.getBytes());
@@ -222,7 +222,7 @@ public class ActivityMessages extends ListActivity implements Runnable {
         	
         	String[] boxes = new String[3];
         	boxes[0] = "Inbox";
-        	boxes[1] = "Outbox";
+        	boxes[1] = "Sent";
         	boxes[2] = "Archived";
         	
         	return new AlertDialog.Builder(ActivityMessages.this)

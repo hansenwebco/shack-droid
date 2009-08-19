@@ -129,11 +129,15 @@ public class ActivityPostMessage extends Activity implements Runnable {
 			+ URLEncoder.encode(to.getText().toString(), "UTF-8") + "&"
 			+ URLEncoder.encode("body", "UTF-8") + "="
 			+ URLEncoder.encode(body.getText().toString(), "UTF-8");
-
-
+		
+			
 			// post to ShackNews
 			URL url = new URL("http://shackapi.stonedonkey.com/messages/send/");
+			String userPassword = login + ":" + password;
+			String encoding = Base64.encodeBytes(userPassword.getBytes());
+												
 			URLConnection conn = url.openConnection();
+			conn.setRequestProperty("Authorization","Basic " + encoding);
 			conn.setDoOutput(true);
 
 			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
@@ -142,7 +146,7 @@ public class ActivityPostMessage extends Activity implements Runnable {
 			wr.flush();
 
 
-			// Capture reponse for handling
+			// Capture response for handling
 			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 			String line;
 			String result = "";
