@@ -41,7 +41,7 @@ public class ActivitySplashScreen extends Activity {
 		iv.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent();
-    			intent.setClass(getBaseContext(), ActivityTopicView.class);
+    			intent.setClass(getBaseContext(), ActivityMainMenu.class);
     			startActivity(intent);
     			
     			// TODO: Find a way to kill the Runnable, this is hacky
@@ -58,7 +58,7 @@ public class ActivitySplashScreen extends Activity {
     		
             	if (skip==false) {
             	Intent intent = new Intent();
-    			intent.setClass(getBaseContext(), ActivityTopicView.class);
+    			intent.setClass(getBaseContext(), ActivityMainMenu.class);
     			startActivity(intent);
     			ActivitySplashScreen.this.finish();
             	}
