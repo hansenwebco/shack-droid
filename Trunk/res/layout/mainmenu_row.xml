@@ -10,6 +10,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:layout_marginRight="14dip"
+        android:layout_marginLeft="5dip"
         android:src="@drawable/icon" />
 
     <TextView  
