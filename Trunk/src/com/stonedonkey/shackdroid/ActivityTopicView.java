@@ -116,12 +116,15 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 
+		
 		menu.add(1, 5, 1, "Prev Page").setIcon(R.drawable.menu_back);
 		menu.add(1, 4, 2, "Next Page").setIcon(R.drawable.menu_forward);
-		menu.add(1, 3, 3, "Home").setIcon(R.drawable.menu_message);
+		menu.add(2, 1, 3, "Refresh").setIcon(R.drawable.menu_reload);
+		
 		menu.add(2, 0, 4, "New Post").setIcon(R.drawable.menu_addpost);
-		menu.add(2, 1, 5, "Refresh").setIcon(R.drawable.menu_reload);
+		menu.add(1, 3, 5, "First Page").setIcon(R.drawable.menu_top);
 		menu.add(2, 2, 6, "Menu").setIcon(R.drawable.menu_home);
+		
 		//menu.add(2, 6, 7, "ShackMarks").setIcon(R.drawable.menu_addpost);
 		//menu.add(2, 7, 8, "Shack RSS").setIcon(R.drawable.menu_reload);
 		//menu.add(3, 8, 9, "Check Version");
@@ -170,7 +173,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			return true;
 		case 2: // show settings dialog
 			intent = new Intent();
-			intent.setClass(this, ActivityPreferences.class);
+			intent.setClass(this, ActivityMainMenu.class);
 			startActivity(intent);
 			return true;
 		case 3: // home
@@ -279,7 +282,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 	}
 
 	public void run() {
-		
+		 
 		threadLoaded = false;
 		try {
 
