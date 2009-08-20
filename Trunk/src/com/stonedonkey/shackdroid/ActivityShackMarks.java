@@ -71,7 +71,7 @@ public class ActivityShackMarks extends ListActivity implements Runnable {
 			return;
 		}
 		
-		pd = ProgressDialog.show(this, null, "shackmarks loading, please wait...", true,false); 
+		pd = ProgressDialog.show(this, null, "loading shackmarks...", true,false); 
 		pd.setIcon(R.drawable.shack_logo);
 		
 		// use the class run() method to do work

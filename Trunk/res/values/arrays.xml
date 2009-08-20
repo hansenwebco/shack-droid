@@ -31,11 +31,31 @@
 		<item>http://shackchatty.com</item>
 		<item>http://shackapi.stonedonkey.com</item>
 	</string-array>
-		<string-array name="fontSizes">
+	<string-array name="fontSizes">
 		<item>12</item>
 		<item>14</item>
 		<item>16</item>
 		<item>18</item>
 		<item>20</item>
 	</string-array>
+	<string-array name="titles">
+		<item>Suck it Trebek!</item>
+		<item>Stay a while and listen.</item>
+		<item>Not Pony Safe</item>
+		<item>Lamp, Sand, Lime!</item>
+		<item>*golf clap*</item>
+		<item>Spy's sappin' mah phone!</item>
+		<item>You are not the father!</item>
+		<item>Putting NWS in NeWS.</item>
+		<item>What?</item>
+		<item>Stealing your bike.</item>
+		<item>thanks.txt</item>
+		<item>ITLC</item>
+		<item>Pics+Divx</item>
+		<item>Because work is over rated.</item>
+		<item>Better than real life.</item>
+		<item>I see what you did there.</item>
+		<item>It has already been posted.</item>
+		<item>Not Radio Shack.</item>
+	</string-array>	
 </resources>

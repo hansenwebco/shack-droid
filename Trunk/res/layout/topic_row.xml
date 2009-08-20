@@ -10,7 +10,8 @@ android:layout_height="fill_parent">
 	android:layout_height="wrap_content"
 	android:textColor="#ffba00"
 	android:textSize="12sp"
-	android:paddingLeft="3px"
+	android:paddingLeft="8px"
+	android:paddingTop="3px"
 	/>
 
 	<ImageView
@@ -18,26 +19,28 @@ android:layout_height="fill_parent">
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:paddingLeft="4px"
-	android:paddingTop="6px"
+	android:paddingTop="8px"
 	android:layout_toRightOf="@+id/TextViewPosterName"
+	
 	/>
 
 	<TextView
 	android:id="@+id/TextViewDatePosted"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-	android:paddingRight="8px"
 	android:gravity="right"
 	android:textSize="12sp"
 	android:layout_toRightOf="@+id/ImageViewCat"
+	android:paddingTop="3px"
+	android:paddingRight="12px"
 	/>
 
 	<TextView
 	android:id="@+id/TextViewPostText"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
-	android:paddingLeft="4px"
-	android:paddingRight="4px"
+	android:paddingLeft="8px"
+	android:paddingRight="8px"
 	android:textSize="12sp"
 	android:layout_below="@+id/TextViewPosterName"
 	android:textColor="#FFFFFF"

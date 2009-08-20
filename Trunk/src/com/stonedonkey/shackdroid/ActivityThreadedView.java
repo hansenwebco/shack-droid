@@ -273,7 +273,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			posterName.setTextColor(Color.parseColor("#FFBA00"));
 
 		TextView postDate = (TextView) findViewById(R.id.TextViewThreadViewPostDate);
-		postDate.setText(post.getPostDate());
+		postDate.setText(Helper.FormatShackDate(post.getPostDate()));
 		postDate.setTypeface(face);
 
 		String postCat = post.getPostCategory();
@@ -440,18 +440,19 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 
-		menu.add(1, 0, 3, "Reply").setIcon(R.drawable.menu_reply);
-		menu.add(1, 1, 1, "Settings").setIcon(R.drawable.menu_settings);
-		menu.add(1, 2, 2, "Back").setIcon(R.drawable.menu_back);
-		menu.add(1, 3, 4, "Refresh").setIcon(R.drawable.menu_reload);
+		menu.add(1, 0, 4, "Reply").setIcon(R.drawable.menu_reply);
+		//menu.add(1, 1, 1, "Settings").setIcon(R.drawable.menu_settings);
+		menu.add(1, 2, 1, "Back").setIcon(R.drawable.menu_back);
+		menu.add(1, 3, 2, "Refresh").setIcon(R.drawable.menu_reload);
 
-		SubMenu sub = menu.addSubMenu(1, 4, 1, "LOL/INF").setIcon(R.drawable.menu_lolinf);
+		SubMenu sub = menu.addSubMenu(1, 4, 3, "LOL/INF").setIcon(R.drawable.menu_lolinf);
 		sub.add(0,8,0,"LOL Post");
 		sub.add(0,9,1, "INF Post");
+		sub.add(0,10,2, "Cancel");
 
-		sub = menu.addSubMenu(1, 5, 5, "ShackMarks").setIcon(R.drawable.menu_mark);
-		sub.add(0,6,0,"View saved ShackMarks");
-		sub.add(0,7,1, "Save to ShackMarks").setIcon(R.drawable.menu_shacktags);
+		//sub = menu.addSubMenu(1, 5, 5, "ShackMarks").setIcon(R.drawable.menu_mark);
+		//sub.add(0,6,0,"View saved ShackMarks");
+		//sub.add(0,7,1, "Save to ShackMarks").setIcon(R.drawable.menu_shacktags);
 
 		return true;
 	}
@@ -518,6 +519,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			// inf post
 			login = prefs.getString("shackLogin", "");	
 			HandlerExtendedSites.INFLOLPost(this,login,postID,"INF");
+			return true;
+		case 10:
 			return true;
 
 		}
