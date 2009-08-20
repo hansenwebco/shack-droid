@@ -55,7 +55,7 @@ public class AdapterMessages extends BaseAdapter {
 		auth.setTypeface(face);
 		
 		TextView dp =  (TextView)v.findViewById(R.id.TextViewMessageDatePosted);
-		dp.setText(msg.getMsgDate());
+		dp.setText(Helper.FormatShackDate(msg.getMsgDate()));
 		dp.setTypeface(face);
 		
 		TextView sub = (TextView)v.findViewById(R.id.TextViewMessageSubject);

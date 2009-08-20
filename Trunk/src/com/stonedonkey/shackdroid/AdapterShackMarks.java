@@ -64,7 +64,7 @@ public class AdapterShackMarks extends BaseAdapter {
 		postText.setTypeface(face);
 		
 		TextView postDate = (TextView)v.findViewById(R.id.TextViewNotesDatePosted);
-		postDate.setText(post.getPostDate());
+		postDate.setText(Helper.FormatShackDate(post.getPostDate()));
 		postDate.setTypeface(face);
 		
 		return v;

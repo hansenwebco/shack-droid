@@ -70,9 +70,11 @@ public class AdapterTopicView extends BaseAdapter {
 		
 		TextView postDate = (TextView)v.findViewById(R.id.TextViewDatePosted);
 		postDate.setTypeface(face);
-		if (postDate != null)
-			postDate.setText(post.getPostDate());
-		
+		if (postDate != null) {
+			postDate.setText(Helper.FormatShackDate(post.getPostDate()));
+			//postDate.setText(post.getPostDate());
+		}
+	
 	
 		// Sep 14, 2008 2:31pm CST  
 		//DateFormat dfm = new SimpleDateFormat("MMM d, y hh:mmaa z");

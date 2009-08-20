@@ -11,14 +11,16 @@
 		android:layout_height="wrap_content"
 		android:textColor="#ffba00" 
 		android:textSize="12sp"
-		android:paddingLeft="3px">
+		android:paddingLeft="8px"
+		android:paddingTop="3px"		
+		>
 	</TextView>
 	<ImageView
 	android:id="@+id/ImageViewCatTopic"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
-	android:paddingLeft="3px"
-	android:paddingTop="4px"
+	android:paddingLeft="4px"
+	android:paddingTop="8px"
 	android:layout_toRightOf="@+id/TextViewThreadAuthor"
 	/>	
 	<TextView 
@@ -28,7 +30,10 @@
 		android:text="" 
 		android:gravity="right" 
 		android:layout_toRightOf="@+id/TextViewThreadAuthor"
-		android:textSize="12sp">
+		android:textSize="12sp"
+		android:paddingTop="3px"
+		android:paddingRight="12px"
+		>
 	</TextView>	
 	
 	<ScrollView 
@@ -44,8 +49,8 @@
 			android:text="" 
 			android:minHeight="180px"
 			android:textSize="12sp" 
-			android:paddingLeft="3px"
-			android:paddingRight="1px"
+			android:paddingLeft="8px"
+			android:paddingRight="8px"
 			android:paddingBottom="10px"
 			android:textColorLink="#FFFFFF"
 			android:textColor="#FFFFFF"
@@ -59,6 +64,8 @@
 		android:background="#000000"
 		android:layout_below="@+id/textAreaScroller"
 		android:choiceMode="singleChoice"
+		android:dividerHeight="1px"
+		android:divider="#333333"
 		android:focusableInTouchMode="true"/>
 	
 

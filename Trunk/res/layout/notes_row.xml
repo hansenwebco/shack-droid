@@ -11,7 +11,9 @@
 	android:layout_height="wrap_content"
 	android:textColor="#ffba00"
 	android:textSize="12sp"
-	android:paddingLeft="3px"
+	android:paddingLeft="8px"
+	android:paddingTop="3px"
+	
 	/>
 
 	<ImageView
@@ -27,7 +29,8 @@
 	android:id="@+id/TextViewNotesDatePosted"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-	android:paddingRight="8px"
+	android:paddingTop="3px"
+	android:paddingRight="12px"
 	android:gravity="right"
 	android:textSize="12sp"
 	android:layout_toRightOf="@+id/ImageViewNotesCat"
@@ -37,8 +40,9 @@
 	android:id="@+id/TextViewNotesPreview"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
-	android:paddingLeft="3px"
-	android:paddingRight="3px"
+	android:paddingLeft="8px"
+	android:paddingRight="8px"
+	android:paddingBottom="8px"
 	android:textSize="12sp"
 	android:layout_below="@+id/TextViewNotesPosterName"
 	android:textColor="#FFFFFF"

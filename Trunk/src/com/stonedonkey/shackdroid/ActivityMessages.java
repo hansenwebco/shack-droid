@@ -151,10 +151,10 @@ public class ActivityMessages extends ListActivity implements Runnable {
 		
 		menu.add(1, 0 ,0,"Prev").setIcon(R.drawable.menu_back);
 		menu.add(1, 1 ,1,"Next").setIcon(R.drawable.menu_forward);
-		menu.add(1, 2, 6, "Home").setIcon(R.drawable.menu_home);
-		menu.add(2, 3, 3, "Send Msg").setIcon(R.drawable.menu_message);
-		menu.add(2, 4, 4, "Refresh").setIcon(R.drawable.menu_reload);
-		menu.add(2, 6, 2, "Folder").setIcon(R.drawable.menu_folder);
+		menu.add(1, 2, 6, "Menu").setIcon(R.drawable.menu_home);
+		menu.add(2, 3, 5, "Send Msg").setIcon(R.drawable.menu_message);
+		menu.add(2, 4, 3, "Refresh").setIcon(R.drawable.menu_reload);
+		menu.add(2, 6, 4, "Folder").setIcon(R.drawable.menu_folder);
 		
 		menu.findItem(0).setEnabled(false);
 
@@ -175,8 +175,10 @@ public class ActivityMessages extends ListActivity implements Runnable {
 			return true;
 		case 2: // show settings dialog
 			intent = new Intent();
-			intent.setClass(this, ActivityTopicView.class);
+			//intent.setClass(this, ActivityTopicView.class);
+			intent.setClass(this,ActivityMainMenu.class);
 			startActivity(intent);
+			finish();
 			return true;
 		case 3:
 			intent = new Intent();
