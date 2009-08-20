@@ -22,7 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnCreateContextMenuListener;
+import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class ActivityRSS extends ListActivity implements Runnable {
@@ -41,30 +41,37 @@ public class ActivityRSS extends ListActivity implements Runnable {
 				
 			setContentView(R.layout.rss);
 			fillSaxData();
-		
-			getListView().setOnCreateContextMenuListener(
-					new OnCreateContextMenuListener() {
-						@Override
-						public void onCreateContextMenu(ContextMenu menu, View v,
-								ContextMenuInfo menuInfo) {
-							menu.setHeaderTitle("RSS Story Options");
-							menu.add(0, 3, 0, "View Story");
-							menu.add(0, 4, 0, "View Comments");
-							menu.add(0, -1, 0, "Cancel");
-						}
-					});		
+//		
+//			getListView().setOnCreateContextMenuListener(
+//					new OnCreateContextMenuListener() {
+//						@Override
+//						public void onCreateContextMenu(ContextMenu menu, View v,
+//								ContextMenuInfo menuInfo) {
+//							menu.setHeaderTitle("RSS Story Options");
+//							menu.add(0, 3, 0, "View Story");
+//							menu.add(0, 4, 0, "View Comments");
+//							menu.add(0, -1, 0, "Cancel");
+//						}
+//					});		
 			
 		super.onCreate(savedInstanceState);
-		
+		registerForContextMenu(getListView());
 	}
 	
 	
 	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,ContextMenuInfo menuInfo) {
+		
+		menu.setHeaderTitle("RSS Story Options");
+		menu.add(0, 3, 0, "View Story");
+		menu.add(0, 4, 0, "View Comments");
+		menu.add(0, -1, 0, "Cancel");
+		
+	};			
+	
+	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-	
-	
-		
 	}
 
 
@@ -225,8 +232,19 @@ public class ActivityRSS extends ListActivity implements Runnable {
                         /* User clicked No so do some stuff */
                     }
                 })
-               .create();
+               .create(); 
 	        }
 			return null;
         }
+
+
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		// TODO Auto-generated method stub
+		super.onListItemClick(l, v, position, id);
+		v.showContextMenu();
+	}
+
+
+	
 }
