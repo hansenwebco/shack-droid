@@ -26,6 +26,7 @@ public class ActivityMainMenu extends ListActivity  {
 	     menu.add(new ShackMenuItem("Shack Messages","Stuff too shocking for even the Shack.",R.drawable.menu2_shackmessages2));
 	     menu.add(new ShackMenuItem("Settings","Hay guys, am I doing this right?",R.drawable.menu2_settings));
 	     menu.add(new ShackMenuItem("Version Check","stonedonkey finally did something new!?!",R.drawable.menu2_vercheck));
+	     //menu.add(new ShackMenuItem("Camera","Pics + Divx of STFU",R.drawable.menu2_settings));
 	     
 	     AdapterMainMenu mm = new AdapterMainMenu(this,R.layout.mainmenu_row, menu);
      	     
@@ -94,6 +95,11 @@ public class ActivityMainMenu extends ListActivity  {
 
 				new AlertDialog.Builder(this).setTitle("Version Check").setPositiveButton("OK", null).setMessage(message).show();
 
+				break;
+			}
+			case 7:
+			{
+				intent.setClass(this,ActivityCamera.class);
 				break;
 			}
 			
