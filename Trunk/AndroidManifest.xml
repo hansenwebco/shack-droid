@@ -22,7 +22,9 @@
         <activity android:screenOrientation="sensor" android:name="ActivityViewMessage" android:label="View Shack Message"></activity>
         <activity android:screenOrientation="sensor" android:name="ActivityPostMessage" android:label="Create Shack Message"></activity>
         <activity android:screenOrientation="sensor" android:name="ActivityMainMenu" android:label="ShackDroid"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivityCamera" android:label="ShackDroid - Snap Picture"></activity>
 </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+	<uses-permission android:name="android.permission.CAMERA"></uses-permission>
     <uses-sdk  android:minSdkVersion="3"/>
 </manifest> 
