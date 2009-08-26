@@ -445,9 +445,11 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		menu.add(1, 2, 1, "Back").setIcon(R.drawable.menu_back);
 		menu.add(1, 3, 2, "Refresh").setIcon(R.drawable.menu_reload);
 
-		SubMenu sub = menu.addSubMenu(1, 4, 3, "LOL/INF").setIcon(R.drawable.menu_lolinf);
+		SubMenu sub = menu.addSubMenu(1, 4, 3, "LOL/INF/UNF/TAG").setIcon(R.drawable.menu_lolinf);
 		sub.add(0,8,0,"LOL Post");
 		sub.add(0,9,1, "INF Post");
+		sub.add(0,11,1, "UNF Post");
+		sub.add(0,12,1, "TAG Post");
 		sub.add(0,10,2, "Cancel");
 
 		//sub = menu.addSubMenu(1, 5, 5, "ShackMarks").setIcon(R.drawable.menu_mark);
@@ -520,9 +522,19 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			login = prefs.getString("shackLogin", "");	
 			HandlerExtendedSites.INFLOLPost(this,login,postID,"INF");
 			return true;
-		case 10:
+		case 10: // cancel lol/unf/tag/ing
 			return true;
-
+		case 11:
+			// unf post
+			login = prefs.getString("shackLogin", "");	
+			HandlerExtendedSites.INFLOLPost(this,login,postID,"UNF");
+			return true;
+		case 12:
+			// tag post
+			login = prefs.getString("shackLogin", "");	
+			HandlerExtendedSites.INFLOLPost(this,login,postID,"TAG");
+			return true;
+			
 		}
 		return false;
 	}
