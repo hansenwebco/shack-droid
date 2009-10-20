@@ -25,5 +25,5 @@
         <activity android:screenOrientation="sensor" android:name="ActivityCamera" android:label="ShackDroid - Snap Picture"></activity>
 </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    <uses-sdk  android:minSdkVersion="3"/>
+    <uses-sdk  android:minSdkVersion="4"/>
 </manifest> 
