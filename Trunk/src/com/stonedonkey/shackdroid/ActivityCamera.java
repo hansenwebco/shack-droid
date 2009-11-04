@@ -1,8 +1,16 @@
 package com.stonedonkey.shackdroid;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import org.apache.http.HttpClientConnection;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -43,7 +51,9 @@ public class ActivityCamera extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
 			Bitmap x = (Bitmap) data.getExtras().get("data");
+			
 			((ImageView) findViewById(R.id.pictureView)).setImageBitmap(x);
+			
 			ContentValues values = new ContentValues();
 			values.put(Images.Media.TITLE, "title");
 			values.put(Images.Media.BUCKET_ID, "test");
@@ -54,13 +64,47 @@ public class ActivityCamera extends Activity {
 			OutputStream outstream;
 			try {
 				outstream = getContentResolver().openOutputStream(uri);
+				//x.compress(Bitmap.CompressFormat.JPEG, 70, outstream);
+				
+				
+				URL url = null;
+				HttpURLConnection conn;
+				url = new URL("http://www.shackpics.com/upload.x");
 
-				x.compress(Bitmap.CompressFormat.JPEG, 70, outstream);
+				conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("POST");
+				conn.setDoOutput(true);
+				conn.setDoInput(true);
+				
+				conn.addRequestProperty("username", "");
+				conn.addRequestProperty("password", "");
+				conn.addRequestProperty("filename", "droidPhoneUpload.jpg");
+				
+				ByteArrayOutputStream baos= new ByteArrayOutputStream();
+				x.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+				
+				String imageData = Base64.encodeBytes(baos.toByteArray());
+				conn.addRequestProperty("image",imageData);
+								
 				outstream.close();
-			} catch (FileNotFoundException e) {
-				//
-			} catch (IOException e) {
-				//
+				
+				OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+				wr.flush();
+				
+				// Capture response for handling
+				BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				String line;
+				String result = "";
+				while ((line = rd.readLine()) != null) {
+					result = result + line;
+				}
+				wr.close();
+				rd.close();
+				
+				
+			} catch (Exception e) {
+				String fail = e.getMessage();
+			String hold = "hold'";
 			}
 		}
 
