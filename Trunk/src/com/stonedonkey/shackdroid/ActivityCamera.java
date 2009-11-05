@@ -1,16 +1,21 @@
 package com.stonedonkey.shackdroid;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.apache.http.HttpClientConnection;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -51,60 +56,36 @@ public class ActivityCamera extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
 			Bitmap x = (Bitmap) data.getExtras().get("data");
-			
 			((ImageView) findViewById(R.id.pictureView)).setImageBitmap(x);
 			
-			ContentValues values = new ContentValues();
-			values.put(Images.Media.TITLE, "title");
-			values.put(Images.Media.BUCKET_ID, "test");
-			values.put(Images.Media.DESCRIPTION, "test Image taken");
-			values.put(Images.Media.MIME_TYPE, "image/jpeg");
-			Uri uri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI,
-					values);
-			OutputStream outstream;
+			
+			
 			try {
-				outstream = getContentResolver().openOutputStream(uri);
-				//x.compress(Bitmap.CompressFormat.JPEG, 70, outstream);
-				
-				
-				URL url = null;
-				HttpURLConnection conn;
-				url = new URL("http://www.shackpics.com/upload.x");
 
-				conn = (HttpURLConnection) url.openConnection();
-				conn.setRequestMethod("POST");
-				conn.setDoOutput(true);
-				conn.setDoInput(true);
-				
-				conn.addRequestProperty("username", "");
-				conn.addRequestProperty("password", "");
-				conn.addRequestProperty("filename", "droidPhoneUpload.jpg");
-				
-				ByteArrayOutputStream baos= new ByteArrayOutputStream();
-				x.compress(Bitmap.CompressFormat.JPEG, 70, baos);
-				
-				String imageData = Base64.encodeBytes(baos.toByteArray());
-				conn.addRequestProperty("image",imageData);
-								
-				outstream.close();
-				
-				OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-				wr.flush();
-				
-				// Capture response for handling
-				BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-				String line;
-				String result = "";
-				while ((line = rd.readLine()) != null) {
-					result = result + line;
+		
+	
+				HttpClient httpClient = new DefaultHttpClient();
+			
+				HttpPost request = new HttpPost("http://www.shackpics.com/upload.x");
+				MultipartEntity  entity = new MultipartEntity();
+				entity.addPart("filename",new StringBody("droidUpload"));
+				entity.addPart("userfile[]", new FileBody(null));
+				request.setEntity(entity);
+			
+				HttpResponse response = httpClient.execute(request);
+				int status = response.getStatusLine().getStatusCode();
+
+				if (status != HttpStatus.SC_OK) {
+				    // see above  
+				} else {
+				    // see above
 				}
-				wr.close();
-				rd.close();
-				
+
+				  
 				
 			} catch (Exception e) {
 				String fail = e.getMessage();
-			String hold = "hold'";
+				String hold = "hold'";
 			}
 		}
 
