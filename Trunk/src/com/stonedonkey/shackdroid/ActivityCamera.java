@@ -1,12 +1,9 @@
 package com.stonedonkey.shackdroid;
 
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.InputStream;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -58,17 +55,23 @@ public class ActivityCamera extends Activity {
 			Bitmap x = (Bitmap) data.getExtras().get("data");
 			((ImageView) findViewById(R.id.pictureView)).setImageBitmap(x);
 			
-			
+			ContentValues values = new ContentValues();
+			values.put(Images.Media.TITLE, "title");
+			values.put(Images.Media.BUCKET_ID, "test");
+			values.put(Images.Media.DESCRIPTION, "test Image taken");
+			values.put(Images.Media.MIME_TYPE, "image/jpeg");
+			Uri uri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI,values);
 			
 			try {
-
-		
-	
+						
+			
+				File file; // how do I convert this stupid extra to a file.. arg 
+				
 				HttpClient httpClient = new DefaultHttpClient();
 			
 				HttpPost request = new HttpPost("http://www.shackpics.com/upload.x");
 				MultipartEntity  entity = new MultipartEntity();
-				entity.addPart("filename",new StringBody("droidUpload"));
+				entity.addPart("filename",new StringBody("droidUpload.jpg"));
 				entity.addPart("userfile[]", new FileBody(null));
 				request.setEntity(entity);
 			
@@ -85,7 +88,7 @@ public class ActivityCamera extends Activity {
 				
 			} catch (Exception e) {
 				String fail = e.getMessage();
-				String hold = "hold'";
+				//String hold = "hold'";
 			}
 		}
 
