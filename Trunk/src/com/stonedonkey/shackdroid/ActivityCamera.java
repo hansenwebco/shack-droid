@@ -1,10 +1,5 @@
 package com.stonedonkey.shackdroid;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
@@ -60,12 +55,12 @@ public class ActivityCamera extends Activity {
 			values.put(Images.Media.BUCKET_ID, "test");
 			values.put(Images.Media.DESCRIPTION, "test Image taken");
 			values.put(Images.Media.MIME_TYPE, "image/jpeg");
-			Uri uri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI,values);
+			//Uri uri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI,values);
 			
 			try {
 						
 			
-				File file; // how do I convert this stupid extra to a file.. arg 
+				///File file; // how do I convert this stupid extra to a file.. arg 
 				
 				HttpClient httpClient = new DefaultHttpClient();
 			
@@ -87,7 +82,7 @@ public class ActivityCamera extends Activity {
 				  
 				
 			} catch (Exception e) {
-				String fail = e.getMessage();
+				//String fail = e.getMessage();
 				//String hold = "hold'";
 			}
 		}
