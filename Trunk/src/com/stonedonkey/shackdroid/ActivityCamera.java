@@ -1,73 +1,219 @@
 package com.stonedonkey.shackdroid;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
-import android.content.ContentValues;
-import android.content.Intent;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.PixelFormat;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory.Options;
+import android.hardware.Camera;
+import android.hardware.Camera.AutoFocusCallback;
+import android.hardware.Camera.Parameters;
+import android.hardware.Camera.PictureCallback;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore.Images;
-import android.provider.MediaStore.Images.Media;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
 
-public class ActivityCamera extends Activity {
+public class ActivityCamera extends Activity implements AutoFocusCallback, SurfaceHolder.Callback, PictureCallback {
+	
+	Uri _fileUri;
+	Camera _cam;
+	boolean _takingPicture;
+	boolean _imageNeedsResize;
+	byte[] _pictureData;
+	double _scaleAmount = 0;
+	
+	private static final int MODE_TAKING_PICTURE = 0;
+	private static final int MODE_SHOWING_PICTURE = 1;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.camera);
-		Button cameraButton = (Button) findViewById(R.id.cameraButton);
-		cameraButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				ContentValues values = new ContentValues();
-				values.put(Images.Media.TITLE, "title");
-				values.put(Images.Media.BUCKET_ID, "test");
-				values.put(Images.Media.DESCRIPTION, "test Image taken");
-				Uri uri = getContentResolver().insert(
-						Media.EXTERNAL_CONTENT_URI, values);
-				Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-				intent.putExtra("output", uri.getPath());
-				startActivityForResult(intent, 0);
-			}
-		});
+		SurfaceHolder holder = ((SurfaceView)findViewById(R.id.SurfaceView01)).getHolder();
+		holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+		holder.addCallback(this);
 
+		SetupButtons(MODE_TAKING_PICTURE);
+	}
+
+    protected Dialog onCreateDialog(int id) {
+    	switch(id){
+	    	case 0:
+	    		ProgressDialog loadingContent = new ProgressDialog(this);
+		    	loadingContent.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		    	loadingContent.setTitle("Uploading file");
+		    	loadingContent.setMessage("Please wait...");
+		    	loadingContent.setCancelable(false);
+
+		    	return loadingContent;
+    	}
+    	return null;
+    }
+    
+    @Override 
+    protected void onPause(){
+    	super.onPause();
+    	_pictureData = null;
+    }
+
+	@Override
+	public void onAutoFocus(boolean arg0, Camera arg1) {
+		// TODO Auto-generated method stub
+		if (arg0 && _takingPicture){
+			arg1.takePicture(null, null, this);
+		}
+		else if (arg0 == false){
+			_takingPicture = false;
+		}
+	}
+
+
+	@Override
+	public void surfaceChanged(SurfaceHolder holder, int format, int width,
+			int height) {
+        Camera.Parameters parameters = _cam.getParameters();
+        parameters.setPreviewSize(width, height);
+        _cam.setParameters(parameters);
+        _cam.startPreview();
+	}
+
+
+	@Override
+	public void surfaceCreated(SurfaceHolder holder) {
+		_cam = Camera.open();
+		
+		Parameters params = _cam.getParameters();
+		params.setPictureFormat(PixelFormat.JPEG);
+		
+		int size = params.getPictureSize().height * params.getPictureSize().width; 
+		
+		if (size >= 3145728){ //3 megapixels
+			_imageNeedsResize = true;
+			_scaleAmount = Math.floor(params.getPictureSize().width / 2048);
+		}
+		
+		_cam.setParameters(params);			
+		try {
+			_cam.setPreviewDisplay(holder);
+			_cam.startPreview();
+			_cam.autoFocus(this);				
+		} catch (IOException e) {
+			_cam.release();
+			_cam = null;
+		}		
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
-			Bitmap x = (Bitmap) data.getExtras().get("data");
-			((ImageView) findViewById(R.id.pictureView)).setImageBitmap(x);
+	public void surfaceDestroyed(SurfaceHolder holder) {
+		_cam.stopPreview();
+		_cam.release();
+		_cam = null;
+	}
+
+	@Override
+	public void onPictureTaken(byte[] data, Camera camera) {
+		findViewById(R.id.takePicture).setEnabled(false);
+		
+		if (_imageNeedsResize){ //We might want to bump this off to an Async task.
+
+			Options options = new Options();
+			if (_scaleAmount > 1){
+				//Try and scale down 2 == half size, 4 == quarter size etc.
+				options.inSampleSize = (int)_scaleAmount;
+			}
+			else{
+				options = null;
+			}
 			
-			ContentValues values = new ContentValues();
-			values.put(Images.Media.TITLE, "title");
-			values.put(Images.Media.BUCKET_ID, "test");
-			values.put(Images.Media.DESCRIPTION, "test Image taken");
-			values.put(Images.Media.MIME_TYPE, "image/jpeg");
-			//Uri uri = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI,values);
-			
+			Bitmap pic = BitmapFactory.decodeByteArray(data, 0, data.length, options);
+
+			ByteArrayOutputStream compressed = new ByteArrayOutputStream();
+			pic.compress(CompressFormat.JPEG, 90, compressed);  //Get it down to 800k-900k
+
+			data = compressed.toByteArray();
+			pic.recycle();
 			try {
-						
+				compressed.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}				
+		}
+		
+		findViewById(R.id.takePicture).setEnabled(true);
+		SetupButtons(MODE_SHOWING_PICTURE);
+		_pictureData = data;
+		_takingPicture = false;
+	}
+	
+	private void SetupButtons(int mode){
+		switch(mode){
+		case MODE_TAKING_PICTURE:
+			((Button)findViewById(R.id.takePicture)).setText("Oh snap");
+			((Button)findViewById(R.id.takePicture)).setOnClickListener(new OnClickListener(){
+				public void onClick(View v) {
+					_takingPicture = true;
+					_cam.autoFocus(ActivityCamera.this);
+				}
+			});				
+			((Button)findViewById(R.id.btnCancel)).setVisibility(View.INVISIBLE);
+			break;
+		case MODE_SHOWING_PICTURE:
+			((Button)findViewById(R.id.takePicture)).setText("Upload");
+			((Button)findViewById(R.id.takePicture)).setOnClickListener(new OnClickListener(){
+				public void onClick(View v) {
+					new UploadAsyncTask().execute(_pictureData);
+				}
+			});
 			
-				///File file; // how do I convert this stupid extra to a file.. arg 
+			((Button)findViewById(R.id.btnCancel)).setVisibility(View.VISIBLE);
+			((Button)findViewById(R.id.btnCancel)).setOnClickListener(new OnClickListener(){
+				@Override
+				public void onClick(View v) {
+					_takingPicture = false;
+					_pictureData = null;
+					
+					SetupButtons(0);
+					_cam.startPreview();
+				}});				
+			break;
+		}
+	}
+
+	class UploadAsyncTask extends AsyncTask<byte[], Integer, Integer>{
+
+		@Override
+		protected Integer doInBackground(byte[]... params) {
+			try {
+				byte[] data = params[0];
 				
 				HttpClient httpClient = new DefaultHttpClient();
-			
+				
 				HttpPost request = new HttpPost("http://www.shackpics.com/upload.x");
 				MultipartEntity  entity = new MultipartEntity();
 				entity.addPart("filename",new StringBody("droidUpload.jpg"));
-				entity.addPart("userfile[]", new FileBody(null));
+
+				entity.addPart("userfile[]", new InputStreamBody(new ByteArrayInputStream(data), "droidUpload.jpg"));
 				request.setEntity(entity);
 			
 				HttpResponse response = httpClient.execute(request);
@@ -78,14 +224,23 @@ public class ActivityCamera extends Activity {
 				} else {
 				    // see above
 				}
-
-				  
+				
+				return 1;
 				
 			} catch (Exception e) {
-				//String fail = e.getMessage();
-				//String hold = "hold'";
+				String fail = e.getMessage();
+				return 0;
 			}
 		}
+		
+		protected void onPreExecute(){
+			showDialog(0);
+		}
+	     protected void onPostExecute(Integer result) {
+	         dismissDialog(0);
+	         SetupButtons(MODE_TAKING_PICTURE);
+	         _cam.startPreview();
+	     }
 
-	}
+	}		
 }
