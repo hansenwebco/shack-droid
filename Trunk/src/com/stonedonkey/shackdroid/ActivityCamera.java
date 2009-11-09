@@ -3,6 +3,8 @@ package com.stonedonkey.shackdroid;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -204,11 +206,12 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 
 		@Override
 		protected Integer doInBackground(byte[]... params) {
+			
+			HttpClient httpClient = new DefaultHttpClient();
+			
 			try {
 				byte[] data = params[0];
-				
-				HttpClient httpClient = new DefaultHttpClient();
-				
+			
 				HttpPost request = new HttpPost("http://www.shackpics.com/upload.x");
 				
 				//List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
@@ -223,14 +226,29 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 
 				ResponseHandler<String> responseHandler = new BasicResponseHandler();
 				String response = httpClient.execute(request,responseHandler);
-
-								
 				
-				return 1;
+				Pattern p = Pattern.compile("value=.(.*?)=?>");
+				Matcher m = p.matcher(response);
+				
+				if (m.matches()) // GREATTTT SUCCESSS!
+				{
+					
+					return 1;		
+				}
+				else
+					return 0;
+				
+				// pass the url to the posting screen
+				
+				// close this activity and launch the posting activity
+				
+				
 				
 			} catch (Exception e) {
-				//String fail = e.getMessage();
 				return 0;
+			}
+			finally {
+				httpClient.getConnectionManager().shutdown();				
 			}
 		}
 		
