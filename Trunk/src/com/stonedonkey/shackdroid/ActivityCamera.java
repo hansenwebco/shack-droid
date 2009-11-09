@@ -4,13 +4,13 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
@@ -210,25 +210,26 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 				HttpClient httpClient = new DefaultHttpClient();
 				
 				HttpPost request = new HttpPost("http://www.shackpics.com/upload.x");
+				
+				//List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
+				//nameValuePairs.add(new BasicNameValuePair("filename","droidUpload.jpg"));
+				//nameValuePairs.add(new BasicNameValuePair("userfile[]",new String(data)));
+				//request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+	
 				MultipartEntity  entity = new MultipartEntity();
 				entity.addPart("filename",new StringBody("droidUpload.jpg"));
-
 				entity.addPart("userfile[]", new InputStreamBody(new ByteArrayInputStream(data), "droidUpload.jpg"));
 				request.setEntity(entity);
-			
-				HttpResponse response = httpClient.execute(request);
-				int status = response.getStatusLine().getStatusCode();
 
-				if (status != HttpStatus.SC_OK) {
-				    // see above  
-				} else {
-				    // see above
-				}
+				ResponseHandler<String> responseHandler = new BasicResponseHandler();
+				String response = httpClient.execute(request,responseHandler);
+
+								
 				
 				return 1;
 				
 			} catch (Exception e) {
-				String fail = e.getMessage();
+				//String fail = e.getMessage();
 				return 0;
 			}
 		}
