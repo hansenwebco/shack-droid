@@ -182,7 +182,13 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 					_cam.autoFocus(ActivityCamera.this);
 				}
 			});				
-			((Button)findViewById(R.id.btnCancel)).setVisibility(View.INVISIBLE);
+			((Button)findViewById(R.id.btnCancel)).setVisibility(View.VISIBLE);
+			((Button)findViewById(R.id.btnCancel)).setOnClickListener(new OnClickListener(){
+				@Override
+				public void onClick(View v) {
+					setResult(RESULT_CANCELED);
+					finish();
+				}});						
 			break;
 		case MODE_SHOWING_PICTURE:
 			((Button)findViewById(R.id.takePicture)).setText("Upload");
