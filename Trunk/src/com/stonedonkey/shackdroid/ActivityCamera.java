@@ -18,6 +18,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
@@ -34,6 +35,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.URLUtil;
 import android.widget.Button;
 
 public class ActivityCamera extends Activity implements AutoFocusCallback, SurfaceHolder.Callback, PictureCallback {
@@ -44,6 +46,8 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 	boolean _imageNeedsResize;
 	byte[] _pictureData;
 	double _scaleAmount = 0;
+	
+	public static final String UPLOADED_FILE_URL = "uploadedfileurl";
 	
 	private static final int MODE_TAKING_PICTURE = 0;
 	private static final int MODE_SHOWING_PICTURE = 1;
@@ -206,19 +210,20 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 
 		@Override
 		protected Integer doInBackground(byte[]... params) {
-			
+
 			HttpClient httpClient = new DefaultHttpClient();
-			
 			try {
 				byte[] data = params[0];
-			
 				HttpPost request = new HttpPost("http://www.shackpics.com/upload.x");
 				
 				//List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
 				//nameValuePairs.add(new BasicNameValuePair("filename","droidUpload.jpg"));
-				//nameValuePairs.add(new BasicNameValuePair("userfile[]",new String(data)));
+				
+				// *Tried changing this to encode data.  Hangs on setEntity() :(
+				// Maybe we need to escape the [ and ]
+				//nameValuePairs.add(new BasicNameValuePair("userfile[]",Base64.encodeBytes(data)));
 				//request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-	
+
 				MultipartEntity  entity = new MultipartEntity();
 				entity.addPart("filename",new StringBody("droidUpload.jpg"));
 				entity.addPart("userfile[]", new InputStreamBody(new ByteArrayInputStream(data), "droidUpload.jpg"));
@@ -226,30 +231,38 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 
 				ResponseHandler<String> responseHandler = new BasicResponseHandler();
 				String response = httpClient.execute(request,responseHandler);
+
+				//Pattern p = Pattern.compile("value=.(.*?)=?>");
 				
-				Pattern p = Pattern.compile("value=.(.*?)=?>");
+				// Tested with: http://www.fileformat.info/tool/regex.htm
+				Pattern p = Pattern.compile("http\\:\\/\\/www\\.shackpics\\.com\\/viewer\\.x\\?file=.*?\\.jpg");
 				Matcher m = p.matcher(response);
 				
-				if (m.matches()) // GREATTTT SUCCESSS!
-				{
-					
-					return 1;		
+				if (m.find()){
+					String url = m.group();
+					if (URLUtil.isValidUrl(url)){
+						Intent result = new Intent();
+						result.putExtra(ActivityCamera.UPLOADED_FILE_URL, url);
+						setResult(RESULT_OK, result);
+
+						finish(); // close down and send the result we have set.
+					}
+					else{
+						setResult(RESULT_CANCELED);
+					}
 				}
-				else
-					return 0;
-				
-				// pass the url to the posting screen
-				
-				// close this activity and launch the posting activity
-				
+				else{
+					setResult(RESULT_CANCELED);
+				}
 				
 				
 			} catch (Exception e) {
-				return 0;
+				setResult(RESULT_CANCELED);
 			}
 			finally {
-				httpClient.getConnectionManager().shutdown();				
+				httpClient.getConnectionManager().shutdown();
 			}
+			return 1;
 		}
 		
 		protected void onPreExecute(){
