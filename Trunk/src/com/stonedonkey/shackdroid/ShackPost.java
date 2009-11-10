@@ -2,6 +2,8 @@ package com.stonedonkey.shackdroid;
 
 import java.io.Serializable;
 
+import android.text.Html;
+
 public final class ShackPost implements Serializable
  {
 
@@ -25,7 +27,7 @@ public final class ShackPost implements Serializable
 		
 		this.posterName = posterName;
 		this.postDate = postDate;
-		this.postPreview = postPreview;
+		this.postPreview = Html.fromHtml(postPreview).toString();//postPreview;
 		this.postID = postID;
 		this.postText = postText;
 		this.replyCount = replyCount; 
