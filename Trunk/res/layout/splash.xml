@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout
+<RelativeLayout
 android:id="@+id/widget29"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
@@ -10,8 +10,6 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 android:id="@+id/ImageViewSplash"
 android:layout_width="fill_parent"
 android:layout_height="wrap_content"
-android:layout_x="0px"
-android:layout_y="30px"
 >
 </ImageView>
 
@@ -20,11 +18,11 @@ android:id="@+id/TextViewVersion"
 android:layout_width="fill_parent"
 android:layout_height="wrap_content"
 android:text=""
-android:layout_x="0px"
-android:layout_y="285px"
-android:gravity="center"
 android:textColor="#00BFF3"
 android:textStyle="bold"
+android:layout_marginTop="275px"
+android:gravity="center"
+android:layout_gravity="center_horizontal|top"
 />
 
 <TextView
@@ -32,8 +30,9 @@ android:id="@+id/TextViewAuthor"
 android:layout_width="fill_parent"
 android:layout_height="wrap_content"
 android:text=""
-android:layout_x="0px"
-android:layout_y="330px"
+android:textColor="#FFBA00"
+android:paddingTop="10px"
+android:layout_below="@+id/TextViewVersion"
 android:gravity="center"
 />
 
@@ -42,12 +41,12 @@ android:id="@+id/TextViewWebSite"
 android:layout_width="fill_parent"
 android:layout_height="wrap_content"
 android:text=""
-android:layout_x="0px"
-android:layout_y="345px"
+android:paddingTop="15px"
+android:layout_below="@+id/TextViewAuthor"
 android:gravity="center"
 />
 
 
 
 
-</AbsoluteLayout>
+</RelativeLayout>
