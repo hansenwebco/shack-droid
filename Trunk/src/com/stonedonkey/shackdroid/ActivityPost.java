@@ -34,6 +34,9 @@ public class ActivityPost extends Activity implements Runnable {
 	private String selectedShackTagOpen = "";
 	private String selectedShackTagClose = "";
 	
+	public static final String UPLOADED_FILE_URL = "uploadedfileurl"; // TODO: Needs more global...
+	private static final int CAMERA_RESULT = 0;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +76,39 @@ public class ActivityPost extends Activity implements Runnable {
 			public void onClick(View v) {
 				// action
 				finish();
+			}
+		});
+
+		final Button cameraButton = (Button)findViewById(R.id.ButtonCamera);
+		cameraButton.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				
+
+				Intent intent = new Intent();
+				intent.setClass(getBaseContext(), ActivityCamera.class);
+				startActivityForResult(intent,CAMERA_RESULT);
+				
 				
 			}
 		});
+		
 		SetShackTagAttributes();
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		switch(requestCode){
+		case CAMERA_RESULT:
+			if (resultCode == RESULT_OK) {
+				TextView tv = (TextView)findViewById(R.id.EditTextPost);
+				String url = data.getStringExtra(UPLOADED_FILE_URL);
+				tv.setText(url);
+			}
+
+			break;
+		}
 	}
 	
 	@Override

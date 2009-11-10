@@ -19,7 +19,7 @@
 
 	<Button
 	android:id="@+id/ButtonPost"
-	android:textSize="10sp"
+	android:textSize="10dip"
 	android:layout_width="55px"
 	android:layout_height="40px"
 	android:text="Post"
@@ -30,7 +30,7 @@
 	
 	<Button
 	android:id="@+id/ButtonCancel"
-	android:textSize="10sp"
+	android:textSize="10dip"
 	android:layout_width="55px"
 	android:layout_height="40px"
 	android:text="Cancel"
@@ -40,12 +40,22 @@
 	android:layout_y="140px">
 	</Button>
 	
+	<Button
+	android:id="@+id/ButtonCamera"
+	android:textSize="10dip"
+	android:layout_width="wrap_content"
+	android:layout_height="40px"
+	android:text="Camera"
+	android:layout_below="@+id/EditTextPost"
+	android:layout_toRightOf="@+id/ButtonCancel">
+	</Button>
+	
 	<TextView
 	android:id="@+id/TextViewPostError"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:layout_below="@+id/EditTextPost"
-	android:layout_toRightOf="@+id/ButtonCancel"	
+	android:layout_toRightOf="@+id/ButtonCamera"	
 	android:text=""
 	android:layout_x="0px"
 	android:layout_y="185px"
@@ -56,10 +66,8 @@
 	<TableLayout
 	android:id="@+id/TableLayoutShackTags"
 	android:visibility="visible"
-	android:paddingTop="8px"
-	android:layout_x="0px"
-	android:layout_y="280px"
-	android:layout_height="200px"
+	android:paddingTop="3px"
+	android:layout_height="wrap_content"
 	android:layout_width="fill_parent"
 	android:layout_below="@+id/ButtonCancel"
 	android:background="#222222">
