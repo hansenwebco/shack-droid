@@ -19,14 +19,22 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.Html.TagHandler;
+import android.text.Spannable.Factory;
 import android.text.style.BackgroundColorSpan;
+import android.text.style.StrikethroughSpan;
 import android.text.util.Linkify;
 import android.text.util.Linkify.MatchFilter;
 import android.text.util.Linkify.TransformFilter;
@@ -239,8 +247,37 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	{
 		TextView tv = (TextView) findViewById(R.id.TextViewPost);
 		String postText = ParseShackText(posts.get(position).getPostText(),addSpoilerMarkers);
-		tv.setText(Html.fromHtml(postText),BufferType.EDITABLE);
+		
+		Spanned parsedText = Html.fromHtml(postText,null, new TagHandler(){
+			int startPos = 0;
+			@Override
+			public void handleTag(boolean opening, String tag, Editable output,
+					XMLReader xmlReader) {
+				
+				if(tag.equals("s")){
+					if (opening){
+						startPos = output.length();
+					}
+					else{
+						StrikethroughSpan strike = new StrikethroughSpan();
+						/*
+						// This doesn't work and the colour is really dark normally :(
+						TextPaint p = new TextPaint();
+						p.setStrokeWidth(2);
+						p.setColor(Color.RED);
+						p.setFlags(TextPaint.STRIKE_THRU_TEXT_FLAG);
+						strike.updateDrawState(p);
+						*/
+						output.setSpan(strike, startPos, output.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+					}
+				}
+				
+			}});
+		
+		tv.setText(parsedText,BufferType.SPANNABLE);
+		//tv.setText(Html.fromHtml(postText),BufferType.SPANNABLE);
 
+		
 		if (addSpoilerMarkers == true) 
 			SpoilerTextView();
 		
@@ -422,9 +459,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		text = text.replaceAll("<span class=\"jt_bold\">(.*?)</span>", "<b>$1</b>");
 		text = text.replaceAll("<span class=\"jt_italic\">(.*?)</span>", "<i>$1</i>");
 		text = text.replaceAll("<span class=\"jt_underline\">(.*?)</span>", "<u>$1</u>");
-		text = text.replaceAll("<span class=\"jt_strike\">(.*?)</span>", "<strike>$1</strike>");
-
-
+		text = text.replaceAll("<span class=\"jt_strike\">(.*?)</span>", "<s>$1</s>");
 
 		// You can only do "highlights" on the actual TextView itself, so we mark up spoilers 
 		// !!-text-!! like so, and then handle it on the appling text to the TextView

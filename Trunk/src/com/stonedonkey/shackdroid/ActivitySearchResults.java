@@ -111,8 +111,10 @@ public class ActivitySearchResults extends ListActivity implements Runnable {
 		setTitle("Search Results - " + currentPage + " of " + this.totalPages + " - " + this.totalResults + " results.");
 		
 		// this is where we bind our fancy ArrayList of posts
-		AdapterSearchResults tva = new AdapterSearchResults(this, searchResults,R.layout.searchresults_row);
-		setListAdapter(tva);
+		if (searchResults != null){
+			AdapterSearchResults tva = new AdapterSearchResults(this, searchResults,R.layout.searchresults_row);
+			setListAdapter(tva);
+		}
 	}
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
