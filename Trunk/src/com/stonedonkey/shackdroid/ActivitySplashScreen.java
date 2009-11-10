@@ -24,8 +24,8 @@ public class ActivitySplashScreen extends Activity {
 		iv.setImageResource(R.drawable.shackdroid_splash);
 		
 		TextView auth= (TextView)findViewById(R.id.TextViewAuthor);
-		auth.setTextSize(10);
-		auth.setText("Written By: Mark \"stonedonkey\" Hansen");
+		auth.setTextSize(12);
+		auth.setText("written by: stonedonkey ~ chazums");
 		
 		TextView version= (TextView)findViewById(R.id.TextViewVersion);
 		version.setTextSize(12);
