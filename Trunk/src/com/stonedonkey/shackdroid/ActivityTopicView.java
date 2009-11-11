@@ -1,7 +1,16 @@
 package com.stonedonkey.shackdroid;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -16,6 +25,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -105,7 +115,9 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 
 		threadLoaded = true;
 		savedInstanceState.clear(); // we'll resave it if we do something again
-		ShowData();
+		
+			ShowData();
+		
 	}
 
 	// Override the onCreateOptionsMenu to provide our own custom
@@ -332,22 +344,17 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			// we implement a handler because most UI items
 			// won't update within a thread
 			try {
-
-				// pd.dismiss();
 				dismissDialog(1);
 			} catch (Exception ex) {
-				// TODO : .dismiss is failing on the initial startup, something
-				// to do with the
-				// windows manager... this is a hacky fix.. :(
-				// String fail = ex.getMessage();
-				// fillDataSAX();
 			}
 
-			ShowData();
+		
+				ShowData();
+		
 		}
 	};
 
-	private void ShowData() {
+	private void ShowData()  {
 
 		if (posts != null) {
 			// storyName is set during FillData above
@@ -372,9 +379,63 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 						.show();
 			}
 		}
+		
+		// update the reply counts for the listing of topics
+		try {
+			UpdatePostCache();
+		} catch (Exception e) {
+			
+		}
+ 
 		threadLoaded = true;
 	}
 
+	@SuppressWarnings("unchecked")
+	public Hashtable<String, String> GetPostCache() throws StreamCorruptedException, IOException
+	{
+		if (getFileStreamPath("posts.cache").exists()) {
+			Hashtable<String, String> postCounts = null;
+			FileInputStream fileIn = openFileInput("posts.cache");
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			try {
+				postCounts = (Hashtable<String, String>)in.readObject();
+			} catch (ClassNotFoundException e) {
+				return null; // fail boat?
+			}
+			in.close(); 
+			fileIn.close();
+			
+			return postCounts;
+		}
+		else 
+			return null;
+	}
+	
+
+	public void UpdatePostCache() throws StreamCorruptedException, IOException
+	{
+		// TODO: How and when do we clear this cache?
+		// squeegy used a file per day.. probably simplest.
+		
+		Hashtable<String, String> postCounts = null;
+		
+		// get the post cache if it exists
+		postCounts = GetPostCache();
+		
+		if (postCounts == null)
+			postCounts = new Hashtable<String, String>();
+		
+		for(int x= 0; x < posts.size();x++)
+			postCounts.put(posts.get(x).getPostID(), posts.get(x).getReplyCount());
+		
+		FileOutputStream fos = openFileOutput("posts.cache",MODE_PRIVATE);
+		ObjectOutputStream os = new ObjectOutputStream(fos);
+		os.writeObject(postCounts);
+		os.close();
+		fos.close();
+		
+	}
+	
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
