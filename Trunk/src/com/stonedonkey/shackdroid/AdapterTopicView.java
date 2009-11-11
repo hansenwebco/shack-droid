@@ -1,5 +1,6 @@
 package com.stonedonkey.shackdroid;
 
+import java.util.Hashtable;
 import java.util.List;
 
 import android.content.Context;
@@ -21,14 +22,15 @@ public class AdapterTopicView extends BaseAdapter {
 	private String shackLogin;
 	static Typeface face;
 	private int fontSize = 12;
+	private Hashtable<String,String> postCache = null;
 	
-	
-	public AdapterTopicView(Context context,int rowResouceID, List<ShackPost> topicList, String shackLogin,int fontSize ){
+	public AdapterTopicView(Context context,int rowResouceID, List<ShackPost> topicList, String shackLogin,int fontSize,Hashtable<String,String> postCache ){
 		this.context = context;
 		this.topicList = topicList;
 		this.rowResouceID = rowResouceID;
 		this.shackLogin = shackLogin;
 		this.fontSize = fontSize;
+		this.postCache = postCache;
 				
 	    face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
 	}
@@ -52,12 +54,9 @@ public class AdapterTopicView extends BaseAdapter {
 
 		ShackPost post = topicList.get(position);
 		LayoutInflater inflate = LayoutInflater.from(context);
-		
-		
-		
+				
 		View v = inflate.inflate(rowResouceID,parent,false);
-	
-		
+			
 		// bind the TextViews to the items in our datasource
 		TextView posterName = (TextView)v.findViewById(R.id.TextViewPosterName);
 		posterName.setTypeface(face);
@@ -74,23 +73,19 @@ public class AdapterTopicView extends BaseAdapter {
 			postDate.setText(Helper.FormatShackDate(post.getPostDate()));
 			//postDate.setText(post.getPostDate());
 		}
-	
-	
-		// Sep 14, 2008 2:31pm CST  
-		//DateFormat dfm = new SimpleDateFormat("MMM d, y hh:mmaa z");
-		//Date conDate = null;
-		//try {  
-		//	conDate = dfm.parse(post.getPostDate());
-		//} catch (ParseException e) {
-		//	// TODO Auto-generated catch block
-		//	e.printStackTrace();
-		//}   
-	
+		
 		
 		TextView postReplyCount = (TextView)v.findViewById(R.id.TextViewReplyCount);
 		postReplyCount.setTypeface(face);
-		postReplyCount.setText(post.getReplyCount());	
-			
+		
+		if (postCache.get(post.getPostID()) != null ) {
+			String cacheposts = postCache.get(post.getPostID());
+			Integer newPosts = Integer.parseInt(post.getReplyCount()) - Integer.parseInt(cacheposts);
+		
+			postReplyCount.setText(post.getReplyCount() + " ( +" + newPosts.toString() +" )" );	
+		}
+		else
+			postReplyCount.setText(post.getReplyCount());
 		
 		TextView postText = (TextView)v.findViewById(R.id.TextViewPostText);
 		postText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
