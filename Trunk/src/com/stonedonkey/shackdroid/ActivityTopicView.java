@@ -1,10 +1,8 @@
 package com.stonedonkey.shackdroid;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
@@ -25,7 +23,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -48,7 +45,8 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 	private Integer storyPages = 1;
 	private String loadStoryID = null;
 	private Boolean threadLoaded = true;
-
+	private Hashtable<String, String> postCounts = null;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,7 +55,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 		Bundle extras = this.getIntent().getExtras();
 		if (extras != null)
 			loadStoryID = extras.getString("StoryID");
-
+		
 		if (savedInstanceState == null) {
 			try {
 				// setRequestedOrientation(ActivityInfo.
@@ -347,10 +345,10 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 				dismissDialog(1);
 			} catch (Exception ex) {
 			}
-
-		
-				ShowData();
-		
+			ShowData();
+			
+			
+			
 		}
 	};
 
@@ -362,16 +360,36 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 					+ currentPage.toString() + " of "
 					+ this.storyPages.toString());
 
-			SharedPreferences prefs = PreferenceManager
-					.getDefaultSharedPreferences(this);
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			String login = prefs.getString("shackLogin", "");
 			int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
 
-			// this is where we bind our fancy ArrayList of posts
-			AdapterTopicView tva = new AdapterTopicView(this,
-					R.layout.topic_row, posts, login, fontSize);
+			try {
+				postCounts = GetPostCache();
+			} catch (Exception ex) {
+				// TODO Auto-generated catch block
+			}
+	
+
+			// TODO: Passing this as a new HashTable seems very ugly and a waste of memory
+			// Unfortunately I can't find a a way to get the Adapter to update before I call
+			// the UpdatePostCache below.. that update occurs before the ListAdapter is set
+			// apparently.  I can't find anything else to put the Update , so for now we'll
+			// create a new Hashtable.. ick.
+
+			AdapterTopicView tva = new AdapterTopicView(this,R.layout.topic_row, posts, login, fontSize,new Hashtable<String,String>(postCounts));
 			setListAdapter(tva);
 
+			
+			// update the reply counts for the listing of topics
+			try {
+				UpdatePostCache();
+			} catch (Exception e) {
+				
+			}
+			
+			
+			
 		} else {
 			if (errorText.length() > 0) {
 				new AlertDialog.Builder(this).setTitle("Error")
@@ -379,14 +397,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 						.show();
 			}
 		}
-		
-		// update the reply counts for the listing of topics
-		try {
-			UpdatePostCache();
-		} catch (Exception e) {
 			
-		}
- 
 		threadLoaded = true;
 	}
 
@@ -411,16 +422,10 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			return null;
 	}
 	
-
 	public void UpdatePostCache() throws StreamCorruptedException, IOException
 	{
 		// TODO: How and when do we clear this cache?
 		// squeegy used a file per day.. probably simplest.
-		
-		Hashtable<String, String> postCounts = null;
-		
-		// get the post cache if it exists
-		postCounts = GetPostCache();
 		
 		if (postCounts == null)
 			postCounts = new Hashtable<String, String>();
@@ -442,8 +447,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 
 		Intent intent = new Intent();
 		intent.setClass(this, ActivityThreadedView.class);
-		intent.putExtra("postID", Long.toString(id)); // the value must be a
-														// string
+		intent.putExtra("postID", Long.toString(id)); // the value must be a string
 		intent.putExtra("storyID", storyID);
 		startActivity(intent);
 	}
