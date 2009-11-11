@@ -48,9 +48,9 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 	double _scaleAmount = 0;
 	
 	public static final String UPLOADED_FILE_URL = "uploadedfileurl";
-	
 	private static final int MODE_TAKING_PICTURE = 0;
-	private static final int MODE_SHOWING_PICTURE = 1;
+	private static final int MODE_SHOWING_PICTURE = 1;	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,10 +73,18 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		    	loadingContent.setCancelable(false);
 
 		    	return loadingContent;
+	    	case 1:
+	    		ProgressDialog compressingContent = new ProgressDialog(this);
+	    		compressingContent.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+	    		compressingContent.setTitle("Compressing image");
+	    		compressingContent.setMessage("Please wait...");
+	    		compressingContent.setCancelable(false);
+
+		    	return compressingContent;		    	
     	}
     	return null;
     }
-    
+
     @Override 
     protected void onPause(){
     	super.onPause();
@@ -85,7 +93,6 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 
 	@Override
 	public void onAutoFocus(boolean arg0, Camera arg1) {
-		// TODO Auto-generated method stub
 		if (arg0 && _takingPicture){
 			arg1.takePicture(null, null, this);
 		}
@@ -93,7 +100,6 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 			_takingPicture = false;
 		}
 	}
-
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
@@ -104,14 +110,13 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
         _cam.startPreview();
 	}
 
-
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		_cam = Camera.open();
 		
 		Parameters params = _cam.getParameters();
 		params.setPictureFormat(PixelFormat.JPEG);
-		
+
 		int size = params.getPictureSize().height * params.getPictureSize().width; 
 		
 		if (size >= 3145728){ //3 megapixels
@@ -139,37 +144,9 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 
 	@Override
 	public void onPictureTaken(byte[] data, Camera camera) {
-		findViewById(R.id.takePicture).setEnabled(false);
-		
-		if (_imageNeedsResize){ //We might want to bump this off to an Async task.
-
-			Options options = new Options();
-			if (_scaleAmount > 1){
-				//Try and scale down 2 == half size, 4 == quarter size etc.
-				options.inSampleSize = (int)_scaleAmount;
-			}
-			else{
-				options = null;
-			}
-			
-			Bitmap pic = BitmapFactory.decodeByteArray(data, 0, data.length, options);
-
-			ByteArrayOutputStream compressed = new ByteArrayOutputStream();
-			pic.compress(CompressFormat.JPEG, 90, compressed);  //Get it down to 800k-900k
-
-			data = compressed.toByteArray();
-			pic.recycle();
-			try {
-				compressed.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}				
-		}
-		
-		findViewById(R.id.takePicture).setEnabled(true);
-		SetupButtons(MODE_SHOWING_PICTURE);
 		_pictureData = data;
 		_takingPicture = false;
+		SetupButtons(MODE_SHOWING_PICTURE);
 	}
 	
 	private void SetupButtons(int mode){
@@ -182,7 +159,7 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 					_cam.autoFocus(ActivityCamera.this);
 				}
 			});				
-			((Button)findViewById(R.id.btnCancel)).setVisibility(View.VISIBLE);
+
 			((Button)findViewById(R.id.btnCancel)).setOnClickListener(new OnClickListener(){
 				@Override
 				public void onClick(View v) {
@@ -194,28 +171,73 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 			((Button)findViewById(R.id.takePicture)).setText("Upload");
 			((Button)findViewById(R.id.takePicture)).setOnClickListener(new OnClickListener(){
 				public void onClick(View v) {
-					new UploadAsyncTask().execute(_pictureData);
+					new CompressAsyncTask().execute(_pictureData);
+					
 				}
 			});
 			
-			((Button)findViewById(R.id.btnCancel)).setVisibility(View.VISIBLE);
 			((Button)findViewById(R.id.btnCancel)).setOnClickListener(new OnClickListener(){
 				@Override
 				public void onClick(View v) {
 					_takingPicture = false;
 					_pictureData = null;
 					
-					SetupButtons(0);
+					SetupButtons(MODE_TAKING_PICTURE);
 					_cam.startPreview();
 				}});				
 			break;
 		}
 	}
 
-	class UploadAsyncTask extends AsyncTask<byte[], Integer, Integer>{
+	
+	class CompressAsyncTask extends AsyncTask<byte[], byte[], byte[]>{
 
 		@Override
-		protected Integer doInBackground(byte[]... params) {
+		protected byte[] doInBackground(byte[]... params) {
+			
+			byte[] data = params[0];
+			if (_imageNeedsResize){
+
+				Options options = new Options();
+				if (_scaleAmount > 1){
+					//Try and scale down 2 == half size, 4 == quarter size etc.
+					options.inSampleSize = (int)_scaleAmount;
+				}
+				else{
+					options = null;
+				}
+				
+				Bitmap pic = BitmapFactory.decodeByteArray(data, 0, data.length, options);
+
+				ByteArrayOutputStream compressed = new ByteArrayOutputStream();
+				pic.compress(CompressFormat.JPEG, 90, compressed);  //Get it down to 800k-900k
+
+				data = compressed.toByteArray();
+				pic.recycle();
+				try {
+					compressed.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			return data;
+		}
+		
+		protected void onPreExecute(){
+			findViewById(R.id.takePicture).setEnabled(false);
+			showDialog(1);
+		}
+		
+		protected void onPostExecute(byte[] result) {
+		    dismissDialog(1);
+		    new UploadAsyncTask().execute(result);
+		}		
+	}
+	
+	class UploadAsyncTask extends AsyncTask<byte[], String, String>{
+
+		@Override
+		protected String doInBackground(byte[]... params) {
 
 			HttpClient httpClient = new DefaultHttpClient();
 			try {
@@ -238,8 +260,6 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 				ResponseHandler<String> responseHandler = new BasicResponseHandler();
 				String response = httpClient.execute(request,responseHandler);
 
-				//Pattern p = Pattern.compile("value=.(.*?)=?>");
-				
 				// Tested with: http://www.fileformat.info/tool/regex.htm
 				Pattern p = Pattern.compile("http\\:\\/\\/www\\.shackpics\\.com\\/viewer\\.x\\?file=.*?\\.jpg");
 				Matcher m = p.matcher(response);
@@ -247,38 +267,39 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 				if (m.find()){
 					String url = m.group();
 					if (URLUtil.isValidUrl(url)){
-						Intent result = new Intent();
-						result.putExtra(ActivityCamera.UPLOADED_FILE_URL, url);
-						setResult(RESULT_OK, result);
-
-						finish(); // close down and send the result we have set.
+						return url;
 					}
 					else{
-						setResult(RESULT_CANCELED);
+						return null;
 					}
 				}
 				else{
-					setResult(RESULT_CANCELED);
+					return null;
 				}
-				
-				
 			} catch (Exception e) {
-				setResult(RESULT_CANCELED);
+				return null;
 			}
 			finally {
 				httpClient.getConnectionManager().shutdown();
 			}
-			return 1;
 		}
 		
 		protected void onPreExecute(){
 			showDialog(0);
 		}
-	     protected void onPostExecute(Integer result) {
-	         dismissDialog(0);
-	         SetupButtons(MODE_TAKING_PICTURE);
-	         _cam.startPreview();
-	     }
+		protected void onPostExecute(String result) {
+		    dismissDialog(0);
+		 	if (result != null){
+				Intent passback = new Intent();
+				passback.putExtra(ActivityCamera.UPLOADED_FILE_URL, result);
+				setResult(RESULT_OK, passback);
+		 	}
+		 	else{
+		 		setResult(RESULT_CANCELED);	
+		 	}
+			finish(); // close down and send the result we have set.
+				
+		}
 
 	}		
 }
