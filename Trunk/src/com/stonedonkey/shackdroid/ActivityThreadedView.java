@@ -31,7 +31,6 @@ import android.text.Spanned;
 import android.text.Html.TagHandler;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.StrikethroughSpan;
-import android.text.util.Linkify;
 import android.text.util.Linkify.MatchFilter;
 import android.text.util.Linkify.TransformFilter;
 import android.util.TypedValue;
@@ -79,8 +78,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 
 		if (savedInstanceState == null) 
 			fillSaxData(postID);
-
-
 	}
 
 	@Override 
@@ -88,8 +85,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	{
 
 		try {
-
-			// pd.dismiss();
 			dismissDialog(1);
 		} catch (Exception ex) {
 			// dialog could not be killed for some reason
@@ -100,7 +95,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		savedInstanceState.putString("postID", postID);
 		savedInstanceState.putInt("currentPosition", currentPosition);
 		savedInstanceState.putBoolean("threadLoaded", threadLoaded);
-
 	}
 
 	@SuppressWarnings("unchecked")
@@ -145,7 +139,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	}
 	private void fillSaxData(String postID) {
 		// show a progress dialog
-		//pd = ProgressDialog.show(this, null, "Loading thread...", true,	true);
 		showDialog(1);
 
 		// use the class run() method to do work
@@ -182,7 +175,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			// Our ExampleHandler now provides the parsed data to us.
 			posts = saxHandler.GetParsedPosts();
 
-			// the folowing sorts are what are used to highlight the last ten posts.  We add an index to the
+			// the following sorts are what are used to highlight the last ten posts.  We add an index to the
 			// array by sorting them by post id, then adding the index, then sorting them back	
 			// sort our posts by PostID
 			Collections.sort(posts,byPostID);
@@ -196,7 +189,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 				tempPost.setPostIndex(x);
 			}
 
-			// set the order back to the orginal sort
+			// set the order back to the original sort
 			Collections.sort(posts,byOrderID);
 
 		} catch (Exception ex) {
@@ -212,17 +205,13 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	private Handler progressBarHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			// we implement a handler because most UI items 
-			// won't update within a thread
 			try {
-				//pd.dismiss();
 				dismissDialog(1);
 			}
 			catch (Exception ex)
 			{
 				// dialog could not be killed for some reason
 			}
-
 
 			// if we are provided a postID that is not the same as the first
 			// item we need to find it and setit
@@ -276,8 +265,10 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		
 		if (addSpoilerMarkers == true) 
 			SpoilerTextView();
-		
-		Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
+				// TODO: This was causing links to break for some reason, for instance
+		// NWS:  http://pancake_humper.shackspace.com/marisa/antm/Marisa_Miller_AmericasNTM110409_09.jpg
+		// it removes the pancake_ and goes to http://humper.shackspace... bug in linkify maybe??
+		//Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
 
 //		Pattern shackURLMatcher = Pattern.compile("href=\"http://www\\.shacknews\\.com/laryn\\.x\\?id=([0-9]*)#itemanchor_([0-9]*)(.*?)\">");
 //		String threadView = "content://com.stonedonkey.shackdroid/ActivityThreadedView";
@@ -334,7 +325,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayoutThread);
 			layout.setBackgroundColor(Color.parseColor("#222222"));
 
-			// add a listner for removing spoilers and maybe adding "copy" functionality later
+			// add a listener for removing spoilers and maybe adding "copy" functionality later
 			TextView tvpost = (TextView)findViewById(R.id.TextViewPost);
 			tvpost.setOnCreateContextMenuListener(
 					new OnCreateContextMenuListener() {
@@ -519,29 +510,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			LaunchNotesIntent();
 			return true;
 		case 7: //sub menu for ShackMarks
-
 			HandlerExtendedSites.AddRemoveShackMark(this, postID,false);
-
-			//			ShackDroidNotesManager nm = new ShackDroidNotesManager(this);
-			//			nm.open();
-			//			
-			//			TextView poster = (TextView)findViewById(R.id.TextViewThreadAuthor);
-			//			TextView postDate = (TextView)findViewById(R.id.TextViewThreadViewPostDate);
-			//			
-			//			ShackPost shackPost= posts.get(currentPosition);
-			//			String previewText = shackPost.getPostPreview();
-			//			
-			//			long result = nm.CreateNote(postID, previewText, poster.getText().toString(), postDate.getText().toString(),"NWS",storyID);
-			//			
-			//			// notes manager returns an ID if it worked
-			//			if (result > 0)
-			//				new AlertDialog.Builder(this).setTitle("ShackMark").setPositiveButton("OK", null)
-			//				.setMessage("This post has been saved to your ShackMarks.").show();
-			//			else
-			//				new AlertDialog.Builder(this).setTitle("ShackMark").setPositiveButton("OK", null)
-			//				.setMessage("There was a problem saving your mark.").show();
-			//
-			//			nm.close();
 			return true;
 		case 8:
 			// lol post
@@ -619,17 +588,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 
 		}
 		 */
-
-
-
-
-
 		return super.onKeyDown(keyCode, event);
-
 	}
-
-
-
 }/**
  * Used to sort the post array based on the ID
  */
