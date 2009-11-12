@@ -57,7 +57,7 @@ public class AdapterTopicView extends BaseAdapter {
 				
 		View v = inflate.inflate(rowResouceID,parent,false);
 			
-		// bind the TextViews to the items in our datasource
+		// bind the TextViews to the items in our data source
 		TextView posterName = (TextView)v.findViewById(R.id.TextViewPosterName);
 		posterName.setTypeface(face);
 		
@@ -75,9 +75,10 @@ public class AdapterTopicView extends BaseAdapter {
 		}
 			
 		TextView postReplyCount = (TextView)v.findViewById(R.id.TextViewReplyCount);
-				
 		postReplyCount.setTypeface(face);
-	
+		postReplyCount.setText(post.getReplyCount());
+		
+		// show the number of new posts since the last refresh
 		if (postCache != null && postCache.get(post.getPostID()) != null ) {
 
 			String cacheposts = postCache.get(post.getPostID());
@@ -89,8 +90,6 @@ public class AdapterTopicView extends BaseAdapter {
 				postNewCount.setText("+" + newPosts.toString());
 			}
 		}
-		
-		postReplyCount.setText(post.getReplyCount());
 		
 		TextView postText = (TextView)v.findViewById(R.id.TextViewPostText);
 		postText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
