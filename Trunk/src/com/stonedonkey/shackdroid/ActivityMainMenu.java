@@ -5,7 +5,9 @@ import java.util.Random;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -29,18 +31,14 @@ public class ActivityMainMenu extends ListActivity  {
 	     //menu.add(new ShackMenuItem("Camera","Pics + Divx of STFU",R.drawable.menu2_camera));
 	     
 	     AdapterMainMenu mm = new AdapterMainMenu(this,R.layout.mainmenu_row, menu);
-     	     
-
 	     
 	     String[] urls = getResources().getStringArray(R.array.titles);
 	     int titles =urls.length;
 	     Random r = new Random();
 	     setTitle("ShackDroid - " + urls[r.nextInt(titles)]);
-
 	     
 	     getListView().setDividerHeight(1);
 	     setListAdapter(mm);
-         
 	}
 	
 	@Override
@@ -83,18 +81,42 @@ public class ActivityMainMenu extends ListActivity  {
 			}
 			case 6:
 			{
-				// TODO: Rework new version check this is not very useful
 				String message = "Unable to complete version check, please try again later.";
 
-				int result = HandlerExtendedSites.VersionCheck(this);
-
-				if (result == 1)
-					message = "NEW SHACKDROID VERSION!\n http://www.stonedonkey.com/ShackDroid/Latest";
-				else if (result == 0)
+				final String result = HandlerExtendedSites.VersionCheck(this);
+				boolean updateAvail = false;
+				
+				if (result != null && result != "*fail*") {
+					message = "GOOD NEWS EVERYBODY!\n\nA new version of ShackDroid is available, would you like to get it now?";
+					updateAvail = true;
+				}
+				else if (result == null) // if we got null we're good if we got fail we failed
 					message = "ShackDroid is up to date.";
 
-				new AlertDialog.Builder(this).setTitle("Version Check").setPositiveButton("OK", null).setMessage(message).show();
+				if (updateAvail) 
+				{
+				// show update dialog
+				new AlertDialog.Builder(this)
+				.setTitle("Version Check")
+				.setPositiveButton("YES",  new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                    	 
+                    	startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(result))); 
+                    	finish();
+                }
+				})
+				.setNegativeButton("NO", null).setMessage(message).show();
 
+				}
+				else
+				{
+					new AlertDialog.Builder(this)
+					.setTitle("Version Check")
+					.setPositiveButton("OK",null)
+					.setMessage(message).show();
+				}
+					
+				
 				break;
 			}
 			case 7:
@@ -109,5 +131,9 @@ public class ActivityMainMenu extends ListActivity  {
 			startActivity(intent);
 			
 		}
+	}
+	protected void NewVersionCheck()
+	{
+		
 	}
 }
