@@ -376,8 +376,12 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			// the UpdatePostCache below.. that update occurs before the ListAdapter is set
 			// apparently.  I can't find anything else to put the Update , so for now we'll
 			// create a new Hashtable.. ick.
-
-			AdapterTopicView tva = new AdapterTopicView(this,R.layout.topic_row, posts, login, fontSize,new Hashtable<String,String>(postCounts));
+			
+			Hashtable<String,String> tempHash = null;
+			if (postCounts != null)
+				tempHash = new Hashtable<String,String>(postCounts);
+			
+			AdapterTopicView tva = new AdapterTopicView(this,R.layout.topic_row, posts, login, fontSize,tempHash);
 			setListAdapter(tva);
 
 			
