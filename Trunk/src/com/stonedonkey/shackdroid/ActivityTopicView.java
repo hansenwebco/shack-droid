@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Hashtable;
 
 import javax.xml.parsers.SAXParser;
@@ -409,7 +410,20 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 	public Hashtable<String, String> GetPostCache() throws StreamCorruptedException, IOException
 	{
 		if (getFileStreamPath("posts.cache").exists()) {
+
 			Hashtable<String, String> postCounts = null;
+			
+			// if the day is different we delete and recreate the file
+			long lastMod = getFileStreamPath("posts.cache").lastModified();
+			Date lastDateMod = new Date(lastMod); 
+			Date currentDate = new Date();
+			if (lastDateMod.getDay() != currentDate.getDay())
+			{
+				getFileStreamPath("posts.cache").delete();
+				return null;
+			} 
+			
+			
 			FileInputStream fileIn = openFileInput("posts.cache");
 			ObjectInputStream in = new ObjectInputStream(fileIn);
 			try {
@@ -420,12 +434,14 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			in.close(); 
 			fileIn.close();
 			
+			
+			
 			return postCounts;
 		}
 		else 
 			return null;
 	}
-	
+	 
 	public void UpdatePostCache() throws StreamCorruptedException, IOException
 	{
 		// TODO: How and when do we clear this cache?
