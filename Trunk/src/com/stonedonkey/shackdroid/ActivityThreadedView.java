@@ -31,6 +31,7 @@ import android.text.Spanned;
 import android.text.Html.TagHandler;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.StrikethroughSpan;
+import android.text.util.Linkify;
 import android.text.util.Linkify.MatchFilter;
 import android.text.util.Linkify.TransformFilter;
 import android.util.TypedValue;
@@ -268,7 +269,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 				// TODO: This was causing links to break for some reason, for instance
 		// NWS:  http://pancake_humper.shackspace.com/marisa/antm/Marisa_Miller_AmericasNTM110409_09.jpg
 		// it removes the pancake_ and goes to http://humper.shackspace... bug in linkify maybe??
-		//Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
+		Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
 
 //		Pattern shackURLMatcher = Pattern.compile("href=\"http://www\\.shacknews\\.com/laryn\\.x\\?id=([0-9]*)#itemanchor_([0-9]*)(.*?)\">");
 //		String threadView = "content://com.stonedonkey.shackdroid/ActivityThreadedView";
