@@ -3,22 +3,27 @@ package com.stonedonkey.shackdroid;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
@@ -31,6 +36,7 @@ import android.hardware.Camera.PictureCallback;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -43,9 +49,10 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 	Uri _fileUri;
 	Camera _cam;
 	boolean _takingPicture;
-	boolean _imageNeedsResize;
 	byte[] _pictureData;
 	double _scaleAmount = 0;
+	private boolean _highResAvailable;
+	private boolean _extraCompressionNeeded;
 	
 	public static final String UPLOADED_FILE_URL = "uploadedfileurl";
 	private static final int MODE_TAKING_PICTURE = 0;
@@ -119,9 +126,23 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 
 		int size = params.getPictureSize().height * params.getPictureSize().width; 
 		
-		if (size >= 3145728){ //3 megapixels
-			_imageNeedsResize = true;
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		String login = prefs.getString("shackLogin", "");
+		String password = prefs.getString("shackPassword", "");
+		
+		//3 possible states
+		// 1: Can login (3Mb file max) so we're ok whatever at 95% compression
+		// 2: No login and greater than 3Megapixels so we need to try and scale down to 3Mp AND compress to 90%
+		// 3: No login 3Megapixel camera so we need to compress to 90%
+		if (login.length() > 0 && password.length() > 0){
+			_highResAvailable = true;
+		}
+		else if (size > 3145728){ //3 megapixels
+			_extraCompressionNeeded = true;
 			_scaleAmount = Math.floor(params.getPictureSize().width / 2048);
+		}
+		else{
+			_extraCompressionNeeded = true;
 		}
 		
 		_cam.setParameters(params);			
@@ -194,31 +215,34 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 
 		@Override
 		protected byte[] doInBackground(byte[]... params) {
+			Options options = new Options();
 			
-			byte[] data = params[0];
-			if (_imageNeedsResize){
+			int compressionAmount = 95;
+			
+			//Try and scale down 2 == half size, 4 == quarter size etc.
+			options.inSampleSize = (int)_scaleAmount;
+			
+			if (_extraCompressionNeeded){
+				compressionAmount = 90;
+			}
+			
+			Bitmap pic = BitmapFactory.decodeByteArray(params[0], 0, params[0].length, options);
 
-				Options options = new Options();
-				if (_scaleAmount > 1){
-					//Try and scale down 2 == half size, 4 == quarter size etc.
-					options.inSampleSize = (int)_scaleAmount;
-				}
-				else{
-					options = null;
-				}
-				
-				Bitmap pic = BitmapFactory.decodeByteArray(data, 0, data.length, options);
-
-				ByteArrayOutputStream compressed = new ByteArrayOutputStream();
-				pic.compress(CompressFormat.JPEG, 90, compressed);  //Get it down to 800k-900k
-
+			ByteArrayOutputStream compressed = new ByteArrayOutputStream();
+			pic.compress(CompressFormat.JPEG, compressionAmount, compressed);  //Get it down
+			pic.recycle();
+			
+			byte[] data;
+			try{
 				data = compressed.toByteArray();
-				pic.recycle();
 				try {
 					compressed.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			}
+			catch(OutOfMemoryError err){
+				return null;
 			}
 			return data;
 		}
@@ -240,10 +264,32 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		protected String doInBackground(byte[]... params) {
 
 			HttpClient httpClient = new DefaultHttpClient();
+			ResponseHandler<String> responseHandler = new BasicResponseHandler();
 			try {
 				byte[] data = params[0];
-				HttpPost request = new HttpPost("http://www.shackpics.com/upload.x");
 				
+				if (_highResAvailable){
+					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+					String login = prefs.getString("shackLogin", "");
+					String password = prefs.getString("shackPassword", "");
+					
+					if (login.length() > 0 && password.length() > 0){
+						HttpPost req = new HttpPost("http://www.shackpics.com/users.x?act=login_go");
+						List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
+						
+						nameValuePairs.add(new BasicNameValuePair("user_name", login));
+						nameValuePairs.add(new BasicNameValuePair("user_password", password));
+						req.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+						
+						 String response = httpClient.execute(req, responseHandler);
+						if (!response.contains("You have successfully been logged in")){
+							// Do something here to re-size the image again?
+						}
+					}
+				}
+				
+				HttpPost request = new HttpPost("http://www.shackpics.com/upload.x");
+
 				//List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
 				//nameValuePairs.add(new BasicNameValuePair("filename","droidUpload.jpg"));
 				
@@ -257,7 +303,7 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 				entity.addPart("userfile[]", new InputStreamBody(new ByteArrayInputStream(data), "droidUpload.jpg"));
 				request.setEntity(entity);
 
-				ResponseHandler<String> responseHandler = new BasicResponseHandler();
+				
 				String response = httpClient.execute(request,responseHandler);
 
 				// Tested with: http://www.fileformat.info/tool/regex.htm
