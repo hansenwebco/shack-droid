@@ -111,8 +111,7 @@ public class ActivityRSS extends ListActivity implements Runnable {
 			rssItems = saxHandler.getRssItems();
 		
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
 		}
 		progressBarHandler.sendEmptyMessage(0);
 		
@@ -240,7 +239,6 @@ public class ActivityRSS extends ListActivity implements Runnable {
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
 		v.showContextMenu();
 	}

@@ -123,13 +123,9 @@ public class ActivityShackMarks extends ListActivity implements Runnable {
 		
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
 			new AlertDialog.Builder(this).setTitle("ShackMarks Error")
 					.setPositiveButton("OK", null).setMessage("Could not connect to ShackMarks server.")
 					.show();
-
 		}
 		progressBarHandler.sendEmptyMessage(0);
 

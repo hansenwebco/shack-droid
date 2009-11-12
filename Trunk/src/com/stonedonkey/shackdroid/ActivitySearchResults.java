@@ -84,8 +84,7 @@ public class ActivitySearchResults extends ListActivity implements Runnable {
 			totalResults = saxHandler.getTotalResults();
 		
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
 		}
 		progressBarHandler.sendEmptyMessage(0);
 		

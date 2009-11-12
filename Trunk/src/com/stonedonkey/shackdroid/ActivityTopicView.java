@@ -32,10 +32,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
-/**
- * @author stonedonkey
- * 
- */
 public class ActivityTopicView extends ListActivity implements Runnable {
 
 	private ArrayList<ShackPost> posts;
@@ -95,8 +91,6 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 		savedInstanceState.putBoolean("threadLoaded", threadLoaded);
 
 	}
-
-	// TODO: How do I make typesafe check.. how is typecheck formed?
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -107,8 +101,8 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 		posts = (ArrayList<ShackPost>) savedInstanceState.getSerializable("posts");
 		threadLoaded = savedInstanceState.getBoolean("threadLoaded");
 		
-		// TODO : If we change orientation in the middle of a thread loading we end up with 
-		//        the last loaded posts, this forces a new pull on orientation change.
+		// If we change orientation in the middle of a thread loading we end up with 
+		// the last loaded posts, this forces a new pull on orientation change.
 		if (threadLoaded == false)
 			fillDataSAX();  
 
@@ -116,11 +110,8 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 		savedInstanceState.clear(); // we'll resave it if we do something again
 		
 			ShowData();
-		
 	}
 
-	// Override the onCreateOptionsMenu to provide our own custom
-	// buttons.
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
@@ -147,7 +138,6 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			menu.findItem(3).setEnabled(true); // home
 			menu.findItem(5).setEnabled(true); // previous
 		}
-
 		if (this.currentPage >= this.storyPages) // next enabled
 			menu.findItem(4).setEnabled(false);
 		else
@@ -255,9 +245,6 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 
 	private void fillDataSAX() {
 
-		// pd = ProgressDialog.show(this, null, "loading, please wait...",
-		// true,false);
-		// pd.setIcon(R.drawable.shack_logo);
 		showDialog(1);
 
 		// use the class run() method to do work
@@ -275,12 +262,10 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			dialog.setIndeterminate(true);
 			dialog.setCancelable(false);
 			return dialog;
-		}
+			}
 		}
 		return null;
-
 	}
-
 	public void run() {
 		 
 		threadLoaded = false;
@@ -347,9 +332,6 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			} catch (Exception ex) {
 			}
 			ShowData();
-			
-			
-			
 		}
 	};
 
@@ -368,41 +350,37 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			try {
 				postCounts = GetPostCache();
 			} catch (Exception ex) {
-				// TODO Auto-generated catch block
+
 			}
-	
+
 
 			// TODO: Passing this as a new HashTable seems very ugly and a waste of memory
 			// Unfortunately I can't find a a way to get the Adapter to update before I call
 			// the UpdatePostCache below.. that update occurs before the ListAdapter is set
 			// apparently.  I can't find anything else to put the Update , so for now we'll
 			// create a new Hashtable.. ick.
-			
 			Hashtable<String,String> tempHash = null;
 			if (postCounts != null)
 				tempHash = new Hashtable<String,String>(postCounts);
-			
+
 			AdapterTopicView tva = new AdapterTopicView(this,R.layout.topic_row, posts, login, fontSize,tempHash);
 			setListAdapter(tva);
 
-			
 			// update the reply counts for the listing of topics
 			try {
 				UpdatePostCache();
 			} catch (Exception e) {
-				
+
 			}
-			
-			
-			
+
 		} else {
 			if (errorText.length() > 0) {
 				new AlertDialog.Builder(this).setTitle("Error")
-						.setPositiveButton("OK", null).setMessage(errorText)
-						.show();
+				.setPositiveButton("OK", null).setMessage(errorText)
+				.show();
 			}
 		}
-			
+
 		threadLoaded = true;
 	}
 
@@ -465,5 +443,4 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 		intent.putExtra("storyID", storyID);
 		startActivity(intent);
 	}
-
 }

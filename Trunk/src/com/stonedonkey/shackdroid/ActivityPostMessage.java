@@ -45,7 +45,6 @@ public class ActivityPostMessage extends Activity implements Runnable {
 				else
 					sub.setText(msgSub);
 
-
 				EditText post = (EditText)findViewById(R.id.EditTextSMMessage);
 				StringBuilder quote = new StringBuilder();
 				quote.append("\n\n/[" + msg.getName() + " Wrote:\n");
@@ -73,12 +72,8 @@ public class ActivityPostMessage extends Activity implements Runnable {
 			public void onClick(View v) {
 				// action
 				finish();
-
 			}
 		});
-
-
-
 	}
 	private void PostShackMessage()
 	{
@@ -106,7 +101,7 @@ public class ActivityPostMessage extends Activity implements Runnable {
 	}
 	@Override
 	public void run() {
-		// get the login and password for user out of our preferences
+
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		String login = prefs.getString("shackLogin", "");
 		String password = prefs.getString("shackPassword", "");
@@ -185,12 +180,9 @@ public class ActivityPostMessage extends Activity implements Runnable {
 
 
 		} catch (Exception e) {
-
 			errorPostHandler.sendEmptyMessage(3);
-			//TextView errorText = (TextView)findViewById(R.id.TextViewPostError);
-			//errorText.setText("There was an error submitting your post.");
-			//e.printStackTrace();
 		}
+
 		progressBarHandler.sendEmptyMessage(0);
 		
 		
@@ -206,10 +198,6 @@ public class ActivityPostMessage extends Activity implements Runnable {
 			}
 			catch (Exception ex)
 			{
-				// TODO : .dismiss is failing on the initial startup, something to do with the
-				//        windows manager... this is a hacky fix.. :(  
-				//String fail = ex.getMessage();
-				//fillDataSAX();
 				finish();
 				return;
 			}
@@ -224,11 +212,7 @@ public class ActivityPostMessage extends Activity implements Runnable {
 			try {
 				dismissDialog(1);
 			}
-			catch (Exception ex)
-			{
-				// TODO : .dismiss is failing on the initial startup, something to do with the
-				//        windows manager... this is a hacky fix.. :(  
-				
+			catch (Exception ex) {
 			}
 			TextView errorText = (TextView)findViewById(R.id.TextViewSMErrorMessage);
 			switch (msg.what){
@@ -248,8 +232,6 @@ public class ActivityPostMessage extends Activity implements Runnable {
 				errorText.setText("Problem contacting Shack News please try again later.");
 				break;
 			}
-			
-		
 		}
 	};	
 }

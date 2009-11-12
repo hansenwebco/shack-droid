@@ -574,7 +574,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
 		/*	
 		ListView lv = getListView();
 

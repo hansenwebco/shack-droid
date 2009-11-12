@@ -301,58 +301,52 @@ public class ActivityPost extends Activity implements Runnable {
 	
 
 	@Override
-	 protected Dialog onCreateDialog(int id)
-	 {
+	protected Dialog onCreateDialog(int id)
+	{
 		switch (id) {
-		case 1:
-		 	// Ripped from AlertDialogSamples.java SDK examples
-			// This example shows how to add a custom layout to an AlertDialog
-	        LayoutInflater factory = LayoutInflater.from(this);
-	        final View textEntryView = factory.inflate(R.layout.text_entry_dialog, null);
-	        return new AlertDialog.Builder(ActivityPost.this)
-	            .setTitle("Enter text to ShackTag")
-	            .setView(textEntryView)
-	            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-	                public void onClick(DialogInterface dialog, int whichButton) {
-
-	                    /* User clicked OK so do some stuff */
-	                	EditText tv = (EditText)findViewById(R.id.EditTextPost);
-	                	String text = tv.getText().toString();
-	                	
-	                	TextView shackTag = (TextView)textEntryView.findViewById(R.id.TextViewShackTagText);
-	                	String shackTagText = shackTag.getText().toString();
-	                	shackTag.setText(""); // reset entry box
-               	
-	                	Integer cursorPosition = tv.getSelectionStart();
-	                	
-	                	text = text.substring(0,cursorPosition) + selectedShackTagOpen + shackTagText + selectedShackTagClose + text.substring(cursorPosition);
-	                	tv.setText(text);
-	                	
-	                	tv.setSelection(text.length());
-	                	
-	                	
-	                }
-	            })
-	            .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-	                public void onClick(DialogInterface dialog, int whichButton) {
-
-	                    /* User clicked cancel so do some stuff */
-	                }
-	            }).create();	
-	      case 2: {
-			ProgressDialog dialog = new ProgressDialog(this);
-			dialog.setMessage("Posting, please wait...");
-			dialog.setTitle(null);
-			dialog.setIndeterminate(true);
-			dialog.setCancelable(false);
-			return dialog;
-		}
-        
-	        
+			case 1:
+				// Ripped from AlertDialogSamples.java SDK examples
+				// This example shows how to add a custom layout to an AlertDialog
+				LayoutInflater factory = LayoutInflater.from(this);
+				final View textEntryView = factory.inflate(R.layout.text_entry_dialog, null);
+				return new AlertDialog.Builder(ActivityPost.this)
+				.setTitle("Enter text to ShackTag")
+				.setView(textEntryView)
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+	
+						/* User clicked OK so do some stuff */
+						EditText tv = (EditText)findViewById(R.id.EditTextPost);
+						String text = tv.getText().toString();
+	
+						TextView shackTag = (TextView)textEntryView.findViewById(R.id.TextViewShackTagText);
+						String shackTagText = shackTag.getText().toString();
+						shackTag.setText(""); // reset entry box
+	
+						Integer cursorPosition = tv.getSelectionStart();
+	
+						text = text.substring(0,cursorPosition) + selectedShackTagOpen + shackTagText + selectedShackTagClose + text.substring(cursorPosition);
+						tv.setText(text);
+	
+						tv.setSelection(text.length());
+					}
+				})
+				.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						/* User clicked cancel so do some stuff */
+					}
+				}).create();	
+			case 2: {
+				ProgressDialog dialog = new ProgressDialog(this);
+				dialog.setMessage("Posting, please wait...");
+				dialog.setTitle(null);
+				dialog.setIndeterminate(true);
+				dialog.setCancelable(false);
+				return dialog;
+			}
 		}
 		return null;
-	
-	 }
+	}
 	 
 	// menu creation
 	@Override
@@ -394,8 +388,7 @@ public class ActivityPost extends Activity implements Runnable {
 	 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		// get the login and password for user out of our preferences
+
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		String login = prefs.getString("shackLogin", "");
 		String password = prefs.getString("shackPassword", "");
@@ -443,16 +436,12 @@ public class ActivityPost extends Activity implements Runnable {
 
 			// show an error messages to the user if needed
 			// Shack sends back a <script> with a bunch of script.. so.. we look for error messages.. eh...
-			
 			if (result.contains("You must be logged in to post") == true) {
-				//errorText.setText("Login failed, please check your username and password.");
 				errorPostHandler.sendEmptyMessage(0);
 			}
 			else if (result.contains("Please post something with more than 5 characters.") == true)
-				//errorText.setText("Please post something with more than 5 characters.");
 				errorPostHandler.sendEmptyMessage(1);
 			else if (result.contains("Please wait a few minutes before trying to post again.") == true)
-				//errorText.setText("Please wait a few minutes before trying to post again.");
 				errorPostHandler.sendEmptyMessage(2);
 			else  // no errors
 			{
@@ -464,7 +453,7 @@ public class ActivityPost extends Activity implements Runnable {
 					// pass a result back to the ShackDroidThread.java letting
 					// it know our work is done.
 					setResult(RESULT_OK,intent); 
-					//finish();
+
 					progressBarHandler.sendEmptyMessage(0);
 					return;
 				}
@@ -476,39 +465,24 @@ public class ActivityPost extends Activity implements Runnable {
 					startActivity(intent);
 				}
 				progressBarHandler.sendEmptyMessage(0);
-				//finish(); // this will be replaced with an intent
 			}
 	
 		} catch (Exception e) {
-			
 			errorPostHandler.sendEmptyMessage(3);
-			//TextView errorText = (TextView)findViewById(R.id.TextViewPostError);
-			//errorText.setText("There was an error submitting your post.");
-			//e.printStackTrace();
 		}
 	}
 	
 	private Handler progressBarHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			// we implement a handler because most UI items 
-			// won't update within a thread
 			try {
-				
-				//pd.dismiss();
 				dismissDialog(2);
 			}
 			catch (Exception ex)
 			{
-				// TODO : .dismiss is failing on the initial startup, something to do with the
-				//        windows manager... this is a hacky fix.. :(  
-				//String fail = ex.getMessage();
-				//fillDataSAX();
 				finish();
 				return;
 			}
-			
-			
 			finish();
 		}
 	};
@@ -516,19 +490,14 @@ public class ActivityPost extends Activity implements Runnable {
 	private Handler errorPostHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			// we implement a handler because most UI items 
-			// won't update within a thread
+
 			try {
-				//pd.dismiss();
 				dismissDialog(2);
-				
 			}
-			catch (Exception ex)
-			{
-				// TODO : .dismiss is failing on the initial startup, something to do with the
-				//        windows manager... this is a hacky fix.. :(  
-				
+			catch (Exception ex) {
+			
 			}
+			
 			TextView errorText = (TextView)findViewById(R.id.TextViewPostError);
 			switch (msg.what){
 			case 0:
@@ -544,10 +513,6 @@ public class ActivityPost extends Activity implements Runnable {
 				errorText.setText("There was an error submitting your post, try again later.");
 				break;
 			}
-			
-		
 		}
 	};
-	
-	
 }
