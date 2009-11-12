@@ -73,14 +73,13 @@ public class AdapterTopicView extends BaseAdapter {
 			postDate.setText(Helper.FormatShackDate(post.getPostDate()));
 			//postDate.setText(post.getPostDate());
 		}
-		
-		
+			
 		TextView postReplyCount = (TextView)v.findViewById(R.id.TextViewReplyCount);
 		postReplyCount.setTypeface(face);
-		
-		// TODO: get rid of all the calls against the object here.
+	
 		// TODO: Create a separate TextView for the +X counts on posts
 		if (postCache != null && postCache.get(post.getPostID()) != null ) {
+
 			String cacheposts = postCache.get(post.getPostID());
 			Integer newPosts = Integer.parseInt(post.getReplyCount()) - Integer.parseInt(cacheposts);
 		

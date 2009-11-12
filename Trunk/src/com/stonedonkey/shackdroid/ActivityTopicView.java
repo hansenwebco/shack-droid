@@ -422,8 +422,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 				getFileStreamPath("posts.cache").delete();
 				return null;
 			} 
-			
-			
+						
 			FileInputStream fileIn = openFileInput("posts.cache");
 			ObjectInputStream in = new ObjectInputStream(fileIn);
 			try {
@@ -433,8 +432,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			}
 			in.close(); 
 			fileIn.close();
-			
-			
+				
 			
 			return postCounts;
 		}
@@ -444,9 +442,6 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 	 
 	public void UpdatePostCache() throws StreamCorruptedException, IOException
 	{
-		// TODO: How and when do we clear this cache?
-		// squeegy used a file per day.. probably simplest.
-		
 		if (postCounts == null)
 			postCounts = new Hashtable<String, String>();
 		
@@ -458,7 +453,6 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 		os.writeObject(postCounts);
 		os.close();
 		fos.close();
-		
 	}
 	
 	@Override
