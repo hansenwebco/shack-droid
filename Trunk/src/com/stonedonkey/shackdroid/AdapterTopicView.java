@@ -75,21 +75,22 @@ public class AdapterTopicView extends BaseAdapter {
 		}
 			
 		TextView postReplyCount = (TextView)v.findViewById(R.id.TextViewReplyCount);
+				
 		postReplyCount.setTypeface(face);
 	
-		// TODO: Create a separate TextView for the +X counts on posts
 		if (postCache != null && postCache.get(post.getPostID()) != null ) {
 
 			String cacheposts = postCache.get(post.getPostID());
 			Integer newPosts = Integer.parseInt(post.getReplyCount()) - Integer.parseInt(cacheposts);
 		
-			if (newPosts > 0 && Integer.parseInt(post.getReplyCount()) > 0)
-				postReplyCount.setText(post.getReplyCount() + " ( +" + newPosts.toString() +" )" );
-			else 
-				postReplyCount.setText(post.getReplyCount());
+			if (newPosts > 0 && Integer.parseInt(post.getReplyCount()) > 0) {
+				TextView postNewCount = (TextView)v.findViewById(R.id.TextViewNewPosts);
+				postNewCount.setTypeface(face);
+				postNewCount.setText("+" + newPosts.toString());
+			}
 		}
-		else
-			postReplyCount.setText(post.getReplyCount());
+		
+		postReplyCount.setText(post.getReplyCount());
 		
 		TextView postText = (TextView)v.findViewById(R.id.TextViewPostText);
 		postText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
