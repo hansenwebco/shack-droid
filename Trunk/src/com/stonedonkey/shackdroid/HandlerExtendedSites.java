@@ -16,8 +16,9 @@ import android.preference.PreferenceManager;
 
 public class HandlerExtendedSites extends Activity {
 
-	public static int VersionCheck(Context ctx) {
+	public static String VersionCheck(Context ctx) {
 
+		String result = null;
 		URL url;
 		try {
 			url = new URL("http://www.stonedonkey.com/ShackDroid/version.txt");
@@ -25,30 +26,26 @@ public class HandlerExtendedSites extends Activity {
 			HttpURLConnection httpConnection = (HttpURLConnection) conn;
 
 			int responseCode = httpConnection.getResponseCode();
-			
 			if (responseCode == HttpURLConnection.HTTP_OK) {
 
 				InputStream is = httpConnection.getInputStream();
-				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(is));
+				BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 
 				String line = null;
 				line = reader.readLine();
 
+				// the result is null if the versions match
 				if (line.equals(ctx.getString(R.string.version_id)))
-					return 0;
+					result = null;
 				else
-					return 1;
-
+					result = reader.readLine();
 			}
 
 		} catch (Exception e) {
 
-			return -1;
+			result = "*fail*";
 		}
-
-		return -1;
-
+		return result;
 	}
 
 	public static void AddRemoveShackMark(Context ctx, String id, Boolean delete) {

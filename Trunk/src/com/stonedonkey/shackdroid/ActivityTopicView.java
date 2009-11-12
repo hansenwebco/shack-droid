@@ -189,18 +189,18 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			startActivity(intent);
 			return true;
 		case 8:
-			String message = "Unable to complete version check, please try again later.";
-
-			int result = HandlerExtendedSites.VersionCheck(this);
-
-			if (result == 1)
-				message = "NEW SHACKDROID VERSION!\n http://www.stonedonkey.com/ShackDroid/Latest";
-			else if (result == 0)
-				message = "ShackDroid is up to date.";
-
-			new AlertDialog.Builder(this).setTitle("Version Check")
-					.setPositiveButton("OK", null).setMessage(message).show();
-			return true;
+//			String message = "Unable to complete version check, please try again later.";
+//
+//			int result = HandlerExtendedSites.VersionCheck(this);
+//
+//			if (result == 1)
+//				message = "NEW SHACKDROID VERSION!\n http://www.stonedonkey.com/ShackDroid/Latest";
+//			else if (result == 0)
+//				message = "ShackDroid is up to date.";
+//
+//			new AlertDialog.Builder(this).setTitle("Version Check")
+//					.setPositiveButton("OK", null).setMessage(message).show();
+//			return true;
 		case 9:
 			intent = new Intent();
 			intent.setClass(this,ActivitySearch.class);
