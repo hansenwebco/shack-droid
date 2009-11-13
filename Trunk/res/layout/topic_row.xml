@@ -9,17 +9,17 @@ android:layout_height="fill_parent">
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:textColor="#ffba00"
-	android:textSize="12sp"
-	android:paddingLeft="8px"
-	android:paddingTop="3px"
+	android:textSize="12dip"
+	android:paddingLeft="8dip"
+	android:paddingTop="3dip"
 	/>
 
 	<ImageView
 	android:id="@+id/ImageViewCat"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
-	android:paddingLeft="4px"
-	android:paddingTop="8px"
+	android:paddingLeft="4dip"
+	android:paddingTop="8dip"
 	android:layout_toRightOf="@+id/TextViewPosterName"
 	
 	/>
@@ -29,35 +29,23 @@ android:layout_height="fill_parent">
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:gravity="right"
-	android:textSize="12sp"
+	android:textSize="12dip"
 	android:layout_toRightOf="@+id/ImageViewCat"
-	android:paddingTop="3px"
-	android:paddingRight="12px"
+	android:paddingTop="3dip"
+	android:paddingRight="12dip"
 	/>
 
 	<TextView
 	android:id="@+id/TextViewPostText"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-	android:paddingLeft="8px"
-	android:paddingRight="8px"
-	android:textSize="12sp"
+	android:paddingLeft="8dip"
+	android:paddingRight="8dip"
+	android:textSize="12dip"
 	android:layout_below="@+id/TextViewPosterName"
 	android:textColor="#FFFFFF"
 	/>
 
-	<TextView
-	android:id="@+id/TextViewReplyCount"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-	android:paddingRight="4px"
-	android:paddingBottom="2px"
-	android:textSize="10sp"
-	android:layout_below="@+id/TextViewPostText"
-	android:layout_toLeftOf="@+id/TextViewNewPosts"	
-	android:text="0"
-	/>
-	
 	<TextView
 	android:id="@+id/TextViewNewPosts"
 	android:layout_width="wrap_content"
@@ -70,5 +58,20 @@ android:layout_height="fill_parent">
 	android:textColor="#0099CC"
 	android:text=""
 	/>
+
+	<TextView
+	android:id="@+id/TextViewReplyCount"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:paddingRight="4dip"
+	android:paddingBottom="2dip"
+	android:textSize="10dip"
+	android:textColor="#FFFFFF"
+	android:layout_below="@+id/TextViewPostText"
+	android:layout_toLeftOf="@+id/TextViewNewPosts"	
+	android:text="0"
+	/>
+	
+
 	
 </RelativeLayout>

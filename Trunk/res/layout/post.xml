@@ -17,15 +17,6 @@
 	android:scrollbars="vertical">
 	</EditText>
 
-	<Button
-	android:id="@+id/ButtonPost"
-	android:layout_width="75dip"
-	android:layout_height="wrap_content"
-	android:text="Post"
-	android:layout_below="@+id/EditTextPost"
-	android:layout_toLeftOf="@+id/ButtonCancel"
-	>
-	</Button>
 	
 	<Button
 	android:id="@+id/ButtonCancel"
@@ -34,6 +25,16 @@
 	android:text="Cancel"
 	android:layout_below="@+id/EditTextPost"
 	android:layout_centerHorizontal="true"
+	>
+	</Button>
+
+	<Button
+	android:id="@+id/ButtonPost"
+	android:layout_width="75dip"
+	android:layout_height="wrap_content"
+	android:text="Post"
+	android:layout_below="@+id/EditTextPost"
+	android:layout_toLeftOf="@+id/ButtonCancel"
 	>
 	</Button>
 
