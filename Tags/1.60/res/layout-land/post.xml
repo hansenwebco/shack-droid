@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+	android:id="@+id/AbsoluteLayoutPostForm"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<EditText
+	android:id="@+id/EditTextPost"
+	android:layout_width="fill_parent"
+	android:layout_height="160px"
+	android:textSize="12sp"
+	android:text=""
+	android:gravity="top"
+	android:minLines="20"
+	android:scrollbars="vertical">
+	</EditText>
+
+	<Button
+	android:id="@+id/ButtonPost"
+	android:textSize="10dip"
+	android:layout_width="55px"
+	android:layout_height="40px"
+	android:text="Post"
+	android:layout_below="@+id/EditTextPost"
+	android:layout_x="64px"
+	android:layout_y="140px">
+	</Button>
+	
+	<Button
+	android:id="@+id/ButtonCancel"
+	android:textSize="10dip"
+	android:layout_width="55px"
+	android:layout_height="40px"
+	android:text="Cancel"
+	android:layout_x="144px"
+	android:layout_below="@+id/EditTextPost"
+	android:layout_toRightOf="@+id/ButtonPost"
+	android:layout_y="140px">
+	</Button>
+	
+	<Button
+	android:id="@+id/ButtonCamera"
+	android:textSize="10dip"
+	android:layout_width="wrap_content"
+	android:layout_height="40px"
+	android:text="Camera"
+	android:layout_below="@+id/EditTextPost"
+	android:layout_toRightOf="@+id/ButtonCancel">
+	</Button>
+	
+	<TextView
+	android:id="@+id/TextViewPostError"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_below="@+id/EditTextPost"
+	android:layout_toRightOf="@+id/ButtonCamera"	
+	android:text=""
+	android:layout_x="0px"
+	android:layout_y="185px"
+	android:gravity="center"
+	android:textSize="12sp"/>
+	
+	
+	<TableLayout
+	android:id="@+id/TableLayoutShackTags"
+	android:visibility="visible"
+	android:paddingTop="3px"
+	android:layout_height="wrap_content"
+	android:layout_width="fill_parent"
+	android:layout_below="@+id/ButtonCancel"
+	android:background="#222222">
+		<TableRow android:gravity="center_horizontal">
+			<Button 
+			android:id="@+id/ButtonRed"
+			android:layout_width="60px"
+			android:layout_height="35px"
+			android:textSize="9sp"
+			android:text="red"/>
+			<Button
+			android:id="@+id/ButtonGreen"
+			android:layout_width="60px"
+			android:layout_height="35px"
+			android:textSize="9sp"
+			android:text="green"/>
+			<Button
+			android:id="@+id/ButtonBlue"
+			android:layout_width="60px"
+			android:layout_height="35px"
+			android:textSize="9sp"
+			android:text="blue"/>
+			<Button
+			android:id="@+id/ButtonYellow"
+			android:layout_width="60px"
+			android:layout_height="35px"
+			android:textSize="9sp"
+			android:text="yellow"/>
+
+			<Button
+			android:id="@+id/ButtonLime"
+			android:layout_width="60px"
+			android:layout_height="35px"
+			android:textSize="9sp"
+			android:text="lime"/>
+			<Button
+			android:id="@+id/ButtonOrange"
+			android:layout_width="60px"
+			android:layout_height="35px"
+			android:textSize="9sp"
+			android:text="orange"/>
+			<Button
+			android:id="@+id/ButtonMultisync"
+			android:layout_width="60px"
+			android:layout_height="35px"
+			android:textSize="9sp"
+			android:text="multi"/>
+			<Button
+			android:id="@+id/ButtonOlive"
+			android:layout_width="60px"
+			android:layout_height="35px"
+			android:textSize="9sp"
+			android:text="olive"/>
+		</TableRow>		
+		<TableRow android:gravity="center_horizontal">
+			<Button
+			android:id="@+id/ButtonItalics"
+			android:layout_width="60px"
+			android:layout_height="35px"
+			android:textSize="9sp"
+			android:text="italics"/>
+			<Button
+			android:id="@+id/ButtonBold"
+			android:layout_width="60px"
+			android:layout_height="35px"
+			android:textSize="9sp"
+			android:text="bold"/>
+			<Button
+			android:id="@+id/ButtonQuote"
+			android:layout_width="60px"
+			android:layout_height="35px"
+			android:textSize="9sp"
+			android:text="quote"/>
+			<Button
+			android:id="@+id/ButtonSample"
+			android:layout_width="60px"
+			android:layout_height="35px"
+			android:textSize="9sp"
+			android:text="sample"/>
+
+			<Button
+			android:id="@+id/ButtonUnderline"
+			android:layout_width="60px"
+			android:layout_height="35px"
+			android:textSize="9sp"
+			android:text="under"/>
+			<Button
+			android:id="@+id/ButtonStike"
+			android:layout_width="60px"
+			android:layout_height="35px"
+			android:textSize="9sp"
+			android:text="strike"/>
+			<Button
+			android:id="@+id/ButtonSpoil"
+			android:layout_width="60px"
+			android:layout_height="35px"
+			android:textSize="9sp"
+			android:text="spoil"/>
+			<Button
+			android:id="@+id/ButtonCode"
+			android:layout_width="60px"
+			android:layout_height="35px"
+			android:textSize="9sp"
+			android:text="code"/>
+		</TableRow>					
+</TableLayout>
+	
+	
+	
+
+</RelativeLayout>
