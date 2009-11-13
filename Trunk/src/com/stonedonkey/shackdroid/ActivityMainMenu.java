@@ -7,6 +7,8 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -31,13 +33,18 @@ public class ActivityMainMenu extends ListActivity  {
 	     //menu.add(new ShackMenuItem("Camera","Pics + Divx of STFU",R.drawable.menu2_camera));
 	     
 	     AdapterMainMenu mm = new AdapterMainMenu(this,R.layout.mainmenu_row, menu);
+	    
+	     //getListView().setDivider("#333333");
 	     
 	     String[] urls = getResources().getStringArray(R.array.titles);
 	     int titles =urls.length;
 	     Random r = new Random();
 	     setTitle("ShackDroid - " + urls[r.nextInt(titles)]);
 	     
+	     ColorDrawable cd = new ColorDrawable(Color.parseColor("#333333"));
+	     getListView().setDivider(cd);
 	     getListView().setDividerHeight(1);
+	     
 	     setListAdapter(mm);
 	}
 	
