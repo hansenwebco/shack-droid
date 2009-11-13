@@ -267,7 +267,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		if (addSpoilerMarkers == true) 
 			SpoilerTextView();
 				// TODO: This was causing links to break for some reason, for instance
-		// NWS:  http://pancake_humper.shackspace.com/marisa/antm/Marisa_Miller_AmericasNTM110409_09.jpg
+		// http://pancake_humper.shackspace.com/
 		// it removes the pancake_ and goes to http://humper.shackspace... bug in linkify maybe??
 		Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
 
