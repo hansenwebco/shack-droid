@@ -47,6 +47,10 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		//requestWindowFeature(Window.FEATURE_NO_TITLE);
+		//this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
 		setContentView(R.layout.topics);
 
 		Bundle extras = this.getIntent().getExtras();
