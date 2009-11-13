@@ -19,7 +19,7 @@
 
 	<Button
 	android:id="@+id/ButtonPost"
-	android:layout_width="75px"
+	android:layout_width="75dip"
 	android:layout_height="wrap_content"
 	android:text="Post"
 	android:layout_below="@+id/EditTextPost"
@@ -29,7 +29,7 @@
 	
 	<Button
 	android:id="@+id/ButtonCancel"
-	android:layout_width="75px"
+	android:layout_width="75dip"
 	android:layout_height="wrap_content"
 	android:text="Cancel"
 	android:layout_below="@+id/EditTextPost"
@@ -39,7 +39,7 @@
 
 	<Button
 	android:id="@+id/ButtonCamera"
-	android:layout_width="75px"
+	android:layout_width="75dip"
 	android:layout_height="wrap_content"
 	android:text="Camera"
 	android:layout_below="@+id/EditTextPost"
@@ -61,110 +61,110 @@
 	android:visibility="visible"
 	android:paddingTop="12dip"
 	android:layout_below="@+id/TextViewPostError"
-	android:layout_height="200dip"
+	android:layout_height="fill_parent"
 	android:layout_width="fill_parent"
 	android:background="#222222">
 		<TableRow android:layout_width="fill_parent" android:gravity="center_horizontal">
 			<Button 
 			android:id="@+id/ButtonRed"
-			android:layout_width="60px"
-			android:layout_height="35px"
+			android:layout_width="60dip"
+			android:layout_height="35dip"
 			android:textSize="9dip"
 			android:text="red"/>
 			<Button
 			android:id="@+id/ButtonGreen"
-			android:layout_width="60px"
-			android:layout_height="35px"
+			android:layout_width="60dip"
+			android:layout_height="35dip"
 			android:textSize="9sp"
 			android:text="green"/>
 			<Button
 			android:id="@+id/ButtonBlue"
-			android:layout_width="60px"
-			android:layout_height="35px"
+			android:layout_width="60dip"
+			android:layout_height="35dip"
 			android:textSize="9dip"
 			android:text="blue"/>
 			<Button
 			android:id="@+id/ButtonYellow"
-			android:layout_width="60px"
-			android:layout_height="35px"
+			android:layout_width="60dip"
+			android:layout_height="35dip"
 			android:textSize="9dip"
 			android:text="yellow"/>
 		</TableRow>
 		<TableRow android:gravity="center_horizontal">
 			<Button
 			android:id="@+id/ButtonLime"
-			android:layout_width="60px"
-			android:layout_height="35px"
+			android:layout_width="60dip"
+			android:layout_height="35dip"
 			android:textSize="9dip"
 			android:text="lime"/>
 			<Button
 			android:id="@+id/ButtonOrange"
-			android:layout_width="60px"
-			android:layout_height="35px"
+			android:layout_width="60dip"
+			android:layout_height="35dip"
 			android:textSize="9dip"
 			android:text="orange"/>
 			<Button
 			android:id="@+id/ButtonMultisync"
-			android:layout_width="60px"
-			android:layout_height="35px"
+			android:layout_width="60dip"
+			android:layout_height="35dip"
 			android:textSize="9dip"
 			android:text="multi"/>
 			<Button
 			android:id="@+id/ButtonOlive"
-			android:layout_width="60px"
-			android:layout_height="35px"
+			android:layout_width="60dip"
+			android:layout_height="35dip"
 			android:textSize="9dip"
 			android:text="olive"/>
 		</TableRow>		
 		<TableRow android:gravity="center_horizontal">
 			<Button
 			android:id="@+id/ButtonItalics"
-			android:layout_width="60px"
-			android:layout_height="35px"
+			android:layout_width="60dip"
+			android:layout_height="35dip"
 			android:textSize="9dip"
 			android:text="italics"/>
 			<Button
 			android:id="@+id/ButtonBold"
-			android:layout_width="60px"
-			android:layout_height="35px"
+			android:layout_width="60dip"
+			android:layout_height="35dip"
 			android:textSize="9dip"
 			android:text="bold"/>
 			<Button
 			android:id="@+id/ButtonQuote"
-			android:layout_width="60px"
-			android:layout_height="35px"
+			android:layout_width="60dip"
+			android:layout_height="35dip"
 			android:textSize="9dip"
 			android:text="quote"/>
 			<Button
 			android:id="@+id/ButtonSample"
-			android:layout_width="60px"
-			android:layout_height="35px"
+			android:layout_width="60dip"
+			android:layout_height="35dip"
 			android:textSize="9dip"
 			android:text="sample"/>
 		</TableRow>	
 		<TableRow android:gravity="center_horizontal">
 			<Button
 			android:id="@+id/ButtonUnderline"
-			android:layout_width="60px"
-			android:layout_height="35px"
+			android:layout_width="60dip"
+			android:layout_height="35dip"
 			android:textSize="9dip"
 			android:text="under"/>
 			<Button
 			android:id="@+id/ButtonStike"
-			android:layout_width="60px"
-			android:layout_height="35px"
+			android:layout_width="60dip"
+			android:layout_height="35dip"
 			android:textSize="9dip"
 			android:text="strike"/>
 			<Button
 			android:id="@+id/ButtonSpoil"
-			android:layout_width="60px"
-			android:layout_height="35px"
+			android:layout_width="60dip"
+			android:layout_height="35dip"
 			android:textSize="9dip"
 			android:text="spoil"/>
 			<Button
 			android:id="@+id/ButtonCode"
-			android:layout_width="60px"
-			android:layout_height="35px"
+			android:layout_width="60dip"
+			android:layout_height="35dip"
 			android:textSize="9dip"
 			android:text="code"/>
 		</TableRow>					
