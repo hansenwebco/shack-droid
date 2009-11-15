@@ -17,13 +17,18 @@
 	android:scrollbars="vertical">
 	</EditText>
 
+<RelativeLayout
+    android:id="@+id/actionsLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_below="@+id/EditTextPost" android:layout_centerHorizontal="true">
 	<Button
 	android:id="@+id/ButtonPost"
 	android:textSize="10dip"
 	android:layout_width="55dip"
 	android:layout_height="40dip"
 	android:text="Post"
-	android:layout_below="@+id/EditTextPost"
 	android:layout_x="64dip"
 	android:layout_y="140dip">
 	</Button>
@@ -35,7 +40,6 @@
 	android:layout_height="40dip"
 	android:text="Cancel"
 	android:layout_x="144dip"
-	android:layout_below="@+id/EditTextPost"
 	android:layout_toRightOf="@+id/ButtonPost"
 	android:layout_y="140dip">
 	</Button>
@@ -46,16 +50,24 @@
 	android:layout_width="wrap_content"
 	android:layout_height="40dip"
 	android:text="Camera"
-	android:layout_below="@+id/EditTextPost"
 	android:layout_toRightOf="@+id/ButtonCancel">
 	</Button>
 	
+    <Button
+    android:id="@+id/ButtonUpload"
+    android:textSize="10dip"
+    android:layout_width="wrap_content"
+    android:layout_height="40dip"
+    android:text="Upload"
+    android:layout_toRightOf="@+id/ButtonCamera">
+    </Button>
+	</RelativeLayout>
 	<TextView
 	android:id="@+id/TextViewPostError"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-	android:layout_below="@+id/EditTextPost"
-	android:layout_toRightOf="@+id/ButtonCamera"	
+	android:layout_below="@+id/actionsLayout"
+	android:layout_toRightOf="@+id/ButtonUpload"	
 	android:text=""
 	android:layout_x="0dip"
 	android:layout_y="185dip"
@@ -69,7 +81,7 @@
 	android:paddingTop="3dip"
 	android:layout_height="wrap_content"
 	android:layout_width="fill_parent"
-	android:layout_below="@+id/ButtonCancel"
+	android:layout_below="@+id/TextViewPostError"
 	android:background="#222222">
 		<TableRow android:gravity="center_horizontal">
 			<Button 
@@ -177,5 +189,7 @@
 	
 	
 	
+
+
 
 </RelativeLayout>

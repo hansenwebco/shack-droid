@@ -2,6 +2,7 @@ package com.stonedonkey.shackdroid;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +21,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -43,31 +46,68 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.URLUtil;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class ActivityCamera extends Activity implements AutoFocusCallback, SurfaceHolder.Callback, PictureCallback {
 	
-	Uri _fileUri;
+	String _fileUri;
 	Camera _cam;
 	boolean _takingPicture;
 	byte[] _pictureData;
 	double _scaleAmount = 0;
 	private boolean _highResAvailable;
 	private boolean _extraCompressionNeeded;
+	private boolean _askToPost = false;
 	
 	public static final String UPLOADED_FILE_URL = "uploadedfileurl";
+	
 	private static final int MODE_TAKING_PICTURE = 0;
 	private static final int MODE_SHOWING_PICTURE = 1;	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		Intent caller = getIntent();
 		setContentView(R.layout.camera);
-		SurfaceHolder holder = ((SurfaceView)findViewById(R.id.SurfaceView01)).getHolder();
-		holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-		holder.addCallback(this);
-
-		SetupButtons(MODE_TAKING_PICTURE);
+		
+		if (caller == null){
+			
+			SurfaceHolder holder = ((SurfaceView)findViewById(R.id.SurfaceView01)).getHolder();
+			holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+			holder.addCallback(this);
+	
+			SetupButtons(MODE_TAKING_PICTURE);
+		}		
+		else{
+			Uri uri = caller.getData();
+			if (uri == null && caller.hasExtra(Intent.EXTRA_STREAM)){
+				uri = (Uri)caller.getExtras().get(Intent.EXTRA_STREAM);
+				// TODO: change this to true when we work out how to do this.
+				_askToPost = false;
+			}
+			
+			if (uri != null){
+				try {
+					Bitmap bmp = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+					ByteArrayOutputStream stream = new ByteArrayOutputStream();
+					
+					Setup(bmp.getWidth(), bmp.getHeight());
+					
+					bmp.compress(CompressFormat.JPEG, 100, stream);
+					
+					_pictureData = stream.toByteArray();
+					bmp.recycle();
+					stream.close();
+					
+					new CompressAsyncTask().execute(_pictureData);
+					
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
     protected Dialog onCreateDialog(int id) {
@@ -87,11 +127,53 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 	    		compressingContent.setMessage("Please wait...");
 	    		compressingContent.setCancelable(false);
 
-		    	return compressingContent;		    	
+		    	return compressingContent;
+	    	case 2:
+	    		AlertDialog askToPost = new AlertDialog.Builder(this)
+	    			.setTitle("")
+	    			.setMessage("Post about his now?")
+	    			.setPositiveButton("Yes", new AlertDialog.OnClickListener(){
+						@Override
+						public void onClick(DialogInterface arg0, int arg1) {
+							Intent newPost = new Intent(getApplicationContext(), ActivityPost.class);
+							newPost.putExtra(ActivityPost.UPLOADED_FILE_URL, _fileUri);
+
+							startActivity(newPost);
+						}})
+	    			.setNegativeButton("No", new AlertDialog.OnClickListener(){
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+						}})
+	    			.create();
+	    		
+	    		return askToPost;
     	}
     	return null;
     }
 
+    private void Setup(int width, int height){
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		String login = prefs.getString("shackLogin", "");
+		String password = prefs.getString("shackPassword", "");
+		
+		int size = width * height; 
+		
+		//3 possible states
+		// 1: Can login (3Mb file max) so we're ok whatever at 95% compression
+		// 2: No login and greater than 3Megapixels so we need to try and scale down to 3Mp AND compress to 90%
+		// 3: No login 3Megapixel camera so we need to compress to 90%
+		if (login.length() > 0 && password.length() > 0){
+			_highResAvailable = true;
+		}
+		else if (size > 3145728){ //3 megapixels
+			_extraCompressionNeeded = true;
+			_scaleAmount = Math.floor(width / 2048);
+		}
+		else{
+			_extraCompressionNeeded = true;
+		}    	
+    }
+    
     @Override 
     protected void onPause(){
     	super.onPause();
@@ -105,6 +187,7 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		}
 		else if (arg0 == false){
 			_takingPicture = false;
+			Toast.makeText(this, "Unable to focus", Toast.LENGTH_SHORT);
 		}
 	}
 
@@ -124,26 +207,7 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		Parameters params = _cam.getParameters();
 		params.setPictureFormat(PixelFormat.JPEG);
 
-		int size = params.getPictureSize().height * params.getPictureSize().width; 
-		
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		String login = prefs.getString("shackLogin", "");
-		String password = prefs.getString("shackPassword", "");
-		
-		//3 possible states
-		// 1: Can login (3Mb file max) so we're ok whatever at 95% compression
-		// 2: No login and greater than 3Megapixels so we need to try and scale down to 3Mp AND compress to 90%
-		// 3: No login 3Megapixel camera so we need to compress to 90%
-		if (login.length() > 0 && password.length() > 0){
-			_highResAvailable = true;
-		}
-		else if (size > 3145728){ //3 megapixels
-			_extraCompressionNeeded = true;
-			_scaleAmount = Math.floor(params.getPictureSize().width / 2048);
-		}
-		else{
-			_extraCompressionNeeded = true;
-		}
+		Setup(params.getPictureSize().width, params.getPictureSize().height);
 		
 		_cam.setParameters(params);			
 		try {
@@ -232,9 +296,9 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 			pic.compress(CompressFormat.JPEG, compressionAmount, compressed);  //Get it down
 			pic.recycle();
 			
-			byte[] data;
+			//byte[] data;
 			try{
-				data = compressed.toByteArray();
+				_pictureData = compressed.toByteArray();
 				try {
 					compressed.close();
 				} catch (IOException e) {
@@ -244,7 +308,7 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 			catch(OutOfMemoryError err){
 				return null;
 			}
-			return data;
+			return _pictureData;
 		}
 		
 		protected void onPreExecute(){
@@ -336,14 +400,22 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		protected void onPostExecute(String result) {
 		    dismissDialog(0);
 		 	if (result != null){
-				Intent passback = new Intent();
-				passback.putExtra(ActivityCamera.UPLOADED_FILE_URL, result);
-				setResult(RESULT_OK, passback);
+		 		if (_askToPost){
+		 			_fileUri = result;
+		 			showDialog(2);
+		 		}
+		 		else{
+					Intent passback = new Intent();
+					passback.putExtra(ActivityCamera.UPLOADED_FILE_URL, result);
+					setResult(RESULT_OK, passback);
+					finish(); // close down and send the result we have set.
+		 		}
 		 	}
 		 	else{
-		 		setResult(RESULT_CANCELED);	
+		 		setResult(RESULT_CANCELED);
+		 		finish(); // close down and send the result we have set.
 		 	}
-			finish(); // close down and send the result we have set.
+			
 				
 		}
 
