@@ -14,6 +14,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -36,7 +37,7 @@ public class ActivityPost extends Activity implements Runnable {
 	
 	public static final String UPLOADED_FILE_URL = "uploadedfileurl"; // TODO: Needs more global...
 	private static final int CAMERA_RESULT = 0;
-	
+	private static final int UPLOAD_RESULT = 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +92,26 @@ public class ActivityPost extends Activity implements Runnable {
 				
 			}
 		});
-		
+
+		final Button uploadButton = (Button)findViewById(R.id.ButtonUpload);
+		uploadButton.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				
+
+				Intent intent = new Intent(Intent.ACTION_PICK);
+				intent.setType("image/*");
+				//intent.setClass(getBaseContext(), ActivityCamera.class);
+				startActivityForResult(intent,UPLOAD_RESULT);
+				
+				
+			}
+		});		
 		SetShackTagAttributes();
+		
+		Intent i = getIntent();
+		if (i.hasExtra(UPLOADED_FILE_URL)){
+			et.setText(i.getStringExtra(UPLOADED_FILE_URL));
+		}
 	}
 	
 	@Override
@@ -107,6 +126,17 @@ public class ActivityPost extends Activity implements Runnable {
 				tv.setText(url);
 			}
 
+			break;
+		case UPLOAD_RESULT:
+			if (resultCode == RESULT_OK) {
+				String url = data.getDataString();
+				Intent camera = new Intent();
+				camera.setClass(this, ActivityCamera.class);
+				camera.setData(Uri.parse(url));
+				//intent.putExtra(ActivityCamera.EXISTING_FILE_URI, url);
+				startActivityForResult(camera, CAMERA_RESULT);
+				
+			}
 			break;
 		}
 	}

@@ -9,50 +9,59 @@
 	<EditText
 	android:id="@+id/EditTextPost"
 	android:layout_width="fill_parent"
-	android:layout_height="175dip"
 	android:textSize="12dip"
 	android:text=""
 	android:gravity="top"
-	android:minLines="20"
-	android:scrollbars="vertical">
+	android:minLines="15"
+	android:scrollbars="vertical" android:layout_height="130dip">
 	</EditText>
 
+<RelativeLayout android:id="@+id/RelativeLayout01" 
+android:layout_below="@+id/EditTextPost" 
+android:layout_width="wrap_content" 
+android:layout_height="wrap_content"
+android:layout_centerHorizontal="true">
+    <Button
+    android:id="@+id/ButtonPost"
+    android:layout_width="75dip"
+    android:layout_height="wrap_content"
+    android:text="Post"
+    >
+    </Button>
+    <Button
+    android:id="@+id/ButtonCancel"
+    android:layout_width="75dip"
+    android:layout_height="wrap_content"
+    android:layout_toRightOf="@+id/ButtonPost"
+    android:text="Cancel"
+    >
+    </Button>
+
+    <Button
+    android:id="@+id/ButtonCamera"
+    android:layout_width="75dip"
+    android:layout_height="wrap_content"
+    android:text="Camera"
+    android:layout_toRightOf="@+id/ButtonCancel">
+    </Button>
+
+    <Button
+    android:id="@+id/ButtonUpload"
+    android:layout_width="75dip"
+    android:layout_height="wrap_content"
+    android:text="Upload"
+    android:layout_toRightOf="@+id/ButtonCamera">
+    </Button>
+</RelativeLayout>	
+
 	
-	<Button
-	android:id="@+id/ButtonCancel"
-	android:layout_width="75dip"
-	android:layout_height="wrap_content"
-	android:text="Cancel"
-	android:layout_below="@+id/EditTextPost"
-	android:layout_centerHorizontal="true"
-	>
-	</Button>
-
-	<Button
-	android:id="@+id/ButtonPost"
-	android:layout_width="75dip"
-	android:layout_height="wrap_content"
-	android:text="Post"
-	android:layout_below="@+id/EditTextPost"
-	android:layout_toLeftOf="@+id/ButtonCancel"
-	>
-	</Button>
-
-	<Button
-	android:id="@+id/ButtonCamera"
-	android:layout_width="75dip"
-	android:layout_height="wrap_content"
-	android:text="Camera"
-	android:layout_below="@+id/EditTextPost"
-	android:layout_toRightOf="@+id/ButtonCancel">
-	</Button>
 	
 	<TextView
 	android:id="@+id/TextViewPostError"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:text=""
-	android:layout_below="@+id/ButtonPost"
+	android:layout_below="@+id/RelativeLayout01"
 	android:gravity="center"
 	android:textSize="12dip"/>
 	
@@ -60,7 +69,7 @@
 	<TableLayout
 	android:id="@+id/TableLayoutShackTags"
 	android:visibility="visible"
-	android:paddingTop="12dip"
+	android:paddingTop="8dip"
 	android:layout_below="@+id/TextViewPostError"
 	android:layout_height="fill_parent"
 	android:layout_width="fill_parent"
@@ -172,6 +181,4 @@
 </TableLayout>
 	
 	
-	
-
 </RelativeLayout>
