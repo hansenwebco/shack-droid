@@ -9,12 +9,10 @@
 	<EditText
 	android:id="@+id/EditTextPost"
 	android:layout_width="fill_parent"
-	android:layout_height="160dip"
 	android:textSize="12dip"
 	android:text=""
 	android:gravity="top"
-	android:minLines="20"
-	android:scrollbars="vertical">
+	android:scrollbars="vertical" android:minLines="15" android:layout_height="140dip">
 	</EditText>
 
 <RelativeLayout
