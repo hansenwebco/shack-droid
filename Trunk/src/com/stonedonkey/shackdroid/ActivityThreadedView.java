@@ -68,17 +68,38 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
+		//requestWindowFeature(Window.FEATURE_NO_TITLE);
+		//this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
+		
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.thread);
 		this.setTitle("ShackDroid - View Thread");
-
+			
 		Bundle extras = this.getIntent().getExtras();
 		postID = extras.getString("postID");
 		storyID = extras.getString("storyID");
 
 		if (savedInstanceState == null) 
 			fillSaxData(postID);
+				
+	}
+	@Override
+    public void onWindowFocusChanged(boolean hasFocus) { 
+		// Adjust the scroll view based on the size of the screen
+		// this doesn't account for the titlebar or the statusbar
+		// no methods appear to be available to determine them 
+		ScrollView sv = (ScrollView) findViewById(R.id.textAreaScroller);
+		TextView tv = (TextView)findViewById(R.id.TextViewThreadAuthor);
+		
+		int statusTitleBar = 40; // TODO: really would like to not hardcode this
+		
+		int offset = tv.getTotalPaddingTop() + tv.getHeight() +  sv.getTop() ;
+		int height = getWindowManager().getDefaultDisplay().getHeight();
+
+		sv.getLayoutParams().height = (height - offset - statusTitleBar) / 2;
+		sv.requestLayout();		
 	}
 
 	@Override 
