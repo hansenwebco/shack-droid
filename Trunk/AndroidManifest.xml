@@ -22,16 +22,16 @@
         <activity android:screenOrientation="sensor" android:name="ActivityViewMessage" android:label="View Shack Message"></activity>
         <activity android:screenOrientation="sensor" android:name="ActivityPostMessage" android:label="Create Shack Message"></activity>
         <activity android:screenOrientation="sensor" android:name="ActivityMainMenu" android:label="ShackDroid"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivitySearchTabs" android:label="ShackDroid - Search" ></activity>
         <activity android:screenOrientation="landscape" android:name="ActivityCamera" android:label="ShackDroid - Snap Picture" >
-            
-        <intent-filter android:icon="@drawable/icon" android:label="@string/app_name"><action android:name="android.intent.action.SEND"></action>
-        <category android:name="android.intent.category.DEFAULT"></category>
-<category android:name="android.intent.category.ALTERNATIVE"></category>
-<category android:name="android.intent.category.SELECTED_ALTERNATIVE"></category>
-<data android:mimeType="image/*"></data>
-<data android:mimeType="text/plain" />
-</intent-filter>
-</activity>
+           <intent-filter android:icon="@drawable/icon" android:label="@string/app_name"><action android:name="android.intent.action.SEND"></action>
+        		<category android:name="android.intent.category.DEFAULT"></category>
+				<category android:name="android.intent.category.ALTERNATIVE"></category>
+				<category android:name="android.intent.category.SELECTED_ALTERNATIVE"></category>
+				<data android:mimeType="image/*"></data>
+				<data android:mimeType="text/plain" />
+			</intent-filter>
+		</activity>
 </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-sdk  android:minSdkVersion="3"/>
