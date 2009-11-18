@@ -32,7 +32,7 @@ public class ActivityMainMenu extends ListActivity  {
 	     menu.add(new ShackMenuItem("Shack Messages","Stuff too shocking for even the Shack.",R.drawable.menu2_shackmessages2));
 	     menu.add(new ShackMenuItem("Settings","Hay guys, am I doing this right?",R.drawable.menu2_settings));
 	     menu.add(new ShackMenuItem("Version Check","stonedonkey finally did something new!?!",R.drawable.menu2_vercheck));
-	     //menu.add(new ShackMenuItem("Camera","Pics + Divx of STFU",R.drawable.menu2_camera));
+	     //menu.add(new ShackMenuItem("Search v2","Tabs omg!",R.drawable.menu2_search));
 	     
 	     AdapterMainMenu mm = new AdapterMainMenu(this,R.layout.mainmenu_row, menu);
 	    
@@ -68,7 +68,7 @@ public class ActivityMainMenu extends ListActivity  {
 			}
 			case 2: 
 			{
-				intent.setClass(this,ActivitySearch.class);
+				intent.setClass(this,ActivitySearchTabs.class);
 				break;
 			
 			}
@@ -130,7 +130,7 @@ public class ActivityMainMenu extends ListActivity  {
 			}
 			case 7:
 			{
-				intent.setClass(this,ActivityCamera.class);
+				intent.setClass(this,ActivitySearchTabs.class);
 				break;
 			}
 			
