@@ -17,6 +17,9 @@ public class ActivityViewMessage extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Helper.SetWindowState(getWindow(),this);
+		
 		setContentView(R.layout.view_message);
 
 		face = Typeface.createFromAsset(this.getAssets(), "fonts/arial.ttf");

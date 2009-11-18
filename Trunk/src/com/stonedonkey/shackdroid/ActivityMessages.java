@@ -38,13 +38,13 @@ public class ActivityMessages extends ListActivity implements Runnable {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
+		Helper.SetWindowState(getWindow(),this);
+		
 		setTitle("Shack Messages - " + box);
 		
 		setContentView(R.layout.messages);
 		fillSaxData();
-
-		
 
 	}
 	private void fillSaxData() {

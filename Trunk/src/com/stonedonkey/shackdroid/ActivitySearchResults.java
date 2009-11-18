@@ -35,6 +35,8 @@ public class ActivitySearchResults extends ListActivity implements Runnable {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		Helper.SetWindowState(getWindow(),this);
+		
 		Bundle extras = this.getIntent().getExtras();
 		searchTerm = extras.getString("searchTerm");
 		author = extras.getString("author");

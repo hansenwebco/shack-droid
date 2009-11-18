@@ -18,6 +18,7 @@ public class ActivitySplashScreen extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
+		Helper.SetWindowState(getWindow(),this);
 		
 		setContentView(R.layout.splash);
 		ImageView iv = (ImageView)findViewById(R.id.ImageViewSplash);

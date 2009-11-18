@@ -39,22 +39,12 @@ public class ActivityRSS extends ListActivity implements Runnable {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 				
-			setContentView(R.layout.rss);
-			fillSaxData();
-//		
-//			getListView().setOnCreateContextMenuListener(
-//					new OnCreateContextMenuListener() {
-//						@Override
-//						public void onCreateContextMenu(ContextMenu menu, View v,
-//								ContextMenuInfo menuInfo) {
-//							menu.setHeaderTitle("RSS Story Options");
-//							menu.add(0, 3, 0, "View Story");
-//							menu.add(0, 4, 0, "View Comments");
-//							menu.add(0, -1, 0, "Cancel");
-//						}
-//					});		
-			
 		super.onCreate(savedInstanceState);
+		Helper.SetWindowState(getWindow(),this);
+		
+		setContentView(R.layout.rss);
+		fillSaxData();
+	
 		registerForContextMenu(getListView());
 	}
 	

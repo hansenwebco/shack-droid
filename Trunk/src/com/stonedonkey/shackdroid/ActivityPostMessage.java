@@ -27,6 +27,9 @@ public class ActivityPostMessage extends Activity implements Runnable {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Helper.SetWindowState(getWindow(),this);
+		
 		setContentView(R.layout.messages_post);
 
 		Bundle extras = this.getIntent().getExtras();

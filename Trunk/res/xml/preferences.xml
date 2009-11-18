@@ -30,11 +30,7 @@
     		android:defaultValue="false"
     		android:summary="Run ShackDroid Fullscreen."/>
     		
-    	<CheckBoxPreference 
-    		android:key="allowHapticFeedBack" 
-    		android:title="Enable Haptic Feedback" 
-    		android:defaultValue="false"
-    		android:summary="Allow ShackDroid to love you back."/>    		
+  		
     	
     </PreferenceCategory>
     <PreferenceCategory  android:title="Chatty Filters">    

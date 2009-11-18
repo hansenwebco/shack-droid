@@ -21,6 +21,8 @@ public class ActivityNotes extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		Helper.SetWindowState(getWindow(),this);
+		
 		setContentView(R.layout.notes);
 
 		this.setTitle("ShackMarks");
