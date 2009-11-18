@@ -41,6 +41,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.ImageView;
@@ -68,12 +70,16 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
-		//requestWindowFeature(Window.FEATURE_NO_TITLE);
-		//this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		
-		
 		super.onCreate(savedInstanceState);
-
+		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		if (prefs.getBoolean("allowFullScreen", false)) {
+			requestWindowFeature(Window.FEATURE_NO_TITLE);
+			this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		}
+		getListView().setHapticFeedbackEnabled(prefs.getBoolean("allowHapticFeedBack", false));
+		
+		
 		setContentView(R.layout.thread);
 		this.setTitle("ShackDroid - View Thread");
 			
@@ -93,7 +99,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		ScrollView sv = (ScrollView) findViewById(R.id.textAreaScroller);
 		TextView tv = (TextView)findViewById(R.id.TextViewThreadAuthor);
 		
-		int statusTitleBar = 40; // TODO: really would like to not hardcode this
+		int statusTitleBar = 0; // TODO: really would like to not hardcode this
 		
 		int offset = tv.getTotalPaddingTop() + tv.getHeight() +  sv.getTop() ;
 		int height = getWindowManager().getDefaultDisplay().getHeight();

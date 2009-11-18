@@ -22,8 +22,22 @@
     		android:textSize="10sp"
     		android:summary="NOTE: This will pass your info to the API not directly to ShackNews."/>                    
     </PreferenceCategory>
-    <PreferenceCategory
-            android:title="Chatty Filters">    
+    
+    <PreferenceCategory  android:title="Application Settings">
+    	<CheckBoxPreference 
+    		android:key="allowFullScreen" 
+    		android:title="Full Screen Mode" 
+    		android:defaultValue="false"
+    		android:summary="Run ShackDroid Fullscreen."/>
+    		
+    	<CheckBoxPreference 
+    		android:key="allowHapticFeedBack" 
+    		android:title="Enable Haptic Feedback" 
+    		android:defaultValue="false"
+    		android:summary="Allow ShackDroid to love you back."/>    		
+    	
+    </PreferenceCategory>
+    <PreferenceCategory  android:title="Chatty Filters">    
     
     		<CheckBoxPreference 
     		android:key="allowNWS" 

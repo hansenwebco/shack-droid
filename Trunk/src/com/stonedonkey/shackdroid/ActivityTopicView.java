@@ -30,6 +30,8 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ListView;
 
 public class ActivityTopicView extends ListActivity implements Runnable {
@@ -48,8 +50,13 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		//requestWindowFeature(Window.FEATURE_NO_TITLE);
-		//this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		if (prefs.getBoolean("allowFullScreen", false)) {
+			requestWindowFeature(Window.FEATURE_NO_TITLE);
+			this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		}
+		getListView().setHapticFeedbackEnabled(prefs.getBoolean("allowHapticFeedBack", false));
+		
 		
 		setContentView(R.layout.topics);
 
