@@ -36,8 +36,10 @@ public class ActivityShackMarks extends ListActivity implements Runnable {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Helper.SetWindowState(getWindow(),this);
+		
 		setContentView(R.layout.notes);
-
 
 		fillSaxData();
 		

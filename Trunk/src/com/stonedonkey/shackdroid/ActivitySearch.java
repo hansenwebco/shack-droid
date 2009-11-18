@@ -12,8 +12,9 @@ public class ActivitySearch extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		
+
+		Helper.SetWindowState(getWindow(),this);
+
 		setContentView(R.layout.search);
 
 		final Button postButton = (Button) findViewById(R.id.ButtonSearch);

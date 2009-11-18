@@ -43,6 +43,8 @@ public class ActivityPost extends Activity implements Runnable {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		Helper.SetWindowState(getWindow(),this);
+		
 		setContentView(R.layout.post);
 		setTitle("ShackDroid - Post");
 

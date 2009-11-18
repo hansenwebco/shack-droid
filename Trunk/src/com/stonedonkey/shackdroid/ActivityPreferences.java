@@ -7,13 +7,18 @@ public class ActivityPreferences extends PreferenceActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	
+	
 
-		addPreferencesFromResource(R.xml.preferences);
+		Helper.SetWindowState(getWindow(),this);
 	
 		
+		     
+		super.onCreate(savedInstanceState);
 
+	
 		
+		addPreferencesFromResource(R.xml.preferences);
 		
 	}
 

@@ -41,8 +41,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.ImageView;
@@ -72,14 +70,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 
 		super.onCreate(savedInstanceState);
 		
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		if (prefs.getBoolean("allowFullScreen", false)) {
-			requestWindowFeature(Window.FEATURE_NO_TITLE);
-			this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		}
-		getListView().setHapticFeedbackEnabled(prefs.getBoolean("allowHapticFeedBack", false));
-		
-		
+		Helper.SetWindowState(getWindow(),this);
+			
 		setContentView(R.layout.thread);
 		this.setTitle("ShackDroid - View Thread");
 			
