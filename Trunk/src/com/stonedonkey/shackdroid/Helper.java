@@ -59,7 +59,7 @@ public class Helper {
 
 		return fixedDate;
 	}
-	public static int GetCurrentChattyStoryID()
+	public static String GetCurrentChattyStoryID()
 	{
 		try {
 			URL url = new URL("http://www.shacknews.com/latestchatty.x");
@@ -72,13 +72,13 @@ public class Helper {
 			String location = httpConnection.getURL().toString();
 			String id =  location.substring(location.lastIndexOf("=")+1);
 			
-			return Integer.parseInt(id);
+			return id;
 			}
 			else
-				return 0;
+				return null;
 			
 		} catch (Exception e) {
-			return 0;
+			return null;
 		}		
 	}
 	public static void SetWindowState(Window window,Context context)

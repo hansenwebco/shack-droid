@@ -40,6 +40,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.ClipboardManager;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -83,7 +84,7 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 			if (uri == null && caller.hasExtra(Intent.EXTRA_STREAM)){
 				uri = (Uri)caller.getExtras().get(Intent.EXTRA_STREAM);
 				// TODO: change this to true when we work out how to do this.
-				_askToPost = false;
+				_askToPost = true;
 			}
 			
 			if (uri != null){
@@ -131,18 +132,27 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 	    	case 2:
 	    		AlertDialog askToPost = new AlertDialog.Builder(this)
 	    			.setTitle("")
-	    			.setMessage("Post about his now?")
+	    			.setMessage("Post a new thread, or copy to clipboard?")
+	    			.setNeutralButton("Clip",new AlertDialog.OnClickListener(){
+						@Override
+						public void onClick(DialogInterface arg0, int arg1) {
+							ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE); 
+  						    clipboard.setText(_fileUri);
+							finish();
+						}})
 	    			.setPositiveButton("Yes", new AlertDialog.OnClickListener(){
 						@Override
 						public void onClick(DialogInterface arg0, int arg1) {
 							Intent newPost = new Intent(getApplicationContext(), ActivityPost.class);
 							newPost.putExtra(ActivityPost.UPLOADED_FILE_URL, _fileUri);
-
+							newPost.putExtra("storyID", Helper.GetCurrentChattyStoryID());
 							startActivity(newPost);
+							finish();
 						}})
 	    			.setNegativeButton("No", new AlertDialog.OnClickListener(){
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
+							finish();
 						}})
 	    			.create();
 	    		
