@@ -16,6 +16,9 @@ public class SaxHandlerTopicView extends DefaultHandler
 	private ArrayList<Integer> indent = new ArrayList<Integer>();
 	
 	private boolean body = false;
+	private boolean author = false;
+	private boolean participant = false;
+
 
 	Boolean allowNWS = true;
 	Boolean allowPolitical = true;
@@ -83,7 +86,7 @@ public class SaxHandlerTopicView extends DefaultHandler
 					storyPageCount = Integer.parseInt(attributes.getValue("last_page"));
 			
 		
-		}
+		}   
 				
 		if("comment".equalsIgnoreCase(localName))
 		{
@@ -96,6 +99,9 @@ public class SaxHandlerTopicView extends DefaultHandler
 			postCategory = attributes.getValue("category");
 		}
 		
+		if ("participant".equalsIgnoreCase(localName))
+			participant = true;
+		
 		if ("body".equalsIgnoreCase(localName))
 			body = true;
 		
@@ -106,9 +112,15 @@ public class SaxHandlerTopicView extends DefaultHandler
             final String rawName)
 			throws SAXException {
 		 
-		if ("body".equalsIgnoreCase(localName)) 
+		if ("participant".equalsIgnoreCase(localName))
+		{
+			participant = false;
+		}
+		
+		if ("comment".equalsIgnoreCase(localName)) 
 		{
 			body = false;
+			
 		
 			// this handles determining how far in a reply is indented
 			int currentIndent;
@@ -146,9 +158,10 @@ public class SaxHandlerTopicView extends DefaultHandler
 				 (postCategory.equals("ontopic")))
 			{
 				// add new post to collection
-				ShackPost currentPost = new ShackPost( posterName, postDate, preview ,postID, bodyText, replyCount, currentIndent,postCategory,0,posts.size());
+				ShackPost currentPost = new ShackPost( posterName, postDate, preview ,postID, bodyText, replyCount, currentIndent,postCategory,0,posts.size(),author);
 				posts.add(currentPost);
 				bodyText= "";
+				author = false;
 			}
 			
 		}
@@ -161,5 +174,16 @@ public class SaxHandlerTopicView extends DefaultHandler
 
 		if (body)
 			bodyText = bodyText + new String(ch,start,length);
+		
+		if (participant)
+		{
+			String part = new String(ch,start,length);
+			if (part.equalsIgnoreCase("stonedonkey"))
+			{
+				author = true;
+			}
+		}
+		
+		
 	}
 }
