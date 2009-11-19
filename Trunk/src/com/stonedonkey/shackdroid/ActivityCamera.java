@@ -30,6 +30,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
+import android.graphics.Rect;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory.Options;
 import android.hardware.Camera;
@@ -83,30 +84,12 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 			Uri uri = caller.getData();
 			if (uri == null && caller.hasExtra(Intent.EXTRA_STREAM)){
 				uri = (Uri)caller.getExtras().get(Intent.EXTRA_STREAM);
-				// TODO: change this to true when we work out how to do this.
+
 				_askToPost = true;
 			}
 			
 			if (uri != null){
-				try {
-					Bitmap bmp = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
-					ByteArrayOutputStream stream = new ByteArrayOutputStream();
-					
-					Setup(bmp.getWidth(), bmp.getHeight());
-					
-					bmp.compress(CompressFormat.JPEG, 100, stream);
-					
-					_pictureData = stream.toByteArray();
-					bmp.recycle();
-					stream.close();
-					
-					new CompressAsyncTask().execute(_pictureData);
-					
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				new CompressShareAsyncTask().execute(uri);
 			}
 		}
 	}
@@ -284,6 +267,74 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		}
 	}
 
+	class CompressShareAsyncTask extends AsyncTask<Uri, byte[], byte[]>{
+
+		@Override
+		protected byte[] doInBackground(Uri... params) {
+			//First we find out how big the pic is
+			//Then set setup our environment variables - scale factor etc
+			//Then we configure our compressor
+			//Then we compress and return.
+			
+			Options options = new Options();
+			
+			options.inJustDecodeBounds = true;
+			Bitmap pic;
+			try {
+				pic = BitmapFactory.decodeStream(getContentResolver().openInputStream(params[0]), new Rect(-1,-1,-1,1), options);
+				
+				Setup(options.outWidth, options.outHeight);
+				options.inJustDecodeBounds = false;
+			} catch (FileNotFoundException e2) {
+				return null;
+			}
+			
+			int compressionAmount = 95;
+			
+			//Try and scale down 2 == half size, 4 == quarter size etc.
+			options.inSampleSize = (int)_scaleAmount;
+			
+			if (_extraCompressionNeeded){
+				compressionAmount = 90;
+			}
+			
+			try {
+				pic = BitmapFactory.decodeStream(getContentResolver().openInputStream(params[0]), new Rect(-1,-1,-1,1), options);
+				ByteArrayOutputStream compressed = new ByteArrayOutputStream();
+				pic.compress(CompressFormat.JPEG, compressionAmount, compressed);  //Get it down
+				pic.recycle();
+				_pictureData = compressed.toByteArray();
+				try {
+					compressed.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}				
+				
+			} catch (FileNotFoundException e1) {
+				return null;
+			}catch(OutOfMemoryError err){
+				return null;
+			}
+
+			return _pictureData;
+		}
+		
+		protected void onPreExecute(){
+			findViewById(R.id.takePicture).setEnabled(false);
+			showDialog(1);
+		}
+		
+		protected void onPostExecute(byte[] result) {
+		    dismissDialog(1);
+		    if (result != null){
+		    	new UploadAsyncTask().execute(result);
+		    }
+		    else{
+		    	Toast.makeText(getApplicationContext(), "Error compressing", Toast.LENGTH_SHORT);
+		    	finish();
+		    }
+		}		
+	}
 	
 	class CompressAsyncTask extends AsyncTask<byte[], byte[], byte[]>{
 
@@ -328,7 +379,12 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		
 		protected void onPostExecute(byte[] result) {
 		    dismissDialog(1);
-		    new UploadAsyncTask().execute(result);
+		    if (result != null){
+		    	new UploadAsyncTask().execute(result);
+		    }
+		    else{
+		    	Toast.makeText(getApplicationContext(), "Error compressing", Toast.LENGTH_SHORT);		    
+		    }
 		}		
 	}
 	
