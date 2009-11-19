@@ -79,7 +79,7 @@ public class AdapterTopicView extends BaseAdapter {
 		postReplyCount.setText(post.getReplyCount());
 		
 		if (post.getIsAuthorInThread())
-			postReplyCount.setTextColor(Color.GREEN);
+			postReplyCount.setTextColor(Color.parseColor("#0099CC"));
 
 		
 		// show the number of new posts since the last refresh
