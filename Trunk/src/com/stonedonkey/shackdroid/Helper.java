@@ -1,5 +1,8 @@
 package com.stonedonkey.shackdroid;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,6 +38,7 @@ public class Helper {
 
 
 	}
+	// TODO: We can probably combine these i'm just lazy today
 	public static String FormShackRSSDate(String unformattedDate)
 	{
 		String fixedDate  = null;
@@ -55,7 +59,28 @@ public class Helper {
 
 		return fixedDate;
 	}
-	
+	public static int GetCurrentChattyStoryID()
+	{
+		try {
+			URL url = new URL("http://www.shacknews.com/latestchatty.x");
+			URLConnection connection = url.openConnection();
+			HttpURLConnection httpConnection = (HttpURLConnection)connection;
+			httpConnection.connect();
+			int response = httpConnection.getResponseCode();
+
+			if (response == 200) {
+			String location = httpConnection.getURL().toString();
+			String id =  location.substring(location.lastIndexOf("=")+1);
+			
+			return Integer.parseInt(id);
+			}
+			else
+				return 0;
+			
+		} catch (Exception e) {
+			return 0;
+		}		
+	}
 	public static void SetWindowState(Window window,Context context)
 	{
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
