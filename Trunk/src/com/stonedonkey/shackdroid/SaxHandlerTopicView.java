@@ -36,9 +36,11 @@ public class SaxHandlerTopicView extends DefaultHandler
 	private String storyName = "";
 	private String postCategory = "";
 	private int storyPageCount = 0;
+	private String view = "";
+	private String username = "";
 
 	
-	public SaxHandlerTopicView(Context context)
+	public SaxHandlerTopicView(Context context, String v)
 	{
 		//this.context = context;
 		
@@ -49,6 +51,9 @@ public class SaxHandlerTopicView extends DefaultHandler
 		allowStupid = prefs.getBoolean("allowStupid", true);
 		allowInteresting = prefs.getBoolean("allowInteresting", true);
 		allowOffTopic = prefs.getBoolean("allowOffTopic", true);
+		username = prefs.getString("shackLogin", "");
+		
+		view = v;
 	}
 
 
@@ -117,7 +122,7 @@ public class SaxHandlerTopicView extends DefaultHandler
 			participant = false;
 		}
 		
-		if ("comment".equalsIgnoreCase(localName)) 
+		if (("body".equalsIgnoreCase(localName) && view.equalsIgnoreCase("threaded")) || ("comment".equalsIgnoreCase(localName) && view.equalsIgnoreCase("topic"))) 
 		{
 			body = false;
 			
@@ -178,7 +183,7 @@ public class SaxHandlerTopicView extends DefaultHandler
 		if (participant)
 		{
 			String part = new String(ch,start,length);
-			if (part.equalsIgnoreCase("stonedonkey"))
+			if (part.equalsIgnoreCase(username))
 			{
 				author = true;
 			}

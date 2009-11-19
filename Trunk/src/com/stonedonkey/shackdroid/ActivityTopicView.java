@@ -301,7 +301,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			// Get the XMLReader of the SAXParser we created.
 			XMLReader xr = sp.getXMLReader();
 			// Create a new ContentHandler and apply it to the XML-Reader
-			SaxHandlerTopicView saxHandler = new SaxHandlerTopicView(this);
+			SaxHandlerTopicView saxHandler = new SaxHandlerTopicView(this,"topic");
 			xr.setContentHandler(saxHandler);
 
 			// Parse the xml-data from our URL.
