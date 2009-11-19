@@ -21,9 +21,10 @@ public final class ShackPost implements Serializable
 	private String postCategory;
 	private int postIndex;
 	private int orderID = 0;
+	private boolean authorInThread = false;
 	
 	public ShackPost(String posterName, String postDate, String postPreview,
-			String postID, String postText,String replyCount,Integer indent,String postCategory, Integer postIndex,Integer orderID) {
+			String postID, String postText,String replyCount,Integer indent,String postCategory, Integer postIndex,Integer orderID,boolean authorInThread) {
 		
 		this.posterName = posterName;
 		this.postDate = postDate;
@@ -34,9 +35,15 @@ public final class ShackPost implements Serializable
 		this.indent = indent;
 		this.postCategory = postCategory;
 		this.postIndex = postIndex;
+		this.authorInThread = authorInThread;
 		this.orderID = orderID; 
 	}
 
+	public boolean getIsAuthorInThread()
+	{
+		return authorInThread;
+	}
+	
 	public int getOrderID()
 	{
 		return orderID;

@@ -79,6 +79,10 @@ public class AdapterTopicView extends BaseAdapter {
 		postReplyCount.setTypeface(face);
 		postReplyCount.setText(post.getReplyCount());
 		
+		if (post.getIsAuthorInThread())
+			postReplyCount.setTextColor(Color.GREEN);
+
+		
 		// show the number of new posts since the last refresh
 		if (postCache != null && postCache.get(post.getPostID()) != null ) {
 
@@ -99,7 +103,13 @@ public class AdapterTopicView extends BaseAdapter {
 			postText.setText(post.getPostPreview());
 				
 		ImageView img = (ImageView)v.findViewById(R.id.ImageViewCat);
-		RelativeLayout tr = (RelativeLayout)v.findViewById(R.id.TopicRow);		
+			
+		
+		//if (post.getIsAuthorInThread())
+		//{
+			//RelativeLayout tr = (RelativeLayout)v.findViewById(R.id.TopicRow);	
+			//tr.setBackgroundColor(Color.GREEN);
+		//}
 		
 		// TODO: clean this up a little / also replicated in ShackDroidThread ick
 		String postCat = post.getPostCategory();
@@ -111,11 +121,11 @@ public class AdapterTopicView extends BaseAdapter {
 			img.setImageResource(R.drawable.nws);
 		else if (postCat.equals("political")) {
 			img.setImageResource(R.drawable.political);
-			tr.setBackgroundColor(Color.parseColor("#211D1A"));
+			//tr.setBackgroundColor(Color.parseColor("#211D1A"));
 		}
 		else if (postCat.equals("stupid")) {
 			img.setImageResource(R.drawable.stupid);
-			tr.setBackgroundColor(Color.GREEN);
+			//tr.setBackgroundColor(Color.GREEN);
 		}
 		else if (postCat.equals("informative"))
 			img.setImageResource(R.drawable.interesting);		
