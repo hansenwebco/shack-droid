@@ -15,24 +15,47 @@ public class Helper {
 
 	public static String FormatShackDate(String unformattedDate) 
 	{
-		DateFormat dfm = new SimpleDateFormat("MMM d, y hh:mmaa z");
-		Date conDate = null;
-		SimpleDateFormat format= null;
-		String fixedDate  = null;
 
-		try {  
+		String fixedDate  = null;
+		try { 
+			DateFormat dfm = new SimpleDateFormat("MMM d, y hh:mmaa z");
+			Date conDate = null;
+			SimpleDateFormat format= null;
+
 			conDate = dfm.parse(unformattedDate);
-			format = new SimpleDateFormat("M.d.yy h:mm a");
+			format = new SimpleDateFormat("M.d.yy h:mma");
 			fixedDate = format.format(conDate);
+
 		} catch (ParseException e) {
 			return "";
 		}
-		
-		
+
+
 		return fixedDate;
-		
-		
+
+
 	}
+	public static String FormShackRSSDate(String unformattedDate)
+	{
+		String fixedDate  = null;
+		//2009-11-19T10:10-06:00
+		try {  
+			DateFormat dfm = new SimpleDateFormat("yyyy-MM-dd'T'h:mmZ");
+			Date conDate = null;
+			SimpleDateFormat format= null;
+
+			conDate = dfm.parse(unformattedDate);
+			format = new SimpleDateFormat("M.d.yy h:mma");
+			fixedDate = format.format(conDate);
+
+		} catch (ParseException e) {
+			return "";
+		}
+
+
+		return fixedDate;
+	}
+	
 	public static void SetWindowState(Window window,Context context)
 	{
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
