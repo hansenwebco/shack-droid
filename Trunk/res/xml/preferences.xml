@@ -31,6 +31,14 @@
     		android:summary="Run ShackDroid Fullscreen."/>
     		
   		
+    		<ListPreference
+    			android:key="showAuthor"
+    			android:entryValues ="@array/showAuthorValues"
+    			android:entries="@array/showAuthor"
+    			android:title="Show Threads I've Posted In"
+    			android:summary="Add an indicator to threads I've replied to."
+    			android:defaultValue="none"
+    		/>
     	
     </PreferenceCategory>
     <PreferenceCategory  android:title="Chatty Filters">    

@@ -4,14 +4,19 @@ import java.util.Hashtable;
 import java.util.List;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.preference.PreferenceManager;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class AdapterTopicView extends BaseAdapter {
@@ -23,6 +28,7 @@ public class AdapterTopicView extends BaseAdapter {
 	static Typeface face;
 	private int fontSize = 12;
 	private Hashtable<String,String> postCache = null;
+	static String showAuthor = "";
 	
 	public AdapterTopicView(Context context,int rowResouceID, List<ShackPost> topicList, String shackLogin,int fontSize,Hashtable<String,String> postCache ){
 		this.context = context;
@@ -33,6 +39,10 @@ public class AdapterTopicView extends BaseAdapter {
 		this.postCache = postCache;
 				
 	    face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
+	   	    
+	    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+	    showAuthor = prefs.getString("showAuthor","none");
+	    
 	}
 	
 	@Override
@@ -78,7 +88,7 @@ public class AdapterTopicView extends BaseAdapter {
 		postReplyCount.setTypeface(face);
 		postReplyCount.setText(post.getReplyCount());
 		
-		if (post.getIsAuthorInThread())
+		if (showAuthor.equalsIgnoreCase("count") &&  post.getIsAuthorInThread())
 			postReplyCount.setTextColor(Color.parseColor("#0099CC"));
 
 		
@@ -104,11 +114,15 @@ public class AdapterTopicView extends BaseAdapter {
 		ImageView img = (ImageView)v.findViewById(R.id.ImageViewCat);
 			
 		
-		//if (post.getIsAuthorInThread())
-		//{
-			//RelativeLayout tr = (RelativeLayout)v.findViewById(R.id.TopicRow);	
-			//tr.setBackgroundColor(Color.GREEN);
-		//}
+		if (showAuthor.equalsIgnoreCase("topic") && post.getIsAuthorInThread())
+		{
+			RelativeLayout tr = (RelativeLayout)v.findViewById(R.id.TopicRow);	
+			//tr.setBackgroundColor(Color.parseColor("#0A0A2A"));
+		
+			 Resources r = context.getResources();
+			 Drawable d = r.getDrawable(R.drawable.background_gradient_blue);
+			 tr.setBackgroundDrawable(d);
+		}
 		
 		// TODO: clean this up a little / also replicated in ShackDroidThread ick
 		String postCat = post.getPostCategory();

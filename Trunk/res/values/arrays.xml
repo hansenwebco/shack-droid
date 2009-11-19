@@ -11,6 +11,16 @@
 		<item>XBLA</item>
 		<item>Rumor</item>
 	</string-array>
+	<string-array name="showAuthor">
+		<item>None</item>
+		<item>Highlight Post Count</item>
+		<item>Highlight Topic</item>
+	</string-array>
+	<string-array name="showAuthorValues">
+		<item>none</item>
+		<item>count</item>
+		<item>topic</item>
+	</string-array>
 	<string-array name="feedsURls">
 		<item>http://feed.shacknews.com/shackfeed.xml</item>
 		<item>http://www.shacknews.com/shackfeed_content.xml</item>
