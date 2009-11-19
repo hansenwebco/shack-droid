@@ -3,7 +3,10 @@ package com.stonedonkey.shackdroid;
 import java.util.List;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +19,16 @@ public class AdapterShackMarks extends BaseAdapter {
 	private List<ShackPost> marks;
 	private int rowResouceID;
 	static Typeface face;
-		
+	static int fontSize = 12;
+	
 	public  AdapterShackMarks(Context context,int rowResouceID, List<ShackPost> marks)
 	{
 		this.context = context;
 		this.rowResouceID = rowResouceID;
 		this.marks = marks;
 		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
 		face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
 		
 	}
@@ -61,6 +67,7 @@ public class AdapterShackMarks extends BaseAdapter {
 		
 		TextView postText = (TextView)v.findViewById(R.id.TextViewNotesPreview);
 		postText.setText(post.getPostPreview());
+		postText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 		postText.setTypeface(face);
 		
 		TextView postDate = (TextView)v.findViewById(R.id.TextViewNotesDatePosted);

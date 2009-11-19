@@ -3,7 +3,10 @@ package com.stonedonkey.shackdroid;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,7 @@ public class AdapterSearchResults  extends BaseAdapter {
 	private ArrayList<ShackSearch> searchItems;
 	private int rowResouceID;
 	static Typeface face;
+	static int fontSize = 12;
 	
 	public AdapterSearchResults(Context context, ArrayList<ShackSearch> rssItems, int rowResouceID)
 	{
@@ -23,6 +27,9 @@ public class AdapterSearchResults  extends BaseAdapter {
 		this.searchItems = rssItems;
 		this.rowResouceID = rowResouceID;
 		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
+				
 		face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
 	}
 	
@@ -48,7 +55,7 @@ public class AdapterSearchResults  extends BaseAdapter {
 		
 		ShackSearch searchItem = searchItems.get(position);
 		LayoutInflater inflate = LayoutInflater.from(context);
-		
+			
 		View v = inflate.inflate(rowResouceID,parent,false);
 
 		TextView auth = (TextView)v.findViewById(R.id.TextViewSearchAuthor);
@@ -61,6 +68,7 @@ public class AdapterSearchResults  extends BaseAdapter {
 		
 		TextView rt = (TextView)v.findViewById(R.id.TextViewSearchBody);
 		String result = searchItem.getResultText();
+		rt.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 		result = result.replaceAll("(\r\n|\r|\n|\n\r)", "");
 		rt.setText(result);
 		rt.setTypeface(face);
