@@ -7,10 +7,12 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ListView;
 
@@ -79,9 +81,27 @@ public class ActivityMainMenu extends ListActivity  {
 			}
 			case 4:
 			{
-				intent.setClass(this,ActivityMessages.class);
+				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+				boolean allowSMs = prefs.getBoolean("allowShackMessages", false);
 				
-				break;
+				if (allowSMs)
+				{
+				intent = new Intent();
+				intent.setClass(this,ActivityMessages.class);
+				startActivity(intent);
+				return;
+				}
+				else
+				{
+					new AlertDialog.Builder(this).setTitle("Information")
+					.setPositiveButton("OK", null).setMessage(
+							"Shack Messages posts your credentials to the API " +
+							"instead of directly ShackNews.\n\n If you agree with this " +
+							"you can enable this feature under \"Settings\"." )
+					.show();
+					
+				return;
+				}
 			}
 			case 5:
 			{
