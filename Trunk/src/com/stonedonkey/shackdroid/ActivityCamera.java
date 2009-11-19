@@ -72,25 +72,24 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		Intent caller = getIntent();
 		setContentView(R.layout.camera);
 		
-		if (caller == null){
-			
+		//If we have a calling intent see if it's passed us a content URI of an existing image
+		// if not then assume we're taking a nice new photo
+		Uri uri = caller.getData();
+		if (uri == null && caller.hasExtra(Intent.EXTRA_STREAM)){
+			uri = (Uri)caller.getExtras().get(Intent.EXTRA_STREAM);
+
+			_askToPost = true;
+		}
+		
+		if (uri != null){
+			new CompressShareAsyncTask().execute(uri);
+		}
+		else{
 			SurfaceHolder holder = ((SurfaceView)findViewById(R.id.SurfaceView01)).getHolder();
 			holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 			holder.addCallback(this);
 	
-			SetupButtons(MODE_TAKING_PICTURE);
-		}		
-		else{
-			Uri uri = caller.getData();
-			if (uri == null && caller.hasExtra(Intent.EXTRA_STREAM)){
-				uri = (Uri)caller.getExtras().get(Intent.EXTRA_STREAM);
-
-				_askToPost = true;
-			}
-			
-			if (uri != null){
-				new CompressShareAsyncTask().execute(uri);
-			}
+			SetupButtons(MODE_TAKING_PICTURE);				
 		}
 	}
 
