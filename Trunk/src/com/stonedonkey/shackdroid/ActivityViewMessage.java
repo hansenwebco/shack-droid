@@ -2,9 +2,12 @@ package com.stonedonkey.shackdroid;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Html;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -13,6 +16,7 @@ public class ActivityViewMessage extends Activity {
 
 	ShackMessage msg = null;
 	static Typeface face;
+
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -22,6 +26,9 @@ public class ActivityViewMessage extends Activity {
 		
 		setContentView(R.layout.view_message);
 
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
+		
 		face = Typeface.createFromAsset(this.getAssets(), "fonts/arial.ttf");
 		Bundle extras = this.getIntent().getExtras();
 		if (extras != null)
@@ -42,6 +49,7 @@ public class ActivityViewMessage extends Activity {
 	 TextView content =(TextView)findViewById(R.id.TextViewViewMsgContent);
 	 content.setText(Html.fromHtml(msg.getMsgText().replaceAll("(\r\n|\r|\n|\n\r)", "")));
 	 content.setTypeface(face);
+	content.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 	 
 	 //TextView msglbl =(TextView)findViewById(R.id.TextViewViewMsgLabelMessage);
 	 //msglbl.setText(Html.fromHtml("<b>Message:</b>"));
