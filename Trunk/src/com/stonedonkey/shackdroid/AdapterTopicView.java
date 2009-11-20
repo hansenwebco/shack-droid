@@ -41,7 +41,7 @@ public class AdapterTopicView extends BaseAdapter {
 	    face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
 	   	    
 	    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-	    showAuthor = prefs.getString("showAuthor","none");
+	    showAuthor = prefs.getString("showAuthor","count");
 	    
 	}
 	
