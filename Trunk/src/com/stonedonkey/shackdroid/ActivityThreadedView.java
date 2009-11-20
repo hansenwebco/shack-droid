@@ -80,7 +80,16 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		storyID = extras.getString("storyID");
 
 		if (savedInstanceState == null) 
+			try {
 			fillSaxData(postID);
+			}
+			catch (Exception ex)
+			{
+				new AlertDialog.Builder(this).setTitle("Error")
+				.setPositiveButton("OK", null).setMessage(
+						"There was an error or could not connect to the API.")
+				.show();
+			}
 				
 	}
 	@Override
