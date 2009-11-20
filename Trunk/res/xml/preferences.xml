@@ -37,7 +37,7 @@
     			android:entries="@array/showAuthor"
     			android:title="Show Threads I've Posted In"
     			android:summary="Add an indicator to threads I've replied to."
-    			android:defaultValue="none"
+    			android:defaultValue="count"
     		/>
     	
     </PreferenceCategory>
