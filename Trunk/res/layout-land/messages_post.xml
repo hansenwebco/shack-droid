@@ -42,6 +42,8 @@ android:layout_alignParentLeft="true"
 android:gravity="top"
 android:minLines="20"
 android:scrollbars="vertical"
+android:capitalize="sentences"
+android:autoText="true"
 >
 </EditText>
 <TextView

@@ -13,7 +13,11 @@
 	android:text=""
 	android:gravity="top"
 	android:minLines="15"
-	android:scrollbars="vertical" android:layout_height="130dip">
+	android:scrollbars="vertical" 
+	android:layout_height="130dip"
+	android:capitalize="sentences"
+	android:autoText="true"
+	>
 	</EditText>
 
 <RelativeLayout android:id="@+id/RelativeLayout01" 
