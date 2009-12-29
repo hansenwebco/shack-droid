@@ -34,6 +34,7 @@ public class ActivityMainMenu extends ListActivity  {
 	     menu.add(new ShackMenuItem("Shack Messages","Stuff too shocking for even the Shack.",R.drawable.menu2_shackmessages2));
 	     menu.add(new ShackMenuItem("Settings","Hay guys, am I doing this right?",R.drawable.menu2_settings));
 	     menu.add(new ShackMenuItem("Version Check","stonedonkey finally did something new!?!",R.drawable.menu2_vercheck));
+	     menu.add(new ShackMenuItem("What's New","How we most recently broke this thing.",R.drawable.menu2_cone));
 	     //menu.add(new ShackMenuItem("Search v2","Tabs omg!",R.drawable.menu2_search));
 	     
 	     AdapterMainMenu mm = new AdapterMainMenu(this,R.layout.mainmenu_row, menu);
@@ -50,8 +51,58 @@ public class ActivityMainMenu extends ListActivity  {
 	     getListView().setDividerHeight(1);
 	     
 	     setListAdapter(mm);
+	     
+	     CheckForUpdate(false);
+	     
 	}
 	
+	private void CheckForUpdate(boolean force) {
+		
+		
+		// have we seen this update?
+		
+		try {
+		
+			
+			
+		String vc = null;
+		vc = getString(R.string.version_id);
+		
+		
+		
+		SharedPreferences settings=getPreferences(0);
+
+		// NOTE: debugging resets value
+		//SharedPreferences.Editor editor = settings.edit();
+        //editor.putBoolean("hasSeenUpdatedVersion" + vc, false);
+        //editor.commit(); 
+        
+        boolean hasSeenUpdatedVersion = settings.getBoolean("hasSeenUpdatedVersion" + vc, false);
+		
+		if (!hasSeenUpdatedVersion || force)
+		{
+			final String result = HandlerExtendedSites.WhatsNew();
+			
+			new AlertDialog.Builder(this)
+			.setTitle("What's New " + vc)
+			.setPositiveButton("OK",null)
+			.setMessage(result).show();
+
+			SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("hasSeenUpdatedVersion" + vc, true);
+            editor.commit(); 
+			
+		}
+	
+		}
+		catch (Exception ex)
+		{
+			// do nothing
+		}
+		
+		
+	}
+
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
@@ -150,13 +201,15 @@ public class ActivityMainMenu extends ListActivity  {
 			}
 			case 7:
 			{
-				intent.setClass(this,ActivitySearchTabs.class);
+				CheckForUpdate(true);
 				break;
+				//intent.setClass(this,ActivitySearchTabs.class);
+				//break;
 			}
 			
 		}	
 		
-		if (position != 6) {
+		if (position != 6 &&  position !=7) {
 			startActivity(intent);
 			
 		}

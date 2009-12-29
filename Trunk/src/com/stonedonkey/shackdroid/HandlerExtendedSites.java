@@ -47,6 +47,38 @@ public class HandlerExtendedSites extends Activity {
 		}
 		return result;
 	}
+	public static String WhatsNew()
+	{
+	
+		String result = "";
+		URL url;
+		try {
+			url = new URL("http://www.stonedonkey.com/ShackDroid/whatsnew.txt");
+			URLConnection conn = url.openConnection();
+			HttpURLConnection httpConnection = (HttpURLConnection) conn;
+
+			int responseCode = httpConnection.getResponseCode();
+			if (responseCode == HttpURLConnection.HTTP_OK) {
+
+				InputStream is = httpConnection.getInputStream();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+				
+				String line = "";
+				
+				while ((line = reader.readLine()) != null) {
+					result = result + line + "\n";
+				}
+				
+			}
+
+		} catch (Exception e) {
+
+			result = "";
+		}
+		return result;
+	
+		
+	}
 
 	public static void AddRemoveShackMark(Context ctx, String id, Boolean delete) {
 
