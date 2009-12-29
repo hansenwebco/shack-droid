@@ -128,6 +128,7 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 							Intent newPost = new Intent(getApplicationContext(), ActivityPost.class);
 							newPost.putExtra(ActivityPost.UPLOADED_FILE_URL, _fileUri);
 							newPost.putExtra("storyID", Helper.GetCurrentChattyStoryID());
+							newPost.putExtra("postID", "");  // send black string for new posts
 							startActivity(newPost);
 							finish();
 						}})

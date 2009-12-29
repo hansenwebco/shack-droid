@@ -440,7 +440,7 @@ public class ActivityPost extends Activity implements Runnable {
 						+ URLEncoder.encode("body", "UTF-8") + "="
 						+ URLEncoder.encode(postText, "UTF-8");
 
-			if (postID.length() > 0)
+			if (postID != null && postID.length() > 0)
 			{
 				data = data + "&" + URLEncoder.encode("parent", "UTF-8") + "="
 				+ URLEncoder.encode(postID, "UTF-8");
