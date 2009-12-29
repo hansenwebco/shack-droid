@@ -12,7 +12,12 @@
 	android:textSize="12dip"
 	android:text=""
 	android:gravity="top"
-	android:scrollbars="vertical" android:minLines="15" android:layout_height="140dip">
+	android:scrollbars="vertical" 
+	android:minLines="15" 
+	android:layout_height="140dip"
+	android:capitalize="sentences"
+	android:autoText="true"
+	>
 	</EditText>
 
 <RelativeLayout
