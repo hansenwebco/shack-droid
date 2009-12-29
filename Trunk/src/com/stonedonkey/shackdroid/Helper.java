@@ -61,6 +61,9 @@ public class Helper {
 	}
 	public static String GetCurrentChattyStoryID()
 	{
+		// NOTE: testing thread
+		//return "61661;" 
+		
 		try {
 			URL url = new URL("http://www.shacknews.com/latestchatty.x");
 			URLConnection connection = url.openConnection();
