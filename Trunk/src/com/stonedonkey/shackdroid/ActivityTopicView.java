@@ -440,10 +440,17 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 
+		String cat = posts.get(position).getPostCategory();
+		
 		Intent intent = new Intent();
 		intent.setClass(this, ActivityThreadedView.class);
 		intent.putExtra("postID", Long.toString(id)); // the value must be a string
 		intent.putExtra("storyID", storyID);
+		if (cat.equalsIgnoreCase("nws"))
+			intent.putExtra("isNWS", true);
+		else
+			intent.putExtra("isNWS",false);
+		
 		startActivity(intent);
 	}
 }

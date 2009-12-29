@@ -64,6 +64,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	private int currentPosition = 0;
 	private boolean spoilerText= false;
 	private Boolean threadLoaded = true;
+	private Boolean isNWS = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +79,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		Bundle extras = this.getIntent().getExtras();
 		postID = extras.getString("postID");
 		storyID = extras.getString("storyID");
+		isNWS = extras.getBoolean("isNWS");
 
 		if (savedInstanceState == null) 
 			try {
@@ -185,6 +187,12 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			String feedURL = prefs.getString("shackFeedURL", getString(R.string.default_api));
+			
+			// TODO: Once Squeegy updates his api to work with NWS
+			//       we can remove this.
+			if (isNWS) 
+				feedURL = "http://shackapi.stonedonkey.com";
+			
 			URL url = new URL(feedURL + "/thread/" + postID	+ ".xml");
 
 			// Get a SAXParser from the SAXPArserFactory.
