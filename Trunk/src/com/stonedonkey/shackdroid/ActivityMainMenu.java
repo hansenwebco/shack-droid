@@ -81,7 +81,7 @@ public class ActivityMainMenu extends ListActivity  {
 		
 		if (!hasSeenUpdatedVersion || force)
 		{
-			final String result = HandlerExtendedSites.WhatsNew();
+			final String result = HandlerExtendedSites.WhatsNew(getResources().getString(R.string.version_id));
 			
 			new AlertDialog.Builder(this)
 			.setTitle("What's New " + vc)
