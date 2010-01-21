@@ -48,7 +48,7 @@ android:id="@+id/HorizontalRuleViewMessage"
 <ScrollView
 android:id="@+id/ScrollViewViewMsg"
 android:layout_width="fill_parent"
-android:layout_height="355px"
+android:layout_height="fill_parent"
 android:layout_below="@+id/HorizontalRuleViewMessage"
 android:layout_alignParentLeft="true"
 android:paddingTop="5sp"
