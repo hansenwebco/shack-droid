@@ -1,0 +1,11 @@
+
+- replace the ListView on the threaded view with a TableLayout, and then 
+  track the clicks on the row in an attempt to show the row clicked on in 
+  touch mode... Google doesn't think that touches on listviews should show 
+  and indication of what was last pressed, and there seems to be no way to 
+  implement this by default.
+
+	Seems possible re:  
+	http://groups.google.com/group/android-developers/browse_thread/thread/71e2a5be710cfe44?tvc=2
+	
+	
