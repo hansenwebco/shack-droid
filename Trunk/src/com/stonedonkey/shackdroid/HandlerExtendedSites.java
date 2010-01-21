@@ -47,13 +47,13 @@ public class HandlerExtendedSites extends Activity {
 		}
 		return result;
 	}
-	public static String WhatsNew()
+	public static String WhatsNew(String version)
 	{
 	
 		String result = "";
 		URL url;
 		try {
-			url = new URL("http://www.stonedonkey.com/ShackDroid/whatsnew.txt");
+			url = new URL("http://www.stonedonkey.com/ShackDroid/whatsnew_" + version + ".txt");
 			URLConnection conn = url.openConnection();
 			HttpURLConnection httpConnection = (HttpURLConnection) conn;
 
