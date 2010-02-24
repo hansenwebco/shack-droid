@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/LolRow"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+  
+  <TextView
+	android:id="@+id/TextViewLolPostText"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:paddingLeft="8dip"
+	android:paddingRight="8dip"
+	android:textSize="12dip"
+	android:textColor="#FFFFFF"
+	/>
+  
+</RelativeLayout>
