@@ -32,11 +32,7 @@ public class Helper {
 		} catch (ParseException e) {
 			return "";
 		}
-
-
 		return fixedDate;
-
-
 	}
 	// TODO: We can probably combine these i'm just lazy today
 	public static String FormShackRSSDate(String unformattedDate)
@@ -55,8 +51,24 @@ public class Helper {
 		} catch (ParseException e) {
 			return "";
 		}
+		return fixedDate;
+	}
+	public static String FormatLOLDate(String unformattedDate)
+	{
+		String fixedDate  = null;
+		//Wed, 24 Feb 2010 09:49:00 -0800
+		try {  
+			DateFormat dfm = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
+			Date conDate = null;
+			SimpleDateFormat format= null;
 
+			conDate = dfm.parse(unformattedDate);
+			format = new SimpleDateFormat("M.d.yy h:mma");
+			fixedDate = format.format(conDate);
 
+		} catch (ParseException e) {
+			return "";
+		}
 		return fixedDate;
 	}
 	public static String GetCurrentChattyStoryID()

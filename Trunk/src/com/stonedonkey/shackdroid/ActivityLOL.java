@@ -65,7 +65,7 @@ class GetLOLsAsyncTask extends AsyncTask<Void,Void,Integer>{
 	protected Integer doInBackground(Void... arg0) {
 
 		try {
-		String feedURL = "http://lmnopc.com/greasemonkey/shacklol/api.php?format=xml&limit=50&since=2/23/2010%203:49PM";
+		String feedURL = "http://lmnopc.com/greasemonkey/shacklol/api.php?format=xml&tag=lol&limit=50&since=2/23/2010%203:49PM";
 		URL url = new URL(feedURL);
 
 		// Get a SAXParser from the SAXPArserFactory.
