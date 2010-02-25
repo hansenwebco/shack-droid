@@ -4,6 +4,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.xml.parsers.SAXParser;
@@ -78,8 +79,14 @@ class GetLOLsAsyncTask extends AsyncTask<Void,Void,Integer>{
 
 		try {
 		
+		Date date = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.DAY_OF_YEAR, -1);
+		date = cal.getTime();
+			
 		SimpleDateFormat sdf = new SimpleDateFormat("M/d/yy hh:mm Z");
-		String queryDate = sdf.format(new Date());
+		String queryDate = sdf.format(date);
 		
 		queryDate = URLEncoder.encode(queryDate);
 		
@@ -114,10 +121,12 @@ class GetLOLsAsyncTask extends AsyncTask<Void,Void,Integer>{
 	
 	@Override
 	protected void onPostExecute(Integer result) {
-		if (result == 1)
+		if (result != null && result == 1)
 		{
-			AdapterLOL tva = new AdapterLOL(context,posts,R.layout.lol_row);
-			context.setListAdapter(tva);
+			if (posts.size() > 0) {
+				AdapterLOL tva = new AdapterLOL(context,posts,R.layout.lol_row);
+				context.setListAdapter(tva);
+			}
 		}
 		context.dismissDialog(1);
 	}
