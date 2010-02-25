@@ -3,11 +3,13 @@ package com.stonedonkey.shackdroid;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class AdapterLOL extends BaseAdapter {
@@ -73,9 +75,35 @@ public class AdapterLOL extends BaseAdapter {
 		posterName.setTypeface(face);
 		
 		// Tag count
+		String postTag = post.getTag();
 		TextView tagCount = (TextView)v.findViewById(R.id.TextViewLolTagCount);
 		tagCount.setText(post.getTagCount() + "\n" + post.getTag().toUpperCase() + "s");
 		tagCount.setTypeface(face);
+		if (postTag.toLowerCase().contains("lol"))
+			tagCount.setBackgroundColor(Color.parseColor("#FF8800"));
+		else if (postTag.toLowerCase().contains("inf"))
+			tagCount.setBackgroundColor(Color.parseColor("#0099CC"));
+		else if (postTag.toLowerCase().contains("tag"))
+			tagCount.setBackgroundColor(Color.parseColor("#FF0000"));
+		else if (postTag.toLowerCase().contains("unf"))
+			tagCount.setBackgroundColor(Color.parseColor("#77BB22"));
+		else
+			tagCount.setBackgroundColor(Color.parseColor("#FFFFDD"));
+		
+		// shack topic type
+		// TODO: clean this up a little / also replicated in ShackDroidThread ick
+		ImageView img = (ImageView)v.findViewById(R.id.ImageViewLolCat);
+		String postCat = post.getCategory();
+		if (postCat.equals("offtopic"))  
+			img.setImageResource(R.drawable.offtopic);
+		else if (postCat.equals("nws"))
+			img.setImageResource(R.drawable.nws);
+		else if (postCat.equals("political")) 
+			img.setImageResource(R.drawable.political);
+		else if (postCat.equals("stupid")) 
+			img.setImageResource(R.drawable.stupid);
+		else if (postCat.equals("informative"))
+			img.setImageResource(R.drawable.interesting);	
 		
 		 // date posted
 		TextView datePosted = (TextView)v.findViewById(R.id.TextViewLOLDatePosted);

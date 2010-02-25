@@ -28,6 +28,15 @@
 		android:paddingLeft="48dip"
 	/>
 	
+	<ImageView
+	android:id="@+id/ImageViewLolCat"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:paddingLeft="4dip"
+	android:paddingTop="5dip"
+	android:layout_toRightOf="@+id/TextViewLolPosterName"
+	/>
+	
 	<TextView
 		android:id="@+id/TextViewLOLDatePosted"
 		android:layout_width="fill_parent"
