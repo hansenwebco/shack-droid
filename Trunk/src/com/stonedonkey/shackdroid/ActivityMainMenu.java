@@ -128,7 +128,7 @@ public class ActivityMainMenu extends ListActivity  {
 			}
 			case 3:  // shackLOL
 			{
-				intent.setClass(this,ActivityLOL.class);
+				intent.setClass(this,ActivityLOLTabs.class);
 				break;
 			}
 			case 4:
