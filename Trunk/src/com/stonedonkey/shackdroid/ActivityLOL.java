@@ -35,7 +35,9 @@ public class ActivityLOL extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		Helper.SetWindowState(getWindow(),this);
+		
 		
 		setContentView(R.layout.topics);
 		setTitle("ShackLOLs - Last 24 Hours");

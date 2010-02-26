@@ -99,6 +99,10 @@ public class Helper {
 	public static void SetWindowState(Window window,Context context)
 	{
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		
+		//int orientation = prefs.getInt("orientation", 0);
+		
+		
 		if (prefs.getBoolean("allowFullScreen", false)) {
 			window.requestFeature(Window.FEATURE_NO_TITLE);
 			window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);

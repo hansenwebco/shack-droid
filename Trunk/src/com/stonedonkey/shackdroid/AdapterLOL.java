@@ -3,8 +3,10 @@ package com.stonedonkey.shackdroid;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,8 +51,8 @@ public class AdapterLOL extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 	
-		//SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		//int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
 		
 		ShackLOL post = posts.get(position);
 			
@@ -66,6 +68,7 @@ public class AdapterLOL extends BaseAdapter {
 			postBody = postBody.substring(0,255);
 		
 		TextView postText = (TextView)v.findViewById(R.id.TextViewLolPostText);
+		postText.setTextSize(fontSize);
 		postText.setText(postBody);
 		postText.setTypeface(face);
 		
