@@ -17,8 +17,10 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ListView;
 
@@ -26,6 +28,9 @@ public class ActivityLOL extends ListActivity {
 
 	private ProgressDialog dialog;
 	private String view;
+	
+	
+
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,8 +42,12 @@ public class ActivityLOL extends ListActivity {
 		
 		Bundle extras = this.getIntent().getExtras();
 		view = extras.getString("view");
+		int lolView= extras.getInt("lolView");
 		
-		new GetLOLsAsyncTask(this,view).execute();
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		String login = prefs.getString("shackLogin", "");
+		
+		new GetLOLsAsyncTask(this,view,lolView,login).execute();
 	}
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
@@ -48,7 +57,7 @@ public class ActivityLOL extends ListActivity {
 		intent.setClass(this, ActivityThreadedView.class);
 		intent.putExtra("postID", String.valueOf(id)); // the value must be a string
 		startActivity(intent);
-	}
+	} 
 	
 	protected Dialog onCreateDialog(int id) {
 		dialog = new ProgressDialog(this);
@@ -65,11 +74,15 @@ class GetLOLsAsyncTask extends AsyncTask<Void,Void,Integer>{
 	ArrayList<ShackLOL> posts; 
 	String error;
 	String view;
+	String login;
+	int lolView = -1;
 	
-	public GetLOLsAsyncTask(ActivityLOL context,String view) {
+	public GetLOLsAsyncTask(ActivityLOL context,String view, int lolView, String login) {
 		super();
 		this.context = context;
 		this.view = view.toLowerCase();
+		this.lolView = lolView;
+		this.login = login;
 		
 		context.showDialog(1);
 	}
@@ -78,7 +91,7 @@ class GetLOLsAsyncTask extends AsyncTask<Void,Void,Integer>{
 	protected Integer doInBackground(Void... arg0) {
 
 		try {
-		
+			
 		Date date = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
@@ -89,8 +102,22 @@ class GetLOLsAsyncTask extends AsyncTask<Void,Void,Integer>{
 		String queryDate = sdf.format(date);
 		
 		queryDate = URLEncoder.encode(queryDate);
+		String feedURL = null;
 		
-		String feedURL = "http://lmnopc.com/greasemonkey/shacklol/api.php?format=xml&tag=" + view + "&limit=50&since=" + queryDate;
+
+		
+		switch (lolView){
+			case 0:
+				feedURL = "http://lmnopc.com/greasemonkey/shacklol/api.php?format=xml&tag=" + view + "&limit=50&since=" + queryDate;
+				break;
+			case 1: // stuff you wrote
+				feedURL = "http://lmnopc.com/greasemonkey/shacklol/api.php?format=xml&author=" + URLEncoder.encode(login) + "&tag=" + view + "&limit=50&order=date_desc";
+				break;
+			case 2:  // stuff you lol'd
+				feedURL = "http://lmnopc.com/greasemonkey/shacklol/api.php?format=xml&tagger=" + URLEncoder.encode(login) + "&tag=" + view + "&limit=50&order=date_desc";
+				break;
+		}
+		
 		URL url = new URL(feedURL);
  
 		// Get a SAXParser from the SAXPArserFactory.
