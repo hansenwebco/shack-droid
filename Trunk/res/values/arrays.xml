@@ -48,6 +48,11 @@
 		<item>18</item>
 		<item>20</item>
 	</string-array>
+	<string-array name="lolViews">
+		<item>latest lol's</item>
+		<item>stuff you wrote</item>
+		<item>stuff you LOL'd</item>
+	</string-array>	
 	<string-array name="titles">
 		<item>Suck it Trebek!</item>
 		<item>Stay a while and listen.</item>
