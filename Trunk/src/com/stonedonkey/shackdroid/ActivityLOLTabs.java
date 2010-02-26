@@ -74,17 +74,13 @@ public class ActivityLOLTabs extends TabActivity {
         case 1:
         	return new AlertDialog.Builder(ActivityLOLTabs.this)
             .setTitle("Choose Feed")
-            .setSingleChoiceItems(R.array.lolViews, 0, new DialogInterface.OnClickListener() {
+            .setItems(R.array.lolViews, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
                 	viewID = whichButton;
+                	ChangeView(viewID);
                 }
             })
-            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                     ChangeView(viewID);         
-                }
-            }) 
-            .setNegativeButton("CANCEL", null).create(); 
+            .create(); 
         }
 		return null;
     }	
