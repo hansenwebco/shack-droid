@@ -21,6 +21,16 @@
 		<item>count</item>
 		<item>topic</item>
 	</string-array>
+	<string-array name="orientation">
+		<item>sensor</item>
+		<item>portrait</item>
+		<item>landscape</item>
+	</string-array>
+	<string-array name="orientationValues">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
 	<string-array name="feedsURls">
 		<item>http://feed.shacknews.com/shackfeed.xml</item>
 		<item>http://www.shacknews.com/shackfeed_content.xml</item>

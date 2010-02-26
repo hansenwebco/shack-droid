@@ -31,7 +31,7 @@ public class ActivityMainMenu extends ListActivity  {
 	     menu.add(new ShackMenuItem("Shack RSS", "The \"Mos Eisley\" of chatties.",R.drawable.menu2_rss));
 	     menu.add(new ShackMenuItem("Shack Search","For all your vanity needs.",R.drawable.menu2_search));
 	     menu.add(new ShackMenuItem("Shack Messages","Stuff too shocking for even the Shack.",R.drawable.menu2_shackmessages2));
-	     menu.add(new ShackMenuItem("Shack LOLs","Your not as popular as these people.",R.drawable.menu2_lol2));//
+	     menu.add(new ShackMenuItem("Shack LOLs","You are not as popular as these people.",R.drawable.menu2_lol2));//
 	     //menu.add(new ShackMenuItem("Shack Marks","Your mobile tranny porn Stash.",R.drawable.menu2_shackmarks2));
 	     menu.add(new ShackMenuItem("Settings","Hay guys, am I doing this right?",R.drawable.menu2_settings));
 	     menu.add(new ShackMenuItem("Version Check","stonedonkey finally did something new!?!",R.drawable.menu2_vercheck));
