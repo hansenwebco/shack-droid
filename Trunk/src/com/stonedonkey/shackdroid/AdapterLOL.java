@@ -84,9 +84,9 @@ public class AdapterLOL extends BaseAdapter {
 		else if (postTag.toLowerCase().contains("inf"))
 			tagCount.setBackgroundColor(Color.parseColor("#0099CC"));
 		else if (postTag.toLowerCase().contains("tag"))
-			tagCount.setBackgroundColor(Color.parseColor("#FF0000"));
-		else if (postTag.toLowerCase().contains("unf"))
 			tagCount.setBackgroundColor(Color.parseColor("#77BB22"));
+		else if (postTag.toLowerCase().contains("unf"))
+			tagCount.setBackgroundColor(Color.parseColor("#FF0000"));
 		else
 			tagCount.setBackgroundColor(Color.parseColor("#FFFFDD"));
 		
