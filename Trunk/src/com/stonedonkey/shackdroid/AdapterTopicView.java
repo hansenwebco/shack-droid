@@ -109,7 +109,13 @@ public class AdapterTopicView extends BaseAdapter {
 		postText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 		postText.setTypeface(face);
 		if (postText != null)
-			postText.setText(post.getPostPreview());
+		{
+			String preview = post.getPostPreview();
+			if (preview.length() > 99)
+				preview= preview.substring(0,99);
+			
+			postText.setText(preview);
+		}
 				
 		ImageView img = (ImageView)v.findViewById(R.id.ImageViewCat);
 			
