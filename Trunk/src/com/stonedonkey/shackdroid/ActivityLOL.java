@@ -25,6 +25,7 @@ import android.widget.ListView;
 public class ActivityLOL extends ListActivity {
 
 	private ProgressDialog dialog;
+	private String view;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,13 +33,13 @@ public class ActivityLOL extends ListActivity {
 		Helper.SetWindowState(getWindow(),this);
 		
 		setContentView(R.layout.topics);
+		setTitle("ShackLOLs - Last 24 Hours");
 		
 		Bundle extras = this.getIntent().getExtras();
-		String view = extras.getString("view");
+		view = extras.getString("view");
 		
 		new GetLOLsAsyncTask(this,view).execute();
 	}
-
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
@@ -48,11 +49,10 @@ public class ActivityLOL extends ListActivity {
 		intent.putExtra("postID", String.valueOf(id)); // the value must be a string
 		startActivity(intent);
 	}
-
 	
 	protected Dialog onCreateDialog(int id) {
 		dialog = new ProgressDialog(this);
-		dialog.setMessage("loading LOLs, please wait...");
+		dialog.setMessage("loading " + view.toUpperCase() + "s, please wait...");
 		dialog.setTitle(null);
 		dialog.setIndeterminate(true);
 		dialog.setCancelable(true);
