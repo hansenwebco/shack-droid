@@ -94,11 +94,20 @@ public class SaxHandlerLOL extends DefaultHandler {
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
 			
+		try {
+		
 		if (bodyResult)
 			bodyText = bodyText + new String(ch,start,length);
 		
 		if (taggerResult)
 			taggerText = taggerText + new String(ch,start,length);
+		}
+		catch (Exception ex)
+		{
+			bodyText = "failboat";
+	
+		}
+		
 		
 	}
 }
