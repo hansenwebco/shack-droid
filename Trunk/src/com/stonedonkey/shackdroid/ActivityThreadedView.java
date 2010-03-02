@@ -184,7 +184,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		Comparator<ShackPost> byOrderID = new SortByOrderIDComparator();
 		threadLoaded = false;
 		try {
-
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			String feedURL = prefs.getString("shackFeedURL", getString(R.string.default_api));
 			
@@ -208,7 +207,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			// Parse the xml-data from our URL.
 			xr.parse(new InputSource(url.openStream()));
 
-
 			// Our ExampleHandler now provides the parsed data to us.
 			posts = saxHandler.GetParsedPosts();
 
@@ -228,7 +226,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 
 			// set the order back to the original sort
 			Collections.sort(posts,byOrderID);
-
 		} catch (Exception ex) {
 			ex.printStackTrace(System.out);
 			errorText = "An error occurred connecting to API.";
@@ -464,8 +461,10 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			img.setImageResource(R.drawable.stupid);
 		else if (postCat.equals("informative"))
 			img.setImageResource(R.drawable.interesting);	
-		else
-			img.setImageResource(-1);
+		else{
+			// chazums, commented out as throwing an exception
+			// img.setImageResource(-1);
+		}
 	}
 	private String ParseShackText(String text,boolean addSpoilerMarkers) {
 

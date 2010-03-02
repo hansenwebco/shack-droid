@@ -16,25 +16,35 @@ import android.widget.TextView;
 
 public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 
-	private Context context;
+	//private Context context;
 	private List<ShackPost> topicList;
 	private int rowResouceID;
 	static Typeface face;
 	private int selectedRow = 0;
 	
+	private String login;
+	private Boolean highlightThread;
+	private int fontSize;
+	private TextView threadPreview;
+	private LayoutInflater inflate;
+	
 	public AdapterThreadedView(Context context,int rowResouceID, List<ShackPost> topicList,int selectedRow ){
-		this.context = context;
+		//this.context = context;
 		this.topicList = topicList;
 		this.rowResouceID = rowResouceID;
 		this.selectedRow = selectedRow;
 		
 		face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		login = prefs.getString("shackLogin", "");
+		highlightThread = prefs.getBoolean("highlightUserThreads", true);
+		fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
+		inflate = LayoutInflater.from(context);
 	}
 	
 	public void setSelectedRow(int selectedRow) {
 		this.selectedRow = selectedRow;
 	}
-
 
 	
 	@Override
@@ -55,53 +65,51 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		
+		View v;
 		ShackPost post = topicList.get(position);
-		LayoutInflater inflate = LayoutInflater.from(context);
-		
-		View v = inflate.inflate(rowResouceID,parent,false);
+		if (convertView == null){
+			v = inflate.inflate(rowResouceID,parent,false);
+		}
+		else{
+			v = convertView;
+		}
 		
 		// bind the TextViews to the items in our datasource
-		TextView threadPreview = (TextView)v.findViewById(R.id.TextViewThreadPreview);
-		threadPreview.setTypeface(face);
-		
+		threadPreview = (TextView)v.findViewById(R.id.TextViewThreadPreview);
+				
 		if (threadPreview != null)
 		{
-		
-			// TODO: This is ATROCIOUS find a better way.
-			String pad ="";
-			int postIndent = post.getIndent(); // avoid multiple lookups
-			for(int i=0;i<postIndent;i++)
-				pad = pad + "   ";	
-			
+			threadPreview.setTypeface(face);
+
+			// chazums
+			// Now just moves the text box to the right instead of padding text.
+			int postIndent = 5* post.getIndent(); // avoid multiple lookups
+	
+			threadPreview.setPadding(postIndent, threadPreview.getPaddingTop(), threadPreview.getPaddingBottom(), threadPreview.getPaddingRight());
 			String postText = post.getPostPreview();
-		
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-			String login = prefs.getString("shackLogin", "");
-			Boolean highlightThread = prefs.getBoolean("highlightUserThreads", true);
-			int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
 			 
 			// show this users posts as blue
 			if (post.getPostIndex() > 9)
 				threadPreview.setTextColor(Color.parseColor("#777777"));
 			
 			
-			if (highlightThread == true)
+			if (highlightThread == true){
 				if (post.getPosterName().toString().equalsIgnoreCase(login))
 					threadPreview.setTextColor(Color.parseColor("#00BFF3"));
-
+				else{
+					//TODO: set back to normal colour or it'll go squigly I think.
+				}
+			}
 			if (position == selectedRow )
 				threadPreview.setBackgroundColor(Color.parseColor("#274FD3"));
-
-
+			else
+				threadPreview.setBackgroundColor(Color.TRANSPARENT);
 		
 			//postText = pad + postText;
 			threadPreview.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-			threadPreview.setText(pad + postText);
+			threadPreview.setText(postText);
 			
 		}
 		return v;
 	}
-
-
 }
