@@ -30,8 +30,9 @@ public class AdapterTopicView extends BaseAdapter {
 	private Hashtable<String,String> postCache = null;
 	static String showAuthor = "";
 	
+	LayoutInflater inflate;// = LayoutInflater.from(context);
 	public AdapterTopicView(Context context,int rowResouceID, List<ShackPost> topicList, String shackLogin,int fontSize,Hashtable<String,String> postCache ){
-		this.context = context;
+		//this.context = context;
 		this.topicList = topicList;
 		this.rowResouceID = rowResouceID;
 		this.shackLogin = shackLogin;
@@ -43,6 +44,7 @@ public class AdapterTopicView extends BaseAdapter {
 	    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 	    showAuthor = prefs.getString("showAuthor","count");
 	    
+	    inflate = LayoutInflater.from(context);
 	}
 	
 	@Override
@@ -59,37 +61,44 @@ public class AdapterTopicView extends BaseAdapter {
 		ShackPost post = topicList.get(position);
 		return Long.parseLong(post.getPostID());
 	}
+	
+	TextView tmp;
+	View v;
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 		ShackPost post = topicList.get(position);
-		LayoutInflater inflate = LayoutInflater.from(context);
-				
-		View v = inflate.inflate(rowResouceID,parent,false);
+		
+		if (convertView == null){
+			v = inflate.inflate(rowResouceID,parent,false);
+		}
+		else{
+			v = convertView;
+		}
 			
 		// bind the TextViews to the items in our data source
-		TextView posterName = (TextView)v.findViewById(R.id.TextViewPosterName);
-		posterName.setTypeface(face);
+		tmp = (TextView)v.findViewById(R.id.TextViewPosterName);
+		tmp.setTypeface(face);
 		
-		if (posterName != null)
-			posterName.setText(post.getPosterName());
+		if (tmp != null)
+			tmp.setText(post.getPosterName());
 		
 		if (shackLogin.equalsIgnoreCase(post.getPosterName()))
-			posterName.setTextColor(Color.parseColor("#00BFF3"));
+			tmp.setTextColor(Color.parseColor("#00BFF3"));
 		
-		TextView postDate = (TextView)v.findViewById(R.id.TextViewDatePosted);
-		postDate.setTypeface(face);
-		if (postDate != null) {
-			postDate.setText(Helper.FormatShackDate(post.getPostDate()));
+		tmp = (TextView)v.findViewById(R.id.TextViewDatePosted);
+		tmp.setTypeface(face);
+		if (tmp != null) {
+			tmp.setText(Helper.FormatShackDate(post.getPostDate()));
 			//postDate.setText(post.getPostDate());
 		}
 			
-		TextView postReplyCount = (TextView)v.findViewById(R.id.TextViewReplyCount);
-		postReplyCount.setTypeface(face);
-		postReplyCount.setText(post.getReplyCount());
+		tmp = (TextView)v.findViewById(R.id.TextViewReplyCount);
+		tmp.setTypeface(face);
+		tmp.setText(post.getReplyCount());
 		
 		if (showAuthor.equalsIgnoreCase("count") &&  post.getIsAuthorInThread())
-			postReplyCount.setTextColor(Color.parseColor("#0099CC"));
+			tmp.setTextColor(Color.parseColor("#0099CC"));
 
 		
 		// show the number of new posts since the last refresh
@@ -105,16 +114,16 @@ public class AdapterTopicView extends BaseAdapter {
 			}
 		}
 		
-		TextView postText = (TextView)v.findViewById(R.id.TextViewPostText);
-		postText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-		postText.setTypeface(face);
-		if (postText != null)
+		tmp = (TextView)v.findViewById(R.id.TextViewPostText);
+		tmp.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+		tmp.setTypeface(face);
+		if (tmp != null)
 		{
 			String preview = post.getPostPreview();
 			if (preview.length() > 99)
 				preview= preview.substring(0,99);
 			
-			postText.setText(preview);
+			tmp.setText(preview);
 		}
 				
 		ImageView img = (ImageView)v.findViewById(R.id.ImageViewCat);
