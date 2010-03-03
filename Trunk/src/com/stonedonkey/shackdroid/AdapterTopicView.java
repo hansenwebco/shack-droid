@@ -29,6 +29,7 @@ public class AdapterTopicView extends BaseAdapter {
 	private int fontSize = 12;
 	private Hashtable<String,String> postCache = null;
 	static String showAuthor = "";
+	private Resources r; 
 	
 	LayoutInflater inflate;// = LayoutInflater.from(context);
 	public AdapterTopicView(Context context,int rowResouceID, List<ShackPost> topicList, String shackLogin,int fontSize,Hashtable<String,String> postCache ){
@@ -38,7 +39,9 @@ public class AdapterTopicView extends BaseAdapter {
 		this.shackLogin = shackLogin;
 		this.fontSize = fontSize;
 		this.postCache = postCache;
-				
+		
+		r = context.getResources();
+		
 	    face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
 	   	    
 	    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -131,10 +134,12 @@ public class AdapterTopicView extends BaseAdapter {
 		
 		if (showAuthor.equalsIgnoreCase("topic") && post.getIsAuthorInThread())
 		{
+			// TODO: Bug here for some reason it's highlighting rows when it 
+			// should not BE!?
 			RelativeLayout tr = (RelativeLayout)v.findViewById(R.id.TopicRow);	
 			//tr.setBackgroundColor(Color.parseColor("#0A0A2A"));
 		
-			 Resources r = context.getResources();
+			 
 			 Drawable d = r.getDrawable(R.drawable.background_gradient_blue);
 			 tr.setBackgroundDrawable(d);
 		}
