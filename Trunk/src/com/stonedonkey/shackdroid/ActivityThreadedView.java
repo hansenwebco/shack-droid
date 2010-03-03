@@ -226,6 +226,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 
 			// set the order back to the original sort
 			Collections.sort(posts,byOrderID);
+			
+			
 		} catch (Exception ex) {
 			ex.printStackTrace(System.out);
 			errorText = "An error occurred connecting to API.";
