@@ -69,6 +69,7 @@ public class ActivityPost extends Activity implements Runnable {
 		postButton.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				// action
+				ShackDroidStats.AddPostsMade(getBaseContext());
 				DoShackPost();
 			}
 		});

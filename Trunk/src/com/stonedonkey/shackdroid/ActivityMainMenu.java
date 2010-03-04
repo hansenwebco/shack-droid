@@ -112,11 +112,13 @@ public class ActivityMainMenu extends ListActivity  {
 		switch (position) {
 			case 0: // LatestChatty
 			{
+				ShackDroidStats.AddViewedChatty(this);
 				intent.setClass(this, ActivityTopicView.class);
 				break;
 			}
 			case 1: 
 			{
+				ShackDroidStats.AddViewedRssFeed(this);
 				intent.setClass(this,ActivityRSS.class);
 				break;
 			}
@@ -128,6 +130,7 @@ public class ActivityMainMenu extends ListActivity  {
 			}
 			case 4:  // shackLOL
 			{
+				ShackDroidStats.AddViewedShackLOLs(this);
 				intent.setClass(this,ActivityLOLTabs.class);
 				break;
 			}
@@ -138,7 +141,7 @@ public class ActivityMainMenu extends ListActivity  {
 				
 				if (allowSMs)
 				{
-				intent = new Intent();
+				ShackDroidStats.AddViewShackMessage(this);
 				intent.setClass(this,ActivityMessages.class);
 				startActivity(intent);
 				return;

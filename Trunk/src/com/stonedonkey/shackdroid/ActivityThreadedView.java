@@ -340,6 +340,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		setPostCategoryIcon(postCat);
 
 		postID = post.getPostID();
+		
+		ShackDroidStats.AddPostsViewed(this);
 
 	}
 
