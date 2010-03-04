@@ -89,17 +89,14 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 			String postText = post.getPostPreview();
 			 
 			// show this users posts as blue
-			if (post.getPostIndex() > 9)
-				threadPreview.setTextColor(Color.parseColor("#777777"));
-			
-			
-			if (highlightThread == true){
-				if (post.getPosterName().toString().equalsIgnoreCase(login))
+			 if (highlightThread == true && post.getPosterName().toString().equalsIgnoreCase(login))
 					threadPreview.setTextColor(Color.parseColor("#00BFF3"));
-				else{
-					//TODO: set back to normal colour or it'll go squigly I think.
-				}
-			}
+			 else if (post.getPostIndex() > 9)
+				threadPreview.setTextColor(Color.parseColor("#777777"));
+			else
+				threadPreview.setTextColor(Color.parseColor("#FFFFFF"));
+			
+			
 			if (position == selectedRow )
 				threadPreview.setBackgroundColor(Color.parseColor("#274FD3"));
 			else
