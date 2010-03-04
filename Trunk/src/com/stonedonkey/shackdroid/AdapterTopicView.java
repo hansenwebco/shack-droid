@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 public class AdapterTopicView extends BaseAdapter {
 
-	private Context context;
+	//private Context context;
 	private List<ShackPost> topicList;
 	private int rowResouceID;
 	private String shackLogin;
@@ -65,11 +65,13 @@ public class AdapterTopicView extends BaseAdapter {
 		return Long.parseLong(post.getPostID());
 	}
 	
-	TextView tmp;
-	View v;
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
+		TextView tmp;
+		View v;
+		
 		ShackPost post = topicList.get(position);
 		
 		if (convertView == null){
@@ -88,6 +90,7 @@ public class AdapterTopicView extends BaseAdapter {
 		
 		if (shackLogin.equalsIgnoreCase(post.getPosterName()))
 			tmp.setTextColor(Color.parseColor("#00BFF3"));
+
 		
 		tmp = (TextView)v.findViewById(R.id.TextViewDatePosted);
 		tmp.setTypeface(face);
@@ -102,6 +105,8 @@ public class AdapterTopicView extends BaseAdapter {
 		
 		if (showAuthor.equalsIgnoreCase("count") &&  post.getIsAuthorInThread())
 			tmp.setTextColor(Color.parseColor("#0099CC"));
+		else
+			tmp.setTextColor(Color.parseColor("#FFFFFF"));
 
 		
 		// show the number of new posts since the last refresh
@@ -131,18 +136,15 @@ public class AdapterTopicView extends BaseAdapter {
 				
 		ImageView img = (ImageView)v.findViewById(R.id.ImageViewCat);
 			
-		
+		RelativeLayout tr = (RelativeLayout)v.findViewById(R.id.TopicRow);
 		if (showAuthor.equalsIgnoreCase("topic") && post.getIsAuthorInThread())
 		{
-			// TODO: Bug here for some reason it's highlighting rows when it 
-			// should not BE!?
-			RelativeLayout tr = (RelativeLayout)v.findViewById(R.id.TopicRow);	
-			//tr.setBackgroundColor(Color.parseColor("#0A0A2A"));
-		
-			 
 			 Drawable d = r.getDrawable(R.drawable.background_gradient_blue);
 			 tr.setBackgroundDrawable(d);
 		}
+		else
+			tr.setBackgroundDrawable(null);
+
 		
 		// TODO: clean this up a little / also replicated in ShackDroidThread ick
 		String postCat = post.getPostCategory();
