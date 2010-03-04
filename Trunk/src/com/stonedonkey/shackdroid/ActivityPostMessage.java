@@ -64,6 +64,7 @@ public class ActivityPostMessage extends Activity implements Runnable {
 		postButton.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				// action
+				ShackDroidStats.AddSentShackMessage(getBaseContext());
 				PostShackMessage();
 				
 			}

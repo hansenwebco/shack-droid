@@ -45,6 +45,10 @@ public class HandlerExtendedSites extends Activity {
 
 			result = "*fail*";
 		}
+		
+		// update stats
+		ShackDroidStats.AddCheckedForNewVersion(ctx);
+		
 		return result;
 	}
 	public static String WhatsNew(String version)
@@ -216,6 +220,19 @@ public class HandlerExtendedSites extends Activity {
 							.setPositiveButton("OK", null).setMessage(
 									"The post was successfully\n[ " + tag
 											+ "'d ]").show();
+					
+				// update stats
+				if (tag.equalsIgnoreCase("LOL"))
+					ShackDroidStats.AddLOLsMade(ctx);
+				else if (tag.equalsIgnoreCase("INF"))
+					ShackDroidStats.AddINFsMade(ctx);
+				else if (tag.equalsIgnoreCase("UNF"))
+					ShackDroidStats.AddUNFsMade(ctx);
+				else if (tag.equalsIgnoreCase("TAG"))
+					ShackDroidStats.AddTAGsMade(ctx);
+						
+					
+					
 				} else {
 					// error
 					new AlertDialog.Builder(ctx).setTitle("Error")

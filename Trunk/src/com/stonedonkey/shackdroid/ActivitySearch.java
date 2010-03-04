@@ -58,7 +58,14 @@ public class ActivitySearch extends Activity {
 		final Button postButton = (Button) findViewById(R.id.ButtonSearch);
 		postButton.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
-				// action
+				
+				// update statistics
+				if (view == "vanity") 
+					ShackDroidStats.AddVanitySearch(getApplicationContext());
+				else 
+					ShackDroidStats.AddShackSearch(getApplicationContext());				
+
+				// do search
 				DoSearch();
 			}
 		});
@@ -67,10 +74,7 @@ public class ActivitySearch extends Activity {
 	}
 	protected void DoSearch()
 	{
-		
-		//String searchTerm = extras.getString("searchTerm");
-		//String author = extras.getString("author");
-		//String parentAuthor = extras.getString("parentAuthor");
+
 		
 		EditText search =(EditText)findViewById(R.id.EditTextSearch);
 		EditText author = (EditText)findViewById(R.id.EditTextByUser);
@@ -82,9 +86,7 @@ public class ActivitySearch extends Activity {
 		intent.putExtra("author" , author.getText().toString());
 		intent.putExtra("parentAuthor" , parent.getText().toString());
 		
-		startActivity(intent);
-		
-		
+		startActivity(intent);		
 	}
 
 }
