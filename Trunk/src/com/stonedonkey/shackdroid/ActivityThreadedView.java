@@ -468,12 +468,13 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		else{
 			// chazums, commented out as throwing an exception
 			// img.setImageResource(-1);
+			img.setImageDrawable(null);
 		}
 	}
 	private String ParseShackText(String text,boolean addSpoilerMarkers) {
 
 		//Convert the shack spans into HTML fonts since our TextView can convert stuff to HTML
-		// not sure if this is the best or most efficent, but works.
+		// not sure if this is the best or most efficient, but works.
 		text = text.replaceAll("<span class=\"jt_red\">(.*?)</span>", "<font color=\"#ff0000\">$1</font>");	
 		text = text.replaceAll("<span class=\"jt_green\">(.*?)</span>",	"<font color=\"#8dc63f\">$1</font>");
 		text = text.replaceAll("<span class=\"jt_pink\">(.*?)</span>", "<font color=\"#f49ac1\">$1</font>");
