@@ -16,9 +16,9 @@ public class ShackDroidStats  implements Serializable {
 	private int postsViewed = 0;			//
 	private int postsMade = 0;
 	private int lolsMade = 0; 				//
-	private int infsMade =0;  				//
-	private int unfsMade =0; 				//
-	private int tagsMade =0; 				//
+	private int infsMade = 0;  				//
+	private int unfsMade = 0; 				//
+	private int tagsMade = 0; 				//
 	private int vanitySearches = 0;			//
 	private int shackSearches = 0;			//
 	private int viewedShackMessages = 0;	//
@@ -27,6 +27,7 @@ public class ShackDroidStats  implements Serializable {
 	private int viewedRSSFeed = 0;			//
 	private int viewedShackLOLs = 0;		//
 	private int viewedChatty = 0;			//
+	private int viewedStats = 0;			//
 	
 	
 	public static ShackDroidStats GetUserStats(Context context) throws StreamCorruptedException, IOException
@@ -189,6 +190,15 @@ public class ShackDroidStats  implements Serializable {
 		}
 		catch (Exception ex){}
 	}		
+	public static void AddViewedStats(Context context)
+	{
+		try {
+			ShackDroidStats stats = GetUserStats(context);
+			stats.setViewedStats(stats.getViewedStats()+1);
+			UpdateUserStats(stats,context);
+		}
+		catch (Exception ex){}
+	}	
 	public void setPostsViewed(int postsViewed) {
 		this.postsViewed = postsViewed;
 	}
@@ -274,6 +284,14 @@ public class ShackDroidStats  implements Serializable {
 
 	public int getViewedChatty() {
 		return viewedChatty;
+	}
+
+	public void setViewedStats(int viewedStats) {
+		this.viewedStats = viewedStats;
+	}
+
+	public int getViewedStats() {
+		return viewedStats;
 	}
 
 
