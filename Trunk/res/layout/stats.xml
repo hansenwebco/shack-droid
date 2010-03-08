@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+	android:id="@+id/ScrollViewStats"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	>
+
+<TableLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:stretchColumns="1">
+
+ <TableRow android:background="#44AEDF">
+  	<TextView android:text="Chatty Stats" android:textColor="#FFFFFF" android:textStyle="bold" android:textSize="15dip" android:padding="3dip"/>
+</TableRow>
+ <TableRow>
+  	<TextView android:text="Viewed Chatty" android:padding="3dip"/>
+  	<TextView android:id="@+id/TextViewViewedChatty" android:gravity="right"  android:paddingRight="10dip"  android:textSize="13dip"/>
+ </TableRow>  
+ <TableRow>
+  	<TextView android:text="Posts Viewed" android:padding="3dip"/>
+  	<TextView android:id="@+id/TextViewPostsViewed" android:gravity="right"	android:paddingRight="10dip" android:textSize="13dip"/>
+ </TableRow>
+ <TableRow>
+  	<TextView android:text="Posts Made" android:padding="3dip"/>
+  	<TextView android:id="@+id/TextViewPostsMade" android:gravity="right" android:paddingRight="10dip" android:textSize="13dip"/>
+</TableRow>
+
+ <TableRow android:background="#44AEDF">
+  	<TextView android:text="ShackDroid Features" android:textColor="#FFFFFF" android:textStyle="bold" android:textSize="15dip" android:padding="3dip"/>
+</TableRow>
+<TableRow>
+  	<TextView android:text="Shack Searches" android:padding="3dip"/>
+  	<TextView android:id="@+id/TextViewShackSearches" android:gravity="right" android:paddingRight="10dip" android:textSize="13dip"/>
+</TableRow>
+<TableRow>
+  	<TextView android:text="   Vanity Searches" android:padding="3dip"  />
+  	<TextView android:id="@+id/TextViewVanitySearches" android:gravity="right" android:paddingRight="10dip" android:textSize="13dip"/>
+</TableRow>
+<TableRow>
+  	<TextView android:text="Viewed Shack Messages" android:padding="3dip"/>
+  	<TextView android:id="@+id/TextViewViewedShackMessages" android:gravity="right" android:paddingRight="10dip" android:textSize="13dip"/>
+</TableRow>
+<TableRow>
+  	<TextView android:text="   Sent Shack Message" android:padding="3dip"/>
+  	<TextView android:id="@+id/TextViewSentShackMessage" android:gravity="right" android:paddingRight="10dip" android:textSize="13dip"/>
+</TableRow>
+<TableRow>
+  	<TextView android:text="Viewed RSS Feed" android:padding="3dip"/>
+  	<TextView android:id="@+id/TextViewViewRSSFeed" android:gravity="right" android:paddingRight="10dip" android:textSize="13dip"/>
+</TableRow>
+<TableRow>
+  	<TextView android:text="Viewed LOLs" android:padding="3dip"/>
+  	<TextView android:id="@+id/TextViewViewedShackLOLs" android:gravity="right" android:paddingRight="10dip" android:textSize="13dip"/>
+</TableRow>
+<TableRow>
+  	<TextView android:text="Checked for New Version" android:padding="3dip"/>
+  	<TextView android:id="@+id/TextViewCheckedForNewVersion" android:gravity="right" android:paddingRight="10dip" android:textSize="13dip"/>
+</TableRow>
+<TableRow>
+  	<TextView android:text="Viewed Stats (You are here)" android:padding="3dip"/>
+  	<TextView android:id="@+id/TextViewViewedStats" android:gravity="right" android:paddingRight="10dip" android:textSize="13dip"/>
+</TableRow>
+   
+
+ <TableRow android:background="#44AEDF">
+  	<TextView android:text="ThomW LOLs Stats" android:textColor="#FFFFFF" android:textStyle="bold" android:textSize="15dip" android:padding="3dip"/>
+</TableRow>
+ <TableRow>
+  	<TextView android:text="LOLs Made" android:padding="3dip"/>
+  	<TextView android:id="@+id/TextViewLOLsMade" android:gravity="right" android:paddingRight="10dip" android:textSize="13dip"/>
+</TableRow>  
+<TableRow>
+  	<TextView android:text="INFs Made" android:padding="3dip"/>
+  	<TextView android:id="@+id/TextViewINFsMade" android:gravity="right" android:paddingRight="10dip" android:textSize="13dip"/>
+</TableRow>  
+<TableRow>
+  	<TextView android:text="TAGs Made" android:padding="3dip"/>
+  	<TextView android:id="@+id/TextViewTAGsMade" android:gravity="right" android:paddingRight="10dip" android:textSize="13dip"/>
+</TableRow>  
+<TableRow>
+  	<TextView android:text="UNFs Made" android:padding="3dip"/>
+  	<TextView android:id="@+id/TextViewUNFsMade" android:gravity="right" android:paddingRight="10dip" android:textSize="13dip"/>
+</TableRow>  
+   
+    
+</TableLayout>
+</ScrollView>
