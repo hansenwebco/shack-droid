@@ -90,6 +90,8 @@ public class AdapterTopicView extends BaseAdapter {
 		
 		if (shackLogin.equalsIgnoreCase(post.getPosterName()))
 			tmp.setTextColor(Color.parseColor("#00BFF3"));
+		else
+			tmp.setTextColor(Color.parseColor("#ffba00"));
 
 		
 		tmp = (TextView)v.findViewById(R.id.TextViewDatePosted);
@@ -163,7 +165,9 @@ public class AdapterTopicView extends BaseAdapter {
 			//tr.setBackgroundColor(Color.GREEN);
 		}
 		else if (postCat.equals("informative"))
-			img.setImageResource(R.drawable.interesting);		
+			img.setImageResource(R.drawable.interesting);	
+		else 
+			img.setImageDrawable(null); // remove it if it's not being set
 				
 		return v;
 	}
