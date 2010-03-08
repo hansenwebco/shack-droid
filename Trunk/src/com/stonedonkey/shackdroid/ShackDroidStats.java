@@ -13,21 +13,21 @@ import android.content.Context;
 public class ShackDroidStats  implements Serializable {
 
 	private static final long serialVersionUID = -6234264258840979021L;
-	private int postsViewed = 0;			//
-	private int postsMade = 0;
-	private int lolsMade = 0; 				//
-	private int infsMade = 0;  				//
-	private int unfsMade = 0; 				//
-	private int tagsMade = 0; 				//
-	private int vanitySearches = 0;			//
-	private int shackSearches = 0;			//
+	private int postsViewed = 0;			// *
+	private int postsMade = 0;				// *
+	private int lolsMade = 0; 				// *
+	private int infsMade = 0;  				// *
+	private int unfsMade = 0; 				// * 
+	private int tagsMade = 0; 				// *
+	private int vanitySearches = 0;			// *
+	private int shackSearches = 0;			// *
 	private int viewedShackMessages = 0;	//
 	private int sentShackMessage = 0;		//
-	private int checkedForNewVersion = 0;	//
-	private int viewedRSSFeed = 0;			//
-	private int viewedShackLOLs = 0;		//
-	private int viewedChatty = 0;			//
-	private int viewedStats = 0;			//
+	private int checkedForNewVersion = 0;	// *
+	private int viewedRSSFeed = 0;			// *
+	private int viewedShackLOLs = 0;		// *
+	private int viewedChatty = 0;			// *
+	private int viewedStats = 0;			// *
 	
 	
 	public static ShackDroidStats GetUserStats(Context context) throws StreamCorruptedException, IOException
