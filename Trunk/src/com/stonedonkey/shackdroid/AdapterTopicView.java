@@ -116,12 +116,15 @@ public class AdapterTopicView extends BaseAdapter {
 
 			String cacheposts = postCache.get(post.getPostID());
 			Integer newPosts = Integer.parseInt(post.getReplyCount()) - Integer.parseInt(cacheposts);
-		
+			
+			TextView postNewCount = (TextView)v.findViewById(R.id.TextViewNewPosts);
 			if (newPosts > 0 && Integer.parseInt(post.getReplyCount()) > 0) {
-				TextView postNewCount = (TextView)v.findViewById(R.id.TextViewNewPosts);
 				postNewCount.setTypeface(face);
 				postNewCount.setText("+" + newPosts.toString());
 			}
+			else
+				postNewCount.setText(null);
+			
 		}
 		
 		tmp = (TextView)v.findViewById(R.id.TextViewPostText);
