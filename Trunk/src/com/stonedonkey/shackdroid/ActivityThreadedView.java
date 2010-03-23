@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -72,15 +73,24 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		super.onCreate(savedInstanceState);
 		
 		Helper.SetWindowState(getWindow(),this);
-			
+
 		setContentView(R.layout.thread);
 		this.setTitle("ShackDroid - View Thread");
-			
-		Bundle extras = this.getIntent().getExtras();
-		postID = extras.getString("postID");
-		storyID = extras.getString("storyID");
-		isNWS = extras.getBoolean("isNWS");
 
+		if (getIntent() != null && 
+				getIntent().getAction() != null && 
+				getIntent().getAction().equals(Intent.ACTION_VIEW)){
+			Uri uri = getIntent().getData();
+			postID = uri.getQueryParameter("id");
+			storyID = ""; //TODO: Actually get this some how
+			
+		}		
+		else{
+			Bundle extras = this.getIntent().getExtras();
+			postID = extras.getString("postID");
+			storyID = extras.getString("storyID");
+			isNWS = extras.getBoolean("isNWS");
+		}
 		if (savedInstanceState == null) 
 			try {
 			fillSaxData(postID);
