@@ -36,9 +36,10 @@ public class ActivitySplashScreen extends Activity {
 		web.setTextSize(10);
 		web.setText("http://www.stonedonkey.com");
 		
-		
+
+		//startService(new Intent("com.stonedonkey.shackdroid.ActivityShackDroidServices"));
+
 		// ad listener to skip screen
-		
 		iv.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent();
