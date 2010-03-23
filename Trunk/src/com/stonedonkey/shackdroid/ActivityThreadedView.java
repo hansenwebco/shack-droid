@@ -210,6 +210,12 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			// Our ExampleHandler now provides the parsed data to us.
 			posts = saxHandler.GetParsedPosts();
 
+			// from various portions of the site you can get here without a 
+			// story id, we retrieve this in the sax call, so mide as well
+			// set it here if it's missing
+			if (storyID == null)
+				storyID = saxHandler.getStoryID();
+			
 			// the following sorts are what are used to highlight the last ten posts.  We add an index to the
 			// array by sorting them by post id, then adding the index, then sorting them back	
 			// sort our posts by PostID
