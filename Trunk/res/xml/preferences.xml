@@ -20,7 +20,16 @@
     		android:title="Enable Shack Messages"
     		android:defaultValue="false" 
     		android:textSize="10sp"
-    		android:summary="NOTE: This will pass your info to the API not directly to ShackNews."/>                    
+    		android:summary="NOTE: This will pass your info to the API not directly to ShackNews."/>    
+    		
+    	 <CheckBoxPreference 
+    	 	android:key="allowCheckShackMessages" 
+    		android:title="Notify Shack Messages" 
+    		android:defaultValue="false"
+    		android:dependency="allowShackMessages"
+    		android:summary="Check for Shack Messages in the background, every 10 minutes. You must enable Shack Messages."/>
+    		    		
+    		                
     </PreferenceCategory>
     
     <PreferenceCategory  android:title="Application Settings">
@@ -35,6 +44,7 @@
     			android:defaultValue="0"
     		/>    
     	 -->
+
     	<CheckBoxPreference 
     		android:key="allowFullScreen" 
     		android:title="Full Screen Mode" 

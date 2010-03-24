@@ -53,7 +53,7 @@ public class ActivityShackDroidServices extends Service  {
 				
 				
 			}
-		}, 0, 20000);
+		}, 0, 600000);
 	;}
 	
 	private void stopService() {
