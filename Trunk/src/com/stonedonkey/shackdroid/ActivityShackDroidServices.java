@@ -4,6 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
@@ -34,14 +35,25 @@ public class ActivityShackDroidServices extends Service  {
 
 	private void startService()
 	{
+		final Context context = getApplicationContext();;
+		
+		
 		timer.scheduleAtFixedRate( new TimerTask() {
 			public void run() {
 				//code goes here
-				Log.d(this.toString(), "error: " + "test");
-				int a = 1;
-				a++;
+				Log.d(this.toString(), "Checking Shack Messages");
+
+				int unreadMessages = 0;
+				try {
+					 unreadMessages = Helper.CheckForNewShackMessages(context);
+					} 
+				catch (Exception e) {
+					Log.d(this.toString(), e.getMessage());
+				}
+				
+				
 			}
-		}, 0, 10000);
+		}, 0, 20000);
 	;}
 	
 	private void stopService() {
