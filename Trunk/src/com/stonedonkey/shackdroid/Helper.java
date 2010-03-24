@@ -12,11 +12,26 @@ import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -102,26 +117,156 @@ public class Helper {
 			return null;
 		}		
 	}
-	public static void UpdateLastShackMessageId(Context context, int messageID) throws IOException
+	public static int CheckForNewShackMessages(Context context) throws IOException, SAXException, ParserConfigurationException
 	{
-		FileOutputStream fos = context.openFileOutput("shackmessage.cache",Context.MODE_PRIVATE);
-		ObjectOutputStream os = new ObjectOutputStream(fos);
-		os.write(messageID);
-		os.close();
-		fos.close();	
-	}
-	public int GetLastShackMessageId(Context context) throws StreamCorruptedException, IOException
-	{
-		int lastMessageID = 0;
-		if (context.getFileStreamPath("stats.cache").exists()) {
-						
-			FileInputStream fileIn = context.openFileInput("stats.cache");
-			ObjectInputStream in = new ObjectInputStream(fileIn);
-			lastMessageID = in.read(); 
-			in.close();
-			fileIn.close();
+		
+		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		String login = prefs.getString("shackLogin", "");
+		String password = prefs.getString("shackPassword", "");
+	
+		if (login.length() == 0 || password.length() == 0)
+			return -1;
+		
+		URL url = new URL ("http://shackapi.stonedonkey.com/messages/?box=inbox&page=1");
+		String userPassword = login + ":" + password;
+
+		String encoding = Base64.encodeBytes(userPassword.getBytes());
+		
+		URLConnection uc = url.openConnection();
+		uc.setRequestProperty("Authorization", "Basic " + encoding);
+		 
+		// Get a SAXParser from the SAXPArserFactory. 
+		SAXParserFactory spf = SAXParserFactory.newInstance();
+		SAXParser sp = spf.newSAXParser();
+
+		// Get the XMLReader of the SAXParser we created. 
+		XMLReader xr = sp.getXMLReader();
+
+		// Create a new ContentHandler and apply it to the XML-Reader 
+		SaxHandlerMessages saxHandler = new SaxHandlerMessages();
+		xr.setContentHandler(saxHandler);
+
+		// Parse the xml-data from our URL.  
+		xr.parse(new InputSource(uc.getInputStream()));
+
+		// get the Message items
+		ArrayList<ShackMessage> messages = saxHandler.getMessages();
+		
+		// check to see if we got any results back from the inbox
+		// if not were out of here
+		int  totalResults = -1;
+		try {
+			totalResults = Integer.parseInt(saxHandler.getTotalResults());
+		}
+		catch (Exception ex){
+			Log.d(context.toString(), "Error Getting Total Results: " + ex.getMessage());
+		} // total results not found
+		
+		
+		
+		if (totalResults == 0)		
+			return -1;
+		
+		// first retrieve our last known message id
+		int lastMessageID = GetLastShackMessageId(context);
+		
+		;
+		
+		// if the last known message id is less than the current message in the
+		// box then we have a change, count the number of unread messages in the box
+		ShackMessage msg = messages.get(0);
+		int currentMessageID = -1;
+		try {
+		currentMessageID = Integer.parseInt(msg.getMsgID());
+		}
+		catch (Exception ex) {	
+			
 			
 		}
+		
+		int newMessageCount = 0;
+		
+
+		
+		for	(int i=0; i< messages.size();i++)
+		{
+			msg = messages.get(i);
+			if (msg.getMessageStatus().equals("unread"))
+				newMessageCount++;
+			else
+				break;
+		}
+				
+		Log.d(context.toString(), "Last Msg: " + String.valueOf(lastMessageID));
+		Log.d(context.toString(), "Current Msg: " + String.valueOf(currentMessageID));
+		
+		if (lastMessageID < currentMessageID && lastMessageID >= 0)	
+		{
+			
+			Log.d(context.toString(), "FIRE ALERT!");
+			
+			String ns = Context.NOTIFICATION_SERVICE;
+			NotificationManager nm = (NotificationManager)context.getSystemService(ns);
+		
+			int icon = R.drawable.shack_logo;
+			CharSequence tickerText = "New Shack Message";
+			
+			Notification note = new Notification(icon,tickerText,0);
+		
+			CharSequence contentTitle = "New Shack Message";
+			CharSequence contentText = newMessageCount +  " unread messages";
+			Intent notificationIntent = new Intent(context, ActivityMessages.class);
+			PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+			
+			note.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+			note.flags = Notification.FLAG_AUTO_CANCEL;
+			note.ledARGB = Color.MAGENTA;
+			note.ledOnMS = 100;
+			note.ledOffMS = 100;
+			nm.notify(1,note);
+
+		}
+		
+		
+		
+		if (currentMessageID > 0)
+			UpdateLastShackMessageId(context,currentMessageID);
+		
+		return newMessageCount;
+	}
+	public static void UpdateLastShackMessageId(Context context, int messageID) throws IOException
+	{
+		try {
+		FileOutputStream fos = context.openFileOutput("shackmessage.cache",Context.MODE_PRIVATE);
+		ObjectOutputStream os = new ObjectOutputStream(fos);
+		os.writeInt(messageID);
+		os.close();
+		fos.close();
+		}
+		catch (Exception ex)
+		{
+			Log.d(context.toString(), "Error Saving Last Shack Message: " + ex.getMessage());
+		}
+	}
+	public static int GetLastShackMessageId(Context context) throws StreamCorruptedException, IOException
+	{
+		int lastMessageID = -1;
+		try {
+			if (context.getFileStreamPath("shackmessage.cache").exists()) {
+							
+				FileInputStream fileIn = context.openFileInput("shackmessage.cache");
+				ObjectInputStream in = new ObjectInputStream(fileIn);
+				lastMessageID = in.readInt();
+				in.close();
+				fileIn.close();
+			}
+		}
+		catch (Exception ex) { 
+			
+			Log.d(context.toString(), "Error Loading Last Shack Message: " + ex.getMessage());
+		}
+		
 		return lastMessageID;
 	}
 

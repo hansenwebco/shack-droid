@@ -36,9 +36,11 @@ public class ActivitySplashScreen extends Activity {
 		web.setTextSize(10);
 		web.setText("http://www.stonedonkey.com");
 		
-		// start the service that checks for new shackmessages
+		// start the service that checks for new shack messages
 		startService(new Intent(ActivitySplashScreen.this, ActivityShackDroidServices.class));
  
+	
+		
 		// ad listener to skip screen
 		iv.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
