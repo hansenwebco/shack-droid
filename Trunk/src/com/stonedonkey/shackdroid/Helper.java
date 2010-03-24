@@ -1,5 +1,11 @@
 package com.stonedonkey.shackdroid;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -96,6 +102,29 @@ public class Helper {
 			return null;
 		}		
 	}
+	public static void UpdateLastShackMessageId(Context context, int messageID) throws IOException
+	{
+		FileOutputStream fos = context.openFileOutput("shackmessage.cache",Context.MODE_PRIVATE);
+		ObjectOutputStream os = new ObjectOutputStream(fos);
+		os.write(messageID);
+		os.close();
+		fos.close();	
+	}
+	public int GetLastShackMessageId(Context context) throws StreamCorruptedException, IOException
+	{
+		int lastMessageID = 0;
+		if (context.getFileStreamPath("stats.cache").exists()) {
+						
+			FileInputStream fileIn = context.openFileInput("stats.cache");
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			lastMessageID = in.read(); 
+			in.close();
+			fileIn.close();
+			
+		}
+		return lastMessageID;
+	}
+
 	public static void SetWindowState(Window window,Context context)
 	{
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
