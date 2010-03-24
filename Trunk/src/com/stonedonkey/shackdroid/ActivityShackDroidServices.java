@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 public class ActivityShackDroidServices extends Service  {
 
@@ -20,6 +21,7 @@ public class ActivityShackDroidServices extends Service  {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		
 		startService();
 	}
 
@@ -35,6 +37,7 @@ public class ActivityShackDroidServices extends Service  {
 		timer.scheduleAtFixedRate( new TimerTask() {
 			public void run() {
 				//code goes here
+				Log.d(this.toString(), "error: " + "test");
 				int a = 1;
 				a++;
 			}
