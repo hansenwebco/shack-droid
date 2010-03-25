@@ -1,9 +1,13 @@
 package com.stonedonkey.shackdroid;
 
+import java.net.URL;
+import java.net.URLConnection;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
@@ -51,6 +55,13 @@ public class ActivityViewMessage extends Activity {
 	 content.setTypeface(face);
 	content.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 	 
+	
+	String login = prefs.getString("shackLogin", "");
+	String password = prefs.getString("shackPassword", "");
+	
+	if (msg.getMessageStatus() != "read")
+		new ShackMessageMarkRead(login,password,msg.getMsgID()).execute();
+	
 	 //TextView msglbl =(TextView)findViewById(R.id.TextViewViewMsgLabelMessage);
 	 //msglbl.setText(Html.fromHtml("<b>Message:</b>"));
 
@@ -83,5 +94,42 @@ public class ActivityViewMessage extends Activity {
 		return false;
 	}
 }	
+class ShackMessageMarkRead extends AsyncTask<Void,Void,Integer>{
+
+	private String _login;
+	private String _password;
+	private String _messageID;
+	
+	public ShackMessageMarkRead(String login, String password, String messageID)
+	{
+		this._login = login;
+		this._password = password;
+		this._messageID = messageID;
+	}
+	
+	
+	@Override
+	protected Integer doInBackground(Void... arg0) {
+	
+		try {
+			String userPassword = _login + ":" + _password;
+			String encoding = Base64.encodeBytes(userPassword.getBytes());
+			
+			URL url = new URL("http://shackapi.stonedonkey.com/messages/read/?username=" + _login +"&password=" + _password +"&messageid=" + _messageID);
+			
+			URLConnection uc = url.openConnection();
+			uc.setRequestProperty("Authorization", "Basic " + encoding);
+			uc.getInputStream();
+		}
+		catch (Exception ex) {
+		
+		}
+		
+		
+		return null;
+		
+	}
+	
+}
 	
 

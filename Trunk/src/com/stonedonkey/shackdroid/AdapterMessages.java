@@ -4,8 +4,12 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.style.StyleSpan;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +72,15 @@ public class AdapterMessages extends BaseAdapter {
 		TextView sub = (TextView)v.findViewById(R.id.TextViewMessageSubject);
 		String result = msg.getMsgSubject();
 		result = result.replaceAll("(\r\n|\r|\n|\n\r)", "");
-		sub.setText(result);
+		
+		if (msg.getMessageStatus().equals("unread")) {
+			//sub.setTextColor(Color.parseColor("#911B00"));
+			result = "<b><i>" + result + "</i></b>";
+		}
+		else
+			sub.setTextColor(Color.parseColor("#FFFFFF"));
+		
+		sub.setText(Html.fromHtml(result));
 		sub.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 		sub.setTypeface(face);
 				
