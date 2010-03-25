@@ -29,6 +29,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Window;
@@ -224,7 +225,8 @@ public class Helper {
 			note.ledARGB = 0xFF800080;
 			note.ledOnMS = 100;
 			note.ledOffMS = 100;
-			note.defaults = Notification.DEFAULT_SOUND;
+			//note.defaults = Notification.DEFAULT_SOUND;
+			note.sound = Uri.parse("android.resource://com.stonedonkey.shackdroid/" + R.raw.alert1);
 			nm.notify(1,note);
 
 		}

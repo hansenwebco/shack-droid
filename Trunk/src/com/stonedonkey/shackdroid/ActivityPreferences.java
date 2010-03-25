@@ -1,10 +1,13 @@
 package com.stonedonkey.shackdroid;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.widget.Toast;
 
 public class ActivityPreferences extends PreferenceActivity {
@@ -18,50 +21,58 @@ public class ActivityPreferences extends PreferenceActivity {
 		this.setTitle("ShackDroid - Settings");
 		
 		addPreferencesFromResource(R.xml.preferences);
-			
 		
+		Preference customPref = (Preference) findPreference("allowCheckShackMessages");
+		customPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+		
+
+			// make sure we have a password and username as well as have enabled
+			// shack messages before we enable checking for Shack Messages in the background
+			// this doesn't take care if the user removes their name after they
+			// check this setting..
+			// TODO: handle if the user removes username or password
+			@Override
+			public boolean onPreferenceChange(Preference arg0, Object arg1) {
+
+				// make sure we are allowed and that we have a login and password
+				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+				boolean allowSMs = prefs.getBoolean("allowShackMessages", false);
+				String login = prefs.getString("shackLogin", "");
+				String password = prefs.getString("shackPassword", "");
+				
+				if (login.length() > 0 && password.length() > 0 && allowSMs) {
+					return true;
+				}
+				else { 
+					Toast toast = Toast.makeText(getBaseContext(),"Enter your login and password to enable.",Toast.LENGTH_SHORT);
+					toast.show();
+					return false;
+				}
+			}
+			});
+	
 	}
 	@Override
-	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
-			Preference preference) {
-		
+	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,	Preference preference) {
+	
 		Boolean result = super.onPreferenceTreeClick(preferenceScreen, preference);
+		Boolean checkAllowSMSService = Helper.CheckAllowSMService(this);
 
-//			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-//			String login = prefs.getString("shackLogin", "");
-//			String password = prefs.getString("shackPassword", "");
-//			boolean allowCheckShackMessages = prefs.getBoolean("allowCheckShackMessages", false);
-//			
-//			if (allowCheckShackMessages && (login.length() == 0 || password.length() ==0))
-//			{
-//				Toast toast = Toast.makeText(this,"Your must set login and password for Shack Message notifications.",Toast.LENGTH_LONG);
-//				toast.show();
-//			}
-		
-		
-	
-		// start the service that checks for new shack messages
-		if (Helper.CheckAllowSMService(this)) 
+		if (preference.getKey().equals("allowCheckShackMessages") || preference.getKey().equals("allowShackMessages"))
 		{
-			startService(new Intent(this, ActivityShackDroidServices.class));
-			Toast toast = Toast.makeText(this,"ShackMessage Service Started",Toast.LENGTH_SHORT);
-			toast.show();
+			if (checkAllowSMSService)
+			{
+				Toast toast = Toast.makeText(this,"ShackMessage Service Started",Toast.LENGTH_SHORT);
+				toast.show();
+				startService(new Intent(this, ActivityShackDroidServices.class));
+			}
+			else
+			{
+				Toast toast  = Toast.makeText(this,"ShackMessage Service Stopped",Toast.LENGTH_SHORT);
+				toast.show();
+				stopService(new Intent(this, ActivityShackDroidServices.class));
+			}
 		}
-		else 
-		{
-			stopService(new Intent(this, ActivityShackDroidServices.class));
-			Toast toast  = Toast.makeText(this,"ShackMessage Service Stopped",Toast.LENGTH_SHORT);
-			toast.show();
-		}
-		
-     
 		return result;
-		
-			
-		
-		
-		
 	}
-	
-
 }
