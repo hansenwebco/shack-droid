@@ -201,7 +201,7 @@ public class Helper {
 		Log.d(context.toString(), "Last Msg: " + String.valueOf(lastMessageID));
 		Log.d(context.toString(), "Current Msg: " + String.valueOf(currentMessageID));
 		
-		if (lastMessageID < currentMessageID && lastMessageID >= 0)	
+		if (lastMessageID < currentMessageID && lastMessageID >= 0 && messages.get(0).getMessageStatus().equals("unread") )	
 		{
 			
 			Log.d(context.toString(), "FIRE ALERT!");
@@ -221,9 +221,11 @@ public class Helper {
 			
 			note.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 			note.flags = Notification.FLAG_AUTO_CANCEL;
-			note.ledARGB = Color.MAGENTA;
+			note.ledARGB = 0xff00ff00;
 			note.ledOnMS = 100;
 			note.ledOffMS = 100;
+			note.flags |= Notification.FLAG_SHOW_LIGHTS;
+			note.defaults |= Notification.DEFAULT_SOUND;
 			nm.notify(1,note);
 
 		}
@@ -281,6 +283,20 @@ public class Helper {
 			window.requestFeature(Window.FEATURE_NO_TITLE);
 			window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		}
+	}
+	public static boolean CheckAllowSMService(Context context)
+	{
+		// make sure we are allowed and that we have a login and password
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		boolean allowSMs = prefs.getBoolean("allowShackMessages", false);
+		boolean allowCheckShackMessages = prefs.getBoolean("allowCheckShackMessages", false);
+		String login = prefs.getString("shackLogin", "");
+		String password = prefs.getString("shackPassword", "");
+		
+		if (allowSMs == false ||  allowCheckShackMessages == false || login.length() == 0 || password.length() == 0 )
+			return false;
+		else
+			return true;
 	}
 
 }
