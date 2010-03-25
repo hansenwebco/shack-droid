@@ -1,11 +1,13 @@
 package com.stonedonkey.shackdroid;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.widget.Toast;
 
 public class ActivityPreferences extends PreferenceActivity {
 
@@ -18,36 +20,50 @@ public class ActivityPreferences extends PreferenceActivity {
 		this.setTitle("ShackDroid - Settings");
 		
 		addPreferencesFromResource(R.xml.preferences);
-		
-		
-		
+			
 		
 	}
 	@Override
 	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
 			Preference preference) {
 		
+		Boolean result = super.onPreferenceTreeClick(preferenceScreen, preference);
+
+//			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//			String login = prefs.getString("shackLogin", "");
+//			String password = prefs.getString("shackPassword", "");
+//			boolean allowCheckShackMessages = prefs.getBoolean("allowCheckShackMessages", false);
+//			
+//			if (allowCheckShackMessages && (login.length() == 0 || password.length() ==0))
+//			{
+//				Toast toast = Toast.makeText(this,"Your must set login and password for Shack Message notifications.",Toast.LENGTH_LONG);
+//				toast.show();
+//			}
+		
+		
 	
-		if (preference.getKey().equals("allowShackMessages"))
+		// start the service that checks for new shack messages
+		if (Helper.CheckAllowSMService(this)) 
 		{
-			
-			
-			SharedPreferences settings= PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-			SharedPreferences.Editor editor = settings.edit();
-	        editor.putBoolean("allowCheckShackMessages", false);
-	        editor.commit(); 
-	        
-	        // TODO: hacky hackerson // no other way to reset preference screen?
-	        startActivity(getIntent());
-	        finish();
+			startService(new Intent(this, ActivityShackDroidServices.class));
+			Toast toast = Toast.makeText(this,"ShackMessage Service Started",Toast.LENGTH_SHORT);
+			toast.show();
 		}
-        
-		return super.onPreferenceTreeClick(preferenceScreen, preference);
+		else 
+		{
+			stopService(new Intent(this, ActivityShackDroidServices.class));
+			Toast toast  = Toast.makeText(this,"ShackMessage Service Stopped",Toast.LENGTH_SHORT);
+			toast.show();
+		}
+		
+     
+		return result;
 		
 			
 		
 		
 		
 	}
+	
 
 }

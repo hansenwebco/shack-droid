@@ -30,6 +30,7 @@ public class ActivityShackDroidServices extends Service  {
 	public void onDestroy() {
 		super.onDestroy();
 		stopService();
+		
 	}
 
 
@@ -37,15 +38,14 @@ public class ActivityShackDroidServices extends Service  {
 	{
 		final Context context = getApplicationContext();;
 		
-		
 		timer.scheduleAtFixedRate( new TimerTask() {
 			public void run() {
 				//code goes here
 				Log.d(this.toString(), "Checking Shack Messages");
 
-				int unreadMessages = 0;
+				//int unreadMessages = 0;
 				try {
-					 unreadMessages = Helper.CheckForNewShackMessages(context);
+					 Helper.CheckForNewShackMessages(context);
 					} 
 				catch (Exception e) {
 					Log.d(this.toString(), e.getMessage());
@@ -59,6 +59,6 @@ public class ActivityShackDroidServices extends Service  {
 	private void stopService() {
 		 if (timer != null)
 			 timer.cancel();
+	 
 	}	
-
 }
