@@ -40,20 +40,17 @@ public class ActivityShackDroidServices extends Service  {
 		
 		timer.scheduleAtFixedRate( new TimerTask() {
 			public void run() {
-				//code goes here
 				Log.d(this.toString(), "Checking Shack Messages");
-
-				//int unreadMessages = 0;
 				try {
 					 Helper.CheckForNewShackMessages(context);
 					} 
 				catch (Exception e) {
 					Log.d(this.toString(), e.getMessage());
-				}
+			}
 				
 				
 			}
-		}, 0, 600000);
+		}, 0, 300000);
 	;}
 	
 	private void stopService() {

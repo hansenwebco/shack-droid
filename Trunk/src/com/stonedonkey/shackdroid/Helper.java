@@ -219,12 +219,12 @@ public class Helper {
 			PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 			
 			note.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
-			note.flags = Notification.FLAG_AUTO_CANCEL;
-			note.ledARGB = 0xff00ff00;
+			note.flags = Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
+			
+			note.ledARGB = 0xFF800080;
 			note.ledOnMS = 100;
 			note.ledOffMS = 100;
-			note.flags |= Notification.FLAG_SHOW_LIGHTS;
-			note.defaults |= Notification.DEFAULT_SOUND;
+			note.defaults = Notification.DEFAULT_SOUND;
 			nm.notify(1,note);
 
 		}
