@@ -23,6 +23,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -39,7 +40,6 @@ public class Helper {
 
 	public static String FormatShackDate(String unformattedDate) 
 	{
-
 		String fixedDate  = null;
 		try { 
 			DateFormat dfm = new SimpleDateFormat("MMM d, y hh:mmaa z");
@@ -55,6 +55,7 @@ public class Helper {
 		}
 		return fixedDate;
 	}
+	
 	// TODO: We can probably combine these i'm just lazy today
 	public static String FormShackRSSDate(String unformattedDate)
 	{
@@ -298,6 +299,22 @@ public class Helper {
 			return false;
 		else
 			return true;
+	}
+	
+	public static void setSMAlarm(Context context){
+		AlarmManager m = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+		PendingIntent pi = PendingIntent.getBroadcast(context, 0, new Intent(context, ShackDroidServicesReceiver.class), 0);
+		
+		//Get an inexact alarm so we fall in line with other apps waking the phone.  will run every 15 mins....ish.
+		// If we change it to AlarmManager.ELAPSED_REALTIME it doesn't run when the phone is off.....I think.
+		m.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 10, AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi);
+	}
+	
+	public static void clearSMAlarm(Context context){
+		AlarmManager m = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+		PendingIntent pi = PendingIntent.getBroadcast(context, 0, new Intent(context, ShackDroidServicesReceiver.class), 0);
+		
+		m.cancel(pi);
 	}
 
 }
