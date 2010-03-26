@@ -11,7 +11,7 @@ public class ShackDroidServicesReceiver extends BroadcastReceiver
 	public void onReceive(Context context, Intent arg1) {
 		Log.d(this.toString(), "SM Check broadcast received.");
 		
-		if (arg1.getAction() == Intent.ACTION_BOOT_COMPLETED){
+		if (arg1 != null && arg1.getAction() == Intent.ACTION_BOOT_COMPLETED){
 			if (Helper.CheckAllowSMService(context)){
 				Helper.setSMAlarm(context);
 			}
