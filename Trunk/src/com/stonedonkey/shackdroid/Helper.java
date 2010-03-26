@@ -223,7 +223,7 @@ public class Helper {
 			note.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 			note.flags = Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
 			
-			note.ledARGB = 0xFFFFC0CB;
+			note.ledARGB = 0xFF800080;
 			note.ledOnMS = 100;
 			note.ledOffMS = 100;
 			//note.defaults = Notification.DEFAULT_SOUND;
