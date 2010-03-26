@@ -1,6 +1,5 @@
 package com.stonedonkey.shackdroid;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -64,13 +63,15 @@ public class ActivityPreferences extends PreferenceActivity {
 			{
 				Toast toast = Toast.makeText(this,"ShackMessage Service Started",Toast.LENGTH_SHORT);
 				toast.show();
-				startService(new Intent(this, ActivityShackDroidServices.class));
+				Helper.setSMAlarm(getApplicationContext());
+				//startService(new Intent(this, ActivityShackDroidServices.class));
 			}
 			else
 			{
 				Toast toast  = Toast.makeText(this,"ShackMessage Service Stopped",Toast.LENGTH_SHORT);
 				toast.show();
-				stopService(new Intent(this, ActivityShackDroidServices.class));
+				Helper.clearSMAlarm(getApplicationContext());
+				//stopService(new Intent(this, ActivityShackDroidServices.class));
 			}
 		}
 		return result;
