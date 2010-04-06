@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -72,9 +73,15 @@ public class ActivitySplashScreen extends Activity {
 	protected void StartSMService()
 	{
 		// start the service that checks for new shack messages
-		if (Helper.CheckAllowSMService(this))
-			startService(new Intent(ActivitySplashScreen.this, ActivityShackDroidServices.class));
-		else
-			stopService(new Intent(ActivitySplashScreen.this, ActivityShackDroidServices.class));
+		if (Helper.CheckAllowSMService(this)) {
+			Log.d("ShackDroid", "Starting SM Alarm");
+			Helper.setSMAlarm(getApplicationContext());
+			//startService(new Intent(ActivitySplashScreen.this, ActivityShackDroidServices.class));
+		}
+		else {
+			Log.d("ShackDroid", "Stopping SM Alarm");
+			Helper.clearSMAlarm(getApplicationContext());
+			//stopService(new Intent(ActivitySplashScreen.this, ActivityShackDroidServices.class));
+		}
 	}
 }

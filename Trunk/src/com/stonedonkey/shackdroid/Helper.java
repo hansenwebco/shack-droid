@@ -161,7 +161,7 @@ public class Helper {
 			totalResults = Integer.parseInt(saxHandler.getTotalResults());
 		}
 		catch (Exception ex){
-			Log.d(context.toString(), "Error Getting Total Results: " + ex.getMessage());
+			Log.e("ShackDroid", "Error Getting Total Results: " + ex.getMessage());
 		} // total results not found
 		
 		
@@ -199,13 +199,13 @@ public class Helper {
 				break;
 		}
 				
-		Log.d(context.toString(), "Last Msg: " + String.valueOf(lastMessageID));
-		Log.d(context.toString(), "Current Msg: " + String.valueOf(currentMessageID));
+		Log.d("ShackDroid", "Last Msg: " + String.valueOf(lastMessageID));
+		Log.d("ShackDroid", "Current Msg: " + String.valueOf(currentMessageID));
 		
 		if (lastMessageID < currentMessageID && lastMessageID >= 0 && messages.get(0).getMessageStatus().equals("unread") )	
 		{
 			
-			Log.d(context.toString(), "FIRE ALERT!");
+			Log.d("ShackDroid", "FIRE ALERT!");
 			
 			String ns = Context.NOTIFICATION_SERVICE;
 			NotificationManager nm = (NotificationManager)context.getSystemService(ns);
@@ -250,7 +250,7 @@ public class Helper {
 		}
 		catch (Exception ex)
 		{
-			Log.d(context.toString(), "Error Saving Last Shack Message: " + ex.getMessage());
+			Log.e("ShackDroid", "Error Saving Last Shack Message: " + ex.getMessage());
 		}
 	}
 	public static int GetLastShackMessageId(Context context) throws StreamCorruptedException, IOException
@@ -268,7 +268,7 @@ public class Helper {
 		}
 		catch (Exception ex) { 
 			
-			Log.d(context.toString(), "Error Loading Last Shack Message: " + ex.getMessage());
+			Log.e("ShackDroid", "Error Loading Last Shack Message: " + ex.getMessage());
 		}
 		
 		return lastMessageID;
@@ -302,19 +302,36 @@ public class Helper {
 	}
 	
 	public static void setSMAlarm(Context context){
+		
 		AlarmManager m = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-		PendingIntent pi = PendingIntent.getBroadcast(context, 0, new Intent(context, ShackDroidServicesReceiver.class), 0);
+		PendingIntent pi; //= PendingIntent.getBroadcast(context, 0, new Intent(context, ShackDroidServicesReceiver.class), PendingIntent.FLAG_NO_CREATE);
 		
 		//Get an inexact alarm so we fall in line with other apps waking the phone.  will run every 15 mins....ish.
 		// If we change it to AlarmManager.ELAPSED_REALTIME it doesn't run when the phone is off.....I think.
-		m.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 10, AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi);
+		
+		// TODO: This re-fires if already active, it'd be nice to not have it start again if this
+		//       function is called.. not sure how to do that just yet.
+		
+		//if (pi == null) // pi is null if we don't have an existing matching intent
+		//{
+			pi = PendingIntent.getBroadcast(context, 0, new Intent(context, ShackDroidServicesReceiver.class), 0);
+			m.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 1500, AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi);
+			Log.d("ShackDroid", "SM Alarm Set");
+		//}
+		//else {
+		//		Log.d("ShackDroid", "SM Alarm Already Set - Using Existing");
+		//}
+		
 	}
 	
 	public static void clearSMAlarm(Context context){
 		AlarmManager m = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 		PendingIntent pi = PendingIntent.getBroadcast(context, 0, new Intent(context, ShackDroidServicesReceiver.class), 0);
 		
-		m.cancel(pi);
+		
+			m.cancel(pi);
+			Log.d("ShackDroid", "Canceled SM Alarms");
+		
 	}
 
 }

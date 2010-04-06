@@ -27,7 +27,7 @@
     		android:title="Notify Shack Messages" 
     		android:defaultValue="false"
     		android:dependency="allowShackMessages"
-    		android:summary="Check for Shack Messages in the background, every 15 minutes ish. You must enable Shack Messages."/>
+    		android:summary="Check for Shack Messages in the background, every 15 minutes."/>
     		    		
     		                
     </PreferenceCategory>

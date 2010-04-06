@@ -20,11 +20,10 @@ public class ActivityShackDroidServices extends Service  {
 
 	synchronized public static PowerManager.WakeLock getLock(Context context) {
 		if (_wakeLock == null) {
-			//Log.i("DownloadService", "Creating wakeLock");
+			Log.d("ShackDroid", "Creating wakeLock");
 			PowerManager mgr=(PowerManager)context.getSystemService(Context.POWER_SERVICE);
 			
-			_wakeLock=mgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-														"Shackdroid ShackMessge lock aquired");
+			_wakeLock=mgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Shackdroid ShackMessge lock aquired");
 			_wakeLock.setReferenceCounted(false);
 		}
 		
@@ -60,32 +59,33 @@ public class ActivityShackDroidServices extends Service  {
 	{
 		Context context = getApplicationContext();
 		if (CheckConnectivity()){
-			Log.d(this.toString(), "Checking Shack Messages");
+			Log.d("ShackDroid", "Checking Shack Messages");
 			try {
 				 Helper.CheckForNewShackMessages(context);
 				} 
 			catch (Exception e) {
-				Log.d(this.toString(), e.getMessage());	
+				Log.d("ShackDroid", e.getMessage());	
 			}
 		}
 		else{
-			Log.d(this.toString(), "Network too old and busted for SM check.");
+			Log.d("ShackDroid", "Network too old and busted for SM check.");
 		}
 		
 		
 		getLock(context).release();
+		
 		
 		/*
 		final Context context = getApplicationContext();;
 		
 		timer.scheduleAtFixedRate( new TimerTask() {
 			public void run() {
-				Log.d(this.toString(), "Checking Shack Messages");
+				Log.d("ShackDroid", "Checking Shack Messages");
 				try {
 					 Helper.CheckForNewShackMessages(context);
 					} 
 				catch (Exception e) {
-					Log.d(this.toString(), e.getMessage());
+					Log.d("ShackDroid", e.getMessage());
 			}
 				
 				
