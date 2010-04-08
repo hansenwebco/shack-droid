@@ -51,7 +51,23 @@ public class Helper {
 			fixedDate = format.format(conDate);
 
 		} catch (ParseException e) {
-			return "";
+			//return "";
+		}
+		
+		//Thu Apr 08 06:38:00 -0700 2010  -- squeegy updated his api format to this around 4/2010
+		if (fixedDate == null) {
+			try { 
+				DateFormat dfm = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
+				Date conDate = null;
+				SimpleDateFormat format= null;
+				
+				conDate = dfm.parse(unformattedDate);
+				format = new SimpleDateFormat("M.d.yy h:mma");
+				fixedDate = format.format(conDate);
+
+			} catch (ParseException e) {
+				return "";
+			}
 		}
 		return fixedDate;
 	}
