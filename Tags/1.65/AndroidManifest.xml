@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.stonedonkey.shackdroid" android:versionName="@string/version_name" android:versionCode="10">
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="false">
+        <service android:process=":remote" android:name=".ActivityShackDroidServices" >
+        </service>
+       <receiver android:name=".ShackDroidServicesReceiver">
+       <intent-filter>
+       	<action android:name ="android.intent.action.BOOT_COMPLETED">
+       </action>
+       </intent-filter>
+       </receiver>
+        
+        <activity  android:screenOrientation="portrait" android:name="ActivitySplashScreen" android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:screenOrientation="sensor" android:name="ActivityTopicView" android:label="ShackDroid"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivityThreadedView" android:label="TheadView">
+            <intent-filter android:icon="@drawable/icon" android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW"></action>
+			    <category android:name="android.intent.category.DEFAULT" />
+			    <category android:name="android.intent.category.BROWSABLE" />
+			    <data android:scheme="http" android:host="www.shacknews.com" android:pathPattern=".*laryn\\.x*"/>
+			    <data android:scheme="http" android:host="shacknews.com" android:pathPattern=".*laryn\\.x*"/>          
+            </intent-filter>
+        </activity>
+        <activity android:screenOrientation="sensor" android:name=".ActivityPreferences" android:label="ShackDroidPreferences"></activity>
+        <activity android:screenOrientation="sensor" android:name=".ActivityPost" android:label="ShackDroidPost"></activity>        
+        <activity android:screenOrientation="sensor" android:name="ActivityNotes" android:label="ShackDroidNotes"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivityRSS" android:label="ShackDroidRSS"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivityWebView" android:label="ShackDroidWebView"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivityShackMarks" android:label="ShackMarks"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivitySearch" android:label="Search Shack"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivitySearchResults" android:label="Search Results"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivityMessages" android:label="Shack Messages"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivityViewMessage" android:label="View Shack Message"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivityPostMessage" android:label="Create Shack Message"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivityMainMenu" android:label="ShackDroid"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivityLOL" android:label="ShackLOLs"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivityStats" android:label="ShackDroid - Stats"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivityLOLTabs" android:label="ShackLOLs"></activity>
+        <activity android:screenOrientation="sensor" android:name="ActivitySearchTabs" android:label="ShackDroid - Search" ></activity>
+        <activity android:screenOrientation="landscape" android:name="ActivityCamera" android:label="ShackDroid - Snap Picture" >
+           <intent-filter android:icon="@drawable/icon" android:label="@string/app_name"><action android:name="android.intent.action.SEND"></action>
+        		<category android:name="android.intent.category.DEFAULT"></category>
+				<category android:name="android.intent.category.ALTERNATIVE"></category>
+				<category android:name="android.intent.category.SELECTED_ALTERNATIVE"></category>
+				<data android:mimeType="image/*"></data>
+				<data android:mimeType="text/plain" />
+			</intent-filter>
+		</activity>
+</application>
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+	<uses-permission android:name="android.permission.CAMERA"></uses-permission>
+	<uses-permission android:name="android.permission.BOOT_COMPLETED"></uses-permission>
+	<uses-sdk  android:minSdkVersion="3"/>
+<uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+</manifest> 
