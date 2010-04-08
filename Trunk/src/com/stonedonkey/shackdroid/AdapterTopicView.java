@@ -126,6 +126,11 @@ public class AdapterTopicView extends BaseAdapter {
 				postNewCount.setText(null);
 			
 		}
+		else // we don't have a cached version of this in the post cache reset the view
+		{
+			TextView postNewCount = (TextView)v.findViewById(R.id.TextViewNewPosts);
+			postNewCount.setText(null);
+		}
 		
 		tmp = (TextView)v.findViewById(R.id.TextViewPostText);
 		tmp.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
