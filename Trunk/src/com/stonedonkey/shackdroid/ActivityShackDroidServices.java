@@ -99,13 +99,17 @@ public class ActivityShackDroidServices extends Service  {
 		ConnectivityManager c = (ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
 		NetworkInfo i = c.getActiveNetworkInfo();
 		
+		// getActiveNetworkInfo() can return null so check before nullPointerExecptions 
+		if (i == null ) 
+			return false;
+		
 		// If the user has selected "don't do shit in the background" in the phone settings
 		if (!c.getBackgroundDataSetting()){
 			return false;
 		}
 		
 		// If we're on wi-fi awesome.
-		if (i.getType() == ConnectivityManager.TYPE_WIFI &&
+		if ( i.getType() == ConnectivityManager.TYPE_WIFI &&
 				i.isConnected()){
 			return true;
 		}
