@@ -271,6 +271,10 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 	}
 	public void run() {
 		 
+		// TODO : remove testing code
+		//JSONHandlerTopicView jsonResponse = new	JSONHandlerTopicView(this);
+		
+		
 		threadLoaded = false;
 		try {
 
