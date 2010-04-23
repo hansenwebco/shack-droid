@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
+import android.text.util.Linkify;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,6 +47,7 @@ public class ActivityViewMessage extends Activity {
 	 sub.setText(Html.fromHtml("<b><font color='#ffba00'>Subject:</font></b> " + msg.getMsgSubject()));
 	sub.setTypeface(face);
 	 
+	 
 	 TextView date =(TextView)findViewById(R.id.TextViewViewMsgDate);
 	 date.setText(Html.fromHtml("<b><font color='#ffba00'>Date:</font></b> " + msg.getMsgDate()));
 	 date.setTypeface(face);
@@ -54,7 +56,8 @@ public class ActivityViewMessage extends Activity {
 	 content.setText(Html.fromHtml(msg.getMsgText().replaceAll("(\r\n|\r|\n|\n\r)", "")));
 	 content.setTypeface(face);
 	content.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-	 
+	
+	Linkify.addLinks(content, Linkify.ALL);
 	
 	String login = prefs.getString("shackLogin", "");
 	String password = prefs.getString("shackPassword", "");
