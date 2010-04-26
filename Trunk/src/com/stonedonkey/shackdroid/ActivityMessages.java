@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -86,7 +87,8 @@ public class ActivityMessages extends ListActivity implements Runnable {
 			xr.setContentHandler(saxHandler);
 
 			// Parse the xml-data from our URL.  
-			xr.parse(new InputSource(HttpHelper.HttpRequestWithGzip(url.toString())));
+			//xr.parse(new InputSource(HttpHelper.HttpRequestWithGzip(url.toString())));
+			xr.parse(new InputSource(uc.getInputStream()));
 
 			// get the Message items
 			messages = saxHandler.getMessages();
@@ -94,7 +96,7 @@ public class ActivityMessages extends ListActivity implements Runnable {
 			totalResults = saxHandler.getTotalResults();
 
 		} catch (Exception e) {
-
+			Log.e("ShackDroid",e.getMessage());
 		}
 		progressBarHandler.sendEmptyMessage(0);
 
