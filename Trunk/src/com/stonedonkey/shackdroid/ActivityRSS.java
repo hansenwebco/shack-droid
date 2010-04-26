@@ -95,7 +95,7 @@ public class ActivityRSS extends ListActivity implements Runnable {
 			xr.setContentHandler(saxHandler);
 
 			// Parse the xml-data from our URL. 
-			xr.parse(new InputSource(url.openStream()));
+			xr.parse(new InputSource(HttpHelper.HttpRequestWithGzip(url.toString())));
 	
 			// get the RSS items
 			rssItems = saxHandler.getRssItems();

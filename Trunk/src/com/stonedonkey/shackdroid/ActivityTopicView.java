@@ -309,7 +309,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			xr.setContentHandler(saxHandler);
 
 			// Parse the xml-data from our URL.
-			xr.parse(new InputSource(url.openStream()));
+			xr.parse(new InputSource(HttpHelper.HttpRequestWithGzip(url.toString())));
 
 			// Our ExampleHandler now provides the parsed data to us.
 			posts = saxHandler.GetParsedPosts();
@@ -317,8 +317,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			storyName = saxHandler.getStoryTitle();
 			storyPages = saxHandler.getStoryPageCount();
 
-			if (storyPages == 0) // XML returns a 0 for stories with only one
-									// page
+			if (storyPages == 0) // XML returns a 0 for stories with only one page
 				storyPages = 1;
 
 		} catch (Exception ex) {

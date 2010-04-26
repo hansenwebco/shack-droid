@@ -118,7 +118,7 @@ public class ActivityShackMarks extends ListActivity implements Runnable {
 			// so we check the stream before handing it to the parser
 			InputStream inputStream =url.openStream();
 			if (inputStream.available() > 0)
-				xr.parse(new InputSource(inputStream));
+				xr.parse(new InputSource(HttpHelper.HttpRequestWithGzip(url.toString())));
 
 			// Our ExampleHandler now provides the parsed data to us.
 			posts = saxHandler.GetParsedPosts();
