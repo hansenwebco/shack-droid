@@ -165,7 +165,7 @@ public class Helper {
 		xr.setContentHandler(saxHandler);
 
 		// Parse the xml-data from our URL.  
-		xr.parse(new InputSource(uc.getInputStream()));
+		xr.parse(new InputSource(HttpHelper.HttpRequestWithGzip(url.toString())));
 
 		// get the Message items
 		ArrayList<ShackMessage> messages = saxHandler.getMessages();
