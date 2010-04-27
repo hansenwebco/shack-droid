@@ -136,8 +136,7 @@ public class Helper {
 	}
 	public static int CheckForNewShackMessages(Context context) throws IOException, SAXException, ParserConfigurationException
 	{
-		
-		
+
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		String login = prefs.getString("shackLogin", "");
 		String password = prefs.getString("shackPassword", "");
@@ -152,7 +151,8 @@ public class Helper {
 		
 		URLConnection uc = url.openConnection();
 		uc.setRequestProperty("Authorization", "Basic " + encoding);
-		 
+		uc.setRequestProperty("User-Agent", Helper.getUserAgentString(context));
+		
 		// Get a SAXParser from the SAXPArserFactory. 
 		SAXParserFactory spf = SAXParserFactory.newInstance();
 		SAXParser sp = spf.newSAXParser();
@@ -348,6 +348,10 @@ public class Helper {
 			m.cancel(pi);
 			Log.d("ShackDroid", "Canceled SM Alarms");
 		
+	}
+	public static String getUserAgentString(Context context)
+	{
+		return "ShackDroid/" + context.getString(R.string.version_id);
 	}
 
 }

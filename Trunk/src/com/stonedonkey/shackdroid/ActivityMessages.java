@@ -61,6 +61,7 @@ public class ActivityMessages extends ListActivity implements Runnable {
 	public void run() {
 		try {
 
+			
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			String login = prefs.getString("shackLogin", "");
 			String password = prefs.getString("shackPassword", "");
@@ -73,7 +74,7 @@ public class ActivityMessages extends ListActivity implements Runnable {
 			
 			URLConnection uc = url.openConnection();
 			uc.setRequestProperty("Authorization", "Basic " + encoding);
-			 
+			uc.setRequestProperty("User-Agent", Helper.getUserAgentString(this));
 
 			// Get a SAXParser from the SAXPArserFactory. 
 			SAXParserFactory spf = SAXParserFactory.newInstance();
