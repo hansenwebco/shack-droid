@@ -21,14 +21,11 @@ public class HttpHelper {
 	
 	public static InputStream HttpRequestWithGzip(String url,Context context) throws ClientProtocolException, IOException
 	{ 
-		
-		final String userAgent = "ShackDroid/" + context.getString(R.string.version_id);
-		
-		
+
 		DefaultHttpClient client = new DefaultHttpClient();
 		HttpUriRequest request = new HttpGet(url);
 		request.addHeader("Accept-Encoding", "gzip");
-		request.addHeader("User-Agent",userAgent);
+		request.addHeader("User-Agent",Helper.getUserAgentString(context));
 				
 		HttpResponse response = client.execute(request);
 		
