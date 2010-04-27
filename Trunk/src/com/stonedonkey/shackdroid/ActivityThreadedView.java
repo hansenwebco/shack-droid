@@ -215,7 +215,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			xr.setContentHandler(saxHandler);
 
 			// Parse the xml-data from our URL.
-			xr.parse(new InputSource(HttpHelper.HttpRequestWithGzip(url.toString())));
+			xr.parse(new InputSource(HttpHelper.HttpRequestWithGzip(url.toString(),this)));
 
 			// Our ExampleHandler now provides the parsed data to us.
 			posts = saxHandler.GetParsedPosts();
