@@ -134,7 +134,7 @@ class GetLOLsAsyncTask extends AsyncTask<Void,Void,Integer>{
 		xr.setContentHandler(saxHandler);
 
 		// Parse the xml-data from our URL.
-		xr.parse(new InputSource(HttpHelper.HttpRequestWithGzip(url.toString())));
+		xr.parse(new InputSource(HttpHelper.HttpRequestWithGzip(url.toString(),context)));
 		
 		posts = saxHandler.getMessages();
 		

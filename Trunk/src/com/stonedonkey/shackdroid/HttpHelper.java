@@ -12,14 +12,24 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.content.Context;
+
+
 public class HttpHelper { 
 
-	public static InputStream HttpRequestWithGzip(String url) throws ClientProtocolException, IOException
-	{
+	
+	
+	public static InputStream HttpRequestWithGzip(String url,Context context) throws ClientProtocolException, IOException
+	{ 
+		
+		final String userAgent = "ShackDroid/" + context.getString(R.string.version_id);
+		
+		
 		DefaultHttpClient client = new DefaultHttpClient();
 		HttpUriRequest request = new HttpGet(url);
 		request.addHeader("Accept-Encoding", "gzip");
-		 
+		request.addHeader("User-Agent",userAgent);
+				
 		HttpResponse response = client.execute(request);
 		
 		Header contentEncoding = response.getFirstHeader("Content-Encoding");
@@ -29,6 +39,9 @@ public class HttpHelper {
 			content = new GZIPInputStream(response.getEntity().getContent());
 		else
 			content = new DataInputStream(response.getEntity().getContent());
+		
+		response = null;
+		client = null;		
 		
 		return content;
 	}
