@@ -171,7 +171,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			dialog.setMessage("loading, please wait...");
 			dialog.setTitle(null);
 			dialog.setIndeterminate(true);
-			dialog.setCancelable(false);
+			dialog.setCancelable(true);
 			return dialog;
 		}
 		}
