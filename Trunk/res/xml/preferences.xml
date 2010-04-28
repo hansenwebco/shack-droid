@@ -32,27 +32,7 @@
     		                
     </PreferenceCategory>
     
-    <PreferenceCategory  android:title="Application Settings">
-    	
-    	<!-- 
-             <ListPreference
-    			android:key="orientation"
-    			android:entryValues ="@array/orientationValues"
-    			android:entries="@array/orientation"
-    			android:title="Display Orientation"
-    			android:summary="Set the default orientation for ShackDroid."
-    			android:defaultValue="0"
-    		/>    
-    	 -->
-
-    	<CheckBoxPreference 
-    		android:key="allowFullScreen" 
-    		android:title="Full Screen Mode" 
-    		android:defaultValue="false"
-    		android:summary="Run ShackDroid Fullscreen."/>
-    		
-    	
-    </PreferenceCategory>
+    
     <PreferenceCategory  android:title="Chatty Filters">    
     
     		<CheckBoxPreference 
@@ -115,7 +95,36 @@
     			android:defaultValue="12"
     		/>
     		    
- </PreferenceCategory>    
+ </PreferenceCategory>   
+ 
+  <PreferenceCategory  android:title="Application Settings">
+    	
+    	<!-- 
+             <ListPreference
+    			android:key="orientation"
+    			android:entryValues ="@array/orientationValues"
+    			android:entries="@array/orientation"
+    			android:title="Display Orientation"
+    			android:summary="Set the default orientation for ShackDroid."
+    			android:defaultValue="0"
+    		/>    
+    	 -->
+
+		<CheckBoxPreference 
+    		android:key="allowCheckForNewVersion" 
+    		android:title="New Version Notify" 
+    		android:defaultValue="true"
+    		android:summary="Notify me of new ShackDroid Versions, not a background service."/>
+
+    	<CheckBoxPreference 
+    		android:key="allowFullScreen" 
+    		android:title="Full Screen Mode" 
+    		android:defaultValue="false"
+    		android:summary="Run ShackDroid Fullscreen."/>
+    		
+    	
+    </PreferenceCategory>
+  
      <PreferenceCategory android:title="Advanced">
 	    <ListPreference
 	     android:key="shackFeedURL"

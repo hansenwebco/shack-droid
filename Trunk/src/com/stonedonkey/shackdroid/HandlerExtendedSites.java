@@ -24,6 +24,7 @@ public class HandlerExtendedSites extends Activity {
 			url = new URL("http://www.stonedonkey.com/ShackDroid/version.txt");
 			URLConnection conn = url.openConnection();
 			HttpURLConnection httpConnection = (HttpURLConnection) conn;
+			httpConnection.setRequestProperty("User-Agent", Helper.getUserAgentString(ctx));
 
 			int responseCode = httpConnection.getResponseCode();
 			if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -51,7 +52,7 @@ public class HandlerExtendedSites extends Activity {
 		
 		return result;
 	}
-	public static String WhatsNew(String version)
+	public static String WhatsNew(String version,Context ctx)
 	{
 	
 		String result = "";
@@ -61,6 +62,8 @@ public class HandlerExtendedSites extends Activity {
 			URLConnection conn = url.openConnection();
 			HttpURLConnection httpConnection = (HttpURLConnection) conn;
 
+			httpConnection.setRequestProperty("User-Agent", Helper.getUserAgentString(ctx));
+			
 			int responseCode = httpConnection.getResponseCode();
 			if (responseCode == HttpURLConnection.HTTP_OK) {
 
@@ -196,6 +199,8 @@ public class HandlerExtendedSites extends Activity {
 			URLConnection conn = url.openConnection();
 			HttpURLConnection httpConnection = (HttpURLConnection) conn;
 
+			httpConnection.setRequestProperty("User-Agent", Helper.getUserAgentString(ctx));
+			
 			int responseCode = httpConnection.getResponseCode();
 			String result = "";
 
