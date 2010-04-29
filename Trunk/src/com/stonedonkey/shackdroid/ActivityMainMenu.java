@@ -282,7 +282,7 @@ class CheckForNewShackDroidAsyncTask extends AsyncTask<Void,Void,Integer>{
 				fileIn.close();
 
 				// 8640000 = 1 day
-				if (currentDate.getTimeInMillis() - lastMessageDate.getTimeInMillis() > 3600000 )
+				if (currentDate.getTimeInMillis() - lastMessageDate.getTimeInMillis() > 14400000 )
 					checkForUpdate = true;
 			}
 			else 
