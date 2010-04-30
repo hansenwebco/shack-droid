@@ -199,6 +199,8 @@ public class ActivityMainMenu extends ListActivity  {
 		case 9:
 		{
 			intent = new Intent();
+			intent.putExtra("action", "story");
+			intent.putExtra("id", 63577);
 			intent.setClass(this, ActivityInfoViewer.class);
 			
 		}
