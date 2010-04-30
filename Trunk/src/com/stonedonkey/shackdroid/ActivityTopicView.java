@@ -124,7 +124,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 		menu.add(2, 1, 3, "Refresh").setIcon(R.drawable.menu_reload);
 		menu.add(2, 0, 4, "New Post").setIcon(R.drawable.menu_addpost);
 		menu.add(1, 3, 5, "First Page").setIcon(R.drawable.menu_top);
-		//menu.add(2, 2, 6, "Menu").setIcon(R.drawable.menu_home);
+		//menu.add(2, 2, 6, "Menu").setIcon(R.drawable.menu_delete);
 		menu.findItem(5).setEnabled(false);
 
 		return true;
@@ -166,7 +166,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			return true;
 		case 2: // show settings dialog
 			intent = new Intent();
-			intent.setClass(this, ActivityMainMenu.class);
+			intent.setClass(this, ActivityInfoViewer.class);
 			startActivity(intent);
 			return true;
 		case 3: // home

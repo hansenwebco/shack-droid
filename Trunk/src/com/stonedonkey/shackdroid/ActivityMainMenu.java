@@ -50,6 +50,7 @@ public class ActivityMainMenu extends ListActivity  {
 		menu.add(new ShackMenuItem("Version Check","stonedonkey finally did something new!?!",R.drawable.menu2_vercheck));
 		menu.add(new ShackMenuItem("What's New","How we most recently broke this thing.",R.drawable.menu2_cone));
 		menu.add(new ShackMenuItem("Stats","Keeping score, it's how you know you're better.",R.drawable.menu2_stats));
+		menu.add(new ShackMenuItem("Tester","Testing stuff before you can play with it!.",R.drawable.menu2_stats));
 
 		AdapterMainMenu mm = new AdapterMainMenu(this,R.layout.mainmenu_row, menu);
 
@@ -194,6 +195,12 @@ public class ActivityMainMenu extends ListActivity  {
 			ShackDroidStats.AddViewedStats(this);
 			intent.setClass(this,ActivityStats.class);
 			break;
+		}
+		case 9:
+		{
+			intent = new Intent();
+			intent.setClass(this, ActivityInfoViewer.class);
+			
 		}
 
 		}	

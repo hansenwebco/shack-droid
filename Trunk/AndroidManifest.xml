@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.stonedonkey.shackdroid" android:versionName="1.68" android:versionCode="13"> <!-- android fail can't set versionName via strings.xml  -->
-    <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="false">
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
         <service android:process=":remote" android:name=".ActivityShackDroidServices" >
         </service>
        <receiver android:name=".ShackDroidServicesReceiver">
@@ -28,7 +28,8 @@
             </intent-filter>
         </activity>
         <activity android:screenOrientation="sensor" android:name=".ActivityPreferences" android:label="ShackDroidPreferences"></activity>
-        <activity android:screenOrientation="sensor" android:name=".ActivityPost" android:label="ShackDroidPost"></activity>        
+        <activity android:screenOrientation="sensor" android:name=".ActivityPost" android:label="ShackDroidPost"></activity>
+        <activity android:screenOrientation="sensor" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:name=".ActivityInfoViewer" android:label="InfoViewer"></activity>        
         <activity android:screenOrientation="sensor" android:name="ActivityNotes" android:label="ShackDroidNotes"></activity>
         <activity android:screenOrientation="sensor" android:name="ActivityRSS" android:label="ShackDroidRSS"></activity>
         <activity android:screenOrientation="sensor" android:name="ActivityWebView" android:label="ShackDroidWebView"></activity>
