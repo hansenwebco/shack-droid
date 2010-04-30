@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="fill_parent"
   android:layout_height="300dip"
   android:id="@+id/LinearLayoutInfoViewer"
   >
   
-
-
-
-	<WebView
-	android:id="@+id/WebViewInfoView"
-  	android:layout_width="fill_parent"
-  	android:layout_height="fill_parent">
-
-	</WebView>
-  <!-- 
-  <TextView
-  	android:visibility="gone"
-  	android:id="@+id/TextViewInfoView"
-  	android:layout_width="fill_parent"
-  	android:layout_height="fill_parent"/>
-   -->
-
+  	<RelativeLayout
+  	  android:layout_width="fill_parent"
+  	  android:layout_height="fill_parent"
+  	  android:id="@+id/LinearLayoutInfoViewerWrapper"
+  	  android:background="#222222">
   
-</LinearLayout>
+
+		<WebView
+			android:id="@+id/WebViewInfoView"
+		  	android:layout_width="fill_parent"
+		  	android:layout_height="290dip"
+		  	android:padding="10dip"
+		  	>
+		</WebView>
+
+		
+		<RelativeLayout
+			android:layout_below="@+id/WebViewInfoView"
+			android:id="@+id/LinearLayoutTraySeperator"
+			android:layout_width="fill_parent"
+			android:layout_height="10dip"
+			android:background="@drawable/grey_gradient">
+		</RelativeLayout>
+
+	</RelativeLayout>
+
+</RelativeLayout>

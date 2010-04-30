@@ -1,8 +1,11 @@
 package com.stonedonkey.shackdroid;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
@@ -19,6 +22,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -353,5 +358,51 @@ public class Helper {
 	{
 		return "ShackDroid/" + context.getString(R.string.version_id);
 	}
+	
+	public static String getShackStory(int storyID,Context context) throws JSONException
+	{
+		
+		// TODO: we really need a generic call for these HTTP connections where
+		// we simply retreive data from a URL
+		String result = "";
+		URL url;
+		try {
+			url = new URL("http://shackapi.stonedonkey.com/stories/" + storyID + ".json");
+			URLConnection conn = url.openConnection();
+			HttpURLConnection httpConnection = (HttpURLConnection) conn;
+
+			httpConnection.setRequestProperty("User-Agent", Helper.getUserAgentString(context));
+			
+			int responseCode = httpConnection.getResponseCode();
+			if (responseCode == HttpURLConnection.HTTP_OK) {
+
+				InputStream is = httpConnection.getInputStream();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+				
+				String line = "";
+				
+				while ((line = reader.readLine()) != null) {
+					result = result + line + "\n";
+				}
+			}
+
+		} catch (Exception e) {
+
+			result = "";
+		}
+		
+		if (result.length() > 0)
+		{
+			JSONObject json = new JSONObject(result);
+			final String body = json.getString("body");
+			final String name = json.getString("name");
+		
+			return "<h3>" + name + "</h3>" + body;
+		}
+		else
+			return "Story could not be loaded at this time.";
+		
+	}
+	
 
 }
