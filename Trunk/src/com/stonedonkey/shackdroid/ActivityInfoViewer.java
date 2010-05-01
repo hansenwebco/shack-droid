@@ -30,7 +30,7 @@ public class ActivityInfoViewer extends Activity {
 		final String html = "<html><body bgcolor='#222222'><br/><br/><br/><font color='white'><center>LOADING...</center></font></body></html>";
 		WebView wv = (WebView) findViewById(R.id.WebViewInfoView);
 		wv.loadData(html, "text/html","utf-8");
-		wv.setVerticalFadingEdgeEnabled(false);
+		wv.setVerticalFadingEdgeEnabled(true);
 		wv.setVerticalScrollbarOverlay(true);
 		
 		Animation anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.toggle_infoviewer);
@@ -69,12 +69,12 @@ class GetShackStoryAsyncTask extends AsyncTask<Void,Void,Integer>{
 	protected void onPostExecute(Integer result) {
 		super.onPostExecute(result);
 		
-		final String html = "<html><head><style>body { color:white } a { color:white; }</style></head><body bgcolor='#222222'>" 
+		final String html = "<html><head><style>body { color:white;margin:5pt; } a { color:white; } h3 { color:#F02E01 }</style></head><body bgcolor='#222222'>" 
 			+ _html + "</body></html>"; 
 		
 		WebView wv = (WebView)((Activity) _context).findViewById(R.id.WebViewInfoView);
 		wv.loadData(html, "text/html","utf-8");
-		wv.setVerticalFadingEdgeEnabled(false);
+		wv.setVerticalFadingEdgeEnabled(true);
 		wv.setVerticalScrollbarOverlay(true);
 	}
 }
