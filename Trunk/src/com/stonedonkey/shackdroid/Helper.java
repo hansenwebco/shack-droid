@@ -276,7 +276,7 @@ public class Helper {
 	}
 	public static int GetLastShackMessageId(Context context) throws StreamCorruptedException, IOException
 	{
-		int lastMessageID = -1;
+		int lastMessageID = 0;
 		try {
 			if (context.getFileStreamPath("shackmessage.cache").exists()) {
 							
