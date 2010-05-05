@@ -189,7 +189,12 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 			int height) {
         Camera.Parameters parameters = _cam.getParameters();
         parameters.setPreviewSize(width, height);
+        
+        // TODO: this line seems to crash some phones see bug report.
+        // http://code.google.com/p/android/issues/detail?id=7909
         _cam.setParameters(parameters);
+      
+        
         _cam.startPreview();
 	}
 
