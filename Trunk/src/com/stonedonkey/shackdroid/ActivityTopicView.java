@@ -27,9 +27,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnCreateContextMenuListener;
 import android.widget.ListView;
 
 public class ActivityTopicView extends ListActivity implements Runnable {
@@ -373,6 +375,16 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 
 			AdapterTopicView tva = new AdapterTopicView(getApplicationContext(),R.layout.topic_row, posts, login, fontSize,tempHash);
 			
+			ListView lv = getListView();
+		
+			lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+			    @Override
+			    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+			      menu.add(0, 0, 0, "Show Story");
+			      menu.add(0, 1, 0, "Copy Link to Clipboard");
+			    }
+			  }); 
+			
 			setListAdapter(tva);
 			
 			// update the reply counts for the listing of topics
@@ -392,7 +404,36 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 
 		threadLoaded = true;
 	}
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		
+		// get a reference tot he ContextMenu it tells you what
+		// position on  the listview was clicked.
+		//AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+			
+		//int itemPosition = info.position;
+		
+		switch (item.getItemId()) {
+		case 0:
+			try {
+				Intent intent = new Intent();
+				intent.putExtra("action", "story");
+				intent.putExtra("id", Integer.parseInt(storyID));
+				intent.setClass(this, ActivityInfoViewer.class);
+				startActivity(intent);
+			}
+			catch (Exception ex)
+			{
+				
+			}
+			return true;
+		case 1: // delete note
+			// new optoin
+			return true;
+		}
+		return false;
 
+	}
 	@SuppressWarnings("unchecked")
 	public Hashtable<String, String> GetPostCache() throws StreamCorruptedException, IOException
 	{
