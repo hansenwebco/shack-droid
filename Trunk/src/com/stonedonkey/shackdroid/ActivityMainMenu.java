@@ -300,7 +300,7 @@ class CheckForNewShackDroidAsyncTask extends AsyncTask<Void,Void,Integer>{
 		}
 		catch (Exception ex) { 
 			Log.e("ShackDroid", "Error Loading Last Update Date: " + ex.getMessage());
-			return null;
+			checkForUpdate = true;
 		}
 		if (checkForUpdate)
 		{
