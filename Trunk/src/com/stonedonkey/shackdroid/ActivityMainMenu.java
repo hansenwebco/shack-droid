@@ -302,7 +302,7 @@ class CheckForNewShackDroidAsyncTask extends AsyncTask<Void,Void,Integer>{
 			Log.e("ShackDroid", "Error Loading Last Update Date: " + ex.getMessage());
 			checkForUpdate = true;
 		}
-		checkForUpdate = true;
+		//checkForUpdate = true;  // DEBUGGING SWITCH
 		if (checkForUpdate)
 		{
 			final String result = HandlerExtendedSites.VersionCheck(context);
