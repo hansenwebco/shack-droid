@@ -386,7 +386,8 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 			      menu.setHeaderTitle("Options");
 			      //menu.add(0, 0, 0, "Show Story");
-			      menu.add(0, 1, 0, "Copy Link to Clipboard");
+			      menu.add(0, 1, 0, "Copy Post Url to Clipboard");
+			      menu.add(0,-1,0,"Cancel");
 			    }
 			  }); 
 			
