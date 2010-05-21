@@ -56,7 +56,7 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 	Camera _cam;
 	boolean _takingPicture;
 	byte[] _pictureData;
-	double _scaleAmount = 0;
+	double _scaleAmount = 2; // half size
 	private boolean _highResAvailable;
 	private boolean _extraCompressionNeeded;
 	private boolean _askToPost = false;
