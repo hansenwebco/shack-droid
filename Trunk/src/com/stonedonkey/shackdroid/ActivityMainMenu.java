@@ -47,7 +47,7 @@ public class ActivityMainMenu extends ListActivity  {
 		menu.add(new ShackMenuItem("Shack LOLs","You are not as popular as these people.",R.drawable.menu2_lol2));//
 		//menu.add(new ShackMenuItem("Shack Marks","Your mobile tranny porn Stash.",R.drawable.menu2_shackmarks2));
 		menu.add(new ShackMenuItem("Settings","Hay guys, am I doing this right?",R.drawable.menu2_settings));
-		menu.add(new ShackMenuItem("Version Check","stonedonkey finally did something new!?!",R.drawable.menu2_vercheck));
+		//menu.add(new ShackMenuItem("Version Check","stonedonkey finally did something new!?!",R.drawable.menu2_vercheck));
 		menu.add(new ShackMenuItem("What's New","How we most recently broke this thing.",R.drawable.menu2_cone));
 		menu.add(new ShackMenuItem("Stats","Keeping score, it's how you know you're better.",R.drawable.menu2_stats));
 		//menu.add(new ShackMenuItem("Tester","Testing stuff before you can play with it!.",R.drawable.menu2_stats));
@@ -302,6 +302,7 @@ class CheckForNewShackDroidAsyncTask extends AsyncTask<Void,Void,Integer>{
 			Log.e("ShackDroid", "Error Loading Last Update Date: " + ex.getMessage());
 			checkForUpdate = true;
 		}
+		checkForUpdate = true;
 		if (checkForUpdate)
 		{
 			final String result = HandlerExtendedSites.VersionCheck(context);
@@ -320,7 +321,8 @@ class CheckForNewShackDroidAsyncTask extends AsyncTask<Void,Void,Integer>{
 				CharSequence contentTitle = "ShackDroid Update Available";
 				CharSequence contentText = "Touch here to download!";
 
-				Intent notificationIntent = new Intent("android.intent.action.VIEW", Uri.parse(result));
+				//Intent notificationIntent = new Intent("android.intent.action.VIEW", Uri.parse(result));
+				Intent notificationIntent = new Intent("android.intent.action.VIEW", Uri.parse("market://search?q=pname:com.stonedonkey.shackdroid"));
 				PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 				note.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 
