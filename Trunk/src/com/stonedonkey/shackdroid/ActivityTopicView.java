@@ -27,12 +27,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.text.ClipboardManager;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.ListView;
+import android.widget.Toast;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class ActivityTopicView extends ListActivity implements Runnable {
 
@@ -380,7 +384,8 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
 			    @Override
 			    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-			      menu.add(0, 0, 0, "Show Story");
+			      menu.setHeaderTitle("Options");
+			      //menu.add(0, 0, 0, "Show Story");
 			      menu.add(0, 1, 0, "Copy Link to Clipboard");
 			    }
 			  }); 
@@ -407,11 +412,9 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		
-		// get a reference tot he ContextMenu it tells you what
+		// get a reference to to the ContextMenu it tells you what
 		// position on  the listview was clicked.
-		//AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-			
-		//int itemPosition = info.position;
+
 		
 		switch (item.getItemId()) {
 		case 0:
@@ -427,8 +430,28 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 				
 			}
 			return true;
-		case 1: // delete note
-			// new optoin
+		case 1: // copy url to clipboard
+
+			try 
+			{
+				AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+				int itemPosition = info.position;
+				
+				String postID = posts.get(itemPosition).getPostID();
+				
+				//http://www.shacknews.com/laryn.x?id=23004466
+				String url = "http://www.shacknews.com/laryn.x?id=" + postID;
+				ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+				clipboard.setText(url);
+				Toast.makeText(this, "Link to post copied to clipboard.", Toast.LENGTH_SHORT).show();
+				
+			}
+			catch (Exception ex)
+			{
+				Log.e("ShackDroid", "Error copying link to clipboard");
+			}
+			
+			
 			return true;
 		}
 		return false;
