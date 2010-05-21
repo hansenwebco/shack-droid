@@ -130,25 +130,19 @@ public class ActivityMainMenu extends ListActivity  {
 			intent.setClass(this, ActivityTopicView.class);
 			break;
 		}
-		case 1: 
+		case 1: // RSS
 		{
 			ShackDroidStats.AddViewedRssFeed(this);
 			intent.setClass(this,ActivityRSS.class);
 			break;
 		}
-		case 2: 
+		case 2: // Shack Search 
 		{
 			intent.setClass(this,ActivitySearchTabs.class);
 			break;
 
 		}
-		case 4:  // shackLOL
-		{
-			ShackDroidStats.AddViewedShackLOLs(this);
-			intent.setClass(this,ActivityLOLTabs.class);
-			break;
-		}
-		case 3:
+		case 3: // shack messages
 		{
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			boolean allowSMs = prefs.getBoolean("allowShackMessages", false);
@@ -172,26 +166,30 @@ public class ActivityMainMenu extends ListActivity  {
 				return;
 			}
 		}
-		case 5:
+		case 4:  // shackLOL
+		{
+			ShackDroidStats.AddViewedShackLOLs(this);
+			intent.setClass(this,ActivityLOLTabs.class);
+			break;
+		}
+		case 5: // settings
 		{
 			intent.setClass(this,ActivityPreferences.class);
 			break;
 		}
+		//case 6:
+		//{
+		//	newVersionCheck(true);
+		//	break;
+		//}
 		case 6:
-		{
-			newVersionCheck(true);
-
-
-			break;
-		}
-		case 7:
 		{
 			CheckForUpdate(true);
 			break;
 			//intent.setClass(this,ActivitySearchTabs.class);
 			//break;
 		}
-		case 8: {
+		case 7: {
 			ShackDroidStats.AddViewedStats(this);
 			intent.setClass(this,ActivityStats.class);
 			break;
@@ -207,12 +205,13 @@ public class ActivityMainMenu extends ListActivity  {
 
 		}	
 
-		if (position != 6 &&  position !=7) {
+		if (position != 6) {
 			startActivity(intent);
 
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void newVersionCheck(boolean showNoUpdate) {
 
 		String message = "Unable to complete version check, please try again later.";
