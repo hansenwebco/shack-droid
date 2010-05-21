@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.text.ClipboardManager;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
@@ -49,6 +50,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TextView.BufferType;
 
 /**
@@ -375,6 +377,17 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			ListView lv = getListView();
 			lv.setSelection(currentPosition);
 
+			
+			lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+			    @Override
+			    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+			      menu.setHeaderTitle("Options");
+			      menu.add(0, 2, 0, "Copy Post Url to Clipboard");
+			      menu.add(0,-1,0,"Cancel");
+			    }
+			  }); 
+			
+			
 			// set the post background color to be more "shack" like
 			RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayoutThread);
 			layout.setBackgroundColor(Color.parseColor("#222222"));
@@ -384,14 +397,14 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			tvpost.setOnCreateContextMenuListener(
 					new OnCreateContextMenuListener() {
 						@Override
-						public void onCreateContextMenu(ContextMenu menu, View v,
-								ContextMenuInfo menuInfo) {
+						public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+							menu.setHeaderTitle("Post Options");
+							menu.add(0,1,0,"Copy Post Url to Clipboard");
 							if (spoilerText == true) {
-								menu.setHeaderTitle("Post Options");
 								menu.add(0, 10, 0, "Remove Spoiler");
 								//menu.add(0, 11, 0, "Copy Text"); // might be useful one day
-								menu.add(0, -1, 0, "Cancel");
 							}
+							menu.add(0, -1, 0, "Cancel");
 						}
 					});		
 
@@ -600,11 +613,30 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId())
 		{
-		case 10: 
-			RemoveSpoiler();
-			return true;
+			case 10: 
+				RemoveSpoiler();
+				return true;
+			case 1: {
+				//http://www.shacknews.com/laryn.x?id=23004466
+				String url = "http://www.shacknews.com/laryn.x?id=" + postID;
+				ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+				clipboard.setText(url);
+				Toast.makeText(this, "Link to post copied to clipboard.", Toast.LENGTH_SHORT).show();
+			}
+			case 2: {
+				
+				String linkID = posts.get(currentPosition).getPostID();
+				
+				//http://www.shacknews.com/laryn.x?id=23005222#itemanchor_23005222
+				String url = "http://www.shacknews.com/laryn.x?id=" + linkID + "#itemanchor_" + linkID;
+				ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+				clipboard.setText(url);
+				Toast.makeText(this, "Link to post copied to clipboard.", Toast.LENGTH_SHORT).show();
+			}
 		}
-		return false;
+		
+	return false;
+
 	}
 
 
