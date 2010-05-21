@@ -44,8 +44,8 @@
 		<item>http://feed.shacknews.com/extras/tag_rss.x/Rumor</item>
 	</string-array>
 		<string-array name="shackAPIDesc">
-		<item>Squeegy's</item>
-		<item>stonedonkey's</item>
+		<item>Squeegy\'s</item>
+		<item>stonedonkey\'s</item>
 	</string-array>	
 	<string-array name="shackAPIs">
 		<item>http://shackchatty.com</item>
@@ -59,9 +59,9 @@
 		<item>20</item>
 	</string-array>
 	<string-array name="lolViews">
-		<item>latest lol's</item>
+		<item>latest lol\'s</item>
 		<item>stuff you wrote</item>
-		<item>stuff you LOL'd</item>
+		<item>stuff you LOL\'d</item>
 	</string-array>	
 	<string-array name="titles">
 		<item>Suck it Trebek!</item>
@@ -69,7 +69,7 @@
 		<item>Not Pony Safe</item>
 		<item>Lamp, Sand, Lime!</item>
 		<item>*golf clap*</item>
-		<item>Spy's sappin' mah phone!</item>
+		<item>Spy\'s sappin\' mah phone!</item>
 		<item>You are not the father!</item>
 		<item>Putting NWS in NeWS.</item>
 		<item>What?</item>
