@@ -22,29 +22,27 @@ import android.widget.TextView;
 public class AdapterTopicView extends BaseAdapter {
 
 	//private Context context;
-	private List<ShackPost> topicList;
-	private int rowResouceID;
-	private String shackLogin;
-	static Typeface face;
-	private int fontSize = 12;
-	private Hashtable<String,String> postCache = null;
-	static String showAuthor = "";
-	private Resources r; 
+	private final List<ShackPost> topicList;
+	private final int rowResouceID;
+	private final String shackLogin;
+	private final Typeface face;
+	private final int fontSize;
+	private final Hashtable<String,String> postCache;
+	private final String showAuthor;
+	private final Resources r; 
 	
 	LayoutInflater inflate;// = LayoutInflater.from(context);
 	public AdapterTopicView(Context context,int rowResouceID, List<ShackPost> topicList, String shackLogin,int fontSize,Hashtable<String,String> postCache ){
-		//this.context = context;
 		this.topicList = topicList;
 		this.rowResouceID = rowResouceID;
 		this.shackLogin = shackLogin;
 		this.fontSize = fontSize;
 		this.postCache = postCache;
-		
-		r = context.getResources();
+		this.r = context.getResources();
 		
 	    face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
 	   	    
-	    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+	    final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 	    showAuthor = prefs.getString("showAuthor","count");
 	    
 	    inflate = LayoutInflater.from(context);
@@ -61,18 +59,17 @@ public class AdapterTopicView extends BaseAdapter {
 	@Override
 	public long getItemId(int position) {
 		//return position;
-		ShackPost post = topicList.get(position);
+		final ShackPost post = topicList.get(position);
 		return Long.parseLong(post.getPostID());
 	}
-	
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 		TextView tmp;
-		View v;
+		final View v;
 		
-		ShackPost post = topicList.get(position);
+		final ShackPost post = topicList.get(position);
 		
 		if (convertView == null){
 			v = inflate.inflate(rowResouceID,parent,false);
@@ -114,10 +111,10 @@ public class AdapterTopicView extends BaseAdapter {
 		// show the number of new posts since the last refresh
 		if (postCache != null && postCache.get(post.getPostID()) != null ) {
 
-			String cacheposts = postCache.get(post.getPostID());
-			Integer newPosts = Integer.parseInt(post.getReplyCount()) - Integer.parseInt(cacheposts);
+			final String cacheposts = postCache.get(post.getPostID());
+			final Integer newPosts = Integer.parseInt(post.getReplyCount()) - Integer.parseInt(cacheposts);
 			
-			TextView postNewCount = (TextView)v.findViewById(R.id.TextViewNewPosts);
+			final TextView postNewCount = (TextView)v.findViewById(R.id.TextViewNewPosts);
 			if (newPosts > 0 && Integer.parseInt(post.getReplyCount()) > 0) {
 				postNewCount.setTypeface(face);
 				postNewCount.setText("+" + newPosts.toString());
@@ -128,7 +125,7 @@ public class AdapterTopicView extends BaseAdapter {
 		}
 		else // we don't have a cached version of this in the post cache reset the view
 		{
-			TextView postNewCount = (TextView)v.findViewById(R.id.TextViewNewPosts);
+			final TextView postNewCount = (TextView)v.findViewById(R.id.TextViewNewPosts);
 			postNewCount.setText(null);
 		}
 		
@@ -144,12 +141,12 @@ public class AdapterTopicView extends BaseAdapter {
 			tmp.setText(preview);
 		}
 				
-		ImageView img = (ImageView)v.findViewById(R.id.ImageViewCat);
+		final ImageView img = (ImageView)v.findViewById(R.id.ImageViewCat);
 			
-		RelativeLayout tr = (RelativeLayout)v.findViewById(R.id.TopicRow);
+		final RelativeLayout tr = (RelativeLayout)v.findViewById(R.id.TopicRow);
 		if (showAuthor.equalsIgnoreCase("topic") && post.getIsAuthorInThread())
 		{
-			 Drawable d = r.getDrawable(R.drawable.background_gradient_blue);
+			 final Drawable d = r.getDrawable(R.drawable.background_gradient_blue);
 			 tr.setBackgroundDrawable(d);
 		}
 		else
@@ -157,7 +154,7 @@ public class AdapterTopicView extends BaseAdapter {
 
 		
 		// TODO: clean this up a little / also replicated in ShackDroidThread ick
-		String postCat = post.getPostCategory();
+		final String postCat = post.getPostCategory();
 		if (postCat.equals("offtopic"))  {
 			img.setImageResource(R.drawable.offtopic);
 			//tr.setBackgroundColor(Color.parseColor("#081407"));

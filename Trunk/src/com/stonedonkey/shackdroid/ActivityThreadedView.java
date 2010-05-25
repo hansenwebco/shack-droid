@@ -36,6 +36,7 @@ import android.text.style.StrikethroughSpan;
 import android.text.util.Linkify;
 import android.text.util.Linkify.MatchFilter;
 import android.text.util.Linkify.TransformFilter;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
@@ -82,13 +83,13 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		if (getIntent() != null && 
 				getIntent().getAction() != null && 
 				getIntent().getAction().equals(Intent.ACTION_VIEW)){
-			Uri uri = getIntent().getData();
+			final Uri uri = getIntent().getData();
 			postID = uri.getQueryParameter("id");
 			storyID = null; //TODO: Actually get this some how
 			
 		}		
 		else{
-			Bundle extras = this.getIntent().getExtras();
+			final Bundle extras = this.getIntent().getExtras();
 			postID = extras.getString("postID");
 			storyID = extras.getString("storyID");
 			isNWS = extras.getBoolean("isNWS");
@@ -111,13 +112,13 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		// Adjust the scroll view based on the size of the screen
 		// this doesn't account for the titlebar or the statusbar
 		// no methods appear to be available to determine them 
-		ScrollView sv = (ScrollView) findViewById(R.id.textAreaScroller);
-		TextView tv = (TextView)findViewById(R.id.TextViewThreadAuthor);
+		final ScrollView sv = (ScrollView) findViewById(R.id.textAreaScroller);
+		final TextView tv = (TextView)findViewById(R.id.TextViewThreadAuthor);
 		
-		int statusTitleBar = 0; // TODO: really would like to not hardcode this
+		final int statusTitleBar = 0; // TODO: really would like to not hardcode this
 		
-		int offset = tv.getTotalPaddingTop() + tv.getHeight() +  sv.getTop() ;
-		int height = getWindowManager().getDefaultDisplay().getHeight();
+		final int offset = tv.getTotalPaddingTop() + tv.getHeight() +  sv.getTop() ;
+		final int height = getWindowManager().getDefaultDisplay().getHeight();
 
 		sv.getLayoutParams().height = (height - offset - statusTitleBar) / 2;
 		sv.requestLayout();		
@@ -153,7 +154,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 
 		if (threadLoaded == true && posts != null) { 
 			ShowData();
-			ListView lv = getListView();
+			final ListView lv = getListView();
 			lv.setSelection(currentPosition);
 		}
 		else
@@ -169,7 +170,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case 1: {
-			ProgressDialog dialog = new ProgressDialog(this);
+			final ProgressDialog dialog = new ProgressDialog(this);
 			dialog.setMessage("loading, please wait...");
 			dialog.setTitle(null);
 			dialog.setIndeterminate(true);
@@ -185,18 +186,18 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		showDialog(1);
 
 		// use the class run() method to do work
-		Thread thread = new Thread(this); 
+		final Thread thread = new Thread(this); 
 		thread.start();
 	}
 
 	@Override
 	public void run() {
 
-		Comparator<ShackPost> byPostID = new SortByPostIDComparator();
-		Comparator<ShackPost> byOrderID = new SortByOrderIDComparator();
+		final Comparator<ShackPost> byPostID = new SortByPostIDComparator();
+		final Comparator<ShackPost> byOrderID = new SortByOrderIDComparator();
 		threadLoaded = false;
 		try {
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			String feedURL = prefs.getString("shackFeedURL", getString(R.string.default_api));
 			
 			// TODO: Once Squeegy updates his api to work with NWS
@@ -204,16 +205,16 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			if (isNWS) 
 				feedURL = "http://shackapi.stonedonkey.com";
 			
-			URL url = new URL(feedURL + "/thread/" + postID	+ ".xml");
+			final URL url = new URL(feedURL + "/thread/" + postID	+ ".xml");
 
 			// Get a SAXParser from the SAXPArserFactory.
-			SAXParserFactory spf = SAXParserFactory.newInstance();
-			SAXParser sp = spf.newSAXParser();
+			final SAXParserFactory spf = SAXParserFactory.newInstance();
+			final SAXParser sp = spf.newSAXParser();
 
 			//  Get the XMLReader of the SAXParser we created.
-			XMLReader xr = sp.getXMLReader();
+			final XMLReader xr = sp.getXMLReader();
 			// Create a new ContentHandler and apply it to the XML-Reader
-			SaxHandlerTopicView saxHandler = new SaxHandlerTopicView(this,"threaded");
+			final SaxHandlerTopicView saxHandler = new SaxHandlerTopicView(this,"threaded");
 			xr.setContentHandler(saxHandler);
 
 			// Parse the xml-data from our URL.
@@ -235,7 +236,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 
 			// set the index on them based on order
 			ShackPost tempPost = null;
-			int postsSize = posts.size();
+			final int postsSize = posts.size();
 			for (int x=0;x<postsSize;x++)
 			{
 				tempPost = posts.get(x);
@@ -247,7 +248,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			
 			
 		} catch (Exception ex) {
-			ex.printStackTrace(System.out);
+			Log.e("ShackDroid", "Unable to parse story " + this.postID);
 			errorText = "An error occurred connecting to API.";
 		}
 		threadLoaded = true;
@@ -284,10 +285,10 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	
 	private void UpdatePostText(int position, Boolean addSpoilerMarkers)
 	{
-		TextView tv = (TextView) findViewById(R.id.TextViewPost);
-		String postText = ParseShackText(posts.get(position).getPostText(),addSpoilerMarkers);
+		final TextView tv = (TextView) findViewById(R.id.TextViewPost);
+		final String postText = ParseShackText(posts.get(position).getPostText(),addSpoilerMarkers);
 		
-		Spanned parsedText = Html.fromHtml(postText,null, new TagHandler(){
+		final Spanned parsedText = Html.fromHtml(postText,null, new TagHandler(){
 			int startPos = 0;
 			@Override
 			public void handleTag(boolean opening, String tag, Editable output,
@@ -298,7 +299,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 						startPos = output.length();
 					}
 					else{
-						StrikethroughSpan strike = new StrikethroughSpan();
+						final StrikethroughSpan strike = new StrikethroughSpan();
 						/*
 						// This doesn't work and the colour is really dark normally :(
 						TextPaint p = new TextPaint();
@@ -329,19 +330,19 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 //		Linkify.addLinks(tv,shackURLMatcher,threadView,new ShackURLMatchFilter(), new ShackURLTransform());
 //		
 
-		ShackPost post = posts.get(position);
+		final ShackPost post = posts.get(position);
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		String login = prefs.getString("shackLogin", "");
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		final String login = prefs.getString("shackLogin", "");
 
-		int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
+		final int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
 		tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 
-		Typeface face = Typeface.createFromAsset(this.getAssets(), "fonts/arial.ttf");
+		final Typeface face = Typeface.createFromAsset(this.getAssets(), "fonts/arial.ttf");
 		tv.setTypeface(face);
 
 
-		TextView posterName = (TextView) findViewById(R.id.TextViewThreadAuthor);
+		final TextView posterName = (TextView) findViewById(R.id.TextViewThreadAuthor);
 		posterName.setText(post.getPosterName());
 		posterName.setTypeface(face);
 
@@ -350,11 +351,11 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		else
 			posterName.setTextColor(Color.parseColor("#FFBA00"));
 
-		TextView postDate = (TextView) findViewById(R.id.TextViewThreadViewPostDate);
+		final TextView postDate = (TextView) findViewById(R.id.TextViewThreadViewPostDate);
 		postDate.setText(Helper.FormatShackDate(post.getPostDate()));
 		postDate.setTypeface(face);
 
-		String postCat = post.getPostCategory();
+		final String postCat = post.getPostCategory();
 		setPostCategoryIcon(postCat);
 
 		postID = post.getPostID();
@@ -369,12 +370,12 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		if (posts != null)
 		{
 			// this is where we bind our fancy ArrayList of posts
-			AdapterThreadedView tva = new AdapterThreadedView(this,	R.layout.thread_row, posts,currentPosition);
+			final AdapterThreadedView tva = new AdapterThreadedView(this,	R.layout.thread_row, posts,currentPosition);
 			setListAdapter(tva);
 
 			UpdatePostText(currentPosition,true);
 
-			ListView lv = getListView();
+			final ListView lv = getListView();
 			lv.setSelection(currentPosition);
 
 			
@@ -389,11 +390,11 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 			
 			
 			// set the post background color to be more "shack" like
-			RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayoutThread);
+			final RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayoutThread);
 			layout.setBackgroundColor(Color.parseColor("#222222"));
 
 			// add a listener for removing spoilers and maybe adding "copy" functionality later
-			TextView tvpost = (TextView)findViewById(R.id.TextViewPost);
+			final TextView tvpost = (TextView)findViewById(R.id.TextViewPost);
 			tvpost.setOnCreateContextMenuListener(
 					new OnCreateContextMenuListener() {
 						@Override
@@ -445,7 +446,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 
 		// tell our adapter what the current row is, this is used to rehighlight
 		// the current topic during scrolling
-		AdapterThreadedView tva = (AdapterThreadedView) getListAdapter();
+		final AdapterThreadedView tva = (AdapterThreadedView) getListAdapter();
 		tva.setSelectedRow(position);
 
 		currentPosition = position;
@@ -454,7 +455,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		//l.setItemChecked(position, true);
 		//l.setSelection(position);
 
-		ScrollView sv = (ScrollView) findViewById(R.id.textAreaScroller);
+		final ScrollView sv = (ScrollView) findViewById(R.id.textAreaScroller);
 		sv.scrollTo(0, 0); 
 
 		UpdatePostText(position,true);
@@ -468,12 +469,12 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		// We have to use the Spannable interface to handle spoilering text
 		// not the best but works.
 		spoilerText = false;
-		TextView tv = (TextView) findViewById(R.id.TextViewPost);
-		String text = tv.getText().toString();
+		final TextView tv = (TextView) findViewById(R.id.TextViewPost);
+		final String text = tv.getText().toString();
 		int end = 0;
 		while (text.indexOf("!!-",end) >= 0)
 		{
-			int start = text.indexOf("!!-",end);
+			final int start = text.indexOf("!!-",end);
 			end = text.indexOf("-!!",start);
 			Spannable str = (Spannable) tv.getText();
 			str.setSpan(new BackgroundColorSpan(Color.parseColor("#383838")), start, end+3,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -483,7 +484,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 
 	private void setPostCategoryIcon(String postCat)
 	{
-		ImageView img = (ImageView)findViewById(R.id.ImageViewCatTopic);
+		final ImageView img = (ImageView)findViewById(R.id.ImageViewCatTopic);
 		//TODO: clean this up a little / also duplicated in Topic View Adapter ick
 		if (postCat.equals("offtopic")) 
 			img.setImageResource(R.drawable.offtopic);
@@ -554,7 +555,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent;
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		String login = "";
 		switch (item.getItemId()) {
 		case 0:	// Launch post form
@@ -619,8 +620,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 				return true;
 			case 1: {
 				//http://www.shacknews.com/laryn.x?id=23004466
-				String url = "http://www.shacknews.com/laryn.x?id=" + postID;
-				ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+				final String url = "http://www.shacknews.com/laryn.x?id=" + postID;
+				final ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 				clipboard.setText(url);
 				Toast.makeText(this, "Link to post copied to clipboard.", Toast.LENGTH_SHORT).show();
 			}
@@ -629,8 +630,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 				String linkID = posts.get(currentPosition).getPostID();
 				
 				//http://www.shacknews.com/laryn.x?id=23005222#itemanchor_23005222
-				String url = "http://www.shacknews.com/laryn.x?id=" + linkID + "#itemanchor_" + linkID;
-				ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+				final String url = "http://www.shacknews.com/laryn.x?id=" + linkID + "#itemanchor_" + linkID;
+				final ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 				clipboard.setText(url);
 				Toast.makeText(this, "Link to post copied to clipboard.", Toast.LENGTH_SHORT).show();
 			}
@@ -643,7 +644,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 
 	private void LaunchNotesIntent()
 	{
-		Intent intent = new Intent();
+		final Intent intent = new Intent();
 		intent.setClass(this, ActivityShackMarks.class);
 		startActivity(intent);
 	}

@@ -16,26 +16,23 @@ import android.widget.TextView;
 
 public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 
-	//private Context context;
-	private List<ShackPost> topicList;
-	private int rowResouceID;
-	static Typeface face;
+	private final List<ShackPost> topicList;
+	private final int rowResouceID;
+	private static Typeface face;
 	private int selectedRow = 0;
-	
-	private String login;
-	private Boolean highlightThread;
-	private int fontSize;
+	private final String login;
+	private final Boolean highlightThread;
+	private final int fontSize;
 	private TextView threadPreview;
-	private LayoutInflater inflate;
+	private final LayoutInflater inflate;
 	
 	public AdapterThreadedView(Context context,int rowResouceID, List<ShackPost> topicList,int selectedRow ){
-		//this.context = context;
 		this.topicList = topicList;
 		this.rowResouceID = rowResouceID;
 		this.selectedRow = selectedRow;
 		
 		face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		login = prefs.getString("shackLogin", "");
 		highlightThread = prefs.getBoolean("highlightUserThreads", true);
 		fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
@@ -59,14 +56,14 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		ShackPost post = topicList.get(position);
+		final ShackPost post = topicList.get(position);
 		return Long.parseLong(post.getPostID());
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View v;
-		ShackPost post = topicList.get(position);
+		final View v;
+		final ShackPost post = topicList.get(position);
 		if (convertView == null){
 			v = inflate.inflate(rowResouceID,parent,false);
 		}
@@ -83,17 +80,17 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 
 			// chazums
 			// Now just moves the text box to the right instead of padding text.
-			int postIndent = 7* post.getIndent(); // avoid multiple lookups
+			final int postIndent = 7* post.getIndent(); // avoid multiple lookups
 	
 			threadPreview.setPadding(postIndent, threadPreview.getPaddingTop(), threadPreview.getPaddingBottom(), threadPreview.getPaddingRight());
-			String postText = post.getPostPreview();
+			final String postText = post.getPostPreview();
 			 
 			// show this users posts as blue
 			 if (highlightThread == true && post.getPosterName().toString().equalsIgnoreCase(login))
 					threadPreview.setTextColor(Color.parseColor("#00BFF3"));
 			 else if (post.getPostIndex() > 9)
 				threadPreview.setTextColor(Color.parseColor("#777777"));
-			else
+			 else
 				threadPreview.setTextColor(Color.parseColor("#FFFFFF"));
 			
 			

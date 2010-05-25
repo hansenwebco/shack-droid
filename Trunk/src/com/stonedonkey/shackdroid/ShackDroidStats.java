@@ -36,8 +36,8 @@ public class ShackDroidStats  implements Serializable {
 			
 			ShackDroidStats stats = null;
 			
-			FileInputStream fileIn = context.openFileInput("stats.cache");
-			ObjectInputStream in = new ObjectInputStream(fileIn);
+			final FileInputStream fileIn = context.openFileInput("stats.cache");
+			final ObjectInputStream in = new ObjectInputStream(fileIn);
 			try {
 				stats = (ShackDroidStats) in.readObject();
 			} catch (ClassNotFoundException e) {
@@ -57,8 +57,8 @@ public class ShackDroidStats  implements Serializable {
 		if (stats == null)
 			stats = new  ShackDroidStats();
 				
-		FileOutputStream fos = context.openFileOutput("stats.cache",Context.MODE_PRIVATE);
-		ObjectOutputStream os = new ObjectOutputStream(fos);
+		final FileOutputStream fos = context.openFileOutput("stats.cache",Context.MODE_PRIVATE);
+		final ObjectOutputStream os = new ObjectOutputStream(fos);
 		os.writeObject(stats);
 		os.close();
 		fos.close();	
@@ -67,7 +67,7 @@ public class ShackDroidStats  implements Serializable {
 	public static void AddPostsViewed(Context context)
 	{
 		try {
-			ShackDroidStats stats = GetUserStats(context);
+			final ShackDroidStats stats = GetUserStats(context);
 			stats.setPostsViewed(stats.getPostsViewed()+1);
 			UpdateUserStats(stats,context);
 		}
@@ -76,7 +76,7 @@ public class ShackDroidStats  implements Serializable {
 	public static void AddPostsMade(Context context)
 	{
 		try {
-			ShackDroidStats stats = GetUserStats(context);
+			final ShackDroidStats stats = GetUserStats(context);
 			stats.setPostsMade(stats.getPostsMade()+1);
 			UpdateUserStats(stats,context);
 		}
@@ -85,7 +85,7 @@ public class ShackDroidStats  implements Serializable {
 	public static void AddLOLsMade(Context context)
 	{
 		try {
-			ShackDroidStats stats = GetUserStats(context);
+			final ShackDroidStats stats = GetUserStats(context);
 			stats.setLolsMade(stats.getLolsMade()+1);
 			UpdateUserStats(stats,context);
 		}
@@ -94,7 +94,7 @@ public class ShackDroidStats  implements Serializable {
 	public static void AddINFsMade(Context context)
 	{
 		try {
-			ShackDroidStats stats = GetUserStats(context);
+			final ShackDroidStats stats = GetUserStats(context);
 			stats.setInfsMade(stats.getInfsMade()+1);
 			UpdateUserStats(stats,context);
 		}
@@ -103,7 +103,7 @@ public class ShackDroidStats  implements Serializable {
 	public static void AddUNFsMade(Context context)
 	{
 		try {
-			ShackDroidStats stats = GetUserStats(context);
+			final ShackDroidStats stats = GetUserStats(context);
 			stats.setUnfsMade(stats.getUnfsMade()+1);
 			UpdateUserStats(stats,context);
 		}
@@ -112,7 +112,7 @@ public class ShackDroidStats  implements Serializable {
 	public static void AddTAGsMade(Context context)
 	{
 		try {
-			ShackDroidStats stats = GetUserStats(context);
+			final ShackDroidStats stats = GetUserStats(context);
 			stats.setTagsMade(stats.getTagsMade()+1);
 			UpdateUserStats(stats,context);
 		}
@@ -121,7 +121,7 @@ public class ShackDroidStats  implements Serializable {
 	public static void AddVanitySearch(Context context)
 	{
 		try {
-			ShackDroidStats stats = GetUserStats(context);
+			final ShackDroidStats stats = GetUserStats(context);
 			stats.setVanitySearches(stats.getVanitySearches()+1);
 			UpdateUserStats(stats,context);
 		}
@@ -130,7 +130,7 @@ public class ShackDroidStats  implements Serializable {
 	public static void AddShackSearch(Context context)
 	{
 		try {
-			ShackDroidStats stats = GetUserStats(context);
+			final ShackDroidStats stats = GetUserStats(context);
 			stats.setShackSearches(stats.getShackSearches()+1);
 			UpdateUserStats(stats,context);
 		}
@@ -139,7 +139,7 @@ public class ShackDroidStats  implements Serializable {
 	public static void AddViewShackMessage(Context context)
 	{
 		try {
-			ShackDroidStats stats = GetUserStats(context);
+			final ShackDroidStats stats = GetUserStats(context);
 			stats.setViewedShackMessages(stats.getViewedShackMessages()+1);
 			UpdateUserStats(stats,context);
 		}
@@ -148,7 +148,7 @@ public class ShackDroidStats  implements Serializable {
 	public static void AddSentShackMessage(Context context)
 	{
 		try {
-			ShackDroidStats stats = GetUserStats(context);
+			final ShackDroidStats stats = GetUserStats(context);
 			stats.setSentShackMessage(stats.getSentShackMessage()+1);
 			UpdateUserStats(stats,context);
 		}
@@ -157,7 +157,7 @@ public class ShackDroidStats  implements Serializable {
 	public static void AddCheckedForNewVersion(Context context)
 	{
 		try {
-			ShackDroidStats stats = GetUserStats(context);
+			final ShackDroidStats stats = GetUserStats(context);
 			stats.setCheckedForNewVersion(stats.getCheckedForNewVersion()+1);
 			UpdateUserStats(stats,context);
 		}
@@ -166,7 +166,7 @@ public class ShackDroidStats  implements Serializable {
 	public static void AddViewedRssFeed(Context context)
 	{
 		try {
-			ShackDroidStats stats = GetUserStats(context);
+			final ShackDroidStats stats = GetUserStats(context);
 			stats.setViewedRSSFeed(stats.getViewedRSSFeed()+1);
 			UpdateUserStats(stats,context);
 		}
@@ -175,7 +175,7 @@ public class ShackDroidStats  implements Serializable {
 	public static void AddViewedShackLOLs(Context context)
 	{
 		try {
-			ShackDroidStats stats = GetUserStats(context);
+			final ShackDroidStats stats = GetUserStats(context);
 			stats.setViewedShackLOLs(stats.getViewedShackLOLs()+1);
 			UpdateUserStats(stats,context);
 		}
@@ -184,7 +184,7 @@ public class ShackDroidStats  implements Serializable {
 	public static void AddViewedChatty(Context context)
 	{
 		try {
-			ShackDroidStats stats = GetUserStats(context);
+			final ShackDroidStats stats = GetUserStats(context);
 			stats.setViewedChatty(stats.getViewedChatty()+1);
 			UpdateUserStats(stats,context);
 		}
@@ -193,7 +193,7 @@ public class ShackDroidStats  implements Serializable {
 	public static void AddViewedStats(Context context)
 	{
 		try {
-			ShackDroidStats stats = GetUserStats(context);
+			final ShackDroidStats stats = GetUserStats(context);
 			stats.setViewedStats(stats.getViewedStats()+1);
 			UpdateUserStats(stats,context);
 		}
