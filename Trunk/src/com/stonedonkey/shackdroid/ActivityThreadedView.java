@@ -399,11 +399,12 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 						@Override
 						public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 							menu.setHeaderTitle("Post Options");
-							menu.add(0,1,0,"Copy Post Url to Clipboard");
+							
 							if (spoilerText == true) {
 								menu.add(0, 10, 0, "Remove Spoiler");
 								//menu.add(0, 11, 0, "Copy Text"); // might be useful one day
 							}
+							menu.add(0,1,0,"Copy Post Url to Clipboard");
 							menu.add(0, -1, 0, "Cancel");
 						}
 					});		
