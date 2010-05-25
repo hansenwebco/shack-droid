@@ -58,7 +58,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 		
 		setContentView(R.layout.topics);
 
-		Bundle extras = this.getIntent().getExtras();
+		final Bundle extras = this.getIntent().getExtras();
 		if (extras != null)
 			loadStoryID = extras.getString("StoryID");
 		
@@ -265,7 +265,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case 1: {
-			ProgressDialog dialog = new ProgressDialog(this);
+			final ProgressDialog dialog = new ProgressDialog(this);
 			dialog.setMessage("loading, please wait...");
 			dialog.setTitle(null);
 			dialog.setIndeterminate(true);
@@ -284,11 +284,9 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 		threadLoaded = false;
 		try {
 
-			SharedPreferences prefs = PreferenceManager
-					.getDefaultSharedPreferences(this);
-			String feedURL = prefs.getString("shackFeedURL",
-					getString(R.string.default_api));
-			URL url;
+			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			final String feedURL = prefs.getString("shackFeedURL",getString(R.string.default_api));
+			final URL url;
 
 			if (loadStoryID != null) {
 				if (currentPage > 1)
@@ -305,13 +303,13 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			}
 
 			// Get a SAXParser from the SAXPArserFactory.
-			SAXParserFactory spf = SAXParserFactory.newInstance();
-			SAXParser sp = spf.newSAXParser();
+			final SAXParserFactory spf = SAXParserFactory.newInstance();
+			final SAXParser sp = spf.newSAXParser();
 
 			// Get the XMLReader of the SAXParser we created.
-			XMLReader xr = sp.getXMLReader();
+			final XMLReader xr = sp.getXMLReader();
 			// Create a new ContentHandler and apply it to the XML-Reader
-			SaxHandlerTopicView saxHandler = new SaxHandlerTopicView(this,"topic");
+			final SaxHandlerTopicView saxHandler = new SaxHandlerTopicView(this,"topic");
 			xr.setContentHandler(saxHandler);
 
 			// Parse the xml-data from our URL.
@@ -327,7 +325,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 				storyPages = 1;
 
 		} catch (Exception ex) {
-			ex.printStackTrace(System.out);
+			Log.e("ShackDroid", "Error parsing story" + storyID);
 			errorText = "An error occurred connecting to API.";
 		}
 		
@@ -355,9 +353,9 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 					+ currentPage.toString() + " of "
 					+ this.storyPages.toString());
 
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-			String login = prefs.getString("shackLogin", "");
-			int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
+			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			final String login = prefs.getString("shackLogin", "");
+			final int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
 
 			try {
 				postCounts = GetPostCache();
@@ -377,9 +375,9 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			if (postCounts != null)
 				tempHash = new Hashtable<String,String>(postCounts);
 
-			AdapterTopicView tva = new AdapterTopicView(getApplicationContext(),R.layout.topic_row, posts, login, fontSize,tempHash);
+			final AdapterTopicView tva = new AdapterTopicView(getApplicationContext(),R.layout.topic_row, posts, login, fontSize,tempHash);
 			
-			ListView lv = getListView();
+			final ListView lv = getListView();
 		
 			lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
 			    @Override
@@ -420,7 +418,7 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 		switch (item.getItemId()) {
 		case 0:
 			try {
-				Intent intent = new Intent();
+				final Intent intent = new Intent();
 				intent.putExtra("action", "story");
 				intent.putExtra("id", Integer.parseInt(storyID));
 				intent.setClass(this, ActivityInfoViewer.class);
@@ -435,14 +433,14 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 
 			try 
 			{
-				AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-				int itemPosition = info.position;
+				final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+				final int itemPosition = info.position;
 				
-				String postID = posts.get(itemPosition).getPostID();
+				final String postID = posts.get(itemPosition).getPostID();
 				
 				//http://www.shacknews.com/laryn.x?id=23004466
-				String url = "http://www.shacknews.com/laryn.x?id=" + postID;
-				ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+				final String url = "http://www.shacknews.com/laryn.x?id=" + postID;
+				final ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 				clipboard.setText(url);
 				Toast.makeText(this, "Link to post copied to clipboard.", Toast.LENGTH_SHORT).show();
 				
@@ -466,17 +464,17 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			Hashtable<String, String> postCounts = null;
 			
 			// if the day is different we delete and recreate the file
-			long lastMod = getFileStreamPath("posts.cache").lastModified();
-			Date lastDateMod = new Date(lastMod); 
-			Date currentDate = new Date();
+			final long lastMod = getFileStreamPath("posts.cache").lastModified();
+			final Date lastDateMod = new Date(lastMod); 
+			final Date currentDate = new Date();
 			if (lastDateMod.getDay() != currentDate.getDay())
 			{
 				getFileStreamPath("posts.cache").delete();
 				return null;
 			} 
 						
-			FileInputStream fileIn = openFileInput("posts.cache");
-			ObjectInputStream in = new ObjectInputStream(fileIn);
+			final FileInputStream fileIn = openFileInput("posts.cache");
+			final ObjectInputStream in = new ObjectInputStream(fileIn);
 			try {
 				postCounts = (Hashtable<String, String>)in.readObject();
 			} catch (ClassNotFoundException e) {
@@ -500,8 +498,8 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 		for(int x= 0; x < posts.size();x++)
 			postCounts.put(posts.get(x).getPostID(), posts.get(x).getReplyCount());
 		
-		FileOutputStream fos = openFileOutput("posts.cache",MODE_PRIVATE);
-		ObjectOutputStream os = new ObjectOutputStream(fos);
+		final FileOutputStream fos = openFileOutput("posts.cache",MODE_PRIVATE);
+		final ObjectOutputStream os = new ObjectOutputStream(fos);
 		os.writeObject(postCounts);
 		os.close();
 		fos.close();
@@ -511,9 +509,9 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 
-		String cat = posts.get(position).getPostCategory();
+		final String cat = posts.get(position).getPostCategory();
 		
-		Intent intent = new Intent();
+		final  Intent intent = new Intent();
 		intent.setClass(getApplicationContext(), ActivityThreadedView.class);
 		intent.putExtra("postID", Long.toString(id)); // the value must be a string
 		intent.putExtra("storyID", storyID);
