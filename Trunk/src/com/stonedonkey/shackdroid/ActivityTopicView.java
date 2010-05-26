@@ -23,6 +23,7 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.gesture.GestureOverlayView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,6 +31,7 @@ import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,7 +40,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
-public class ActivityTopicView extends ListActivity implements Runnable {
+import com.stonedonkey.shackdroid.ShackGestureListener.ShackGestureEvent;
+
+public class ActivityTopicView extends ListActivity implements Runnable, ShackGestureEvent {
 
 	private ArrayList<ShackPost> posts;
 	private String storyID = null;
@@ -56,7 +60,26 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 
 		Helper.SetWindowState(getWindow(),this);
 		
-		setContentView(R.layout.topics);
+		// Add a gesture listener if we're 1.6 or greater.
+		if (Integer.parseInt(android.os.Build.VERSION.SDK) > 3){
+			GestureOverlayView v = new GestureOverlayView(this);
+			
+			// Wrapper class to parse between gesture events and some consts.
+			// Also to remove as much 1.6+ code as possible from the activity.
+			ShackGestureListener l = new ShackGestureListener(this);
+			
+			v.setEventsInterceptionEnabled(true);
+			v.setGestureVisible(false); // set this to true to see what you draw;
+			l.addListener(this);
+			v.addOnGesturePerformedListener(l);
+			
+			//Add the original view as child (this gesture view sits over the top)
+			v.addView(LayoutInflater.from(this).inflate(R.layout.topics, null));
+			setContentView(v);
+		}
+		else{
+			setContentView(R.layout.topics);
+		}
 
 		final Bundle extras = this.getIntent().getExtras();
 		if (extras != null)
@@ -521,5 +544,22 @@ public class ActivityTopicView extends ListActivity implements Runnable {
 			intent.putExtra("isNWS",false);
 		
 		startActivity(intent);
+	}
+
+	@Override
+	public void eventRaised(int eventType) {
+		switch(eventType){
+			case ShackGestureListener.FORWARD:
+				SetPaging(1);
+				fillDataSAX();				
+				break;
+			case ShackGestureListener.BACKWARD:
+				SetPaging(-1);
+				fillDataSAX();				
+				break;
+			case ShackGestureListener.REFRESH:
+				fillDataSAX();
+				break;				
+		}
 	}
 }

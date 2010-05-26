@@ -80,7 +80,7 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 
 			// chazums
 			// Now just moves the text box to the right instead of padding text.
-			final int postIndent = 7* post.getIndent(); // avoid multiple lookups
+			final int postIndent = 8* post.getIndent(); // avoid multiple lookups
 	
 			threadPreview.setPadding(postIndent, threadPreview.getPaddingTop(), threadPreview.getPaddingBottom(), threadPreview.getPaddingRight());
 			final String postText = post.getPostPreview();

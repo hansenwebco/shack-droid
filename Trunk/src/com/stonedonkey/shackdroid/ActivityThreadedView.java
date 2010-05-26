@@ -324,7 +324,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		// http://pancake_humper.shackspace.com/
 		// it removes the pancake_ and goes to http://humper.shackspace... bug in linkify maybe??
 		Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
-
+tv.setClickable(false);
 //		Pattern shackURLMatcher = Pattern.compile("href=\"http://www\\.shacknews\\.com/laryn\\.x\\?id=([0-9]*)#itemanchor_([0-9]*)(.*?)\">");
 //		String threadView = "content://com.stonedonkey.shackdroid/ActivityThreadedView";
 //		Linkify.addLinks(tv,shackURLMatcher,threadView,new ShackURLMatchFilter(), new ShackURLTransform());

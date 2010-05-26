@@ -56,7 +56,6 @@ public class ActivityViewMessage extends Activity {
 	 content.setText(Html.fromHtml(msg.getMsgText().replaceAll("(\r\n|\r|\n|\n\r)", "")));
 	 content.setTypeface(face);
 	content.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-	
 	Linkify.addLinks(content, Linkify.ALL);
 	
 	String login = prefs.getString("shackLogin", "");
@@ -65,9 +64,6 @@ public class ActivityViewMessage extends Activity {
 	if (msg.getMessageStatus() != "read")
 		new ShackMessageMarkRead(login,password,msg.getMsgID()).execute();
 	
-	 //TextView msglbl =(TextView)findViewById(R.id.TextViewViewMsgLabelMessage);
-	 //msglbl.setText(Html.fromHtml("<b>Message:</b>"));
-
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
