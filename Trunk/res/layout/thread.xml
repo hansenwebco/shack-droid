@@ -55,14 +55,16 @@
 			android:textColor="#FFFFFF"
 			>
 		</TextView>
-	</ScrollView>
+	
+</ScrollView>
+<TextView android:layout_below="@+id/textAreaScroller" android:id="@+id/tvSpacer" android:layout_width="fill_parent" android:layout_height="2dip" android:background="#333333"></TextView>
 	<ListView 
 		android:paddingTop="2px"
 		android:id="@android:id/list" 
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent" 
 		android:background="#000000"
-		android:layout_below="@+id/textAreaScroller"
+		android:layout_below="@+id/tvSpacer"
 		android:choiceMode="singleChoice"
 		android:dividerHeight="1px"
 		android:divider="#333333"
