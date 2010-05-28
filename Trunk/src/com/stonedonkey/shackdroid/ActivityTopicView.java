@@ -59,26 +59,9 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		super.onCreate(savedInstanceState);
 
 		Helper.SetWindowState(getWindow(),this);
-		
-		// Add a gesture listener if we're 1.6 or greater.
-		if (Integer.parseInt(android.os.Build.VERSION.SDK) > 3){
-			GestureOverlayView v = new GestureOverlayView(this);
-			
-			// Wrapper class to parse between gesture events and some consts.
-			// Also to remove as much 1.6+ code as possible from the activity.
-			ShackGestureListener l = new ShackGestureListener(this);
-			
-			v.setEventsInterceptionEnabled(true);
-			v.setGestureVisible(false); // set this to true to see what you draw;
-			l.addListener(this);
-			v.addOnGesturePerformedListener(l);
-			
-			//Add the original view as child (this gesture view sits over the top)
-			v.addView(LayoutInflater.from(this).inflate(R.layout.topics, null));
-			setContentView(v);
-		}
-		else{
-			setContentView(R.layout.topics);
+		ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.topics, getApplicationContext(), this);
+		if (listener != null){
+			listener.addListener(this);
 		}
 
 		final Bundle extras = this.getIntent().getExtras();

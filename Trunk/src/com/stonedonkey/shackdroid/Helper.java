@@ -28,6 +28,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -35,9 +36,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.gesture.GestureOverlayView;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -295,6 +298,31 @@ public class Helper {
 		return lastMessageID;
 	}
 
+	public static ShackGestureListener setGestureEnabledContentView(int resourceId, Context ctx, Activity activity){
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+		
+		// Add a gesture listener if we're 1.6 or greater.
+		if (Integer.parseInt(android.os.Build.VERSION.SDK) > 3 && prefs.getBoolean("useGestures", false)){
+			GestureOverlayView v = new GestureOverlayView(ctx);
+			
+			// Wrapper class to parse between gesture events and some consts.
+			// Also to remove as much 1.6+ code as possible from the activity.
+			ShackGestureListener l = new ShackGestureListener(ctx);
+			v.setEventsInterceptionEnabled(true);
+			v.setGestureVisible(prefs.getBoolean("gestureVisible", false)); // set this to true to see what you draw;
+			v.addOnGesturePerformedListener(l);
+			
+			//Add the original view as child (this gesture view sits over the top)
+			v.addView(LayoutInflater.from(ctx).inflate(resourceId, null));
+			activity.setContentView(v);
+			return l;
+		}
+		else{
+			activity.setContentView(resourceId);
+			return null;
+		}		
+	}
+	
 	public static void SetWindowState(Window window,Context context)
 	{
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

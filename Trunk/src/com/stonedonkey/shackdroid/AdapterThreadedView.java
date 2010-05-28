@@ -23,8 +23,10 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 	private final String login;
 	private final Boolean highlightThread;
 	private final int fontSize;
-	private TextView threadPreview;
+	private TextView threadPreview, posterName;
 	private final LayoutInflater inflate;
+	private int postIndent;
+	private String postText;
 	
 	public AdapterThreadedView(Context context,int rowResouceID, List<ShackPost> topicList,int selectedRow ){
 		this.topicList = topicList;
@@ -59,7 +61,7 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 		final ShackPost post = topicList.get(position);
 		return Long.parseLong(post.getPostID());
 	}
-
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final View v;
@@ -71,6 +73,25 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 			v = convertView;
 		}
 		
+		// fill in the poster name for hdpi landscape view.
+		posterName = (TextView)v.findViewById(R.id.TextViewPosterNamePreview);
+		if (posterName != null){
+			posterName.setTypeface(face);
+			posterName.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+			posterName.setText(post.getPosterName());
+			
+			if (post.getPosterName().toString().equalsIgnoreCase(login)){
+				posterName.setTextColor(Color.parseColor("#00BFF3"));
+			}
+			else{
+				posterName.setTextColor(Color.parseColor("#ffba00"));
+			}
+			if (position == selectedRow )
+				posterName.setBackgroundColor(Color.parseColor("#274FD3"));
+			else
+				posterName.setBackgroundColor(Color.TRANSPARENT);			
+		}
+		
 		// bind the TextViews to the items in our datasource
 		threadPreview = (TextView)v.findViewById(R.id.TextViewThreadPreview);
 				
@@ -80,11 +101,11 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 
 			// chazums
 			// Now just moves the text box to the right instead of padding text.
-			final int postIndent = 8* post.getIndent(); // avoid multiple lookups
+			postIndent = 8* post.getIndent(); // avoid multiple lookups
 	
 			threadPreview.setPadding(postIndent, threadPreview.getPaddingTop(), threadPreview.getPaddingBottom(), threadPreview.getPaddingRight());
-			final String postText = post.getPostPreview();
-			 
+			postText = post.getPostPreview();
+
 			// show this users posts as blue
 			 if (highlightThread == true && post.getPosterName().toString().equalsIgnoreCase(login))
 					threadPreview.setTextColor(Color.parseColor("#00BFF3"));
@@ -93,17 +114,17 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 			 else
 				threadPreview.setTextColor(Color.parseColor("#FFFFFF"));
 			
-			
 			if (position == selectedRow )
 				threadPreview.setBackgroundColor(Color.parseColor("#274FD3"));
 			else
-				threadPreview.setBackgroundColor(Color.TRANSPARENT);
-		
+				threadPreview.setBackgroundColor(Color.TRANSPARENT);		
 			//postText = pad + postText;
 			threadPreview.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 			threadPreview.setText(postText);
 			
 		}
+
+		
 		return v;
 	}
 }
