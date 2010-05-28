@@ -53,7 +53,7 @@ public class ActivityRSS extends ListActivity implements Runnable {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,ContextMenuInfo menuInfo) {
 		
-		menu.setHeaderTitle("RSS Story Options");
+		menu.setHeaderTitle("Story Options");
 		menu.add(0, 3, 0, "View Story");
 		menu.add(0, 4, 0, "View Comments");
 		menu.add(0, -1, 0, "Cancel");
@@ -69,9 +69,9 @@ public class ActivityRSS extends ListActivity implements Runnable {
 
 	private void fillSaxData() {
 		// show a progress dialog
-		pd = ProgressDialog.show(this, null, "Loading RSS feed...", true, true); 
+		pd = ProgressDialog.show(this, null, "Loading Story feed...", true, true); 
 		
-		this.setTitle("ShackDroidRSS - " + feedDesc);
+		this.setTitle("ShackDroid - " + feedDesc);
 		
 		// use the class run() method to do work
 		Thread thread = new Thread(this); 
