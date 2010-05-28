@@ -138,4 +138,8 @@
 	    />
 
 </PreferenceCategory>
+<PreferenceCategory android:title="Gestures"><CheckBoxPreference android:key="useGestures" android:title="Enable gestures" android:summary="Enable gestures for paging and refreshing"></CheckBoxPreference>
+<CheckBoxPreference android:key="useGestureVibrate" android:summary="Vibrate when a gesture is recognised." android:title="Vibrate on gesture recognition" android:dependency="useGestures"></CheckBoxPreference>
+<CheckBoxPreference android:key="gestureVisible" android:summary="Show gesture being drawn" android:title="Show gestures" android:dependency="useGestures"></CheckBoxPreference>
+</PreferenceCategory>
 </PreferenceScreen>

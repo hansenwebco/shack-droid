@@ -12,6 +12,8 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
+import com.stonedonkey.shackdroid.ShackGestureListener.ShackGestureEvent;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -58,7 +60,7 @@ import android.widget.TextView.BufferType;
  * @author markh
  *
  */
-public class ActivityThreadedView extends ListActivity implements Runnable {
+public class ActivityThreadedView extends ListActivity implements Runnable, ShackGestureEvent {
 
 	private static final int POST_REPLY = 0;
 	private ArrayList<ShackPost> posts;
@@ -76,8 +78,14 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		super.onCreate(savedInstanceState);
 		
 		Helper.SetWindowState(getWindow(),this);
-
+		/*
+		ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.thread, getApplicationContext(), this);
+		if (listener != null){
+			listener.addListener(this);
+		}
+		*/
 		setContentView(R.layout.thread);
+		
 		this.setTitle("ShackDroid - View Thread");
 
 		if (getIntent() != null && 
@@ -324,7 +332,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable {
 		// http://pancake_humper.shackspace.com/
 		// it removes the pancake_ and goes to http://humper.shackspace... bug in linkify maybe??
 		Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
-tv.setClickable(false);
+		tv.setClickable(false);
 //		Pattern shackURLMatcher = Pattern.compile("href=\"http://www\\.shacknews\\.com/laryn\\.x\\?id=([0-9]*)#itemanchor_([0-9]*)(.*?)\">");
 //		String threadView = "content://com.stonedonkey.shackdroid/ActivityThreadedView";
 //		Linkify.addLinks(tv,shackURLMatcher,threadView,new ShackURLMatchFilter(), new ShackURLTransform());
@@ -679,6 +687,18 @@ tv.setClickable(false);
 		}
 		 */
 		return super.onKeyDown(keyCode, event);
+	}
+	@Override
+	public void eventRaised(int eventType) {
+		switch(eventType){
+			case ShackGestureListener.BACKWARD:
+				finish();
+				break;
+			case ShackGestureListener.REFRESH:
+				fillSaxData(postID);
+				break;				
+		}
+		
 	}
 }/**
  * Used to sort the post array based on the ID

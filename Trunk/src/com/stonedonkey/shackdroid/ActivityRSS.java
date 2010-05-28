@@ -14,6 +14,7 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -167,12 +168,17 @@ public class ActivityRSS extends ListActivity implements Runnable {
 			switch (item.getItemId()) {
 				case 3:
 					String storyURL = rssItems.get(itemPosition).getLink();
+					/*
 					String storyTitle = rssItems.get(itemPosition).getTitle();
 					intent = new Intent();
 					intent.putExtra("URL",storyURL);
 					intent.putExtra("Title",storyTitle);
 					intent.setClass(this, ActivityWebView.class);
 					startActivity(intent);
+					*/
+					Intent i = new Intent(Intent.ACTION_VIEW);
+					i.setData(Uri.parse(storyURL));
+					startActivity(i);
 					return true;
 					
 				case 4: 
