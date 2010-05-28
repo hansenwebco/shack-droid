@@ -116,6 +116,12 @@
     		android:defaultValue="true"
     		android:summary="Notify me of new ShackDroid Versions, not a background service."/>
 
+		<CheckBoxPreference 
+    		android:key="allowMenuAnimations" 
+    		android:title="Allow Menu Animations" 
+    		android:defaultValue="true"
+    		android:summary="Enable or disable the background animation on the main menu."/>
+
     	<CheckBoxPreference 
     		android:key="allowFullScreen" 
     		android:title="Full Screen Mode" 

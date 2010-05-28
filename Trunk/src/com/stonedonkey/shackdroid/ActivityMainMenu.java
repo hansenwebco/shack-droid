@@ -24,6 +24,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 public class ActivityMainMenu extends ListActivity  {
@@ -33,9 +36,11 @@ public class ActivityMainMenu extends ListActivity  {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		setContentView(R.layout.mainmenu);
+		
+		
+		
 		Helper.SetWindowState(getWindow(),this);
-
-
 
 		ArrayList<ShackMenuItem> menu = new ArrayList<ShackMenuItem>();
 
@@ -64,10 +69,38 @@ public class ActivityMainMenu extends ListActivity  {
 		getListView().setDivider(cd);
 		getListView().setDividerHeight(1);
 
+		
 		setListAdapter(mm);
 
 		CheckForUpdate(false);
 
+	}
+
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		// TODO Auto-generated method stub
+		super.onWindowFocusChanged(hasFocus);
+		
+		if (hasFocus)
+		{
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean allowMenuAnimations = prefs.getBoolean("allowMenuAnimations", true);
+		
+		final ImageView imageBackground = (ImageView) findViewById(R.id.ImageViewMainMenuBackground);
+		if (allowMenuAnimations) 
+		{
+			imageBackground.setBackgroundResource(R.drawable.shackcrest);
+			Animation anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.move_rotate);
+			imageBackground.setAnimation(anim);
+			anim = null;
+		}
+		else
+		{
+			imageBackground.setVisibility(View.GONE);
+		}
+		}
+			
+		
 	}
 
 	// TODO: this is copied in ActivityPreferences, need to move to it's own class
@@ -76,7 +109,7 @@ public class ActivityMainMenu extends ListActivity  {
 		try {
 			String vc = null;
 			vc = getString(R.string.version_id);
-			SharedPreferences settings=getPreferences(0);
+			final SharedPreferences settings=getPreferences(0);
 
 			// NOTE: debugging resets value
 			//SharedPreferences.Editor editor = settings.edit();
@@ -242,8 +275,8 @@ class CheckForNewShackDroidAsyncTask extends AsyncTask<Void,Void,Integer>{
 				CharSequence contentTitle = "ShackDroid Update Available";
 				CharSequence contentText = "Touch here to download!";
 
-				//Intent notificationIntent = new Intent("android.intent.action.VIEW", Uri.parse(result));
-				Intent notificationIntent = new Intent("android.intent.action.VIEW", Uri.parse("market://search?q=pname:com.stonedonkey.shackdroid"));
+				Intent notificationIntent = new Intent("android.intent.action.VIEW", Uri.parse(result));
+				//Intent notificationIntent = new Intent("android.intent.action.VIEW", Uri.parse("market://search?q=pname:com.stonedonkey.shackdroid"));
 				PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 				note.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 
