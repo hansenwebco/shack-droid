@@ -57,7 +57,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		super.onCreate(savedInstanceState);
 
 		Helper.SetWindowState(getWindow(),this);
-		final ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.topics, getApplicationContext(), this);
+		final ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.topics, this);
 		if (listener != null){
 			listener.addListener(this);
 		}

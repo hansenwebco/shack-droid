@@ -78,13 +78,13 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		super.onCreate(savedInstanceState);
 		
 		Helper.SetWindowState(getWindow(),this);
-		/*
-		ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.thread, getApplicationContext(), this);
+		
+		ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.thread, this);
 		if (listener != null){
 			listener.addListener(this);
 		}
-		*/
-		setContentView(R.layout.thread);
+		
+		//setContentView(R.layout.thread);
 		
 		this.setTitle("ShackDroid - View Thread");
 

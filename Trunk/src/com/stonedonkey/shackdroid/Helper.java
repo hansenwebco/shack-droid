@@ -298,22 +298,21 @@ public class Helper {
 		return lastMessageID;
 	}
 
-	public static ShackGestureListener setGestureEnabledContentView(int resourceId, Context ctx, Activity activity){
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+	public static ShackGestureListener setGestureEnabledContentView(int resourceId, Activity activity){
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
 		
 		// Add a gesture listener if we're 1.6 or greater.
 		if (Integer.parseInt(android.os.Build.VERSION.SDK) > 3 && prefs.getBoolean("useGestures", false)){
-			GestureOverlayView v = new GestureOverlayView(ctx);
+			GestureOverlayView v = new GestureOverlayView(activity);
 			
 			// Wrapper class to parse between gesture events and some consts.
-			// Also to remove as much 1.6+ code as possible from the activity.
-			ShackGestureListener l = new ShackGestureListener(ctx);
+			ShackGestureListener l = new ShackGestureListener(activity);
 			v.setEventsInterceptionEnabled(true);
 			v.setGestureVisible(prefs.getBoolean("gestureVisible", false)); // set this to true to see what you draw;
 			v.addOnGesturePerformedListener(l);
 			
 			//Add the original view as child (this gesture view sits over the top)
-			v.addView(LayoutInflater.from(ctx).inflate(resourceId, null));
+			v.addView(LayoutInflater.from(activity).inflate(resourceId, null));
 			activity.setContentView(v);
 			return l;
 		}
