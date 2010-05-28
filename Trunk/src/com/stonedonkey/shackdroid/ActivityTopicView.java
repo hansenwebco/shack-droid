@@ -554,8 +554,13 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 				fillDataSAX();				
 				break;
 			case ShackGestureListener.BACKWARD:
-				SetPaging(-1);
-				fillDataSAX();				
+				if (this.currentPage == 1)
+					finish();
+				else {
+					SetPaging(-1);
+					fillDataSAX();
+				}
+								
 				break;
 			case ShackGestureListener.REFRESH:
 				fillDataSAX();
