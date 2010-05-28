@@ -101,7 +101,7 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 
 			// chazums
 			// Now just moves the text box to the right instead of padding text.
-			postIndent = 8* post.getIndent(); // avoid multiple lookups
+			postIndent = 10* post.getIndent(); // avoid multiple lookups
 	
 			threadPreview.setPadding(postIndent, threadPreview.getPaddingTop(), threadPreview.getPaddingBottom(), threadPreview.getPaddingRight());
 			postText = post.getPostPreview();
@@ -110,15 +110,27 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 			 if (highlightThread == true && post.getPosterName().toString().equalsIgnoreCase(login))
 					threadPreview.setTextColor(Color.parseColor("#00BFF3"));
 			 else if (post.getPostIndex() > 9)
-				threadPreview.setTextColor(Color.parseColor("#777777"));
-			 else
 				threadPreview.setTextColor(Color.parseColor("#FFFFFF"));
+			 else  { // show new post
+				 
+				 int red = 229;
+				 int green = 239;
+				 int blue = 73;
+				 
+				 red = ((255 - red) / 10) * post.getPostIndex() + red;
+				 green = ((255 - green) / 10) * post.getPostIndex() + green;
+				 blue = ((255 - blue) / 10) * post.getPostIndex() + blue;
+				 
+				 threadPreview.setTextColor(Color.rgb(red, green, blue));
+				//threadPreview.setTextColor(Color.parseColor("#99FF66"));
+			 }
 			
 			if (position == selectedRow )
 				threadPreview.setBackgroundColor(Color.parseColor("#274FD3"));
 			else
 				threadPreview.setBackgroundColor(Color.TRANSPARENT);		
-			//postText = pad + postText;
+			
+			
 			threadPreview.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 			threadPreview.setText(postText);
 			
