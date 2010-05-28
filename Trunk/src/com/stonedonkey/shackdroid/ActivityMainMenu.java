@@ -14,7 +14,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -41,15 +40,15 @@ public class ActivityMainMenu extends ListActivity  {
 		ArrayList<ShackMenuItem> menu = new ArrayList<ShackMenuItem>();
 
 		menu.add(new ShackMenuItem("Latest Chatty","It gets you chicks, and diseases.",R.drawable.menu2_latestchatty));
-		menu.add(new ShackMenuItem("Shack RSS", "The \"Mos Eisley\" of chatties.",R.drawable.menu2_rss));
+		menu.add(new ShackMenuItem("Latest Stories", "The \"Mos Eisley\" of chatties.",R.drawable.menu2_rss));
 		menu.add(new ShackMenuItem("Shack Search","For all your vanity needs.",R.drawable.menu2_search));
 		menu.add(new ShackMenuItem("Shack Messages","Stuff too shocking for even the Shack.",R.drawable.menu2_shackmessages2));
 		menu.add(new ShackMenuItem("Shack LOLs","You are not as popular as these people.",R.drawable.menu2_lol2));//
 		//menu.add(new ShackMenuItem("Shack Marks","Your mobile tranny porn Stash.",R.drawable.menu2_shackmarks2));
 		menu.add(new ShackMenuItem("Settings","Hay guys, am I doing this right?",R.drawable.menu2_settings));
 		//menu.add(new ShackMenuItem("Version Check","stonedonkey finally did something new!?!",R.drawable.menu2_vercheck));
-		menu.add(new ShackMenuItem("What's New","How we most recently broke this thing.",R.drawable.menu2_cone));
-		menu.add(new ShackMenuItem("Stats","Keeping score, it's how you know you're better.",R.drawable.menu2_stats));
+		//menu.add(new ShackMenuItem("What's New","How we most recently broke this thing.",R.drawable.menu2_cone));
+		//menu.add(new ShackMenuItem("Stats","Keeping score, it's how you know you're better.",R.drawable.menu2_stats));
 		//menu.add(new ShackMenuItem("Tester","Testing stuff before you can play with it!.",R.drawable.menu2_stats));
 
 		AdapterMainMenu mm = new AdapterMainMenu(this,R.layout.mainmenu_row, menu);
@@ -71,27 +70,18 @@ public class ActivityMainMenu extends ListActivity  {
 
 	}
 
+	// TODO: this is copied in ActivityPreferences, need to move to it's own class
 	private void CheckForUpdate(boolean force) {
-
-
 		// have we seen this update?
-
 		try {
-
-
-
 			String vc = null;
 			vc = getString(R.string.version_id);
-
-
-
 			SharedPreferences settings=getPreferences(0);
 
 			// NOTE: debugging resets value
 			//SharedPreferences.Editor editor = settings.edit();
 			//editor.putBoolean("hasSeenUpdatedVersion" + vc, false);
 			//editor.commit(); 
-
 			boolean hasSeenUpdatedVersion = settings.getBoolean("hasSeenUpdatedVersion" + vc, false);
 
 			if (!hasSeenUpdatedVersion || force)
@@ -108,14 +98,11 @@ public class ActivityMainMenu extends ListActivity  {
 				editor.commit(); 
 
 			}
-
 		}
 		catch (Exception ex)
 		{
 			// do nothing
 		}
-
-
 	}
 
 	@Override
@@ -177,77 +164,12 @@ public class ActivityMainMenu extends ListActivity  {
 			intent.setClass(this,ActivityPreferences.class);
 			break;
 		}
-		//case 6:
-		//{
-		//	newVersionCheck(true);
-		//	break;
-		//}
-		case 6:
-		{
-			CheckForUpdate(true);
-			break;
-			//intent.setClass(this,ActivitySearchTabs.class);
-			//break;
-		}
-		case 7: {
-			ShackDroidStats.AddViewedStats(this);
-			intent.setClass(this,ActivityStats.class);
-			break;
-		}
-		case 9:
-		{
-			intent = new Intent();
-			intent.putExtra("action", "story");
-			intent.putExtra("id", 63577);
-			intent.setClass(this, ActivityInfoViewer.class);
-			
-		}
-
 		}	
 
-		if (position != 6) {
-			startActivity(intent);
+		
+		startActivity(intent);
 
-		}
-	}
-
-	@SuppressWarnings("unused")
-	private void newVersionCheck(boolean showNoUpdate) {
-
-		String message = "Unable to complete version check, please try again later.";
-
-		final String result = HandlerExtendedSites.VersionCheck(this);
-		boolean updateAvail = false;
-
-		if (result != null && result != "*fail*") {
-			message = "GOOD NEWS EVERYBODY!\n\nA new version of ShackDroid is available, would you like to get it now?";
-			updateAvail = true;
-		}
-		else if (result == null) // if we got null we're good if we got fail we failed
-			message = "ShackDroid is up to date.";
-
-		if (updateAvail) 
-		{
-			// show update dialog
-			new AlertDialog.Builder(this)
-			.setTitle("Version Check")
-			.setPositiveButton("YES",  new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
-
-					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(result))); 
-					finish();
-				}
-			})
-			.setNegativeButton("NO", null).setMessage(message).show();
-
-		}
-		else if (showNoUpdate)
-		{
-			new AlertDialog.Builder(this)
-			.setTitle("Version Check")
-			.setPositiveButton("OK",null)
-			.setMessage(message).show();
-		}
+		
 	}
 
 	@Override
