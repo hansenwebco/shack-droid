@@ -23,7 +23,6 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.gesture.GestureOverlayView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,7 +30,6 @@ import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,7 +57,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		super.onCreate(savedInstanceState);
 
 		Helper.SetWindowState(getWindow(),this);
-		ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.topics, getApplicationContext(), this);
+		final ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.topics, getApplicationContext(), this);
 		if (listener != null){
 			listener.addListener(this);
 		}
