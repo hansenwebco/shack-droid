@@ -130,6 +130,10 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 
 		sv.getLayoutParams().height = (height - offset - statusTitleBar) / 2;
 		sv.requestLayout();		
+		
+		final TextView spacer = (TextView) findViewById(R.id.tvSpacer);
+		spacer.setBackgroundColor(Color.parseColor("#333333"));
+		
 	}
 
 	@Override 
