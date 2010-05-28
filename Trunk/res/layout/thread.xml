@@ -57,7 +57,7 @@
 		</TextView>
 	
 </ScrollView>
-<TextView android:layout_below="@+id/textAreaScroller" android:id="@+id/tvSpacer" android:layout_width="fill_parent" android:layout_height="2dip" android:background="#333333"></TextView>
+<TextView android:layout_below="@+id/textAreaScroller" android:id="@+id/tvSpacer" android:layout_width="fill_parent" android:layout_height="2dip" android:background="#00000000"></TextView>
 	<ListView 
 		android:paddingTop="2px"
 		android:id="@android:id/list" 
