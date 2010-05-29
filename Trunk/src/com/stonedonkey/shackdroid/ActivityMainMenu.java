@@ -36,11 +36,10 @@ public class ActivityMainMenu extends ListActivity  {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		Helper.SetWindowState(getWindow(),this);
+		
 		setContentView(R.layout.mainmenu);
 		
-		
-		
-		Helper.SetWindowState(getWindow(),this);
 
 		ArrayList<ShackMenuItem> menu = new ArrayList<ShackMenuItem>();
 
