@@ -23,6 +23,7 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -33,10 +34,16 @@ import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewStub;
+import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SlidingDrawer;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.SlidingDrawer.OnDrawerOpenListener;
 
 import com.stonedonkey.shackdroid.ShackGestureListener.ShackGestureEvent;
 
@@ -51,6 +58,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 	private String loadStoryID = null;
 	private Boolean threadLoaded = true;
 	private Hashtable<String, String> postCounts = null;
+	private ShackPost bookmarkedPost;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -83,6 +91,25 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 				}
 			}
 		}
+		
+		SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
+		s.setOnDrawerOpenListener(new OnDrawerOpenListener(){
+
+			@Override
+			public void onDrawerOpened() {
+				ImageView v = (ImageView)findViewById(R.id.handle);
+				v.setImageResource(R.drawable.slider);
+			}});
+		ImageView i = (ImageView)s.findViewById(R.id.bookmarkRemove);
+		i.setClickable(true);
+		i.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View arg0) {
+				bookmarkedPost = null;
+				SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
+				s.close();
+			}});
 	}
 
 	@Override
@@ -349,6 +376,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		}
 	};
 
+	
 	private void ShowData()  {
 
 		if (posts != null) {
@@ -381,6 +409,9 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 
 			final AdapterTopicView tva = new AdapterTopicView(getApplicationContext(),R.layout.topic_row, posts, login, fontSize,tempHash);
 			
+			new BookmarkAsyncTask().execute(null);
+			
+			//TODO: do another check if not in the first page.
 			final ListView lv = getListView();
 		
 			lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
@@ -389,6 +420,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			      menu.setHeaderTitle("Options");
 			      //menu.add(0, 0, 0, "Show Story");
 			      menu.add(0, 1, 0, "Copy Post Url to Clipboard");
+			      menu.add(0, 2, 0, "Bookmark");
 			      menu.add(0,-1,0,"Cancel");
 			    }
 			  }); 
@@ -456,10 +488,65 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			
 			
 			return true;
+		case 2:
+			final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+			final int itemPosition = info.position;
+			
+			bookmarkedPost = posts.get(itemPosition);
+			setBookmarkedPost();
+			
+			
+			
+			return true;			
 		}
+
 		return false;
 
 	}
+	
+	private void setBookmarkedPost(){
+		View sub = findViewById(R.id.bookmarked);
+		if (sub == null){
+			ViewStub v = (ViewStub)findViewById(R.id.bookmarkStub);			
+			sub = v.inflate();
+		}
+		
+		
+		sub.setClickable(true);
+		sub.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				final String cat = bookmarkedPost.getPostCategory();
+				final  Intent intent = new Intent();
+				intent.setClass(getApplicationContext(), ActivityThreadedView.class);
+				intent.putExtra("postID", bookmarkedPost.getPostID()); // the value must be a string
+				intent.putExtra("storyID", storyID);
+				if (cat.equalsIgnoreCase("nws"))
+					intent.putExtra("isNWS", true);
+				else
+					intent.putExtra("isNWS",false);
+				
+				startActivity(intent);				
+			}});
+		
+		TextView t = (TextView)sub.findViewById(R.id.TextViewPosterName);
+		t.setText(bookmarkedPost.getPosterName());
+		
+		t = (TextView)sub.findViewById(R.id.TextViewDatePosted);
+		t.setText(Helper.FormatShackDate(bookmarkedPost.getPostDate()));			
+		
+		t = (TextView)sub.findViewById(R.id.TextViewPostText);
+		String preview = bookmarkedPost.getPostPreview();
+		//if (preview.length() > 99)
+		//	preview= preview.substring(0,99);
+		
+		t.setText(preview);
+
+		t = (TextView)sub.findViewById(R.id.TextViewReplyCount);
+		t.setText(bookmarkedPost.getReplyCount());		
+	}
+	
 	@SuppressWarnings("unchecked")
 	public Hashtable<String, String> GetPostCache() throws StreamCorruptedException, IOException
 	{
@@ -548,4 +635,46 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 				break;				
 		}
 	}
+	
+	class BookmarkAsyncTask extends AsyncTask<Object, Object, Boolean>{
+
+		@Override
+		protected Boolean doInBackground(Object... params) {
+			if (bookmarkedPost != null){
+				for (ShackPost s : posts){
+					if (s.getPostID().equals(bookmarkedPost.getPostID())){
+						if (Integer.parseInt(s.getReplyCount()) >
+								Integer.parseInt(bookmarkedPost.getReplyCount())){
+							bookmarkedPost = s;
+							return true;
+						}
+						break;
+					}
+				}
+				
+				final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+				String feedURL = prefs.getString("shackFeedURL", getString(R.string.default_api));							
+				ArrayList<ShackPost> tmp = Helper.getPostTreeById(feedURL, 
+						true,//bookmarkedPost.getPostCategory().equals("nws"), 
+						bookmarkedPost.getPostID(), 
+						getApplicationContext());
+				
+				if (!tmp.get(0).getReplyCount().equals(bookmarkedPost.getReplyCount())){
+					bookmarkedPost = tmp.get(0);
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		protected void onPostExecute(Boolean result) {
+			if (result){
+				ImageView v = (ImageView)findViewById(R.id.handle);
+				v.setImageResource(R.drawable.slidernew);				
+				setBookmarkedPost();
+			}
+		}
+	}	
 }
+
+
