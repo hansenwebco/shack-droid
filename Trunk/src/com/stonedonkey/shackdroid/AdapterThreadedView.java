@@ -27,6 +27,7 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 	private final LayoutInflater inflate;
 	private int postIndent;
 	private String postText;
+	private final String threadHighlightMode;
 	
 	public AdapterThreadedView(Context context,int rowResouceID, List<ShackPost> topicList,int selectedRow ){
 		this.topicList = topicList;
@@ -36,6 +37,9 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 		face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		login = prefs.getString("shackLogin", "");
+		threadHighlightMode = prefs.getString("threadHighlight", "1");
+		
+		
 		highlightThread = prefs.getBoolean("highlightUserThreads", true);
 		fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
 		inflate = LayoutInflater.from(context);
@@ -106,23 +110,33 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 			threadPreview.setPadding(postIndent, threadPreview.getPaddingTop(), threadPreview.getPaddingBottom(), threadPreview.getPaddingRight());
 			postText = post.getPostPreview();
 
+			// TODO: clean up the thread coloring.. very messy.
 			// show this users posts as blue
 			 if (highlightThread == true && post.getPosterName().toString().equalsIgnoreCase(login))
 					threadPreview.setTextColor(Color.parseColor("#00BFF3"));
 			 else if (post.getPostIndex() > 9)
-				threadPreview.setTextColor(Color.parseColor("#FFFFFF"));
+				 if (threadHighlightMode.equals("2"))
+					 threadPreview.setTextColor(Color.parseColor("#FFFFFF"));
+				 else
+					 threadPreview.setTextColor(Color.parseColor("#777777"));
 			 else  { // show new post
 				 
-				 int red = 229;
-				 int green = 239;
-				 int blue = 73;
-				 
-				 red = ((255 - red) / 10) * post.getPostIndex() + red;
-				 green = ((255 - green) / 10) * post.getPostIndex() + green;
-				 blue = ((255 - blue) / 10) * post.getPostIndex() + blue;
-				 
-				 threadPreview.setTextColor(Color.rgb(red, green, blue));
-				//threadPreview.setTextColor(Color.parseColor("#99FF66"));
+				 if (threadHighlightMode.equals("2"))
+				 {
+					 int red = 229;
+					 int green = 239;
+					 int blue = 73;
+					 
+					 red = ((255 - red) / 10) * post.getPostIndex() + red;
+					 green = ((255 - green) / 10) * post.getPostIndex() + green;
+					 blue = ((255 - blue) / 10) * post.getPostIndex() + blue;
+					 
+					 threadPreview.setTextColor(Color.rgb(red, green, blue));
+				 }
+				 else
+				 {
+					 threadPreview.setTextColor(Color.parseColor("#FFFFFF"));
+				 }
 			 }
 			
 			if (position == selectedRow )
