@@ -31,6 +31,14 @@
 		<item>1</item>
 		<item>2</item>
 	</string-array>
+	<string-array name="threadedView">
+		<item>Black and White</item>
+		<item>Yellow</item>
+	</string-array>
+	<string-array name="threadedViewValues">
+		<item>1</item>
+		<item>2</item>
+	</string-array>	
 	<string-array name="feedsURls">
 		<item>http://feed.shacknews.com/shackfeed.xml</item>
 		<item>http://www.shacknews.com/shackfeed_content.xml</item>
