@@ -307,6 +307,7 @@ public class Helper {
 			
 			// Wrapper class to parse between gesture events and some consts.
 			ShackGestureListener l = new ShackGestureListener(activity);
+			v.setOrientation(GestureOverlayView.ORIENTATION_VERTICAL);
 			v.setEventsInterceptionEnabled(true);
 			v.setGestureVisible(prefs.getBoolean("gestureVisible", false)); // set this to true to see what you draw;
 			v.addOnGesturePerformedListener(l);
@@ -320,6 +321,37 @@ public class Helper {
 			activity.setContentView(resourceId);
 			return null;
 		}		
+	}
+	
+	// Stolen from ActivityThreadedView :(
+	public static ArrayList<ShackPost> getPostTreeById(String feedURL, boolean isNWS, String postID, Context ctx){		
+		try{
+			if (isNWS) 
+				feedURL = "http://shackapi.stonedonkey.com";
+			
+			final URL url = new URL(feedURL + "/thread/" + postID	+ ".xml");
+	
+			// Get a SAXParser from the SAXPArserFactory.
+			final SAXParserFactory spf = SAXParserFactory.newInstance();
+			final SAXParser sp = spf.newSAXParser();
+	
+			//  Get the XMLReader of the SAXParser we created.
+			final XMLReader xr = sp.getXMLReader();
+	
+			// Create a new ContentHandler and apply it to the XML-Reader
+			final SaxHandlerTopicView saxHandler = new SaxHandlerTopicView(ctx,"threaded");
+			xr.setContentHandler(saxHandler);
+	
+			// Parse the xml-data from our URL.
+			xr.parse(new InputSource(HttpHelper.HttpRequestWithGzip(url.toString(),ctx)));
+	
+			// Our ExampleHandler now provides the parsed data to us.
+			return saxHandler.GetParsedPosts();
+		}
+		catch(Exception e){
+			
+		}
+		return null;
 	}
 	
 	public static void SetWindowState(Window window,Context context)
