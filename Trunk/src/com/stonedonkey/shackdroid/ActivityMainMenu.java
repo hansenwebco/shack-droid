@@ -83,7 +83,7 @@ public class ActivityMainMenu extends ListActivity  {
 		if (hasFocus)
 		{
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		boolean allowMenuAnimations = prefs.getBoolean("allowMenuAnimations", true);
+		boolean allowMenuAnimations = prefs.getBoolean("allowMenuAnimations", false);
 		
 		final ImageView imageBackground = (ImageView) findViewById(R.id.ImageViewMainMenuBackground);
 		if (allowMenuAnimations) 
