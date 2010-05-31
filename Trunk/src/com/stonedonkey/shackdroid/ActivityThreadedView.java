@@ -209,6 +209,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		final Comparator<ShackPost> byOrderID = new SortByOrderIDComparator();
 		threadLoaded = false;
 		try {
+			
 			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			String feedURL = prefs.getString("shackFeedURL", getString(R.string.default_api));
 			

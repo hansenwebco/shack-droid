@@ -20,7 +20,10 @@ android:id="@+id/SlidingDrawer01"
      android:layout_height="100dip"
 	 android:animateOnClick="true"
      android:handle="@+id/handle"
-     android:content="@+id/bookMarkParent" android:orientation="vertical" android:layout_alignParentBottom="true">
+     android:content="@+id/bookMarkParent" 
+     android:orientation="vertical" 
+     android:layout_alignParentBottom="true"
+     android:visibility="gone">
 
      <ImageView
          android:id="@id/handle"
@@ -45,7 +48,9 @@ android:id="@+id/SlidingDrawer01"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content" 
          android:layout_alignParentRight="true"
-         android:src="@drawable/removebookmark"/>		
+         android:src="@drawable/removebookmark"
+         android:paddingLeft="10dip" 
+         android:layout_centerVertical="true"/>		
 </RelativeLayout>
 </SlidingDrawer>
 
