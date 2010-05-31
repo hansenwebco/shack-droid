@@ -64,6 +64,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		
 		Helper.SetWindowState(getWindow(),this);
 		final ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.topics, this);
 		if (listener != null){
@@ -93,24 +94,26 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		}
 		
 		SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
-		s.setOnDrawerOpenListener(new OnDrawerOpenListener(){
-
-			@Override
-			public void onDrawerOpened() {
-				ImageView v = (ImageView)findViewById(R.id.handle);
-				v.setImageResource(R.drawable.slider);
-			}});
-		ImageView i = (ImageView)s.findViewById(R.id.bookmarkRemove);
-		i.setClickable(true);
-		i.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View arg0) {
-				bookmarkedPost = null;
-				SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
-				s.close();
-				s.setVisibility(View.GONE);
-			}});
+		if (s != null){
+			s.setOnDrawerOpenListener(new OnDrawerOpenListener(){
+	
+				@Override
+				public void onDrawerOpened() {
+					ImageView v = (ImageView)findViewById(R.id.handle);
+					v.setImageResource(R.drawable.slider);
+				}});
+			ImageView i = (ImageView)s.findViewById(R.id.bookmarkRemove);
+			i.setClickable(true);
+			i.setOnClickListener(new OnClickListener(){
+	
+				@Override
+				public void onClick(View arg0) {
+					bookmarkedPost = null;
+					SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
+					s.close();
+					s.setVisibility(View.GONE);
+				}});
+		}
 	}
 
 	@Override
