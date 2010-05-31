@@ -109,6 +109,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 				bookmarkedPost = null;
 				SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
 				s.close();
+				s.setVisibility(View.GONE);
 			}});
 	}
 
@@ -116,6 +117,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 
 		try {
+			//UpdatePostCache();
 			dismissDialog(1);
 		} catch (Exception ex) {
 			// dialog could not be killed for some reason
@@ -129,6 +131,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		savedInstanceState.putInt("storyPages", storyPages);
 		savedInstanceState.putString("storyID", storyID);
 		savedInstanceState.putBoolean("threadLoaded", threadLoaded);
+		
 
 	}
 	@SuppressWarnings("unchecked")
@@ -149,7 +152,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		threadLoaded = true;
 		savedInstanceState.clear(); // we'll resave it if we do something again
 		
-			ShowData();
+		ShowData();
 	}
 
 	@Override
@@ -311,6 +314,12 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		// TODO : remove testing code
 		//JSONHandlerTopicView jsonResponse = new	JSONHandlerTopicView(this);
 		
+		if (posts != null){
+			try {
+				UpdatePostCache();
+			} catch (Exception e) {
+			}
+		}
 		
 		threadLoaded = false;
 		try {
@@ -409,7 +418,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 
 			final AdapterTopicView tva = new AdapterTopicView(getApplicationContext(),R.layout.topic_row, posts, login, fontSize,tempHash);
 			
-			new BookmarkAsyncTask().execute(null);
+			new BookmarkAsyncTask().execute(new Object());
 			
 			//TODO: do another check if not in the first page.
 			final ListView lv = getListView();
@@ -427,13 +436,14 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			
 			setListAdapter(tva);
 			
+			/* chazums attempted fix for issue
 			// update the reply counts for the listing of topics
 			try {
 				UpdatePostCache();
 			} catch (Exception e) {
 
 			}
-
+			*/
 		} else {
 			if (errorText.length() > 0) {
 				new AlertDialog.Builder(this).setTitle("Error")
@@ -505,12 +515,14 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 	}
 	
 	private void setBookmarkedPost(){
+		SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
+		s.setVisibility(View.VISIBLE);
+		
 		View sub = findViewById(R.id.bookmarked);
 		if (sub == null){
 			ViewStub v = (ViewStub)findViewById(R.id.bookmarkStub);			
 			sub = v.inflate();
 		}
-		
 		
 		sub.setClickable(true);
 		sub.setOnClickListener(new OnClickListener(){

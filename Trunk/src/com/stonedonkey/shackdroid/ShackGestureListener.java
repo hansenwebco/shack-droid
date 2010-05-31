@@ -50,7 +50,7 @@ public class ShackGestureListener implements OnGesturePerformedListener {
 	    if (predictions.size() > 0) {
 	        Prediction prediction = predictions.get(0);
 	        // We want at least some confidence in the result
-	        if (prediction.score > 1.0) {
+	        if (prediction.score > 1.9) {
 	        	if (vibe != null){
 	        		vibe.vibrate(50);
 	        	}
