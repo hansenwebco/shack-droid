@@ -77,29 +77,27 @@ public class ActivityMainMenu extends ListActivity  {
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
-		// TODO Auto-generated method stub
 		super.onWindowFocusChanged(hasFocus);
 		
-		if (hasFocus)
+		//chazums 'fix' for something in the xml crashing on 1.5
+		if (hasFocus  && Integer.parseInt(android.os.Build.VERSION.SDK) > 3)
 		{
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		boolean allowMenuAnimations = prefs.getBoolean("allowMenuAnimations", false);
-		
-		final ImageView imageBackground = (ImageView) findViewById(R.id.ImageViewMainMenuBackground);
-		if (allowMenuAnimations) 
-		{
-			imageBackground.setBackgroundResource(R.drawable.shackcrest);
-			Animation anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.move_rotate);
-			imageBackground.setAnimation(anim);
-			anim = null;
-		}
-		else
-		{
-			imageBackground.setVisibility(View.GONE);
-		}
-		}
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			boolean allowMenuAnimations = prefs.getBoolean("allowMenuAnimations", false);
 			
-		
+			final ImageView imageBackground = (ImageView) findViewById(R.id.ImageViewMainMenuBackground);
+			if (allowMenuAnimations) 
+			{
+				imageBackground.setBackgroundResource(R.drawable.shackcrest);
+				Animation anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.move_rotate);
+				imageBackground.setAnimation(anim);
+				anim = null;
+			}
+			else
+			{
+				imageBackground.setVisibility(View.GONE);
+			}
+		}
 	}
 
 	// TODO: this is copied in ActivityPreferences, need to move to it's own class
