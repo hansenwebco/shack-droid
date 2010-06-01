@@ -327,7 +327,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 				
 			}});
 		
-		tv.setText(parsedText,BufferType.SPANNABLE);
+		if (tv != null)
+			tv.setText(parsedText,BufferType.SPANNABLE);
 		//tv.setText(Html.fromHtml(postText),BufferType.SPANNABLE);
 
 		

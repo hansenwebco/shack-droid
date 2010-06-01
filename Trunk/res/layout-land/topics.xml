@@ -20,7 +20,10 @@ android:id="@+id/SlidingDrawer01"
      android:layout_height="90px"
 	 android:animateOnClick="true"
      android:handle="@+id/handle"
-     android:content="@+id/bookMarkParent" android:orientation="horizontal" android:layout_alignParentBottom="true">
+     android:content="@+id/bookMarkParent" 
+     android:orientation="horizontal" 
+     android:layout_alignParentBottom="true"
+     android:visibility="gone">
 
      <ImageView
          android:id="@id/handle"

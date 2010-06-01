@@ -36,11 +36,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.gesture.GestureOverlayView;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -350,6 +348,7 @@ public class Helper {
 			return HelperAPI4.setGestureEnabledContentView(resourceId, activity);
 		}
 		else{
+			activity.setContentView(resourceId);
 			return null;
 		}
 	}
