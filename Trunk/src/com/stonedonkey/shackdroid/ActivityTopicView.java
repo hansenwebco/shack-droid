@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -42,6 +43,7 @@ import android.widget.SlidingDrawer;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 import com.stonedonkey.shackdroid.ShackGestureListener.ShackGestureEvent;
 
@@ -529,20 +531,13 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 				// want to add a new field just for this function... probably should
 				bookmarkedPost.setPostIndex(Integer.parseInt(storyID)); 
 				watchCache.add(bookmarkedPost);
-
 			
 				// save our cache back to the users system.
 				try {
+					saveWatchCache(watchCache);
 
-					final FileOutputStream fos = openFileOutput("watch.cache",MODE_PRIVATE);
-					final ObjectOutputStream os = new ObjectOutputStream(fos);
-					os.writeObject(watchCache);
-					os.close();
-					fos.close();
-
-					final Toast toast = Toast.makeText(getBaseContext(),"Message now being watched.",Toast.LENGTH_SHORT);
+					final Toast toast = Toast.makeText(getBaseContext(),"Topic now being watched.",Toast.LENGTH_SHORT);
 					toast.show();
-
 				}
 				catch (Exception ex ){
 					Log.e("ShackDroid", "Error Saving watch.cache");
@@ -550,28 +545,16 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			}
 			else
 			{
-				final Toast toast = Toast.makeText(getBaseContext(),"Message already being watched.",Toast.LENGTH_SHORT);
+				final Toast toast = Toast.makeText(getBaseContext(),"Topic already being watched.",Toast.LENGTH_SHORT);
 				toast.show();
 			}
 
 			// 2. After adding it to the collection bind it to a list view in the tray
 			//    The ListView can use the same view as the TopicView and the same
 			//    SaxParser etc
-			ListView v = (ListView) findViewById(R.id.ListViewWatchedThreads);
-			v.removeAllViewsInLayout();
+			setWatchedPosts();
 
-
-			try {
-				postCounts = GetPostCache();
-			} catch (Exception ex) {
-
-			}
-			v.setAdapter(new AdapterTopicView(this, R.layout.topic_row, watchCache, "stonedonkey", 14, postCounts));
-
-			SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
-			s.setVisibility(View.VISIBLE);
-
-			// 3. Make sure and bind the events to the list clicks, deletes, etc
+			// 3. Update the user when threads get updates.. how do to this hrm.
 
 			return true;			
 		}
@@ -594,8 +577,14 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		}
 		catch (Exception ex){ Log.e("ShackDroid", "Error Loading watch.cache"); }
 		
-		if (watchCache != null && watchCache.size() > 0) {
-			SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
+		final SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
+		
+		if (watchCache == null || watchCache.size() == 0)
+		{
+			s.setVisibility(View.GONE);
+		}
+		else
+		{
 			s.setVisibility(View.VISIBLE);
 			
 			ListView v = (ListView) findViewById(R.id.ListViewWatchedThreads);
@@ -609,7 +598,6 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			v.setAdapter(new AdapterTopicView(this, R.layout.topic_row, watchCache, "stonedonkey", 14, postCounts));
 		
 			v.setOnItemClickListener(new OnItemClickListener(){
-
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
@@ -626,57 +614,55 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 						intent.putExtra("isNWS",false);
 					
 					startActivity(intent);		
-
 				}
-				
 			});
 			
-		
+			v.setOnItemLongClickListener(new OnItemLongClickListener()
+			{
+				@Override
+				public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+					try {
+
+						final int pos = position;
+						
+						new AlertDialog.Builder(view.getContext())
+						.setTitle("Remove Watched Topic")
+						.setMessage("Are you sure you wish to remove this watched topic?")
+						.setPositiveButton("YES",  new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int whichButton) {
+						
+								watchCache.remove(pos);
+				 			    try {
+									saveWatchCache(watchCache);
+								} catch (Exception e) {
+									
+								}
+								// close the tray if there are no more messages
+				 			    if (watchCache.size() <= 0)
+									s.close();
+				 			    // relist the items in the users cache
+								setWatchedPosts();
+							}
+						})
+						.setNegativeButton("NO", null).show();
+					}
+					catch (Exception ex)
+					{
+						Log.e("ShackDroid","Error removing topic from watch list");
+					}
+					return true;
+				}
+			});
 		}
-		
-			
-//		SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
-//		s.setVisibility(View.VISIBLE);
-//		
-//		View sub = findViewById(R.id.bookmarked);
-//		if (sub == null){
-//			ViewStub v = (ViewStub)findViewById(R.id.bookmarkStub);			
-//			sub = v.inflate();
-//		}
-//		
-//		sub.setClickable(true);
-//		sub.setOnClickListener(new OnClickListener(){
-//
-//			@Override
-//			public void onClick(View v) {
-//				final String cat = bookmarkedPost.getPostCategory();
-//				final  Intent intent = new Intent();
-//				intent.setClass(getApplicationContext(), ActivityThreadedView.class);
-//				intent.putExtra("postID", bookmarkedPost.getPostID()); // the value must be a string
-//				intent.putExtra("storyID", storyID);
-//				if (cat.equalsIgnoreCase("nws"))
-//					intent.putExtra("isNWS", true);
-//				else
-//					intent.putExtra("isNWS",false);
-//				
-//				startActivity(intent);				
-//			}});
-//		
-//		TextView t = (TextView)sub.findViewById(R.id.TextViewPosterName);
-//		t.setText(bookmarkedPost.getPosterName());
-//		
-//		t = (TextView)sub.findViewById(R.id.TextViewDatePosted);
-//		t.setText(Helper.FormatShackDate(bookmarkedPost.getPostDate()));			
-//		
-//		t = (TextView)sub.findViewById(R.id.TextViewPostText);
-//		String preview = bookmarkedPost.getPostPreview();
-//		//if (preview.length() > 99)
-//		//	preview= preview.substring(0,99);
-//		
-//		t.setText(preview);
-//
-//		t = (TextView)sub.findViewById(R.id.TextViewReplyCount);
-//		t.setText(bookmarkedPost.getReplyCount());		
+	}
+	
+	private void saveWatchCache(ArrayList<ShackPost> watchCache) throws IOException
+	{
+		final FileOutputStream fos = openFileOutput("watch.cache",MODE_PRIVATE);
+		final ObjectOutputStream os = new ObjectOutputStream(fos);
+		os.writeObject(watchCache);
+		os.close();
+		fos.close();
 	}
 	
 	@SuppressWarnings("unchecked")
