@@ -103,6 +103,12 @@
     			android:summary="Choose how ShackDroid highlights new posts in threads."
     			android:defaultValue="1"
     		/>	    		
+
+		<Preference
+		android:key="clearWatchList"
+		android:title="Clear Watch List"
+		android:summary="Clear the list of threads your currently watching.">
+		</Preference>		    		    
     		    
  </PreferenceCategory>   
  
