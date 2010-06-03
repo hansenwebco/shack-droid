@@ -34,16 +34,14 @@ import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewStub;
-import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SlidingDrawer;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.SlidingDrawer.OnDrawerOpenListener;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.stonedonkey.shackdroid.ShackGestureListener.ShackGestureEvent;
 
@@ -59,12 +57,12 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 	private Boolean threadLoaded = true;
 	private Hashtable<String, String> postCounts = null;
 	private ShackPost bookmarkedPost;
+	private ArrayList<ShackPost> watchCache = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		
 		Helper.SetWindowState(getWindow(),this);
 		final ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.topics, this);
 		if (listener != null){
@@ -91,28 +89,6 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 					// dialog could not be killed for some reason
 				}
 			}
-		}
-		
-		SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
-		if (s != null){
-			s.setOnDrawerOpenListener(new OnDrawerOpenListener(){
-	
-				@Override
-				public void onDrawerOpened() {
-					ImageView v = (ImageView)findViewById(R.id.handle);
-					v.setImageResource(R.drawable.slider);
-				}});
-			ImageView i = (ImageView)s.findViewById(R.id.bookmarkRemove);
-			i.setClickable(true);
-			i.setOnClickListener(new OnClickListener(){
-	
-				@Override
-				public void onClick(View arg0) {
-					bookmarkedPost = null;
-					SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
-					s.close();
-					s.setVisibility(View.GONE);
-				}});
 		}
 	}
 
@@ -312,10 +288,8 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		}
 		return null;
 	}
+
 	public void run() {
-		 
-		// TODO : remove testing code
-		//JSONHandlerTopicView jsonResponse = new	JSONHandlerTopicView(this);
 		
 		if (posts != null){
 			try {
@@ -372,6 +346,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			errorText = "An error occurred connecting to API.";
 		}
 		
+		
 		progressBarHandler.sendEmptyMessage(0);
 	}
 
@@ -389,6 +364,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 	};
 
 	
+
 	private void ShowData()  {
 
 		if (posts != null) {
@@ -406,7 +382,6 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			} catch (Exception ex) {
 
 			}
-
 
 			// TODO: Passing this as a new HashTable seems very ugly and a waste of memory
 			// Unfortunately I can't find a a way to get the Adapter to update before I call
@@ -432,7 +407,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			      menu.setHeaderTitle("Options");
 			      //menu.add(0, 0, 0, "Show Story");
 			      menu.add(0, 1, 0, "Copy Post Url to Clipboard");
-			      menu.add(0, 2, 0, "Bookmark");
+			      menu.add(0, 2, 0, "Watch Thread");
 			      menu.add(0,-1,0,"Cancel");
 			    }
 			  }); 
@@ -456,7 +431,11 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		}
 
 		threadLoaded = true;
+		setWatchedPosts();
+	
+		
 	}
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		
@@ -503,13 +482,97 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			return true;
 		case 2:
 			final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+
 			final int itemPosition = info.position;
+			final ShackPost bookmarkedPost = posts.get(itemPosition);
+
+			//setBookmarkedPost();
+
+			// TODO: Refactor Bookmarking
+
+			// 1. Take the post and add it to some sort of object and save either the
+			//    object or the resulting object and export it as XML that matches the
+			//    API.
+
+			ArrayList<ShackPost> watchCache = null;
+			if (getFileStreamPath("watch.cache").exists()) {
+
+				try {
+					final FileInputStream fileIn = openFileInput("watch.cache");
+					final ObjectInputStream in = new ObjectInputStream(fileIn);
+					watchCache = (ArrayList<ShackPost>)in.readObject();
+					in.close();
+					fileIn.close();
+				}
+				catch (Exception ex){ Log.e("ShackDroid", "Error Loading watch.cache"); }
+			}
 			
-			bookmarkedPost = posts.get(itemPosition);
-			setBookmarkedPost();
+			boolean inCache = false;
+			if (watchCache == null || watchCache.size() == 0)
+			{
+				watchCache = new ArrayList<ShackPost>();
+				//watchCache.add(bookmarkedPost);
+			}
+			else // do we already have this post in our collection
+			{
+				for(int counter= 0; counter < watchCache.size();counter++) {
+					if (watchCache.get(counter).getPostID().equals(bookmarkedPost.getPostID()))
+					{
+						inCache = true;
+						break;
+					}
+				}
+			}
+
+			if (inCache == false) {
+				// reuse the postindex to store story for these... I didn't 
+				// want to add a new field just for this function... probably should
+				bookmarkedPost.setPostIndex(Integer.parseInt(storyID)); 
+				watchCache.add(bookmarkedPost);
+
 			
-			
-			
+				// save our cache back to the users system.
+				try {
+
+					final FileOutputStream fos = openFileOutput("watch.cache",MODE_PRIVATE);
+					final ObjectOutputStream os = new ObjectOutputStream(fos);
+					os.writeObject(watchCache);
+					os.close();
+					fos.close();
+
+					final Toast toast = Toast.makeText(getBaseContext(),"Message now being watched.",Toast.LENGTH_SHORT);
+					toast.show();
+
+				}
+				catch (Exception ex ){
+					Log.e("ShackDroid", "Error Saving watch.cache");
+				}
+			}
+			else
+			{
+				final Toast toast = Toast.makeText(getBaseContext(),"Message already being watched.",Toast.LENGTH_SHORT);
+				toast.show();
+			}
+
+			// 2. After adding it to the collection bind it to a list view in the tray
+			//    The ListView can use the same view as the TopicView and the same
+			//    SaxParser etc
+			ListView v = (ListView) findViewById(R.id.ListViewWatchedThreads);
+			v.removeAllViewsInLayout();
+
+
+			try {
+				postCounts = GetPostCache();
+			} catch (Exception ex) {
+
+			}
+			v.setAdapter(new AdapterTopicView(this, R.layout.topic_row, watchCache, "stonedonkey", 14, postCounts));
+
+			SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
+			s.setVisibility(View.VISIBLE);
+
+			// 3. Make sure and bind the events to the list clicks, deletes, etc
+
 			return true;			
 		}
 
@@ -517,49 +580,103 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 
 	}
 	
-	private void setBookmarkedPost(){
-		SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
-		s.setVisibility(View.VISIBLE);
+	@SuppressWarnings("unchecked")
+	private void setWatchedPosts(){
+
+		// TODO: CLEAN THIS UP!
 		
-		View sub = findViewById(R.id.bookmarked);
-		if (sub == null){
-			ViewStub v = (ViewStub)findViewById(R.id.bookmarkStub);			
-			sub = v.inflate();
+		try {
+			final FileInputStream fileIn = openFileInput("watch.cache");
+			final ObjectInputStream in = new ObjectInputStream(fileIn);
+			watchCache = (ArrayList<ShackPost>)in.readObject();
+			in.close();
+			fileIn.close();
+		}
+		catch (Exception ex){ Log.e("ShackDroid", "Error Loading watch.cache"); }
+		
+		if (watchCache != null && watchCache.size() > 0) {
+			SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
+			s.setVisibility(View.VISIBLE);
+			
+			ListView v = (ListView) findViewById(R.id.ListViewWatchedThreads);
+			v.removeAllViewsInLayout();
+
+			try {
+				postCounts = GetPostCache();
+			} catch (Exception ex) {
+
+			}
+			v.setAdapter(new AdapterTopicView(this, R.layout.topic_row, watchCache, "stonedonkey", 14, postCounts));
+		
+			v.setOnItemClickListener(new OnItemClickListener(){
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					
+					ShackPost post = watchCache.get(position);
+					
+					final  Intent intent = new Intent();
+					intent.setClass(getApplicationContext(), ActivityThreadedView.class);
+					intent.putExtra("postID", post.getPostID()); // the value must be a string
+					intent.putExtra("storyID", post.getPostIndex());
+					if (post.getPostCategory().equalsIgnoreCase("nws"))
+						intent.putExtra("isNWS", true);
+					else
+						intent.putExtra("isNWS",false);
+					
+					startActivity(intent);		
+
+				}
+				
+			});
+			
+		
 		}
 		
-		sub.setClickable(true);
-		sub.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				final String cat = bookmarkedPost.getPostCategory();
-				final  Intent intent = new Intent();
-				intent.setClass(getApplicationContext(), ActivityThreadedView.class);
-				intent.putExtra("postID", bookmarkedPost.getPostID()); // the value must be a string
-				intent.putExtra("storyID", storyID);
-				if (cat.equalsIgnoreCase("nws"))
-					intent.putExtra("isNWS", true);
-				else
-					intent.putExtra("isNWS",false);
-				
-				startActivity(intent);				
-			}});
-		
-		TextView t = (TextView)sub.findViewById(R.id.TextViewPosterName);
-		t.setText(bookmarkedPost.getPosterName());
-		
-		t = (TextView)sub.findViewById(R.id.TextViewDatePosted);
-		t.setText(Helper.FormatShackDate(bookmarkedPost.getPostDate()));			
-		
-		t = (TextView)sub.findViewById(R.id.TextViewPostText);
-		String preview = bookmarkedPost.getPostPreview();
-		//if (preview.length() > 99)
-		//	preview= preview.substring(0,99);
-		
-		t.setText(preview);
-
-		t = (TextView)sub.findViewById(R.id.TextViewReplyCount);
-		t.setText(bookmarkedPost.getReplyCount());		
+			
+//		SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
+//		s.setVisibility(View.VISIBLE);
+//		
+//		View sub = findViewById(R.id.bookmarked);
+//		if (sub == null){
+//			ViewStub v = (ViewStub)findViewById(R.id.bookmarkStub);			
+//			sub = v.inflate();
+//		}
+//		
+//		sub.setClickable(true);
+//		sub.setOnClickListener(new OnClickListener(){
+//
+//			@Override
+//			public void onClick(View v) {
+//				final String cat = bookmarkedPost.getPostCategory();
+//				final  Intent intent = new Intent();
+//				intent.setClass(getApplicationContext(), ActivityThreadedView.class);
+//				intent.putExtra("postID", bookmarkedPost.getPostID()); // the value must be a string
+//				intent.putExtra("storyID", storyID);
+//				if (cat.equalsIgnoreCase("nws"))
+//					intent.putExtra("isNWS", true);
+//				else
+//					intent.putExtra("isNWS",false);
+//				
+//				startActivity(intent);				
+//			}});
+//		
+//		TextView t = (TextView)sub.findViewById(R.id.TextViewPosterName);
+//		t.setText(bookmarkedPost.getPosterName());
+//		
+//		t = (TextView)sub.findViewById(R.id.TextViewDatePosted);
+//		t.setText(Helper.FormatShackDate(bookmarkedPost.getPostDate()));			
+//		
+//		t = (TextView)sub.findViewById(R.id.TextViewPostText);
+//		String preview = bookmarkedPost.getPostPreview();
+//		//if (preview.length() > 99)
+//		//	preview= preview.substring(0,99);
+//		
+//		t.setText(preview);
+//
+//		t = (TextView)sub.findViewById(R.id.TextViewReplyCount);
+//		t.setText(bookmarkedPost.getReplyCount());		
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -686,7 +803,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			if (result){
 				ImageView v = (ImageView)findViewById(R.id.handle);
 				v.setImageResource(R.drawable.slidernew);				
-				setBookmarkedPost();
+				setWatchedPosts();
 			}
 		}
 	}	

@@ -17,13 +17,14 @@
 <SlidingDrawer 
 android:id="@+id/SlidingDrawer01" 
      android:layout_width="fill_parent"
-     android:layout_height="100dip"
+     android:layout_height="fill_parent"
 	 android:animateOnClick="true"
      android:handle="@+id/handle"
      android:content="@+id/bookMarkParent" 
      android:orientation="vertical" 
      android:layout_alignParentBottom="true"
-     android:visibility="gone">
+     android:visibility="gone"
+     android:paddingTop="200dip">
 
      <ImageView
          android:id="@id/handle"
@@ -34,23 +35,35 @@ android:id="@+id/SlidingDrawer01"
          android:id="@id/bookMarkParent"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:background="#000000">
-	<ViewStub 
+         android:background="#222222">
+	    
+         <ListView 
+         	android:id="@+id/ListViewWatchedThreads" 
+			android:layout_width="fill_parent" 
+			android:layout_height="fill_parent" 
+			android:textColor="#FFFFFF"
+			android:dividerHeight="1px"
+			android:divider="#333333">
+         
+         </ListView>
+         
+	<!-- <ViewStub 
 		android:id="@+id/bookmarkStub"
 		android:inflatedId="@+id/bookmarked"
 		android:layout="@layout/topic_row" 
 		android:layout_width="fill_parent" 
 		android:layout_height="wrap_content"
 		android:layout_toLeftOf="@+id/bookmarkRemove"
-		></ViewStub>
+		></ViewStub> 
      <ImageView
          android:id="@id/bookmarkRemove"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content" 
          android:layout_alignParentRight="true"
-         android:src="@drawable/removebookmark"
+         android:src="@drawable/removebookmark" 
          android:paddingLeft="10dip" 
          android:layout_centerVertical="true"/>		
+	-->         
 </RelativeLayout>
 </SlidingDrawer>
 

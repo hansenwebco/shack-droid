@@ -94,9 +94,32 @@ public class ActivityPreferences extends PreferenceActivity {
 			CheckForUpdate(true);
 			return true;
 		}
-		
-		
-		
+		if (preference.getKey().equals("clearWatchList"))
+		{
+			
+			new AlertDialog.Builder(this)
+			.setTitle("Clear Watch List")
+			.setMessage("Are you sure you wish to clear all of your watched threads?")
+			.setPositiveButton("YES",  new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+				
+					try {
+						if (getFileStreamPath("watch.cache").exists()) { 
+							getFileStreamPath("watch.cache").delete();
+							Toast.makeText(getApplicationContext(),"Watch List Cleared",Toast.LENGTH_SHORT).show();
+							
+						}
+					}
+					catch (Exception ex)
+					{
+						Log.e("ShackDroid","Error deleting watch.cache from settings.");
+					}
+				}
+			})
+			.setNegativeButton("NO", null).show();
+			return true;
+		}
+
 		Boolean checkAllowSMSService = Helper.CheckAllowSMService(this);
 		if (preference.getKey().equals("allowCheckShackMessages") || preference.getKey().equals("allowShackMessages"))
 		{
