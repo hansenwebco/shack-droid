@@ -572,6 +572,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		final int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
+		final String login = prefs.getString("shackLogin", "");
 		
 		
 		try {
@@ -604,7 +605,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			} catch (Exception ex) {
 
 			}
-			v.setAdapter(new AdapterTopicView(this, R.layout.topic_row, watchCache, "stonedonkey", fontSize, null));
+			v.setAdapter(new AdapterTopicView(this, R.layout.topic_row, watchCache, login, fontSize, null));
 		
 			v.setOnItemClickListener(new OnItemClickListener(){
 				@Override
