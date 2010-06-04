@@ -1,6 +1,7 @@
 package com.stonedonkey.shackdroid;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -370,12 +371,15 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 
 	private void ShowData()  {
 
+		Hashtable<String,String> tempHash = null;
+		
 		if (posts != null) {
 			// storyName is set during FillData above
 			setTitle("ShackDroid - " + storyName + " - "
 					+ currentPage.toString() + " of "
 					+ this.storyPages.toString());
 
+			
 			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			final String login = prefs.getString("shackLogin", "");
 			final int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
@@ -393,7 +397,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			// create a new Hashtable.. ick.
 			
 			//chazums maybe tva.notifyDataSetChanged() ?  
-			Hashtable<String,String> tempHash = null;
+			
 			if (postCounts != null)
 				tempHash = new Hashtable<String,String>(postCounts);
 
@@ -434,10 +438,41 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		}
 
 		threadLoaded = true;
+		
+		try {
+			//updateWatchedPosts(posts,tempHash);
+		}
+		catch (Exception ex)
+		{
+			
+		}
+		
 		setWatchedPosts();
 	
 		
 	}
+	@SuppressWarnings("unchecked")
+	private void updateWatchedPosts(ArrayList<ShackPost> posts,Hashtable<String, String> tempHash) throws StreamCorruptedException, IOException, ClassNotFoundException 
+	{
+		final FileInputStream fileIn = openFileInput("watch.cache");
+		final ObjectInputStream in = new ObjectInputStream(fileIn);
+		watchCache = (ArrayList<ShackPost>)in.readObject();
+		in.close();
+		fileIn.close();
+		
+		for (int counter =0;counter < watchCache.size();counter++)
+		{
+			if (posts.contains(watchCache.get(counter)))
+			{
+				
+			}
+
+		}
+		
+
+		
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
