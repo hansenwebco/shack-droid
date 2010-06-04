@@ -19,7 +19,7 @@ android:id="@+id/SlidingDrawer01"
      android:layout_width="fill_parent"
      android:layout_height="fill_parent"
 	 android:animateOnClick="true"
-     android:handle="@+id/TrayHandle"
+     android:handle="@+id/TextViewTrayHandle"
      android:content="@+id/bookMarkParent" 
      android:orientation="vertical" 
      android:layout_alignParentBottom="true"
@@ -33,7 +33,7 @@ android:id="@+id/SlidingDrawer01"
          android:background="@drawable/grey_gradient"
          android:src="@drawable/slider"/>
 <TextView
-	android:id="@+id/TrayHandle"
+	android:id="@+id/TextViewTrayHandle"
 	android:background="@drawable/darkgrey_gradient"
  	android:layout_width="fill_parent"
      android:layout_height="35dip"
@@ -47,7 +47,7 @@ android:id="@+id/SlidingDrawer01"
          android:id="@id/bookMarkParent"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:background="#222222">
+         android:background="#111111">
 	    
          <ListView 
          	android:id="@+id/ListViewWatchedThreads" 

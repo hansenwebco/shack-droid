@@ -40,6 +40,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SlidingDrawer;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
@@ -487,7 +488,8 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 
 			final int itemPosition = info.position;
 			final ShackPost bookmarkedPost = posts.get(itemPosition);
-
+			
+			
 			//setBookmarkedPost();
 
 			// TODO: Refactor Bookmarking
@@ -568,6 +570,10 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 
 		// TODO: CLEAN THIS UP!
 		
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		final int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
+		
+		
 		try {
 			final FileInputStream fileIn = openFileInput("watch.cache");
 			final ObjectInputStream in = new ObjectInputStream(fileIn);
@@ -587,7 +593,10 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		{
 			s.setVisibility(View.VISIBLE);
 			
-			ListView v = (ListView) findViewById(R.id.ListViewWatchedThreads);
+			final TextView handle = (TextView)findViewById(R.id.TextViewTrayHandle);
+			handle.setText("Watching " + watchCache.size() + " topics");
+			
+			final ListView v = (ListView) findViewById(R.id.ListViewWatchedThreads);
 			v.removeAllViewsInLayout();
 
 			try {
@@ -595,7 +604,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			} catch (Exception ex) {
 
 			}
-			v.setAdapter(new AdapterTopicView(this, R.layout.topic_row, watchCache, "stonedonkey", 14, postCounts));
+			v.setAdapter(new AdapterTopicView(this, R.layout.topic_row, watchCache, "stonedonkey", fontSize, null));
 		
 			v.setOnItemClickListener(new OnItemClickListener(){
 				@Override
