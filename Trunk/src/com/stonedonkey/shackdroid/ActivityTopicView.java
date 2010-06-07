@@ -449,7 +449,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 	
 		
 	}
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "unused" })
 	private void updateWatchedPosts(ArrayList<ShackPost> posts,Hashtable<String, String> tempHash) throws StreamCorruptedException, IOException, ClassNotFoundException 
 	{
 		final FileInputStream fileIn = openFileInput("watch.cache");
@@ -565,6 +565,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 				// reuse the postindex to store story for these... I didn't 
 				// want to add a new field just for this function... probably should
 				bookmarkedPost.setPostIndex(Integer.parseInt(storyID)); 
+				bookmarkedPost.setOriginalReplyCount(Integer.parseInt(bookmarkedPost.getReplyCount()));
 				watchCache.add(bookmarkedPost);
 			
 				// save our cache back to the users system.
@@ -638,8 +639,20 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			} catch (Exception ex) {
 
 			}
-			v.setAdapter(new AdapterTopicView(this, R.layout.topic_row, watchCache, login, fontSize, null));
+
+			// TODO: should probably run this in an async task me thinks
+			//Thread thread = new Thread(this);
+			//thread.start();
+			
+			final AdapterTopicView adapter = new AdapterTopicView(this, R.layout.topic_row, watchCache, login, fontSize, postCounts);
+			v.setAdapter(adapter);
+			final int newPosts = adapter.getTotalNewPosts();
 		
+			if (newPosts == 0) 
+				handle.setText("Watching " + watchCache.size() + " topics");
+			else
+				handle.setText("Watching " + watchCache.size() + " topics / " + newPosts + " new replies");
+			
 			v.setOnItemClickListener(new OnItemClickListener(){
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
@@ -697,8 +710,11 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 				}
 			});
 		}
+	
 	}
 	
+	
+
 	private void saveWatchCache(ArrayList<ShackPost> watchCache) throws IOException
 	{
 		final FileOutputStream fos = openFileOutput("watch.cache",MODE_PRIVATE);

@@ -30,6 +30,7 @@ public class AdapterTopicView extends BaseAdapter {
 	private final Hashtable<String,String> postCache;
 	private final String showAuthor;
 	private final Resources r; 
+	private int totalNewPosts = 0;
 	
 	LayoutInflater inflate;// = LayoutInflater.from(context);
 	public AdapterTopicView(Context context,int rowResouceID, List<ShackPost> topicList, String shackLogin,int fontSize,Hashtable<String,String> postCache ){
@@ -107,28 +108,51 @@ public class AdapterTopicView extends BaseAdapter {
 		else
 			tmp.setTextColor(Color.parseColor("#FFFFFF"));
 
-		
-		// show the number of new posts since the last refresh
-		if (postCache != null && postCache.get(post.getPostID()) != null ) {
-
-			final String cacheposts = postCache.get(post.getPostID());
-			final Integer newPosts = Integer.parseInt(post.getReplyCount()) - Integer.parseInt(cacheposts);
-			
+		if (post.getOrginalReplyCount() != null) // we are showing watched messages
+		{
+	
 			final TextView postNewCount = (TextView)v.findViewById(R.id.TextViewNewPosts);
-			if (newPosts > 0 && Integer.parseInt(post.getReplyCount()) > 0) {
+			Integer newPosts = 0;
+			
+			if (postCache != null && postCache.get(post.getPostID()) != null ) {
+				final String cacheposts = postCache.get(post.getPostID());
+				newPosts = Integer.parseInt(cacheposts) - post.getOrginalReplyCount();
+			}
+			
+			if (newPosts > 0) {
+				totalNewPosts = totalNewPosts + newPosts;
 				postNewCount.setTypeface(face);
 				postNewCount.setText("+" + newPosts.toString());
 			}
 			else
 				postNewCount.setText(null);
 			
+						
 		}
-		else // we don't have a cached version of this in the post cache reset the view
+
+		else // show the number of new posts since the last refresh
 		{
-			final TextView postNewCount = (TextView)v.findViewById(R.id.TextViewNewPosts);
-			postNewCount.setText(null);
+			if (postCache != null && postCache.get(post.getPostID()) != null ) {
+
+				final String cacheposts = postCache.get(post.getPostID());
+				final Integer newPosts = Integer.parseInt(post.getReplyCount()) - Integer.parseInt(cacheposts);
+
+				final TextView postNewCount = (TextView)v.findViewById(R.id.TextViewNewPosts);
+				if (newPosts > 0 && Integer.parseInt(post.getReplyCount()) > 0) {
+					postNewCount.setTypeface(face);
+					postNewCount.setText("+" + newPosts.toString());
+				}
+				else
+					postNewCount.setText(null);
+
+			}
+			else // we don't have a cached version of this in the post cache reset the view
+			{
+				final TextView postNewCount = (TextView)v.findViewById(R.id.TextViewNewPosts);
+				postNewCount.setText(null);
+			}
 		}
-		
+			
 		tmp = (TextView)v.findViewById(R.id.TextViewPostText);
 		tmp.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 		tmp.setTypeface(face);
@@ -175,6 +199,12 @@ public class AdapterTopicView extends BaseAdapter {
 			img.setImageDrawable(null); // remove it if it's not being set
 				
 		return v;
+	}
+
+
+
+	public int getTotalNewPosts() {
+		return totalNewPosts;
 	}
 	
 }

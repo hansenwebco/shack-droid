@@ -47,7 +47,7 @@ public class SaxHandlerShackMarks extends DefaultHandler {
 		{
 			body = false;
 			
-			ShackPost currentPost = new ShackPost( posterName, postDate, preview ,postID, bodyText, "0", 0,"ontopic",0,marks.size(),false);
+			ShackPost currentPost = new ShackPost( posterName, postDate, preview ,postID, bodyText, "0", 0,"ontopic",0,marks.size(),false,null);
 			marks.add(currentPost);
 			
 		}
