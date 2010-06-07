@@ -24,12 +24,7 @@ android:id="@+id/SlidingDrawer01"
      android:orientation="vertical" 
      android:layout_alignParentBottom="true"
      android:visibility="gone">
- <ImageView
-         android:id="@id/handle"
-         android:layout_width="wrap_content"
-         android:layout_height="10dip" 
-         android:background="@drawable/grey_gradient"
-         android:src="@drawable/slider"/>
+
 <TextView
 	android:id="@+id/TextViewTrayHandle"
 	android:background="@drawable/darkgrey_gradient"
