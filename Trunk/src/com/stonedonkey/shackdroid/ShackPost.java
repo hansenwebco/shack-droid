@@ -22,9 +22,10 @@ public final class ShackPost implements Serializable
 	private int postIndex;
 	private int orderID = 0;
 	private boolean authorInThread = false;
+	private Integer orginalReplyCount = null;
 	
 	public ShackPost(String posterName, String postDate, String postPreview,
-			String postID, String postText,String replyCount,Integer indent,String postCategory, Integer postIndex,Integer orderID,boolean authorInThread) {
+			String postID, String postText,String replyCount,Integer indent,String postCategory, Integer postIndex,Integer orderID,boolean authorInThread , Integer originalReplyCount) {
 		
 		this.posterName = posterName;
 		this.postDate = postDate;
@@ -37,6 +38,7 @@ public final class ShackPost implements Serializable
 		this.postIndex = postIndex;
 		this.authorInThread = authorInThread;
 		this.orderID = orderID; 
+		this.orginalReplyCount = originalReplyCount;
 	}
 
 	public boolean getIsAuthorInThread()
@@ -89,6 +91,14 @@ public final class ShackPost implements Serializable
 
 	public String getPostID() {
 		return postID;
+	}
+
+	public void setOriginalReplyCount(Integer orginalPostCount) {
+		this.orginalReplyCount = orginalPostCount;
+	}
+
+	public Integer getOrginalReplyCount() {
+		return orginalReplyCount;
 	}
 
 }

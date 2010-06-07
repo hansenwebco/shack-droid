@@ -163,7 +163,7 @@ public class SaxHandlerTopicView extends DefaultHandler
 				 (postCategory.equals("ontopic")))
 			{
 				// add new post to collection
-				ShackPost currentPost = new ShackPost( posterName, postDate, preview ,postID, bodyText, replyCount, currentIndent,postCategory,0,posts.size(),author);
+				ShackPost currentPost = new ShackPost( posterName, postDate, preview ,postID, bodyText, replyCount, currentIndent,postCategory,0,posts.size(),author,null);
 				posts.add(currentPost);
 				bodyText= "";
 				author = false;
