@@ -1,7 +1,6 @@
 package com.stonedonkey.shackdroid;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -38,7 +37,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
@@ -831,11 +829,11 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		}
 		
 		protected void onPostExecute(Boolean result) {
-			if (result){
-				ImageView v = (ImageView)findViewById(R.id.handle);
-				v.setImageResource(R.drawable.slidernew);				
-				setWatchedPosts();
-			}
+//			if (result){
+//				ImageView v = (ImageView)findViewById(R.id.handle);
+//				v.setImageResource(R.drawable.slidernew);				
+//				setWatchedPosts();
+//			}
 		}
 	}	
 }
