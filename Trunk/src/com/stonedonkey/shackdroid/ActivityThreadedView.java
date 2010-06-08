@@ -18,8 +18,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -187,6 +189,14 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			dialog.setTitle(null);
 			dialog.setIndeterminate(true);
 			dialog.setCancelable(true);
+
+			dialog.setOnCancelListener(new OnCancelListener(){
+				@Override
+				public void onCancel(DialogInterface arg0) {
+					finish();
+				}
+			});
+			
 			return dialog;
 		}
 		}
