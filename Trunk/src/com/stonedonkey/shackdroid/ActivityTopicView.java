@@ -286,20 +286,24 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			dialog.setTitle(null);
 			dialog.setIndeterminate(true);
 			dialog.setCancelable(true);
+			
+			dialog.onBackPressed();
+			
 			return dialog;
 			}
 		}
 		return null;
+	
+	
 	}
-
 	public void run() {
 		
-		if (posts != null){
-			try {
-				UpdatePostCache();
-			} catch (Exception e) {
-			}
-		}
+//		if (posts != null){
+//			try {
+//				UpdatePostCache();
+//			} catch (Exception e) {
+//			}
+//		}
 		
 		threadLoaded = false;
 		try {
@@ -420,14 +424,14 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			
 			setListAdapter(tva);
 			
-			/* chazums attempted fix for issue
+			
 			// update the reply counts for the listing of topics
 			try {
 				UpdatePostCache();
 			} catch (Exception e) {
 
 			}
-			*/
+			
 		} else {
 			if (errorText.length() > 0) {
 				new AlertDialog.Builder(this).setTitle("Error")
@@ -713,9 +717,6 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		}
 	
 	}
-	
-	
-
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		
@@ -723,7 +724,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		{
 			final SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
 			if (s.isOpened()) {
-				s.toggle();
+				s.animateClose();
 				return true;
 			}
 		}
