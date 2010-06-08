@@ -32,6 +32,7 @@ import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -401,7 +402,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 
 			final AdapterTopicView tva = new AdapterTopicView(getApplicationContext(),R.layout.topic_row, posts, login, fontSize,tempHash);
 			
-			new BookmarkAsyncTask().execute(new Object());
+			//new BookmarkAsyncTask().execute(new Object());
 			
 			//TODO: do another check if not in the first page.
 			final ListView lv = getListView();
@@ -714,6 +715,20 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 	}
 	
 	
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		
+		if (keyCode == KeyEvent.KEYCODE_BACK)
+		{
+			final SlidingDrawer s = (SlidingDrawer)findViewById(R.id.SlidingDrawer01);
+			if (s.isOpened()) {
+				s.toggle();
+				return true;
+			}
+		}
+		return super.onKeyDown(keyCode, event);			
+	}
 
 	private void saveWatchCache(ArrayList<ShackPost> watchCache) throws IOException
 	{
