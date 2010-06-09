@@ -17,6 +17,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -403,6 +405,60 @@ public class Helper {
 	public static String getUserAgentString(Context context)
 	{
 		return "ShackDroid/" + context.getString(R.string.version_id);
+	}
+	
+	public static int getThreadReplyCount(int threadId,Context context)
+	{
+//		String result = "";
+//		URL url;
+//		try {
+//			url = new URL("http://shackapi.stonedonkey.com/thread/" + threadId + ".xml");
+//			URLConnection conn = url.openConnection();
+//			HttpURLConnection httpConnection = (HttpURLConnection) conn;
+//
+//			httpConnection.setRequestProperty("User-Agent", Helper.getUserAgentString(context));
+//			
+//			int responseCode = httpConnection.getResponseCode();
+//			if (responseCode == HttpURLConnection.HTTP_OK) {
+//
+//				InputStream is = httpConnection.getInputStream();
+//				BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+//				
+//				String line = "";
+//				
+//				while ((line = reader.readLine()) != null) {
+//					result = result + line + "\n";
+//				}
+//			}
+//
+//		} catch (Exception e) {
+//
+//			result = "";
+//		}
+//		
+//		if (result.length() > 0)
+//		{
+//		
+//			try {
+//				//regex
+//				String regex = "reply_count=\"([0-9]*)\"";
+//				Pattern pattern = Pattern.compile(regex,Pattern.DOTALL|Pattern.MULTILINE);
+//				Matcher matcher= pattern.matcher(result);
+//				if (matcher.matches())
+//				{
+//					return Integer.parseInt(matcher.group(0));
+//				}
+//				else 
+//					return 0;
+//				
+//			} catch (Exception e) {
+//				
+//				Log.e("ShackDroid","Error parsing thread");
+//				
+//			}
+//			
+//		}
+		return 0;
 	}
 	
 	public static String getShackStory(int storyID,Context context) throws JSONException

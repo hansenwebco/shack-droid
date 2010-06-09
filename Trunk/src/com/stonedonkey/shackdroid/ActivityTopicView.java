@@ -493,7 +493,8 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 				ShackPost postTemp = posts.get(counterTwo);
 				if (!postTemp.getPostID().equals(post.getPostID()))
 				{
-					
+					int replies = Helper.getThreadReplyCount(Integer.parseInt(postTemp.getPostID()),getBaseContext());
+					return;
 				}
 			}
 			
