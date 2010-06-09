@@ -129,7 +129,7 @@ public class AdapterTopicView extends BaseAdapter {
 			
 						
 		}
-
+ 
 		else // show the number of new posts since the last refresh
 		{
 			if (postCache != null && postCache.get(post.getPostID()) != null ) {

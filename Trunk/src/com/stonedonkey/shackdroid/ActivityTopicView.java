@@ -465,11 +465,12 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		}
 
 		setWatchedPosts();
+
 	
 		
 	}
-	@SuppressWarnings({ "unchecked", "unused" })
-	private void updateWatchedPosts(ArrayList<ShackPost> posts,Hashtable<String, String> tempHash) throws StreamCorruptedException, IOException, ClassNotFoundException 
+	@SuppressWarnings({"unchecked"})
+	private void updateWatchedPosts(Hashtable<String, String> tempHash) throws StreamCorruptedException, IOException, ClassNotFoundException 
 	{
 		final FileInputStream fileIn = openFileInput("watch.cache");
 		final ObjectInputStream in = new ObjectInputStream(fileIn);
@@ -477,14 +478,43 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		in.close();
 		fileIn.close();
 		
-		for (int counter =0;counter < watchCache.size();counter++)
+		// check to see if the post is in our current load of posts, and if not
+		// call it via the api and get the total replies
+		
+		int newPosts = 0;
+		for (int counter = 0;counter < watchCache.size();counter++)
 		{
-			if (posts.contains(watchCache.get(counter)))
+			ShackPost post = watchCache.get(counter);
+			
+			// check to see if this post was in the latest load from the chatty
+			// if not we call it manually
+			for (int counterTwo = 0; counterTwo < posts.size() ; counterTwo++ )
 			{
-				
+				ShackPost postTemp = posts.get(counterTwo);
+				if (!postTemp.getPostID().equals(post.getPostID()))
+				{
+					
+				}
 			}
-
+			
+			String cacheCount = tempHash.get(post.getPostID());
+			if (cacheCount != null)
+			{
+				final int change = Integer.parseInt(cacheCount) - Integer.parseInt(post.getReplyCount());
+				if (change > 0)
+				newPosts = newPosts + change;   
+			}
 		}
+		
+		final TextView handle = (TextView)findViewById(R.id.TextViewTrayHandle);
+		if (newPosts == 0){
+			handle.setText("Watching " + watchCache.size() + " topics");
+		}
+		else
+		{
+			handle.setText("Watching " + watchCache.size() + " topics / " + newPosts + " new replies");
+		}
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -644,9 +674,6 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		{
 			s.setVisibility(View.VISIBLE);
 			
-			final TextView handle = (TextView)findViewById(R.id.TextViewTrayHandle);
-			handle.setText("Watching " + watchCache.size() + " topics");
-			
 			final ListView v = (ListView) findViewById(R.id.ListViewWatchedThreads);
 			v.removeAllViewsInLayout();
 
@@ -662,14 +689,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			
 			final AdapterTopicView adapter = new AdapterTopicView(this, R.layout.topic_row, watchCache, login, fontSize, postCounts);
 			v.setAdapter(adapter);
-		
-			final int newPosts = adapter.getTotalNewPosts();
-		
-			if (newPosts == 0) 
-				handle.setText("Watching " + watchCache.size() + " topics");
-			else
-				handle.setText("Watching " + watchCache.size() + " topics / " + newPosts + " new replies");
-			
+
 			v.setOnItemClickListener(new OnItemClickListener(){
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
@@ -727,7 +747,13 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 				}
 			});
 		}
-	
+		try {
+			updateWatchedPosts(postCounts);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+		
+		}
+		
 	}
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
