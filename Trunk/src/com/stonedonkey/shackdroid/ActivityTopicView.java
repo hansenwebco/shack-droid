@@ -152,7 +152,15 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 
 		return true;
 	}
-
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		
+		if (hasFocus)
+		{
+			setWatchedPosts();
+		}
+	}
 	@Override
 	public boolean onMenuOpened(int featureId, Menu menu) {
 
@@ -455,7 +463,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		{
 			
 		}
-		
+
 		setWatchedPosts();
 	
 		
@@ -477,9 +485,6 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			}
 
 		}
-		
-
-		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -657,6 +662,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			
 			final AdapterTopicView adapter = new AdapterTopicView(this, R.layout.topic_row, watchCache, login, fontSize, postCounts);
 			v.setAdapter(adapter);
+		
 			final int newPosts = adapter.getTotalNewPosts();
 		
 			if (newPosts == 0) 
