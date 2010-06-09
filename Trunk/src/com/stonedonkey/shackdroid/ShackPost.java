@@ -92,7 +92,10 @@ public final class ShackPost implements Serializable
 	public String getPostID() {
 		return postID;
 	}
-
+	public void setReplyCount(Integer replyCount)
+	{
+		this.replyCount = replyCount.toString();
+	}
 	public void setOriginalReplyCount(Integer orginalPostCount) {
 		this.orginalReplyCount = orginalPostCount;
 	}

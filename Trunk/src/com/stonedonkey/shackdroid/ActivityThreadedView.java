@@ -1,5 +1,9 @@
 package com.stonedonkey.shackdroid;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,8 +15,6 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
-
-import com.stonedonkey.shackdroid.ShackGestureListener.ShackGestureEvent;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -57,6 +59,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.TextView.BufferType;
+
+import com.stonedonkey.shackdroid.ShackGestureListener.ShackGestureEvent;
 
 /**
  * @author markh
@@ -303,9 +307,52 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 
 
 			ShowData();
+			UpdateWatchedPosts();
 		}
 	};
 	
+	@SuppressWarnings("unchecked")
+	private void UpdateWatchedPosts()
+	{
+		// TODO: the opening and saving of the cache file needs to be moved to a func
+		ArrayList<ShackPost> watchCache = null;
+		if (getFileStreamPath("watch.cache").exists()) {
+
+			try {
+				final FileInputStream fileIn = openFileInput("watch.cache");
+				final ObjectInputStream in = new ObjectInputStream(fileIn);
+				watchCache = (ArrayList<ShackPost>)in.readObject();
+				in.close();
+				fileIn.close();
+			}
+			catch (Exception ex){ Log.e("ShackDroid", "Thread Error Loading watch.cache"); }
+		}
+
+
+		if (watchCache != null && watchCache.size() > 0)
+		{
+			// TODO: Not sure a loop is neccessary here
+			for(int counter= 0; counter < watchCache.size();counter++) {
+				if (watchCache.get(counter).getPostID().equals(postID))
+				{
+					final int replyCount = posts.size() - 1;
+					watchCache.get(counter).setOriginalReplyCount(replyCount);
+					watchCache.get(counter).setReplyCount(replyCount);
+					break;
+				}
+			}
+		}
+		try {
+			final FileOutputStream fos = openFileOutput("watch.cache",MODE_PRIVATE);
+			final ObjectOutputStream os = new ObjectOutputStream(fos);
+			os.writeObject(watchCache);
+			os.close();
+			fos.close();
+		} catch (Exception e) {
+		}
+
+
+	}
 	private void UpdatePostText(int position, Boolean addSpoilerMarkers)
 	{
 		final TextView tv = (TextView) findViewById(R.id.TextViewPost);
