@@ -158,7 +158,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		
 		if (hasFocus)
 		{
-			setWatchedPosts();
+			setWatchedPosts(false);
 		}
 	}
 	@Override
@@ -464,40 +464,39 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			
 		}
 
-		setWatchedPosts();
+		setWatchedPosts(true);
 
 	
 		
 	}
 	@SuppressWarnings({"unchecked"})
-	private void updateWatchedPosts(Hashtable<String, String> tempHash) throws StreamCorruptedException, IOException, ClassNotFoundException 
+	private void updateWatchedPosts(Hashtable<String, String> tempHash, Boolean loadMissingThreads) throws StreamCorruptedException, IOException, ClassNotFoundException 
 	{
 		final FileInputStream fileIn = openFileInput("watch.cache");
 		final ObjectInputStream in = new ObjectInputStream(fileIn);
 		watchCache = (ArrayList<ShackPost>)in.readObject();
 		in.close();
 		fileIn.close();
-		
-		// check to see if the post is in our current load of posts, and if not
-		// call it via the api and get the total replies
-		
+				
 		int newPosts = 0;
 		for (int counter = 0;counter < watchCache.size();counter++)
 		{
 			ShackPost post = watchCache.get(counter);
 			
-			// check to see if this post was in the latest load from the chatty
-			// if not we call it manually
-			for (int counterTwo = 0; counterTwo < posts.size() ; counterTwo++ )
-			{
-				ShackPost postTemp = posts.get(counterTwo);
-				if (!postTemp.getPostID().equals(post.getPostID()))
+			// check to see if the post is in our current load of posts, and if not
+			// call it via the api and get the total replies
+			if (loadMissingThreads)
+				for (int counterTwo = 0; counterTwo < posts.size() ; counterTwo++ )
 				{
-					int replies = Helper.getThreadReplyCount(Integer.parseInt(postTemp.getPostID()),getBaseContext());
-					return;
+					ShackPost postTemp = posts.get(counterTwo);
+					if (!postTemp.getPostID().equals(post.getPostID()))
+					{
+						Integer replies = Helper.getThreadReplyCount(Integer.parseInt(post.getPostID()),getBaseContext());
+						tempHash.put(post.getPostID(), replies.toString());
+						break;
+					}
 				}
-			}
-			
+
 			String cacheCount = tempHash.get(post.getPostID());
 			if (cacheCount != null)
 			{
@@ -507,14 +506,20 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			}
 		}
 		
+		String topicString = "topic";
+		String postsString = "reply";
+		if (watchCache.size() > 1)
+			topicString = "topics";
+		
+		if (newPosts > 1)
+			postsString = "replies";
+		
 		final TextView handle = (TextView)findViewById(R.id.TextViewTrayHandle);
-		if (newPosts == 0){
-			handle.setText("Watching " + watchCache.size() + " topics");
-		}
+		if (newPosts == 0)
+			handle.setText("Watching " + watchCache.size() + " " + topicString);
 		else
-		{
-			handle.setText("Watching " + watchCache.size() + " topics / " + newPosts + " new replies");
-		}
+			handle.setText("Watching " + watchCache.size() + " " + topicString + " / " + newPosts + " new " + postsString);
+		
 
 	}
 
@@ -635,7 +640,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			// 2. After adding it to the collection bind it to a list view in the tray
 			//    The ListView can use the same view as the TopicView and the same
 			//    SaxParser etc
-			setWatchedPosts();
+			setWatchedPosts(false);
 
 			// 3. Update the user when threads get updates.. how do to this hrm.
 
@@ -647,7 +652,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void setWatchedPosts(){
+	private void setWatchedPosts(Boolean loadMissingThreads){
 
 		// TODO: CLEAN THIS UP!
 		
@@ -687,6 +692,12 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			// TODO: should probably run this in an async task me thinks
 			//Thread thread = new Thread(this);
 			//thread.start();
+			
+			try {
+				updateWatchedPosts(postCounts,loadMissingThreads);
+			} catch (Exception e) {
+				Log.e("ShackDroid", "Error updating unwatched posts.");
+			}
 			
 			final AdapterTopicView adapter = new AdapterTopicView(this, R.layout.topic_row, watchCache, login, fontSize, postCounts);
 			v.setAdapter(adapter);
@@ -735,7 +746,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 				 			    if (watchCache.size() <= 0)
 									s.close();
 				 			    // relist the items in the users cache
-								setWatchedPosts();
+								setWatchedPosts(false);
 							}
 						})
 						.setNegativeButton("NO", null).show();
@@ -748,14 +759,8 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 				}
 			});
 		}
-		try {
-			updateWatchedPosts(postCounts);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-		
-		}
-		
 	}
+	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		
