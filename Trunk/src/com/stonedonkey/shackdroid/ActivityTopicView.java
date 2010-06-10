@@ -1,12 +1,10 @@
 package com.stonedonkey.shackdroid;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OptionalDataException;
 import java.io.StreamCorruptedException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -62,7 +60,6 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 	private String loadStoryID = null;
 	private Boolean threadLoaded = true;
 	private Hashtable<String, String> postCounts = null;
-	private ShackPost bookmarkedPost;
 	private ArrayList<ShackPost> watchCache = null;
 	
 	@Override
@@ -160,7 +157,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		
 		if (hasFocus)
 		{
-			setWatchedPosts(false);
+			//setWatchedPosts(false);
 		}
 	}
 	@Override
@@ -314,13 +311,6 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 	}
 	public void run() {
 		
-//		if (posts != null){
-//			try {
-//				UpdatePostCache();
-//			} catch (Exception e) {
-//			}
-//		}
-		
 		threadLoaded = false;
 		try {
 
@@ -471,18 +461,15 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 	
 		
 	}
-	@SuppressWarnings({"unchecked"})
 	private void updateWatchedPosts(Hashtable<String, String> tempHash, Boolean loadMissingThreads) throws StreamCorruptedException, IOException, ClassNotFoundException 
 	{
-			// check to see if the post is in our current load of posts, and if not
-			// call it via the api and get the total replies
-			//if (loadMissingThreads) {
+		// check to see if the post is in our current load of posts, and if not
+		// call it via the api and get the total replies
+		final TextView handle = (TextView)findViewById(R.id.TextViewTrayHandle);
+		handle.setText("Refreshing...");
 
-				final TextView handle = (TextView)findViewById(R.id.TextViewTrayHandle);
-				handle.setText("Refreshing...");
-				
-				new WatchedThreadsAsyncTask(tempHash,posts,loadMissingThreads).execute();
-			//}
+		new WatchedThreadsAsyncTask(tempHash,posts,loadMissingThreads).execute();
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -655,11 +642,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			//Thread thread = new Thread(this);
 			//thread.start();
 			
-			try {
-				updateWatchedPosts(postCounts,loadMissingThreads);
-			} catch (Exception e) {
-				Log.e("ShackDroid", "Error updating unwatched posts.");
-			}
+		
 			
 			final AdapterTopicView adapter = new AdapterTopicView(this, R.layout.topic_row, watchCache, login, fontSize, postCounts);
 			v.setAdapter(adapter);
@@ -720,6 +703,14 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 					return true;
 				}
 			});
+			
+			
+			try {
+				updateWatchedPosts(postCounts,loadMissingThreads);
+			} catch (Exception e) {
+				Log.e("ShackDroid", "Error updating unwatched posts.");
+			}
+			
 		}
 	}
 	
@@ -854,8 +845,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		@SuppressWarnings("unchecked")
 		@Override
 		protected Boolean doInBackground(Object... arg0) {
-			
-		
+
 			try {
 				final FileInputStream fileIn = openFileInput("watch.cache");
 				final ObjectInputStream in = new ObjectInputStream(fileIn);
@@ -866,8 +856,6 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 				// TODO: handle exception
 			}
 			
-			
-	
 			for (int counter = 0;counter < watchCache.size();counter++)
 			{
 				ShackPost post = watchCache.get(counter);
