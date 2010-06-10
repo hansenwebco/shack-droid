@@ -1,10 +1,12 @@
 package com.stonedonkey.shackdroid;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OptionalDataException;
 import java.io.StreamCorruptedException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -472,55 +474,15 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 	@SuppressWarnings({"unchecked"})
 	private void updateWatchedPosts(Hashtable<String, String> tempHash, Boolean loadMissingThreads) throws StreamCorruptedException, IOException, ClassNotFoundException 
 	{
-		final FileInputStream fileIn = openFileInput("watch.cache");
-		final ObjectInputStream in = new ObjectInputStream(fileIn);
-		watchCache = (ArrayList<ShackPost>)in.readObject();
-		in.close();
-		fileIn.close();
-				
-		int newPosts = 0;
-		for (int counter = 0;counter < watchCache.size();counter++)
-		{
-			ShackPost post = watchCache.get(counter);
-			
 			// check to see if the post is in our current load of posts, and if not
 			// call it via the api and get the total replies
-			if (loadMissingThreads)
-				for (int counterTwo = 0; counterTwo < posts.size() ; counterTwo++ )
-				{
-					ShackPost postTemp = posts.get(counterTwo);
-					if (!postTemp.getPostID().equals(post.getPostID()))
-					{
-						Integer replies = Helper.getThreadReplyCount(Integer.parseInt(post.getPostID()),getBaseContext());
-						tempHash.put(post.getPostID(), replies.toString());
-						break;
-					}
-				}
+			//if (loadMissingThreads) {
 
-			String cacheCount = tempHash.get(post.getPostID());
-			if (cacheCount != null)
-			{
-				final int change = Integer.parseInt(cacheCount) - Integer.parseInt(post.getReplyCount());
-				if (change > 0)
-				newPosts = newPosts + change;   
-			}
-		}
-		
-		String topicString = "topic";
-		String postsString = "reply";
-		if (watchCache.size() > 1)
-			topicString = "topics";
-		
-		if (newPosts > 1)
-			postsString = "replies";
-		
-		final TextView handle = (TextView)findViewById(R.id.TextViewTrayHandle);
-		if (newPosts == 0)
-			handle.setText("Watching " + watchCache.size() + " " + topicString);
-		else
-			handle.setText("Watching " + watchCache.size() + " " + topicString + " / " + newPosts + " new " + postsString);
-		
-
+				final TextView handle = (TextView)findViewById(R.id.TextViewTrayHandle);
+				handle.setText("Refreshing...");
+				
+				new WatchedThreadsAsyncTask(tempHash,posts,loadMissingThreads).execute();
+			//}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -873,44 +835,97 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		}
 	}
 	
-	class BookmarkAsyncTask extends AsyncTask<Object, Object, Boolean>{
+	class WatchedThreadsAsyncTask extends AsyncTask<Object, Object, Boolean>{
 
-		@Override
-		protected Boolean doInBackground(Object... params) {
-			if (bookmarkedPost != null){
-				for (ShackPost s : posts){
-					if (s.getPostID().equals(bookmarkedPost.getPostID())){
-						if (Integer.parseInt(s.getReplyCount()) >
-								Integer.parseInt(bookmarkedPost.getReplyCount())){
-							bookmarkedPost = s;
-							return true;
-						}
-						break;
-					}
-				}
-				
-				final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-				String feedURL = prefs.getString("shackFeedURL", getString(R.string.default_api));							
-				ArrayList<ShackPost> tmp = Helper.getPostTreeById(feedURL, 
-						true,//bookmarkedPost.getPostCategory().equals("nws"), 
-						bookmarkedPost.getPostID(), 
-						getApplicationContext());
-				
-				if (!tmp.get(0).getReplyCount().equals(bookmarkedPost.getReplyCount())){
-					bookmarkedPost = tmp.get(0);
-					return true;
-				}
-			}
-			return false;
+		Hashtable<String,String> tempHash;
+		Boolean loadMissingThreads;
+		private ArrayList<ShackPost> watchCache;
+		private ArrayList<ShackPost> posts;
+		
+		int newPosts = 0;
+		public WatchedThreadsAsyncTask(Hashtable<String,String> tempHash , ArrayList<ShackPost> posts, Boolean loadMissingThreads)
+		{
+			this.tempHash = tempHash;
+			this.loadMissingThreads = loadMissingThreads;
+			this.posts = posts;
 		}
 		
-		protected void onPostExecute(Boolean result) {
-//			if (result){
-//				ImageView v = (ImageView)findViewById(R.id.handle);
-//				v.setImageResource(R.drawable.slidernew);				
-//				setWatchedPosts();
-//			}
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		protected Boolean doInBackground(Object... arg0) {
+			
+		
+			try {
+				final FileInputStream fileIn = openFileInput("watch.cache");
+				final ObjectInputStream in = new ObjectInputStream(fileIn);
+				watchCache = (ArrayList<ShackPost>) in.readObject();
+				in.close();
+				fileIn.close();
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+			
+	
+			for (int counter = 0;counter < watchCache.size();counter++)
+			{
+				ShackPost post = watchCache.get(counter);
+				
+				// check to see if the post is in our current load of posts, and if not
+				// call it via the api and get the total replies
+				if (loadMissingThreads)
+				{
+					Boolean postFound = false;
+					for (int counterTwo = 0; counterTwo < posts.size() ; counterTwo++ )
+					{
+						ShackPost postTemp = posts.get(counterTwo);
+						if (postTemp.getPostID().equals(post.getPostID()))
+						{
+							postFound = true;
+							break;
+						}
+					}
+					if (!postFound)
+					{
+						Integer replies = Helper.getThreadReplyCount(Integer.parseInt(post.getPostID()),getBaseContext());
+						tempHash.put(post.getPostID(), replies.toString());
+					}
+				}
+					
+				String cacheCount = tempHash.get(post.getPostID());
+				if (cacheCount != null)
+				{
+					final int change = Integer.parseInt(cacheCount) - Integer.parseInt(post.getReplyCount());
+					if (change > 0)
+					newPosts = newPosts + change;   
+				}
+			}
+			return null;
+			
+
 		}
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+						
+			String topicString = "topic";
+			String postsString = "reply";
+			if (watchCache.size() > 1)
+				topicString = "topics";
+			
+			if (newPosts > 1)
+				postsString = "replies";
+			
+			final TextView handle = (TextView)findViewById(R.id.TextViewTrayHandle);
+			if (newPosts == 0)
+				handle.setText("Watching " + watchCache.size() + " " + topicString);
+			else
+				handle.setText("Watching " + watchCache.size() + " " + topicString + " / " + newPosts + " new " + postsString);
+			
+		}
+
+	
 	}	
 }
 
