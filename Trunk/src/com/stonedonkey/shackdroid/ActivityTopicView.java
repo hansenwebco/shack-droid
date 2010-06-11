@@ -161,6 +161,20 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			//setWatchedPosts(false);
 		}
 	}
+
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		setWatchedPosts(false); // update our watched threads
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+	}
+
 	@Override
 	public boolean onMenuOpened(int featureId, Menu menu) {
 
