@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,7 +49,7 @@ public class ActivityPost extends Activity implements Runnable {
 		
 		setContentView(R.layout.post);
 		setTitle("ShackDroid - Post");
-
+		Log.e("ShackDroid",android.os.Build.VERSION.SDK);
 		ShowRulesWarning();
 
 		if (savedInstanceState != null) {
