@@ -206,6 +206,8 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		
 		Camera.Parameters parameters= _cam.getParameters();
 
+		
+		
 		if (Integer.parseInt(android.os.Build.VERSION.SDK) <=4)
 		{
 			// Possible fix for 1.5 - 1.6
@@ -230,26 +232,26 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 				}
 
 				parameters.setPreviewSize(w, h);
+				parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+				
+				//-- Must add the following callback to allow the camera to autofocus.
+				_cam.autoFocus(new Camera.AutoFocusCallback(){
+					@Override
+					public void onAutoFocus(boolean success, Camera camera) {
+						Log.d("ShackDroid", "isAutofoucs " +	Boolean.toString(success));					
+					}
+				} );
+				
 			}
 		}
 
-		
-		//Customize width/height here - otherwise defaults to screen width/height
 
 		parameters.setPictureFormat(PixelFormat.JPEG);
-		parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-		parameters.setJpegQuality(60);
+	//	parameters.setJpegQuality(60) // api 5.0 > ;
 
 		_cam.setParameters(parameters);
 		_cam.startPreview();
-	
-		//-- Must add the following callback to allow the camera to autofocus.
-		_cam.autoFocus(new Camera.AutoFocusCallback(){
-			@Override
-			public void onAutoFocus(boolean success, Camera camera) {
-				Log.d("ShackDroid", "isAutofoucs " +	Boolean.toString(success));					
-			}
-		} );
+	;
 		
 		//Camera.Parameters parameters = _cam.getParameters();
         //parameters.setPreviewSize(width, height);
