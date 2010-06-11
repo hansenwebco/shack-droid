@@ -864,7 +864,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			long lastCheck = settings.getLong("lastMissingThreadLoad", 0);
 			
 			Calendar currentDate = Calendar.getInstance();
-			if (currentDate.getTimeInMillis() - lastCheck > 300000 ) // 5 mins
+			if (currentDate.getTimeInMillis() - lastCheck > 60000 ) // 5 mins
 			{	
 				timeOutMissingThreads = true;
 			
@@ -913,7 +913,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 						tempHash.put(post.getPostID(), replies.toString());
 					}
 				}
-					
+				
 				String cacheCount = tempHash.get(post.getPostID());
 				if (cacheCount != null)
 				{
@@ -922,6 +922,20 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 					newPosts = newPosts + change;   
 				}
 			}
+
+			
+			try {
+				final FileOutputStream fos = openFileOutput("posts.cache",MODE_PRIVATE);
+				final ObjectOutputStream os = new ObjectOutputStream(fos);
+				os.writeObject(tempHash);
+				os.close();
+				fos.close();
+			}
+			catch (Exception ex)
+			{
+				Log.e("ShackDroid", "Error saving watch cache");
+			}
+			
 			return null;
 			
 
