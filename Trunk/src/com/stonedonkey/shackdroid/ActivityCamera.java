@@ -37,6 +37,7 @@ import android.graphics.BitmapFactory.Options;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.PictureCallback;
+import android.hardware.Camera.Size;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -204,9 +205,37 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,	int height) {
 		
 		Camera.Parameters parameters= _cam.getParameters();
+
+		if (Integer.parseInt(android.os.Build.VERSION.SDK) <=4)
+		{
+			// Possible fix for 1.5 - 1.6
+			parameters.setPreviewSize(parameters.getPreviewSize().width,parameters.getPreviewSize().height);	
+		}
+		else
+		{
+			List<Size> sizes = parameters.getSupportedPreviewSizes();
+			if (sizes != null && sizes.size() >=0)
+			{
+				int w = 0;
+				int h = 0;
+				// lets pick the largest preview size for this phone
+				for (int counter = 0;counter < sizes.size();counter++)
+				{
+					final Size s = sizes.get(counter);
+					if (s.width > w)
+					{
+						w = s.width;
+						h = s.height;
+					}
+				}
+
+				parameters.setPreviewSize(w, h);
+			}
+		}
+
 		
 		//Customize width/height here - otherwise defaults to screen width/height
-		parameters.setPreviewSize(width, height);
+
 		parameters.setPictureFormat(PixelFormat.JPEG);
 		parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
 		parameters.setJpegQuality(60);
