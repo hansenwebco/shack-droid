@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
 
@@ -832,6 +833,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		Boolean loadMissingThreads;
 		private ArrayList<ShackPost> watchCache;
 		private ArrayList<ShackPost> posts;
+		private Boolean timeOutMissingThreads = false;
 		
 		int newPosts = 0;
 		public WatchedThreadsAsyncTask(Hashtable<String,String> tempHash , ArrayList<ShackPost> posts, Boolean loadMissingThreads)
@@ -839,6 +841,23 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			this.tempHash = tempHash;
 			this.loadMissingThreads = loadMissingThreads;
 			this.posts = posts;
+			
+			// see if we've checked missing threads over 5 minutes ago
+			// if so we'll check them again, if not we'll leave them
+			// until a load of over 5 mins happens
+			final SharedPreferences settings=getPreferences(0);
+			SharedPreferences.Editor editor = settings.edit();
+			long lastCheck = settings.getLong("lastMissingThreadLoad", 0);
+			
+			Calendar currentDate = Calendar.getInstance();
+			if (currentDate.getTimeInMillis() - lastCheck > 300000 ) // 5 mins
+			{	
+				timeOutMissingThreads = true;
+			
+				editor.putLong("lastMissingThreadLoad", currentDate.getTimeInMillis());
+				editor.commit(); 
+			}
+			
 		}
 		
 		
@@ -862,7 +881,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 				
 				// check to see if the post is in our current load of posts, and if not
 				// call it via the api and get the total replies
-				if (loadMissingThreads)
+				if (loadMissingThreads && timeOutMissingThreads)
 				{
 					Boolean postFound = false;
 					for (int counterTwo = 0; counterTwo < posts.size() ; counterTwo++ )
