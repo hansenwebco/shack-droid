@@ -94,6 +94,13 @@ public class ActivityPreferences extends PreferenceActivity {
 			CheckForUpdate(true);
 			return true;
 		}
+		if (preference.getKey().equals("ChangeLog"))
+		{
+			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.stonedonkey.com/shackdroid/latest/changelog.txt")));
+			return true;
+		}
+		
+		
 		if (preference.getKey().equals("clearWatchList"))
 		{
 			
