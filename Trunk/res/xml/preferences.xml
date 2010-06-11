@@ -170,6 +170,11 @@
 		android:summary="What is new in this version of ShackDroid.">
 	</Preference>
 	<Preference
+		android:key="ChangeLog"
+		android:title="Show Full Change Log"
+		android:summary="Retreive the complete list of changes to ShackDroid.">
+	</Preference>	
+	<Preference
 		android:key="Stats"
 		android:title="Statistics"
 		android:summary="Show ShackDroid stats.">
