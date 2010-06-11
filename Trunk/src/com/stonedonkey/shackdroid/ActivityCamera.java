@@ -27,6 +27,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
@@ -42,6 +43,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -60,6 +62,7 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 	private boolean _highResAvailable;
 	private boolean _extraCompressionNeeded;
 	private boolean _askToPost = false;
+	private AsyncTask<byte[], String, String> uploadTask;
 	
 	public static final String UPLOADED_FILE_URL = "uploadedfileurl";
 	
@@ -100,7 +103,21 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		    	loadingContent.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		    	loadingContent.setTitle("Uploading file");
 		    	loadingContent.setMessage("Please wait...");
-		    	loadingContent.setCancelable(false);
+		    	loadingContent.setCancelable(true);
+		    	
+		    	loadingContent.setOnCancelListener(new OnCancelListener() {
+
+					@Override
+					public void onCancel(DialogInterface arg0) {
+						if (uploadTask != null) {
+							uploadTask.cancel(true);
+							Log.d("ShackDroid", "Canceled Upload Process");
+						}
+					
+						finish();
+					}
+		    		
+		    	});
 
 		    	return loadingContent;
 	    	case 1:
@@ -185,33 +202,50 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 	}
 
 	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
-        Camera.Parameters parameters = _cam.getParameters();
-        parameters.setPreviewSize(width, height);
+	public void surfaceChanged(SurfaceHolder holder, int format, int width,	int height) {
+		
+		Camera.Parameters parameters= _cam.getParameters();
+		
+		//Customize width/height here - otherwise defaults to screen width/height
+		parameters.setPreviewSize(width, height);
+		parameters.setPictureFormat(PixelFormat.JPEG);
+		parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+		parameters.setJpegQuality(60);
+
+		_cam.setParameters(parameters);
+		_cam.startPreview();
+	
+		//-- Must add the following callback to allow the camera to autofocus.
+		_cam.autoFocus(new Camera.AutoFocusCallback(){
+			@Override
+			public void onAutoFocus(boolean success, Camera camera) {
+				Log.d("ShackDroid", "isAutofoucs " +	Boolean.toString(success));					
+			}
+		} );
+		
+		//Camera.Parameters parameters = _cam.getParameters();
+        //parameters.setPreviewSize(width, height);
         
         // TODO: this line seems to crash some phones see bug report.
         // http://code.google.com/p/android/issues/detail?id=7909
-        _cam.setParameters(parameters);
-      
-        
-        _cam.startPreview();
+        //_cam.setParameters(parameters);
+        //_cam.startPreview();
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		_cam = Camera.open();
 		
-		Parameters params = _cam.getParameters();
-		params.setPictureFormat(PixelFormat.JPEG);
+		//Parameters params = _cam.getParameters();
+		//params.setPictureFormat(PixelFormat.JPEG);
 
-		Setup(params.getPictureSize().width, params.getPictureSize().height);
+		//Setup(params.getPictureSize().width, params.getPictureSize().height);
 		
-		_cam.setParameters(params);			
+		//_cam.setParameters(params);			
 		try {
 			_cam.setPreviewDisplay(holder);
-			_cam.startPreview();
-			_cam.autoFocus(this);				
+			//_cam.startPreview();
+			//_cam.autoFocus(this);				
 		} catch (IOException e) {
 			_cam.release();
 			_cam = null;
@@ -274,6 +308,8 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 
 	class CompressShareAsyncTask extends AsyncTask<Uri, byte[], byte[]>{
 
+		
+
 		@Override
 		protected byte[] doInBackground(Uri... params) {
 			//First we find out how big the pic is
@@ -332,7 +368,7 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		protected void onPostExecute(byte[] result) {
 		    dismissDialog(1);
 		    if (result != null){
-		    	new UploadAsyncTask().execute(result);
+		     uploadTask = new UploadAsyncTask().execute(result);
 		    }
 		    else{
 		    	Toast.makeText(getApplicationContext(), "Error compressing", Toast.LENGTH_SHORT);
