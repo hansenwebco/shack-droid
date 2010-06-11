@@ -14,6 +14,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnClickListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -47,6 +48,8 @@ public class ActivityPost extends Activity implements Runnable {
 		
 		setContentView(R.layout.post);
 		setTitle("ShackDroid - Post");
+
+		ShowRulesWarning();
 
 		if (savedInstanceState != null) {
 			// savedInstanceState.getLong("storyID");
@@ -324,11 +327,6 @@ public class ActivityPost extends Activity implements Runnable {
 			selectedShackTagClose = tagClose;
 			showDialog(1);
 		}
-		
-		
-		
-		
-		
 		//return;
 	}
 	
@@ -504,7 +502,50 @@ public class ActivityPost extends Activity implements Runnable {
 			errorPostHandler.sendEmptyMessage(3);
 		}
 	}
-	
+private void ShowRulesWarning() {
+		
+		try {
+			SharedPreferences settings=getPreferences(0);
+
+			// NOTE: debugging resets value
+			//SharedPreferences.Editor editor = settings.edit();
+			//editor.putBoolean("hideRulesWarning", false);
+			//editor.commit(); 
+
+			boolean hideRulesWarning = settings.getBoolean("hideRulesWarning", false);
+			if (!hideRulesWarning)
+			{
+				final String msg = "WARNING!\n\nThis app is just one portal to a much larger community.  If you are new here tap \"Rules\" to read up on what to do and what not to do.  Improper conduct may lead to unpleasant experiences and getting banned by community moderators.\n\nLastly, use the text formatting tags sparingly.  Please.";
+
+				new AlertDialog.Builder(this)
+				.setTitle("IMPORTANT!")
+				.setPositiveButton("OK",null)
+				.setNegativeButton("Hide",new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						SharedPreferences settings=getPreferences(0);
+						SharedPreferences.Editor editor = settings.edit();
+						editor.putBoolean("hideRulesWarning", true);
+						editor.commit(); 
+					}
+				})
+				.setNeutralButton("Rules", new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Intent i = new Intent(Intent.ACTION_VIEW);
+						i.setData(Uri.parse("http://www.shacknews.com/extras/guidelines.x"));
+						startActivity(i);
+					}
+				})
+				.setMessage(msg).show();
+			}
+		}
+		catch (Exception ex)
+		{
+			// do nothing
+		}
+		
+	}
 	private Handler progressBarHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
