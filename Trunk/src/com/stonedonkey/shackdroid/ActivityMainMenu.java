@@ -272,8 +272,8 @@ class CheckForNewShackDroidAsyncTask extends AsyncTask<Void,Void,Integer>{
 				CharSequence contentTitle = "ShackDroid Update Available";
 				CharSequence contentText = "Touch here to download!";
 
-				Intent notificationIntent = new Intent("android.intent.action.VIEW", Uri.parse(result));
-				//Intent notificationIntent = new Intent("android.intent.action.VIEW", Uri.parse("market://search?q=pname:com.stonedonkey.shackdroid"));
+				//Intent notificationIntent = new Intent("android.intent.action.VIEW", Uri.parse(result));
+				Intent notificationIntent = new Intent("android.intent.action.VIEW", Uri.parse("market://search?q=pname:com.stonedonkey.shackdroid"));
 				PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 				note.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 
