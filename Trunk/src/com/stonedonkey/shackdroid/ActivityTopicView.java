@@ -895,7 +895,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 				
 				// check to see if the post is in our current load of posts, and if not
 				// call it via the api and get the total replies
-				if (loadMissingThreads && timeOutMissingThreads)
+				if (posts != null && loadMissingThreads && timeOutMissingThreads)
 				{
 					Boolean postFound = false;
 					for (int counterTwo = 0; counterTwo < posts.size() ; counterTwo++ )
