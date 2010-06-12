@@ -864,7 +864,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			long lastCheck = settings.getLong("lastMissingThreadLoad", 0);
 			
 			Calendar currentDate = Calendar.getInstance();
-			if (currentDate.getTimeInMillis() - lastCheck > 60000 ) // 5 mins
+			if (currentDate.getTimeInMillis() - lastCheck > 300000 ) // 5 mins
 			{	
 				timeOutMissingThreads = true;
 			
