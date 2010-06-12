@@ -64,54 +64,67 @@ public class AdapterTopicView extends BaseAdapter {
 		return Long.parseLong(post.getPostID());
 	}
 	
+	static class ViewHolder
+	{
+	TextView posterName;
+	TextView datePosted;
+	TextView replyCount;
+	TextView newPosts;
+	TextView postText;
+	ImageView viewCat;
+	RelativeLayout topicRow;
+	}
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-		TextView tmp;
-		final View v;
+	//TextView tmp;
+	//final View v;
+	ViewHolder holder;
+	final ShackPost post = topicList.get(position);
+
+	if (convertView == null){
+		convertView = inflate.inflate(rowResouceID,parent,false);
+		holder = new ViewHolder();
+		holder.posterName = (TextView)convertView.findViewById(R.id.TextViewPosterName);
+		holder.datePosted = (TextView)convertView.findViewById(R.id.TextViewDatePosted);
+		holder.replyCount = (TextView)convertView.findViewById(R.id.TextViewReplyCount);
+		holder.newPosts = (TextView)convertView.findViewById(R.id.TextViewNewPosts);
+		holder.postText = (TextView)convertView.findViewById(R.id.TextViewPostText);
+		holder.viewCat = (ImageView)convertView.findViewById(R.id.ImageViewCat);
+		holder.topicRow = (RelativeLayout)convertView.findViewById(R.id.TopicRow);
+	
+		holder.posterName.setTypeface(face);
+		holder.datePosted.setTypeface(face);
+		holder.replyCount.setTypeface(face);
+		holder.newPosts.setTypeface(face);
+		holder.postText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+		holder.postText.setTypeface(face);
 		
-		final ShackPost post = topicList.get(position);
-		
-		if (convertView == null){
-			v = inflate.inflate(rowResouceID,parent,false);
-		}
-		else{
-			v = convertView;
-		}
+		convertView.setTag(holder);
+	}
+	else{
+		holder = (ViewHolder)convertView.getTag();
+	}
 			
-		// bind the TextViews to the items in our data source
-		tmp = (TextView)v.findViewById(R.id.TextViewPosterName);
-		tmp.setTypeface(face);
-		
-		if (tmp != null)
-			tmp.setText(post.getPosterName());
+		holder.posterName.setText(post.getPosterName());
 		
 		if (shackLogin.equalsIgnoreCase(post.getPosterName()))
-			tmp.setTextColor(Color.parseColor("#00BFF3"));
+			holder.posterName.setTextColor(Color.parseColor("#00BFF3"));
 		else
-			tmp.setTextColor(Color.parseColor("#ffba00"));
+			holder.posterName.setTextColor(Color.parseColor("#ffba00"));
 
-		
-		tmp = (TextView)v.findViewById(R.id.TextViewDatePosted);
-		tmp.setTypeface(face);
-		if (tmp != null) {
-			tmp.setText(Helper.FormatShackDate(post.getPostDate()));
-			//postDate.setText(post.getPostDate());
-		}
-			
-		tmp = (TextView)v.findViewById(R.id.TextViewReplyCount);
-		tmp.setTypeface(face);
-		tmp.setText(post.getReplyCount());
+		holder.datePosted.setText(Helper.FormatShackDate(post.getPostDate()));
+		holder.replyCount.setText(post.getReplyCount());
 		
 		if (showAuthor.equalsIgnoreCase("count") &&  post.getIsAuthorInThread())
-			tmp.setTextColor(Color.parseColor("#0099CC"));
+			holder.replyCount.setTextColor(Color.parseColor("#0099CC"));
 		else
-			tmp.setTextColor(Color.parseColor("#FFFFFF"));
+			holder.replyCount.setTextColor(Color.parseColor("#FFFFFF"));
 
+		
 		if (post.getOrginalReplyCount() != null) // we are showing watched messages
 		{
-	
-			final TextView postNewCount = (TextView)v.findViewById(R.id.TextViewNewPosts);
 			Integer newPosts = 0;
 			
 			if (postCache != null && postCache.get(post.getPostID()) != null ) {
@@ -121,15 +134,13 @@ public class AdapterTopicView extends BaseAdapter {
 			
 			if (newPosts > 0) {
 				totalNewPosts = totalNewPosts + newPosts;
-				postNewCount.setTypeface(face);
-				postNewCount.setText("+" + newPosts.toString());
+				holder.newPosts.setText("+" + newPosts.toString());
 			}
 			else
-				postNewCount.setText(null);
+				holder.newPosts.setText(null);
 			
 						
 		}
- 
 		else // show the number of new posts since the last refresh
 		{
 			if (postCache != null && postCache.get(post.getPostID()) != null ) {
@@ -137,68 +148,57 @@ public class AdapterTopicView extends BaseAdapter {
 				final String cacheposts = postCache.get(post.getPostID());
 				final Integer newPosts = Integer.parseInt(post.getReplyCount()) - Integer.parseInt(cacheposts);
 
-				final TextView postNewCount = (TextView)v.findViewById(R.id.TextViewNewPosts);
 				if (newPosts > 0 && Integer.parseInt(post.getReplyCount()) > 0) {
-					postNewCount.setTypeface(face);
-					postNewCount.setText("+" + newPosts.toString());
+					holder.newPosts.setText("+" + newPosts.toString());
 				}
 				else
-					postNewCount.setText(null);
+					holder.newPosts.setText(null);
 
 			}
 			else // we don't have a cached version of this in the post cache reset the view
 			{
-				final TextView postNewCount = (TextView)v.findViewById(R.id.TextViewNewPosts);
-				postNewCount.setText(null);
+				holder.newPosts.setText(null);
 			}
 		}
-			
-		tmp = (TextView)v.findViewById(R.id.TextViewPostText);
-		tmp.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-		tmp.setTypeface(face);
-		if (tmp != null)
-		{
-			String preview = post.getPostPreview();
-			if (preview.length() > 99)
-				preview= preview.substring(0,99);
-			
-			tmp.setText(preview);
-		}
-				
-		final ImageView img = (ImageView)v.findViewById(R.id.ImageViewCat);
-			
-		final RelativeLayout tr = (RelativeLayout)v.findViewById(R.id.TopicRow);
+
+		String preview = post.getPostPreview();
+		if (preview.length() > 99)
+			preview= preview.substring(0,99);
+		
+		holder.postText.setText(preview);
+
 		if (showAuthor.equalsIgnoreCase("topic") && post.getIsAuthorInThread())
 		{
 			 final Drawable d = r.getDrawable(R.drawable.background_gradient_blue);
-			 tr.setBackgroundDrawable(d);
+			 holder.topicRow.setBackgroundDrawable(d);
 		}
 		else
-			tr.setBackgroundDrawable(null);
+			holder.topicRow.setBackgroundDrawable(null);
 
 		
 		// TODO: clean this up a little / also replicated in ShackDroidThread ick
 		final String postCat = post.getPostCategory();
+
 		if (postCat.equals("offtopic"))  {
-			img.setImageResource(R.drawable.offtopic);
+			holder.viewCat.setImageResource(R.drawable.offtopic);
 			//tr.setBackgroundColor(Color.parseColor("#081407"));
 		}
 		else if (postCat.equals("nws"))
-			img.setImageResource(R.drawable.nws);
+			holder.viewCat.setImageResource(R.drawable.nws);
 		else if (postCat.equals("political")) {
-			img.setImageResource(R.drawable.political);
+			holder.viewCat.setImageResource(R.drawable.political);
 			//tr.setBackgroundColor(Color.parseColor("#211D1A"));
 		}
 		else if (postCat.equals("stupid")) {
-			img.setImageResource(R.drawable.stupid);
+			holder.viewCat.setImageResource(R.drawable.stupid);
 			//tr.setBackgroundColor(Color.GREEN);
 		}
 		else if (postCat.equals("informative"))
-			img.setImageResource(R.drawable.interesting);	
+			holder.viewCat.setImageResource(R.drawable.interesting);	
 		else 
-			img.setImageDrawable(null); // remove it if it's not being set
+			holder.viewCat.setImageDrawable(null); // remove it if it's not being set
 				
-		return v;
+		return convertView;
 	}
 
 
