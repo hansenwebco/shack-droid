@@ -37,7 +37,6 @@ import android.graphics.BitmapFactory.Options;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.PictureCallback;
-import android.hardware.Camera.Size;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -201,13 +200,17 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		}
 	}
 
+	
+	
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,	int height) {
 		
 		Camera.Parameters parameters= _cam.getParameters();
 
 		
-		
+		// NOTE: So, if you have functions in this Activity that aren't available in 1.5 or 1.6 the whole thing
+		//       just bombs, so I moved them to their own static method in HelperAPI4... I have no idea if theres
+		//       another way.. now.. will it work?
 		if (Integer.parseInt(android.os.Build.VERSION.SDK) <=4)
 		{
 			// Possible fix for 1.5 - 1.6
@@ -215,46 +218,21 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		}
 		else
 		{
-			List<Size> sizes = parameters.getSupportedPreviewSizes();
-			if (sizes != null && sizes.size() >=0)
-			{
-				int w = 0;
-				int h = 0;
-				// lets pick the largest preview size for this phone
-				for (int counter = 0;counter < sizes.size();counter++)
-				{
-					final Size s = sizes.get(counter);
-					if (s.width > w)
-					{
-						w = s.width;
-						h = s.height;
-					}
-				}
-
-				parameters.setPreviewSize(w, h);
-				parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-				
-				//-- Must add the following callback to allow the camera to autofocus.
-				_cam.autoFocus(new Camera.AutoFocusCallback(){
-					@Override
-					public void onAutoFocus(boolean success, Camera camera) {
-						Log.d("ShackDroid", "isAutofoucs " +	Boolean.toString(success));					
-					}
-				} );
-				
-			}
+			_cam = HelperAPI4.setCameraParams(_cam);
 		}
 
-
 		parameters.setPictureFormat(PixelFormat.JPEG);
-	//	parameters.setJpegQuality(60) // api 5.0 > ;
 
 		_cam.setParameters(parameters);
 		_cam.startPreview();
-	;
+			//-- Must add the following callback to allow the camera to autofocus.
+		_cam.autoFocus(new Camera.AutoFocusCallback(){
+			@Override
+			public void onAutoFocus(boolean success, Camera camera) {
+				Log.d("ShackDroid", "isAutofocus " +	Boolean.toString(success));					
+			}
+		} );
 		
-		//Camera.Parameters parameters = _cam.getParameters();
-        //parameters.setPreviewSize(width, height);
         
         // TODO: this line seems to crash some phones see bug report.
         // http://code.google.com/p/android/issues/detail?id=7909
