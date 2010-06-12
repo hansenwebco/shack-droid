@@ -1,13 +1,18 @@
 package com.stonedonkey.shackdroid;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGesturePerformedListener;
+import android.hardware.Camera;
+import android.hardware.Camera.Size;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 
 public class HelperAPI4 {
+	
 	public static ShackGestureListener setGestureEnabledContentView(int resourceId, Activity activity){
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
 		
@@ -32,4 +37,37 @@ public class HelperAPI4 {
 			return null;
 		}		
 	}
+	
+	
+	public static Camera setCameraParams(Camera _cam)
+	{
+		
+		Camera.Parameters parameters= _cam.getParameters();
+		
+		List<Size> sizes = parameters.getSupportedPreviewSizes();
+		if (sizes != null && sizes.size() >=0)
+		{
+			int w = 0;
+			int h = 0;
+			// lets pick the largest preview size for this phone
+			for (int counter = 0;counter < sizes.size();counter++)
+			{
+				final Size s = sizes.get(counter);
+				if (s.width > w)
+				{
+					w = s.width;
+					h = s.height;
+				}
+			}
+
+			parameters.setPreviewSize(w, h);
+			parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+			
+			
+			
+		}
+		return _cam;
+	}
+	
+	
 }
