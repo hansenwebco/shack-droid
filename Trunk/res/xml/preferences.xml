@@ -79,13 +79,11 @@
          
          	<CheckBoxPreference 
     		android:key="highlightUserThreads" 
-    		android:title="Highlight Threads"
+    		android:title="Highlight My Posts"
     		android:defaultValue="true" 
     		android:summary="Highlight my posts blue in threaded view."/>
     		
-  		
-		
-    		
+  		   		
     		<ListPreference
     			android:key="fontSize"
     			android:entryValues ="@array/fontSizes"
@@ -102,7 +100,17 @@
     			android:title="Thread Highlighting"
     			android:summary="Choose how ShackDroid highlights new posts in threads."
     			android:defaultValue="1"
-    		/>	    		
+    		/>	    	
+    		
+    	<Preference
+		android:key="chooseHighlightColor"
+		android:title="New Thread Highlight Color"
+		android:summary="Choose color to highlight new threads with."
+		android:dependency="threadHighlight"
+		android:defaultValue="#E5EF49"
+		
+		>
+		</Preference>			
 
 		<Preference
 		android:key="clearWatchList"
