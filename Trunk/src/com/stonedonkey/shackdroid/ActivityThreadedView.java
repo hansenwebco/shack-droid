@@ -297,7 +297,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 
 			// if we are provided a postID that is not the same as the first
 			// item we need to find it and setit
-			if (posts != null && posts.size() > 0 )
+			if (posts != null && posts.size() > 0 && postID != null)
 				if (postID.equalsIgnoreCase(posts.get(0).getPostID()) == false)
 					for(int x=0;x<posts.size();x++)
 						if (posts.get(x).getPostID().equalsIgnoreCase(postID)){
