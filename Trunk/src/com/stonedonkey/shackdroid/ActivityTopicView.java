@@ -455,9 +455,18 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			
 		} else {
 			if (errorText.length() > 0) {
-				new AlertDialog.Builder(this).setTitle("Error")
-				.setPositiveButton("OK", null).setMessage(errorText)
-				.show();
+				
+				try {
+					new AlertDialog.Builder(this).setTitle("Error")
+					.setPositiveButton("OK", null).setMessage(errorText)
+					.show();
+				}
+				catch (Exception ex)
+				{
+					// could not create a alert for the error for one reason
+					// or another
+					Log.e("ShackDroid", "Unable to create error alert ActivityTopicView:468");
+				}
 			}
 		}
 
