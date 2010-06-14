@@ -355,6 +355,9 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 	}
 	private void UpdatePostText(int position, Boolean addSpoilerMarkers)
 	{
+		if (posts == null) // can't bind an empty list of posts
+			return; 
+		
 		final TextView tv = (TextView) findViewById(R.id.TextViewPost);
 		final String postText = ParseShackText(posts.get(position).getPostText(),addSpoilerMarkers);
 		
