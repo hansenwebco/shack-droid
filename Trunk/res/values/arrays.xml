@@ -32,8 +32,8 @@
 		<item>2</item>
 	</string-array>
 	<string-array name="threadedView">
-		<item>Black and White</item>
-		<item>Yellow</item>
+		<item>Black and White (Classic)</item>
+		<item>Custom Color</item>
 	</string-array>
 	<string-array name="threadedViewValues">
 		<item>1</item>

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -15,6 +16,8 @@ import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.stonedonkey.shackdroid.ColorPickerDialog.OnColorChangedListener;
 
 public class ActivityPreferences extends PreferenceActivity {
 
@@ -97,6 +100,28 @@ public class ActivityPreferences extends PreferenceActivity {
 		if (preference.getKey().equals("ChangeLog"))
 		{
 			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.stonedonkey.com/shackdroid/latest/changelog.txt")));
+			return true;
+		}
+		if (preference.getKey().equals("chooseHighlightColor"))
+		{
+			final SharedPreferences settings= PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+			int color = settings.getInt("chooseHighlightColor",Color.parseColor("#E5EF49"));
+			
+			ColorPickerDialog cpd = new ColorPickerDialog(this, 
+			new OnColorChangedListener() {
+
+				@Override
+				public void colorChanged(int color) {
+
+					
+					SharedPreferences.Editor editor = settings.edit();
+					editor.putInt("chooseHighlightColor", color);
+					editor.commit(); 
+				}
+
+				
+			}, color);
+			cpd.show();
 			return true;
 		}
 		

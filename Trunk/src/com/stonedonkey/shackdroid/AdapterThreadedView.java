@@ -28,6 +28,7 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 	private int postIndent;
 	private String postText;
 	private final String threadHighlightMode;
+	private final int newThreadColor;
 	
 	public AdapterThreadedView(Context context,int rowResouceID, List<ShackPost> topicList,int selectedRow ){
 		this.topicList = topicList;
@@ -37,7 +38,10 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 		face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		login = prefs.getString("shackLogin", "");
+		
 		threadHighlightMode = prefs.getString("threadHighlight", "1");
+		newThreadColor =  prefs.getInt("chooseHighlightColor", Color.parseColor("#E5EF49"));
+		
 		
 		
 		highlightThread = prefs.getBoolean("highlightUserThreads", true);
@@ -125,6 +129,9 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 			
 			postText = post.getPostPreview();
 
+			
+		
+			
 			// TODO: clean up the thread coloring.. very messy.
 			// show this users posts as blue
 			 if (highlightThread == true && post.getPosterName().toString().equalsIgnoreCase(login))
@@ -138,9 +145,11 @@ public class AdapterThreadedView<TopicRow> extends BaseAdapter {
 				 
 				 if (threadHighlightMode.equals("2"))
 				 {
-					 int red = 229;
-					 int green = 239;
-					 int blue = 73;
+					 //newThreadColor
+
+					 int red = Color.red(newThreadColor);// 229;
+					 int green = Color.green(newThreadColor);// 239;
+					 int blue =  Color.blue(newThreadColor);//73;
 					 
 					 red = ((255 - red) / 10) * post.getPostIndex() + red;
 					 green = ((255 - green) / 10) * post.getPostIndex() + green;
