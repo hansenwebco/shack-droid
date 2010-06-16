@@ -46,6 +46,8 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.webkit.URLUtil;
 import android.widget.Button;
@@ -71,6 +73,8 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		Intent caller = getIntent();
 		setContentView(R.layout.camera);
 		
@@ -214,16 +218,16 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		if (Integer.parseInt(android.os.Build.VERSION.SDK) <=4)
 		{
 			// Possible fix for 1.5 - 1.6
-			parameters.setPreviewSize(parameters.getPreviewSize().width,parameters.getPreviewSize().height);	
+			parameters.setPreviewSize(parameters.getPreviewSize().width,parameters.getPreviewSize().height);
+			parameters.setPictureFormat(PixelFormat.JPEG);
+			_cam.setParameters(parameters);
 		}
 		else
 		{
 			_cam = HelperAPI4.setCameraParams(_cam);
 		}
 
-		parameters.setPictureFormat(PixelFormat.JPEG);
-
-		_cam.setParameters(parameters);
+		
 		_cam.startPreview();
 			//-- Must add the following callback to allow the camera to autofocus.
 		_cam.autoFocus(new Camera.AutoFocusCallback(){
@@ -269,6 +273,7 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 
 	@Override
 	public void onPictureTaken(byte[] data, Camera camera) {
+		
 		_pictureData = data;
 		_takingPicture = false;
 		SetupButtons(MODE_SHOWING_PICTURE);
@@ -391,17 +396,18 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		protected byte[] doInBackground(byte[]... params) {
 			Options options = new Options();
 			
-			int compressionAmount = 95;
-			
+			int compressionAmount = 100;
 			//Try and scale down 2 == half size, 4 == quarter size etc.
 			options.inSampleSize = (int)_scaleAmount;
 			
-			if (_extraCompressionNeeded){
-				compressionAmount = 90;
+			if (Integer.parseInt(android.os.Build.VERSION.SDK) <=4){
+				compressionAmount = 95;
+				
+				if (_extraCompressionNeeded){
+					compressionAmount = 90;
+				}
 			}
-			
 			Bitmap pic = BitmapFactory.decodeByteArray(params[0], 0, params[0].length, options);
-
 			ByteArrayOutputStream compressed = new ByteArrayOutputStream();
 			pic.compress(CompressFormat.JPEG, compressionAmount, compressed);  //Get it down
 			pic.recycle();
@@ -429,7 +435,7 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		protected void onPostExecute(byte[] result) {
 		    dismissDialog(1);
 		    if (result != null){
-		    	new UploadAsyncTask().execute(result);
+		    	// new UploadAsyncTask().execute(result);
 		    }
 		    else{
 		    	Toast.makeText(getApplicationContext(), "Error compressing", Toast.LENGTH_SHORT);		    
@@ -461,7 +467,9 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 						req.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 						
 						 String response = httpClient.execute(req, responseHandler);
+						 
 						if (!response.contains("You have successfully been logged in")){
+							Log.e("shackpics login failure", response);
 							// Do something here to re-size the image again?
 						}
 					}
@@ -502,6 +510,7 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 					return null;
 				}
 			} catch (Exception e) {
+				Log.e("Camera upload", e.getMessage());
 				return null;
 			}
 			finally {
