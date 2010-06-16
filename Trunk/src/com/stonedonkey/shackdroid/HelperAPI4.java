@@ -9,6 +9,7 @@ import android.gesture.GestureOverlayView.OnGesturePerformedListener;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 public class HelperAPI4 {
@@ -59,13 +60,26 @@ public class HelperAPI4 {
 					h = s.height;
 				}
 			}
-
+			//Log.e("preview size", String.valueOf(w) + ":" + String.valueOf(h));
 			parameters.setPreviewSize(w, h);
 			parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+			parameters.setJpegQuality(95);
 			
-			
-			
+			sizes = parameters.getSupportedPictureSizes();
+			for (int counter = 0;counter < sizes.size();counter++)
+			{
+				final Size s = sizes.get(counter);
+				if (s.width > w || s.height > h)
+				{
+					w = s.width;
+					h = s.height;
+				}
+			}
+			//Log.e("picture size", String.valueOf(w) + ":" + String.valueOf(h));
+			parameters.setPictureSize(w, h);
 		}
+		
+		_cam.setParameters(parameters);
 		return _cam;
 	}
 	
