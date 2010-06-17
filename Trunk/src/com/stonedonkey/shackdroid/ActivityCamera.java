@@ -435,7 +435,7 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		protected void onPostExecute(byte[] result) {
 		    dismissDialog(1);
 		    if (result != null){
-		    	// new UploadAsyncTask().execute(result);
+		    	new UploadAsyncTask().execute(result);
 		    }
 		    else{
 		    	Toast.makeText(getApplicationContext(), "Error compressing", Toast.LENGTH_SHORT);		    
