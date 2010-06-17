@@ -888,6 +888,8 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		@Override
 		protected Boolean doInBackground(Object... arg0) {
 
+			
+			
 			try {
 				final FileInputStream fileIn = openFileInput("watch.cache");
 				final ObjectInputStream in = new ObjectInputStream(fileIn);
@@ -922,13 +924,15 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 						tempHash.put(post.getPostID(), replies.toString());
 					}
 				}
-				
-				String cacheCount = tempHash.get(post.getPostID());
-				if (cacheCount != null)
-				{
-					final int change = Integer.parseInt(cacheCount) - Integer.parseInt(post.getReplyCount());
-					if (change > 0)
-					newPosts = newPosts + change;   
+								
+				if (tempHash != null) {
+					String cacheCount = tempHash.get(post.getPostID());
+					if (cacheCount != null)
+					{
+						final int change = Integer.parseInt(cacheCount) - Integer.parseInt(post.getReplyCount());
+						if (change > 0)
+							newPosts = newPosts + change;   
+					}
 				}
 			}
 

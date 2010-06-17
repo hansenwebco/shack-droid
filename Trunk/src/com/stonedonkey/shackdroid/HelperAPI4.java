@@ -9,7 +9,6 @@ import android.gesture.GestureOverlayView.OnGesturePerformedListener;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 
 public class HelperAPI4 {
