@@ -31,7 +31,10 @@ public class AdapterRSSView extends BaseAdapter {
 	
 	@Override
 	public int getCount() {
-		return rssItems.size();
+		if (rssItems == null)
+			return 0;
+		else
+			return rssItems.size();
 	}
 
 	@Override
