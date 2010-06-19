@@ -152,7 +152,8 @@
     		android:summary="Run ShackDroid Fullscreen."/>
     		
     	
-    </PreferenceCategory>
+    <CheckBoxPreference android:title="Keep screen on" android:key="keepScreenOn" android:summary="Prevents the phone from sleeping when viewing a chatty."></CheckBoxPreference>
+</PreferenceCategory>
   
 
 
@@ -199,6 +200,7 @@
 		 android:defaultValue="http://shackchatty.com"
 		 android:textSize="12sp"
 	    />
+
 
 </PreferenceCategory>
 

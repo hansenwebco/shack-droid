@@ -37,6 +37,7 @@ import android.graphics.BitmapFactory.Options;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.PictureCallback;
+import android.hardware.Camera.Size;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -59,7 +60,7 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 	Camera _cam;
 	boolean _takingPicture;
 	byte[] _pictureData;
-	double _scaleAmount = 2; // half size
+	double _scaleAmount = 1; // half size
 	private boolean _highResAvailable;
 	private boolean _extraCompressionNeeded;
 	private boolean _askToPost = false;
@@ -180,7 +181,7 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		}
 		else if (size > 3145728){ //3 megapixels
 			_extraCompressionNeeded = true;
-			_scaleAmount = Math.floor(width / 2048);
+			_scaleAmount = 2; //Math.floor(width / 2048);
 		}
 		else{
 			_extraCompressionNeeded = true;
@@ -342,7 +343,7 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 			} catch (FileNotFoundException e2) {
 				return null;
 			}
-			
+
 			int compressionAmount = 95;
 			
 			//Try and scale down 2 == half size, 4 == quarter size etc.
@@ -394,19 +395,19 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 
 		@Override
 		protected byte[] doInBackground(byte[]... params) {
+			Size size = _cam.getParameters().getPictureSize();
+			Setup(size.width, size.height);
+			
 			Options options = new Options();
 			
-			int compressionAmount = 100;
+			int compressionAmount = 95;
 			//Try and scale down 2 == half size, 4 == quarter size etc.
 			options.inSampleSize = (int)_scaleAmount;
 			
-			if (Integer.parseInt(android.os.Build.VERSION.SDK) <=4){
-				compressionAmount = 95;
-				
-				if (_extraCompressionNeeded){
-					compressionAmount = 90;
-				}
+			if (_extraCompressionNeeded){
+				compressionAmount = 90;
 			}
+			
 			Bitmap pic = BitmapFactory.decodeByteArray(params[0], 0, params[0].length, options);
 			ByteArrayOutputStream compressed = new ByteArrayOutputStream();
 			pic.compress(CompressFormat.JPEG, compressionAmount, compressed);  //Get it down

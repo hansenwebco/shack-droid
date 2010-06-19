@@ -38,6 +38,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -68,6 +69,13 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		super.onCreate(savedInstanceState);
 
 		Helper.SetWindowState(getWindow(),this);
+		
+		boolean screenOn = PreferenceManager.getDefaultSharedPreferences(this)
+								.getBoolean("keepScreenOn", false);
+		if (screenOn){
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
+		
 		final ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.topics, this);
 		if (listener != null){
 			listener.addListener(this);
@@ -480,11 +488,9 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			
 		}
 
-		setWatchedPosts(true);
-
-	
-		
+		setWatchedPosts(true);	
 	}
+	
 	private void updateWatchedPosts(Hashtable<String, String> tempHash, Boolean loadMissingThreads) throws StreamCorruptedException, IOException, ClassNotFoundException 
 	{
 		// check to see if the post is in our current load of posts, and if not
