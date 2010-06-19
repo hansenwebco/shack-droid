@@ -50,10 +50,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -61,12 +65,13 @@ import android.widget.Toast;
 import android.widget.TextView.BufferType;
 
 import com.stonedonkey.shackdroid.ShackGestureListener.ShackGestureEvent;
+import com.stonedonkey.shackdroid.ShackPopup.ShackPopupEvent;
 
 /**
  * @author markh
  *
  */
-public class ActivityThreadedView extends ListActivity implements Runnable, ShackGestureEvent {
+public class ActivityThreadedView extends ListActivity implements Runnable, ShackGestureEvent, ShackPopupEvent {
 
 	private static final int POST_REPLY = 0;
 	private ArrayList<ShackPost> posts;
@@ -85,6 +90,12 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		
 		Helper.SetWindowState(getWindow(),this);
 		
+		boolean screenOn = PreferenceManager.getDefaultSharedPreferences(this)
+							.getBoolean("keepScreenOn", false);
+		if (screenOn){
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
+		
 		ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.thread, this);
 		if (listener != null){
 			listener.addListener(this);
@@ -98,6 +109,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 				getIntent().getAction() != null && 
 				getIntent().getAction().equals(Intent.ACTION_VIEW)){
 			final Uri uri = getIntent().getData();
+
 			postID = uri.getQueryParameter("id");
 			storyID = null; //TODO: Actually get this some how
 			
@@ -108,7 +120,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			storyID = extras.getString("storyID");
 			isNWS = extras.getBoolean("isNWS");
 		}
-		if (savedInstanceState == null) 
+		if (savedInstanceState == null){ 
 			try {
 			fillSaxData(postID);
 			}
@@ -119,8 +131,32 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 						"There was an error or could not connect to the API.")
 				.show();
 			}
-				
+		}
+
+		ShackPopup pop = new ShackPopup();
+		pop.addListener(this);
+		w = pop.Init(this, w);
+		
+		Button b = (Button)findViewById(R.id.btnPopup);
+		if (b != null){
+			b.setVisibility(View.GONE);
+			/*
+			b.setOnClickListener(new OnClickListener(){
+	
+				@Override
+				public void onClick(View arg0) {
+					if (w.isShowing()){
+						w.dismiss();
+					}
+					else{
+						w.showAsDropDown(arg0, -100, 0);
+					}
+				}});
+			*/
+		}
+		
 	}
+	PopupWindow w;
 	@Override
     public void onWindowFocusChanged(boolean hasFocus) { 
 		// Adjust the scroll view based on the size of the screen
@@ -391,7 +427,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			tv.setText(parsedText,BufferType.SPANNABLE);
 		//tv.setText(Html.fromHtml(postText),BufferType.SPANNABLE);
 
-		
 		if (addSpoilerMarkers == true) 
 			SpoilerTextView();
 				// TODO: This was causing links to break for some reason, for instance
@@ -403,7 +438,12 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 //		String threadView = "content://com.stonedonkey.shackdroid/ActivityThreadedView";
 //		Linkify.addLinks(tv,shackURLMatcher,threadView,new ShackURLMatchFilter(), new ShackURLTransform());
 //		
-
+		/*
+		Log.i("height", String.valueOf(tv.getHeight()));
+		tv.forceLayout();
+		findViewById(R.id.textAreaScroller).forceLayout();
+		Log.i("height", String.valueOf(tv.getHeight()));
+		*/
 		final ShackPost post = posts.get(position);
 
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -466,7 +506,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			// set the post background color to be more "shack" like
 			final RelativeLayout layout = (RelativeLayout)findViewById(R.id.RelativeLayoutThread);
 			layout.setBackgroundColor(Color.parseColor("#222222"));
-
+			
 			// add a listener for removing spoilers and maybe adding "copy" functionality later
 			final TextView tvpost = (TextView)findViewById(R.id.TextViewPost);
 			tvpost.setOnCreateContextMenuListener(
@@ -482,7 +522,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 							menu.add(0,1,0,"Copy Post Url to Clipboard");
 							menu.add(0, -1, 0, "Cancel");
 						}
-					});		
+					});
+			
 
 		}
 		else
@@ -633,11 +674,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		String login = "";
 		switch (item.getItemId()) {
 		case 0:	// Launch post form
-			intent = new Intent();
-			intent.setClass(this, ActivityPost.class);
-			intent.putExtra("storyID", storyID);
-			intent.putExtra("postID",postID);
-			startActivityForResult(intent,POST_REPLY);
+			doReply();
 			return true;
 		case 1:
 			// show settings dialog
@@ -716,6 +753,14 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 	}
 
 
+	private void doReply(){
+		Intent intent = new Intent();
+		intent.setClass(this, ActivityPost.class);
+		intent.putExtra("storyID", storyID);
+		intent.putExtra("postID",postID);
+		startActivityForResult(intent,POST_REPLY);		
+	}
+	
 	private void LaunchNotesIntent()
 	{
 		final Intent intent = new Intent();
@@ -765,6 +810,26 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 				break;				
 		}
 		
+	}
+
+	@Override
+	public void PopupEventRaised(int eventType) {
+		switch(eventType){
+		case ShackPopup.MESSAGE:
+			ShackPost post = posts.get(currentPosition);//.getPostText();
+			Intent intent = new Intent();
+			intent.putExtra("postto", post.getPosterName());
+			intent.setClass(this, ActivityPostMessage.class);
+			startActivity(intent);			
+			break;
+		case ShackPopup.REFRESH:
+			fillSaxData(postID);
+			break;
+		case ShackPopup.REPLY:
+			doReply();
+			break;
+		}
+		w.dismiss();
 	}
 }/**
  * Used to sort the post array based on the ID
