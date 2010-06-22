@@ -2,17 +2,19 @@
 <RelativeLayout android:id="@+id/RelativeLayoutThread"
 	android:layout_width="fill_parent" 
 	android:layout_height="fill_parent"
-	android:background="#000000" 
+	android:background="#000000"
 	xmlns:android="http://schemas.android.com/apk/res/android">
-	
-	<TextView 
+
+	<TextView 		
 		android:id="@+id/TextViewThreadAuthor"
 		android:layout_width="wrap_content" 
 		android:layout_height="wrap_content"
 		android:textColor="#ffba00" 
 		android:textSize="12sp"
 		android:paddingLeft="8px"
-		android:paddingTop="3px"		
+		android:paddingTop="3px"
+		
+		android:layout_alignParentLeft="true"	
 		>
 	</TextView>
 	<ImageView
@@ -30,24 +32,27 @@
 		android:text="" 
 		android:gravity="right" 
 		android:layout_toRightOf="@+id/TextViewThreadAuthor"
+		android:layout_toLeftOf="@+id/btnPopup"
 		android:textSize="12sp"
 		android:paddingTop="3px"
 		android:paddingRight="12px"
 		>
 	</TextView>	
-	
 	<ScrollView 
 		android:id="@+id/textAreaScroller"
 		android:layout_width="fill_parent" 
-		android:layout_height="180px"
+		android:layout_height="wrap_content"
+		android:minHeight="20dip"
+		android:maxHeight="190dip"
 		android:fadingEdgeLength="8px"
-		android:layout_below="@+id/TextViewThreadAuthor">
+		android:layout_below="@+id/TextViewThreadAuthor"
+		android:paddingTop="24dip">
 		
 		<TextView android:id="@+id/TextViewPost"
 			android:layout_width="fill_parent" 
-			android:layout_height="fill_parent"
+			android:layout_height="wrap_content"
 			android:text="" 
-			android:minHeight="180px"
+			android:minHeight="20dip"
 			android:textSize="12sp" 
 			android:paddingLeft="8px"
 			android:paddingRight="8px"
@@ -58,7 +63,15 @@
 		</TextView>
 	
 </ScrollView>
-<TextView android:layout_below="@+id/textAreaScroller" android:id="@+id/tvSpacer" android:layout_width="fill_parent" android:layout_height="2dip" android:background="#00000000"></TextView>
+	<ImageView
+	android:id="@+id/ivPopupButton"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:paddingTop="8px"
+	android:layout_below="@+id/textAreaScroller"
+
+	android:src="@drawable/button" android:layout_centerInParent="true"/>
+<TextView android:layout_below="@+id/ivPopupButton" android:id="@+id/tvSpacer" android:layout_width="fill_parent" android:layout_height="2dip" android:background="#00000000"></TextView>
 	<ListView 
 		android:paddingTop="2px"
 		android:id="@android:id/list" 
@@ -71,6 +84,8 @@
 		android:divider="#333333"
 		android:focusableInTouchMode="true"/>
 	
+
+
 
 
 </RelativeLayout>

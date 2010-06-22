@@ -15,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.stonedonkey.shackdroid.ColorPickerDialog.OnColorChangedListener;
@@ -42,8 +43,18 @@ public class ActivityPreferences extends PreferenceActivity {
 		} catch (NameNotFoundException e) {
 			Log.e("ShackDroid","Error retreving pacakge info for version in settings.");
 		}
-		
+		/*
+		if (Integer.parseInt(android.os.Build.VERSION.SDK) >=4)
+		{
+			Preference customPref = (Preference) findPreference("gestureSensitivity");
+			customPref.setDefaultValue(1.5);
+			
+				View v = findViewById(R.id.llPrefGesture);
+				if (v!= null)
+					v.setVisibility(View.GONE);
 
+		}
+		*/
 		Preference customPref = (Preference) findPreference("allowCheckShackMessages");
 		customPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 		

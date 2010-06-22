@@ -23,8 +23,8 @@ public class ShackPopup {
 	
 	public PopupWindow Init(Activity ctx, PopupWindow w){
 		View v = ctx.getLayoutInflater().inflate(R.layout.popup, null, false);
-		w = new PopupWindow(v, 300, 75);
-		w.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.popup));
+		w = new PopupWindow(v, 480, 128);
+		w.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.box));
 
 		setupButton(v.findViewById(R.id.ivPopupReply), REPLY);
 		setupButton(v.findViewById(R.id.ivPopupMessage), MESSAGE);

@@ -34,29 +34,35 @@ public class ActivityPostMessage extends Activity implements Runnable {
 
 		Bundle extras = this.getIntent().getExtras();
 		if (extras != null) {
-			msg = (ShackMessage) extras.getSerializable("message");
-
-			if (msg !=null)
-			{
+			String sendTo = extras.getString("postto");
+			if (sendTo != null && sendTo.length() > 0){
 				EditText to = (EditText)findViewById(R.id.EditTextSMTo);
-				to.setText(msg.getName());
-
-				String msgSub= msg.getMsgSubject();
-				EditText sub = (EditText)findViewById(R.id.EditTextSMSubject);
-				if (msgSub.startsWith("Re: ") == false)
-					sub.setText("Re: " + msgSub);
-				else
-					sub.setText(msgSub);
-
-				EditText post = (EditText)findViewById(R.id.EditTextSMMessage);
-				StringBuilder quote = new StringBuilder();
-				quote.append("\n\n/[" + msg.getName() + " Wrote:\n");
-				quote.append("-----\n");
-				quote.append(msg.getMsgText().replace("<br><br>","\n").replaceAll("\\<.*?\\>","") + "\n");
-				quote.append("-----]/");
-				post.setText(quote.toString());
+				to.setText(sendTo);				
 			}
-
+			else{
+				msg = (ShackMessage) extras.getSerializable("message");
+	
+				if (msg !=null)
+				{
+					EditText to = (EditText)findViewById(R.id.EditTextSMTo);
+					to.setText(msg.getName());
+	
+					String msgSub= msg.getMsgSubject();
+					EditText sub = (EditText)findViewById(R.id.EditTextSMSubject);
+					if (msgSub.startsWith("Re: ") == false)
+						sub.setText("Re: " + msgSub);
+					else
+						sub.setText(msgSub);
+	
+					EditText post = (EditText)findViewById(R.id.EditTextSMMessage);
+					StringBuilder quote = new StringBuilder();
+					quote.append("\n\n/[" + msg.getName() + " Wrote:\n");
+					quote.append("-----\n");
+					quote.append(msg.getMsgText().replace("<br><br>","\n").replaceAll("\\<.*?\\>","") + "\n");
+					quote.append("-----]/");
+					post.setText(quote.toString());
+				}
+			}
 		}
 
 		// onClick for Post
