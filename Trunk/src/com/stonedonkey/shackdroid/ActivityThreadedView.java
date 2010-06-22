@@ -83,6 +83,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 	private Boolean threadLoaded = true;
 	private Boolean isNWS = false;
 
+	private  SharedPreferences prefs;// = PreferenceManager.getDefaultSharedPreferences(this);
+	private  String login;// = prefs.getString("shackLogin", "");	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -101,10 +103,23 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			listener.addListener(this);
 		}
 		
-		//setContentView(R.layout.thread);
 		
 		this.setTitle("ShackDroid - View Thread");
-
+		
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		login = prefs.getString("shackLogin", "");
+		int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
+		Typeface face = Typeface.createFromAsset(this.getAssets(), "fonts/arial.ttf");
+		
+		TextView tv = (TextView)findViewById(R.id.TextViewPost);
+		TextView posterName = (TextView)findViewById(R.id.TextViewThreadAuthor);
+		TextView postDate = (TextView)findViewById(R.id.TextViewThreadViewPostDate);
+		
+		tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+		tv.setTypeface(face);
+		posterName.setTypeface(face);
+		postDate.setTypeface(face);
+		
 		if (getIntent() != null && 
 				getIntent().getAction() != null && 
 				getIntent().getAction().equals(Intent.ACTION_VIEW)){
@@ -137,10 +152,10 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		pop.addListener(this);
 		w = pop.Init(this, w);
 		
-		Button b = (Button)findViewById(R.id.btnPopup);
+		ImageView b = (ImageView)findViewById(R.id.ivPopupButton);
 		if (b != null){
-			b.setVisibility(View.GONE);
-			/*
+			//b.setVisibility(View.GONE);
+			
 			b.setOnClickListener(new OnClickListener(){
 	
 				@Override
@@ -149,12 +164,11 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 						w.dismiss();
 					}
 					else{
-						w.showAsDropDown(arg0, -100, 0);
+						w.showAsDropDown(arg0, 0, -2);
 					}
 				}});
-			*/
+			
 		}
-		
 	}
 	PopupWindow w;
 	@Override
@@ -424,7 +438,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			}});
 		
 		if (tv != null)
-			tv.setText(parsedText,BufferType.SPANNABLE);
+			tv.setText(parsedText,BufferType.NORMAL);
 		//tv.setText(Html.fromHtml(postText),BufferType.SPANNABLE);
 
 		if (addSpoilerMarkers == true) 
@@ -445,20 +459,9 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		Log.i("height", String.valueOf(tv.getHeight()));
 		*/
 		final ShackPost post = posts.get(position);
-
-		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		final String login = prefs.getString("shackLogin", "");
-
-		final int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
-		tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-
-		final Typeface face = Typeface.createFromAsset(this.getAssets(), "fonts/arial.ttf");
-		tv.setTypeface(face);
-
-
 		final TextView posterName = (TextView) findViewById(R.id.TextViewThreadAuthor);
 		posterName.setText(post.getPosterName());
-		posterName.setTypeface(face);
+		
 
 		if (login.equalsIgnoreCase(post.getPosterName()))
 			posterName.setTextColor(Color.parseColor("#00BFF3"));
@@ -467,7 +470,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 
 		final TextView postDate = (TextView) findViewById(R.id.TextViewThreadViewPostDate);
 		postDate.setText(Helper.FormatShackDate(post.getPostDate()));
-		postDate.setTypeface(face);
 
 		final String postCat = post.getPostCategory();
 		setPostCategoryIcon(postCat);
@@ -475,7 +477,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		postID = post.getPostID();
 		
 		ShackDroidStats.AddPostsViewed(this);
-
 	}
 
 	@SuppressWarnings("unchecked")
@@ -814,6 +815,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 
 	@Override
 	public void PopupEventRaised(int eventType) {
+		
 		switch(eventType){
 		case ShackPopup.MESSAGE:
 			ShackPost post = posts.get(currentPosition);//.getPostText();

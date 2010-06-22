@@ -1,11 +1,28 @@
-<RelativeLayout android:id="@+id/RelativeLayout01" style="@android:style/Theme.Dialog" android:layout_width="wrap_content" android:layout_height="wrap_content" xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout android:id="@+id/RelativeLayout01" style="@android:style/Theme.Dialog" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
 
-<HorizontalScrollView android:layout_below="@+id/ScrollView01" android:id="@+id/HorizontalScrollView01" android:layout_height="wrap_content" android:layout_width="wrap_content" android:padding="10px">
+<HorizontalScrollView android:layout_below="@+id/ScrollView01" android:id="@+id/HorizontalScrollView01" android:layout_height="wrap_content" android:layout_width="fill_parent" android:padding="2dip" android:layout_centerInParent="true" android:scrollbars="none">
 <LinearLayout android:id="@+id/LayoutPopup" android:layout_width="fill_parent" android:layout_height="fill_parent">
-	<ImageView android:layout_below="@+id/HorizontalScrollView01" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/ivPopupReply" android:src="@drawable/menu_reply" android:padding="5px"></ImageView>
-	<ImageView android:layout_below="@+id/HorizontalScrollView01" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/ivPopupRefresh" android:src="@drawable/menu_refresh" android:padding="5px"></ImageView>
-	<ImageView android:layout_below="@+id/HorizontalScrollView01" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/ivPopupWatch" android:src="@drawable/menu_search" android:padding="5px"></ImageView>
-	<ImageView android:layout_below="@+id/HorizontalScrollView01" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/ivPopupMessage" android:src="@drawable/menu_message" android:padding="5px"></ImageView>
+	<RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="20dip" android:layout_marginRight="20dip">
+		<ImageView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/ivPopupReply" android:src="@drawable/menu_reply"  android:layout_gravity="center_vertical"></ImageView>
+		<TextView android:id="@+id/tvPopupReply" android:layout_below="@+id/ivPopupReply" android:text="Reply" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true"/>
+	</RelativeLayout>
+	<RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="20dip">
+		<ImageView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/ivPopupRefresh" android:src="@drawable/menu_reload" android:layout_centerHorizontal="true"></ImageView>
+		<TextView android:id="@+id/tvPopupRefresh" android:layout_below="@+id/ivPopupRefresh" android:text="Refresh" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true"/>
+	</RelativeLayout>		
+	<RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="20dip">
+		<ImageView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/ivPopupSpoil" android:src="@drawable/menu_mark" android:layout_gravity="center_vertical"></ImageView>
+		<TextView android:id="@+id/tvPopupSpoil" android:layout_below="@+id/ivPopupSpoil" android:text="Spoil" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true"/>
+	</RelativeLayout>		
+	<RelativeLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="20dip">
+		<ImageView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/ivPopupWatch" android:src="@drawable/menu_search" android:layout_gravity="center_vertical"></ImageView>
+		<TextView android:id="@+id/tvPopupWatch" android:layout_below="@+id/ivPopupWatch" android:text="Watch" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true"/>
+	</RelativeLayout>		
+	<RelativeLayout android:layout_width="wrap_content" android:layout_height="fill_parent" android:layout_marginRight="20dip">
+		<ImageView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/ivPopupMessage" android:src="@drawable/menu_message" android:layout_centerHorizontal="true"></ImageView>
+		<TextView android:id="@+id/tvPopupMessage" android:layout_below="@+id/ivPopupMessage" android:text="Message" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true"/>
+	</RelativeLayout>		
+	
 </LinearLayout>
 </HorizontalScrollView>
 

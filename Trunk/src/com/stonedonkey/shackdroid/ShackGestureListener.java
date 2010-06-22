@@ -65,7 +65,7 @@ public class ShackGestureListener {
 		public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
 			// TODO Auto-generated method stub
 		    ArrayList<Prediction> predictions = mLibrary.recognize(gesture);
-
+		    
 		    // We want at least one prediction
 		    if (predictions.size() > 0) {
 		        Prediction prediction = predictions.get(0);
