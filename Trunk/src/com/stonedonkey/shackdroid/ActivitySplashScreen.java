@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,8 +24,18 @@ public class ActivitySplashScreen extends Activity {
 		Helper.SetWindowState(getWindow(),this);
 		
 		setContentView(R.layout.splash);
-		ImageView iv = (ImageView)findViewById(R.id.ImageViewSplash);
-		iv.setImageResource(R.drawable.shackdroid_splash);
+		
+		ImageView iv = (ImageView)findViewById(R.id.ImageViewSplashText);
+		iv.setImageResource(R.drawable.shackdroid_splash2);
+		
+		iv = (ImageView)findViewById(R.id.ImageViewSplash);
+		iv.setImageResource(R.drawable.shackdroid_splash1);
+		
+//		Animation anim = AnimationUtils.loadAnimation(getBaseContext(), R.anim.spin);
+//		iv.setAnimation(anim);
+//		anim = null;
+		
+		
 		
 		TextView auth= (TextView)findViewById(R.id.TextViewAuthor);
 		auth.setTextSize(12);
