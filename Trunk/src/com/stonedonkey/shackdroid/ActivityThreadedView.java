@@ -37,6 +37,7 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.Html.TagHandler;
+import android.text.method.ScrollingMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.util.Linkify;
@@ -45,6 +46,7 @@ import android.text.util.Linkify.TransformFilter;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -115,6 +117,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		TextView posterName = (TextView)findViewById(R.id.TextViewThreadAuthor);
 		TextView postDate = (TextView)findViewById(R.id.TextViewThreadViewPostDate);
 		
+		tv.setMovementMethod(new ScrollingMovementMethod());
 		tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 		tv.setTypeface(face);
 		posterName.setTypeface(face);
@@ -164,7 +167,14 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 						w.dismiss();
 					}
 					else{
-						w.showAsDropDown(arg0, 0, -2);
+						int wi = getWindowManager().getDefaultDisplay().getWidth();
+						int hi = getWindowManager().getDefaultDisplay().getHeight();
+						int extra = (hi>wi?24:-2);
+						wi = (wi/2) - 240;
+						hi = ((hi/2) - 130) - extra;
+						
+						w.showAtLocation(arg0, Gravity.NO_GRAVITY, wi, hi);
+						//w.showAsDropDown(arg0, 0, -2);
 					}
 				}});
 			
@@ -176,16 +186,16 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		// Adjust the scroll view based on the size of the screen
 		// this doesn't account for the titlebar or the statusbar
 		// no methods appear to be available to determine them 
-		final ScrollView sv = (ScrollView) findViewById(R.id.textAreaScroller);
+		//final ScrollView sv = (ScrollView) findViewById(R.id.textAreaScroller);
 		final TextView tv = (TextView)findViewById(R.id.TextViewThreadAuthor);
 		
 		final int statusTitleBar = 0; // TODO: really would like to not hardcode this
 		
-		final int offset = tv.getTotalPaddingTop() + tv.getHeight() +  sv.getTop() ;
-		final int height = getWindowManager().getDefaultDisplay().getHeight();
+		//final int offset = tv.getTotalPaddingTop() + tv.getHeight() +  sv.getTop() ;
+		//final int height = getWindowManager().getDefaultDisplay().getHeight();
 
-		sv.getLayoutParams().height = (height - offset - statusTitleBar) / 2;
-		sv.requestLayout();		
+		//sv.getLayoutParams().height = (height - offset - statusTitleBar) / 2;
+		//sv.requestLayout();		
 		
 		final TextView spacer = (TextView) findViewById(R.id.tvSpacer);
 		spacer.setBackgroundColor(Color.parseColor("#333333"));
@@ -448,6 +458,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		// it removes the pancake_ and goes to http://humper.shackspace... bug in linkify maybe??
 		Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
 		tv.setClickable(false);
+		tv.scrollTo(0,0);
+		tv.requestLayout();		
 //		Pattern shackURLMatcher = Pattern.compile("href=\"http://www\\.shacknews\\.com/laryn\\.x\\?id=([0-9]*)#itemanchor_([0-9]*)(.*?)\">");
 //		String threadView = "content://com.stonedonkey.shackdroid/ActivityThreadedView";
 //		Linkify.addLinks(tv,shackURLMatcher,threadView,new ShackURLMatchFilter(), new ShackURLTransform());
@@ -475,6 +487,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		setPostCategoryIcon(postCat);
 
 		postID = post.getPostID();
+
 		
 		ShackDroidStats.AddPostsViewed(this);
 	}
@@ -541,7 +554,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-
+		w.dismiss();
 
 		// NOTE: ListView's don't show the current selection when in TouchMode
 		//       so horray for hacks... because this is "intended" behavior.
@@ -571,8 +584,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		//l.setItemChecked(position, true);
 		//l.setSelection(position);
 
-		final ScrollView sv = (ScrollView) findViewById(R.id.textAreaScroller);
-		sv.scrollTo(0, 0); 
+		//final ScrollView sv = (ScrollView) findViewById(R.id.textAreaScroller);
+		//sv.scrollTo(0, 0); 
 
 		UpdatePostText(position,true);
 	}
@@ -670,6 +683,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		w.dismiss();
 		Intent intent;
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		String login = "";
@@ -725,6 +739,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
+		w.dismiss();
 		switch (item.getItemId())
 		{
 			case 10: 
@@ -798,6 +813,10 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 
 		}
 		 */
+		if (keyCode == KeyEvent.KEYCODE_BACK && w.isShowing()){
+			w.dismiss();
+			return true;
+		}
 		return super.onKeyDown(keyCode, event);
 	}
 	@Override
@@ -808,7 +827,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 				break;
 			case ShackGestureListener.REFRESH:
 				fillSaxData(postID);
-				break;				
+				break;
 		}
 		
 	}
@@ -829,6 +848,9 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			break;
 		case ShackPopup.REPLY:
 			doReply();
+			break;
+		case ShackPopup.SPOIL:
+			RemoveSpoiler();
 			break;
 		}
 		w.dismiss();
