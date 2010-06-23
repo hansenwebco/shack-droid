@@ -38,37 +38,33 @@
 		android:paddingRight="12px"
 		>
 	</TextView>	
-	<ScrollView 
-		android:id="@+id/textAreaScroller"
-		android:layout_width="fill_parent" 
-		android:layout_height="wrap_content"
-		android:minHeight="20dip"
-		android:maxHeight="190dip"
-		android:fadingEdgeLength="8px"
-		android:layout_below="@+id/TextViewThreadAuthor"
-		android:paddingTop="24dip">
+
 		
 		<TextView android:id="@+id/TextViewPost"
+			android:layout_below="@+id/TextViewThreadAuthor"
 			android:layout_width="fill_parent" 
 			android:layout_height="wrap_content"
 			android:text="" 
-			android:minHeight="20dip"
 			android:textSize="12sp" 
 			android:paddingLeft="8px"
 			android:paddingRight="8px"
 			android:paddingBottom="10px"
 			android:textColorLink="#FFFFFF"
 			android:textColor="#FFFFFF"
+			android:minHeight="170dip"
+			android:maxHeight="210dip"
+			android:fadingEdgeLength="8dip"
+			android:fadingEdge="vertical"
+			android:scrollbars="vertical"
 			>
 		</TextView>
 	
-</ScrollView>
 	<ImageView
 	android:id="@+id/ivPopupButton"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:paddingTop="8px"
-	android:layout_below="@+id/textAreaScroller"
+	android:layout_below="@+id/TextViewPost"
 
 	android:src="@drawable/button" android:layout_centerInParent="true"/>
 <TextView android:layout_below="@+id/ivPopupButton" android:id="@+id/tvSpacer" android:layout_width="fill_parent" android:layout_height="2dip" android:background="#00000000"></TextView>

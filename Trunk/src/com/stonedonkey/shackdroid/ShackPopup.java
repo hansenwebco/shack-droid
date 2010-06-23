@@ -14,7 +14,7 @@ public class ShackPopup {
 	public static final int WATCH = 1;
 	public static final int REFRESH = 2;
 	public static final int MESSAGE = 3;
-	
+	public static final int SPOIL = 4;
 	
 	private ArrayList<ShackPopupEvent> mListeners = new ArrayList<ShackPopupEvent>();
 	public ShackPopup(){
@@ -30,6 +30,7 @@ public class ShackPopup {
 		setupButton(v.findViewById(R.id.ivPopupMessage), MESSAGE);
 		setupButton(v.findViewById(R.id.ivPopupWatch), WATCH);
 		setupButton(v.findViewById(R.id.ivPopupRefresh), REFRESH);
+		setupButton(v.findViewById(R.id.ivPopupSpoil), SPOIL);
 		
 		return w;
 	}
