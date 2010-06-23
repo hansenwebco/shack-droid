@@ -16,6 +16,7 @@ public class ShackPopup {
 	public static final int MESSAGE = 3;
 	public static final int SPOIL = 4;
 	
+	public boolean isSmallScreen = false;
 	private ArrayList<ShackPopupEvent> mListeners = new ArrayList<ShackPopupEvent>();
 	public ShackPopup(){
 
@@ -23,7 +24,18 @@ public class ShackPopup {
 	
 	public PopupWindow Init(Activity ctx, PopupWindow w){
 		View v = ctx.getLayoutInflater().inflate(R.layout.popup, null, false);
-		w = new PopupWindow(v, 480, 128);
+		
+		
+		if ((ctx.getWindowManager().getDefaultDisplay().getHeight() == 480 &&
+				ctx.getWindowManager().getDefaultDisplay().getWidth() == 320) ||
+				(ctx.getWindowManager().getDefaultDisplay().getHeight() == 320 &&
+						ctx.getWindowManager().getDefaultDisplay().getWidth() == 480)){
+			w = new PopupWindow(v, 240, 64);
+			isSmallScreen = true;
+		}
+		else{
+			w = new PopupWindow(v, 480, 128);
+		}
 		w.setBackgroundDrawable(ctx.getResources().getDrawable(R.drawable.box));
 
 		setupButton(v.findViewById(R.id.ivPopupReply), REPLY);

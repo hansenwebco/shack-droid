@@ -151,7 +151,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			}
 		}
 
-		ShackPopup pop = new ShackPopup();
+		pop = new ShackPopup();
 		pop.addListener(this);
 		w = pop.Init(this, w);
 		
@@ -170,9 +170,18 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 						int wi = getWindowManager().getDefaultDisplay().getWidth();
 						int hi = getWindowManager().getDefaultDisplay().getHeight();
 						int extra = (hi>wi?24:-2);
-						wi = (wi/2) - 240;
-						hi = ((hi/2) - 130) - extra;
 						
+						if (pop.isSmallScreen){
+							if (extra >0){
+								extra -= 30;
+							}
+							wi = (wi/2) - 120;
+							hi = ((hi/2) - 64) - extra;							
+						}
+						else{
+							wi = (wi/2) - 240;
+							hi = ((hi/2) - 130) - extra;
+						}
 						w.showAtLocation(arg0, Gravity.NO_GRAVITY, wi, hi);
 						//w.showAsDropDown(arg0, 0, -2);
 					}
@@ -180,6 +189,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			
 		}
 	}
+	ShackPopup pop;
 	PopupWindow w;
 	@Override
     public void onWindowFocusChanged(boolean hasFocus) { 
