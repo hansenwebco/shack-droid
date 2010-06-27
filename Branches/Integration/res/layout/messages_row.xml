@@ -1,0 +1,46 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/MessagesResultRow"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent">
+
+	<TextView
+	android:id="@+id/TextViewMessageAuthor"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:paddingLeft="4px"
+	android:paddingRight="4px"
+	android:paddingTop="4px"
+	android:textSize="12sp"
+	android:textStyle="bold"
+	android:textColor="#ffba00"
+	/>
+	
+	<TextView
+	android:id="@+id/TextViewMessageDatePosted"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:paddingRight="8px"
+	android:paddingLeft="4px"
+	android:paddingTop="4px"
+	android:gravity="right"
+	android:textSize="12sp"
+	android:layout_toRightOf="@+id/TextViewMessageAuthor"
+	android:textColor="#FFFFFF"
+	/>
+
+
+	<TextView
+	android:id="@+id/TextViewMessageSubject"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:paddingLeft="4px"
+	android:paddingRight="4px"
+	android:paddingBottom="4px"
+	android:paddingTop="2px"
+	android:textSize="12sp"
+	android:layout_below="@+id/TextViewMessageDatePosted"
+	android:textColor="#FFFFFF"
+	android:textColorLink="#FFFFFF"
+	/>
+	
+</RelativeLayout>
