@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/RelativeLayoutThread"
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent"
+	android:background="#000000" 
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	
+	<TextView 
+		android:id="@+id/TextViewThreadAuthor"
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:textColor="#ffba00" 
+		android:textSize="12sp"
+		android:paddingLeft="3px">
+	</TextView>
+	<ImageView
+	android:id="@+id/ImageViewCatTopic"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:paddingLeft="3px"
+	android:paddingTop="4px"
+	android:layout_toRightOf="@+id/TextViewThreadAuthor"
+	/>	
+	<TextView 
+		android:id="@+id/TextViewThreadViewPostDate"
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"
+		android:text="" 
+		android:gravity="right" 
+		android:layout_toRightOf="@+id/TextViewThreadAuthor"
+		android:textSize="12sp">
+	</TextView>	
+	
+		<TextView android:id="@+id/TextViewPost"
+			android:layout_below="@+id/TextViewThreadAuthor"
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:text="" 
+			android:textSize="12sp" 
+			android:paddingLeft="8px"
+			android:paddingRight="8px"
+			android:paddingBottom="10px"
+			android:textColorLink="#FFFFFF"
+			android:textColor="#FFFFFF"
+			android:minHeight="90dip"
+			android:maxHeight="120dip"
+			android:fadingEdgeLength="8dip"
+			android:fadingEdge="vertical"
+			android:scrollbars="vertical"
+			>
+		</TextView>
+	
+	<ImageView
+	android:id="@+id/ivPopupButton"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:paddingTop="8px"
+	android:layout_below="@+id/TextViewPost"
+
+	android:src="@drawable/button" android:layout_centerInParent="true"/>
+<TextView android:layout_below="@+id/ivPopupButton" android:id="@+id/tvSpacer" android:layout_width="fill_parent" android:layout_height="2dip" android:background="#00000000"></TextView>	
+	<ListView 
+		android:paddingTop="2px"
+		android:id="@android:id/list" 
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent" 
+		android:background="#000000"
+		android:layout_below="@+id/tvSpacer"
+		android:choiceMode="singleChoice"
+		android:focusableInTouchMode="true"/>
+	
+
+</RelativeLayout>
