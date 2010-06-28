@@ -56,7 +56,10 @@ public class SaxHandlerTopicView extends DefaultHandler
 		view = v;
 	}
 
-
+	AsyncSaxHandlerTopics async;
+	public void addAsync(AsyncSaxHandlerTopics a){
+			async = a;
+	}
 	public ArrayList<ShackPost> GetParsedPosts()
 	{
 		return this.posts;
@@ -126,32 +129,32 @@ public class SaxHandlerTopicView extends DefaultHandler
 		{
 			body = false;
 			
-		
-			// this handles determining how far in a reply is indented
-			int currentIndent;
-			int indentSize = indent.size();
-			
-			
-			if (indentSize > 0)
-			 currentIndent = indentSize;
-			else
-			 currentIndent = 0;
-			
-			for (int i = 0 ; i < indentSize ; i++)
-			{
-				indent.set(i, indent.get(i) - 1 );
-				if (indent.get(i) == 0)
-				{
-					indent.remove(i);
-					indentSize--;
-					i--;
-				}
-			}
-			
-			if (Integer.parseInt(replyCount) > 0)
-				indent.add(Integer.parseInt(replyCount));
-			// end indention code
+			int currentIndent = 0;
+			if (view.equals("threaded")){
+				// this handles determining how far in a reply is indented
 				
+				int indentSize = indent.size();
+				
+				if (indentSize > 0)
+				 currentIndent = indentSize;
+				else
+				 currentIndent = 0;
+				
+				for (int i = 0 ; i < indentSize ; i++)
+				{
+					indent.set(i, indent.get(i) - 1 );
+					if (indent.get(i) == 0)
+					{
+						indent.remove(i);
+						indentSize--;
+						i--;
+					}
+				}
+				
+				if (Integer.parseInt(replyCount) > 0)
+					indent.add(Integer.parseInt(replyCount));
+				// end indention code
+			}
 		
 			// check to see if it passes the persons filters, if it does not
 			// then we don't add it
@@ -164,6 +167,10 @@ public class SaxHandlerTopicView extends DefaultHandler
 			{
 				// add new post to collection
 				ShackPost currentPost = new ShackPost( posterName, postDate, preview ,postID, bodyText, replyCount, currentIndent,postCategory,0,posts.size(),author,null);
+				
+				if (async != null){
+					async.postUpdate(currentPost);
+				}
 				posts.add(currentPost);
 				bodyText= "";
 				author = false;

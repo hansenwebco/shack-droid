@@ -21,7 +21,6 @@ public class HttpHelper {
 	
 	public static InputStream HttpRequestWithGzip(String url,Context context) throws ClientProtocolException, IOException
 	{ 
-
 		DefaultHttpClient client = new DefaultHttpClient();
 		HttpUriRequest request = new HttpGet(url);
 		request.addHeader("Accept-Encoding", "gzip");
