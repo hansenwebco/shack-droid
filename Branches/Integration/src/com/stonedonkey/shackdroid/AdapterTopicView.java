@@ -27,7 +27,7 @@ public class AdapterTopicView extends BaseAdapter {
 	private final String shackLogin;
 	private final Typeface face;
 	private final int fontSize;
-	private final Hashtable<String,String> postCache;
+	private Hashtable<String,String> postCache;
 	private final String showAuthor;
 	private final Resources r; 
 	private int totalNewPosts = 0;
@@ -47,6 +47,17 @@ public class AdapterTopicView extends BaseAdapter {
 	    showAuthor = prefs.getString("showAuthor","count");
 	    
 	    inflate = LayoutInflater.from(context);
+	}
+	
+	public void setPostCounts(Hashtable<String,String> table){
+		postCache = table;
+	}
+	
+	public void clear(){
+		topicList.clear();
+	}
+	public void add(ShackPost post){
+		topicList.add(post);
 	}
 	
 	@Override

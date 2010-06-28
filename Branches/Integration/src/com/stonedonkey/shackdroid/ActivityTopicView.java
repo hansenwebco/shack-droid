@@ -38,6 +38,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
@@ -67,7 +68,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		Helper.SetWindowState(getWindow(),this);
 		
 		boolean screenOn = PreferenceManager.getDefaultSharedPreferences(this)
@@ -81,6 +82,10 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			listener.addListener(this);
 		}
 
+		posts = new ArrayList<ShackPost>();
+		listAdapter = new AdapterTopicView(getApplicationContext(),R.layout.topic_row, posts, "", 12,null);		
+		setListAdapter(listAdapter);	
+		
 		final Bundle extras = this.getIntent().getExtras();
 		if (extras != null)
 			loadStoryID = extras.getString("StoryID");
@@ -102,6 +107,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 				}
 			}
 		}
+	
 	}
 
 	@Override
@@ -300,10 +306,21 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 	}
 
 	private void fillDataSAX() {
+		//setProgressBarIndeterminateVisibility(true);
 
-		showDialog(1);
-
+		
+		// TODO: Passing this as a new HashTable seems very ugly and a waste of memory
+		// Unfortunately I can't find a a way to get the Adapter to update before I call
+		// the UpdatePostCache below.. that update occurs before the ListAdapter is set
+		// apparently.  I can't find anything else to put the Update , so for now we'll
+		// create a new Hashtable.. ick.
+		
+		//chazums maybe tva.notifyDataSetChanged() ?  
+		
+		//showDialog(1);		
 		// use the class run() method to do work
+		listAdapter.clear();
+		listAdapter.notifyDataSetChanged();
 		Thread thread = new Thread(this);
 		thread.start();
 	}
@@ -332,8 +349,50 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 	
 	
 	}
-	public void run() {
+	
+	private void tmp(){
+		Hashtable<String,String> tempHash = null;
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		final String login = prefs.getString("shackLogin", "");
+		final int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
+		final String feedURL = prefs.getString("shackFeedURL",getString(R.string.default_api));
+		URL url = null;
+		try {
+			
+			postCounts = GetPostCache();
+			
+			
+			if (loadStoryID != null) {
+				if (currentPage > 1)
+					url = new URL(feedURL + "/" + loadStoryID + "."
+							+ this.currentPage.toString() + ".xml");
+				else
+					url = new URL(feedURL + "/" + loadStoryID + ".xml");
+			} else {
+				if (currentPage > 1)
+					url = new URL(feedURL + "/" + this.storyID + "."
+							+ this.currentPage.toString() + ".xml");
+				else
+					url = new URL(feedURL + "/index.xml");
+			}			
+		} catch (Exception ex) {
+
+		}
+		//if (postCounts != null)
+			//tempHash = new Hashtable<String,String>(postCounts);
+
+		//posts = new ArrayList<ShackPost>();
+		//listAdapter = new AdapterTopicView(getApplicationContext(),R.layout.topic_row, posts, login, fontSize,tempHash);		
+		//setListAdapter(listAdapter);
 		
+		listAdapter.setPostCounts(postCounts);
+		AsyncSaxHandlerTopics a =new AsyncSaxHandlerTopics(listAdapter, this, url.toString());
+		a.execute();		
+	}
+	 AdapterTopicView listAdapter;
+	public void run() {
+		tmp();
+		/*
 		threadLoaded = false;
 		try {
 
@@ -384,6 +443,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		
 		
 		progressBarHandler.sendEmptyMessage(0);
+		*/
 	}
 
 	private Handler progressBarHandler = new Handler() {
