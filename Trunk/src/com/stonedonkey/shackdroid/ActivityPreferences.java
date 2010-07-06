@@ -1,6 +1,8 @@
 package com.stonedonkey.shackdroid;
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,7 +17,6 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.stonedonkey.shackdroid.ColorPickerDialog.OnColorChangedListener;
@@ -55,6 +56,40 @@ public class ActivityPreferences extends PreferenceActivity {
 
 		}
 		*/
+		
+
+		final Context context = this;
+		
+		final Preference orientationPref = (Preference)findPreference("orientation");
+		orientationPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+
+			@Override
+			public boolean onPreferenceChange(Preference preference,Object newValue) {
+
+				//Toast toast = Toast.makeText(getBaseContext(),"Fail.",Toast.LENGTH_SHORT);
+				//toast.show();
+				
+					new AlertDialog.Builder(context)
+				.setTitle("Restart ShackDroid")
+				.setMessage("In order for ShackDroid to update this setting it must be restarted.")
+				.setPositiveButton("OK",  new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						
+						final ActivityManager am = (ActivityManager)getBaseContext().getSystemService( ACTIVITY_SERVICE );
+						am.restartPackage("com.stonedonkey.shackdroid");
+
+						//am.killBackgroundProcesses("com.stonedonkey.shackdroid");
+						
+						//finish();
+					}
+				}).show();
+				return false;
+			
+			}
+
+		});
+		
+		
 		Preference customPref = (Preference) findPreference("allowCheckShackMessages");
 		customPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 		
@@ -66,7 +101,7 @@ public class ActivityPreferences extends PreferenceActivity {
 			// TODO: handle if the user removes username or password
 			@Override
 			public boolean onPreferenceChange(Preference arg0, Object arg1) {
-
+				
 				// make sure we are allowed and that we have a login and password
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 				boolean allowSMs = prefs.getBoolean("allowShackMessages", false);
@@ -90,6 +125,8 @@ public class ActivityPreferences extends PreferenceActivity {
 	
 		Boolean result = super.onPreferenceTreeClick(preferenceScreen, preference);
 
+		
+		
 		if (preference.getKey().equals("NewVersion"))
 		{
 			newVersionCheck(true);
