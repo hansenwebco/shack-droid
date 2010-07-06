@@ -38,6 +38,7 @@ public class ActivityMainMenu extends ListActivity  {
 
 		Helper.SetWindowState(getWindow(),this);
 		
+	
 		setContentView(R.layout.mainmenu);
 		
 
@@ -66,7 +67,7 @@ public class ActivityMainMenu extends ListActivity  {
 
 		ColorDrawable cd = new ColorDrawable(Color.parseColor("#333333"));
 		getListView().setDivider(cd);
-		getListView().setDividerHeight(1);
+		getListView().setDividerHeight(0);
 
 		
 		setListAdapter(mm);
@@ -83,7 +84,7 @@ public class ActivityMainMenu extends ListActivity  {
 		if (hasFocus  && Integer.parseInt(android.os.Build.VERSION.SDK) > 3)
 		{
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-			boolean allowMenuAnimations = prefs.getBoolean("allowMenuAnimations", false);
+			boolean allowMenuAnimations = prefs.getBoolean("allowMenuAnimations", true);
 			
 			final ImageView imageBackground = (ImageView) findViewById(R.id.ImageViewMainMenuBackground);
 			if (allowMenuAnimations) 

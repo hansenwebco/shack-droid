@@ -331,16 +331,25 @@ public class Helper {
 	
 	public static void SetWindowState(Window window,Context context)
 	{
+		SetWindowState(window,context,null);
+	}
+	public static void SetWindowState(Window window, Context context, Integer setOrientation)
+	{
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		
-		//int orientation = prefs.getInt("orientation", 0);
-		
+
+		if (setOrientation == null) {
+			int orientation = Integer.parseInt(prefs.getString("orientation", "4"));
+			((Activity) context).setRequestedOrientation(orientation);
+		}
+		else
+			((Activity) context).setRequestedOrientation(setOrientation);
 		
 		if (prefs.getBoolean("allowFullScreen", false)) {
 			window.requestFeature(Window.FEATURE_NO_TITLE);
 			window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		}
+		}		
 	}
+
 	
 	public static ShackGestureListener setGestureEnabledContentView(int resourceId, Activity activity){
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
