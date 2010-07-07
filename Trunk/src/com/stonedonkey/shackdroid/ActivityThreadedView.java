@@ -60,6 +60,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.TextView.BufferType;
@@ -153,7 +154,10 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		pop.addListener(this);
 		w = pop.Init(this, w);
 		
+		// disabling for now.
 		ImageView b = (ImageView)findViewById(R.id.ivPopupButton);
+		b.setVisibility(View.GONE);
+		b =null;
 		if (b != null){
 			//b.setVisibility(View.GONE);
 			
@@ -185,6 +189,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 					}
 				}});
 			
+			
 		}
 	}
 	ShackPopup pop;
@@ -194,16 +199,16 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		// Adjust the scroll view based on the size of the screen
 		// this doesn't account for the titlebar or the statusbar
 		// no methods appear to be available to determine them 
-		//final ScrollView sv = (ScrollView) findViewById(R.id.textAreaScroller);
+		final TextView sv = (TextView) findViewById(R.id.TextViewPost);
 		final TextView tv = (TextView)findViewById(R.id.TextViewThreadAuthor);
 		
 		final int statusTitleBar = 0; // TODO: really would like to not hardcode this
 		
-		//final int offset = tv.getTotalPaddingTop() + tv.getHeight() +  sv.getTop() ;
-		//final int height = getWindowManager().getDefaultDisplay().getHeight();
+		final int offset = tv.getTotalPaddingTop() + tv.getHeight() +  sv.getTop() ;
+		final int height = getWindowManager().getDefaultDisplay().getHeight();
 
-		//sv.getLayoutParams().height = (height - offset - statusTitleBar) / 2;
-		//sv.requestLayout();		
+		sv.getLayoutParams().height = (height - offset - statusTitleBar) / 2;
+		sv.requestLayout();		
 		
 		final TextView spacer = (TextView) findViewById(R.id.tvSpacer);
 		spacer.setBackgroundColor(Color.parseColor("#333333"));
