@@ -56,7 +56,6 @@ import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -94,8 +93,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		
 		Helper.SetWindowState(getWindow(),this);
 		
-		boolean screenOn = PreferenceManager.getDefaultSharedPreferences(this)
-							.getBoolean("keepScreenOn", false);
+		boolean screenOn = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("keepScreenOn", false);
 		if (screenOn){
 			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
@@ -122,6 +120,31 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		tv.setTypeface(face);
 		posterName.setTypeface(face);
 		postDate.setTypeface(face);
+		
+		
+		final ImageView next = (ImageView)findViewById(R.id.ImageViewNextPost);
+		next.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				setListItemPosition(1);
+			}
+		});
+		
+		final ImageView prev = (ImageView)findViewById(R.id.ImageViewPreviousPost);
+		prev.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				setListItemPosition(-1);
+			}
+		});
+		
+		final ImageView reload = (ImageView)findViewById(R.id.ImageViewReload);
+		reload.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				fillSaxData(postID);
+			}
+		});
 		
 		if (getIntent() != null && 
 				getIntent().getAction() != null && 
@@ -207,25 +230,21 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		// Adjust the scroll view based on the size of the screen
 		// this doesn't account for the titlebar or the statusbar
 		// no methods appear to be available to determine them 
-		final TextView sv = (TextView) findViewById(R.id.TextViewPost);
+		final ScrollView sv = (ScrollView) findViewById(R.id.textAreaScroller);
 		final TextView tv = (TextView)findViewById(R.id.TextViewThreadAuthor);
 		
 		final int statusTitleBar = 0; // TODO: really would like to not hardcode this
 		
 		final RelativeLayout spacer = (RelativeLayout) findViewById(R.id.tvSpacer);
-		//final ImageButton next = (ImageButton)findViewById(R.id.ImageViewNextPost);
-		//final ImageButton prev = (ImageButton)findViewById(R.id.ImageViewPreviousPost);
+		spacer.setVisibility(View.VISIBLE);
 		
 		final int offset = tv.getTotalPaddingTop() + tv.getHeight() +  sv.getTop() ;
 		final int height = getWindowManager().getDefaultDisplay().getHeight();
 
-		sv.getLayoutParams().height = ((height - offset - statusTitleBar) / 2)- (spacer.getHeight()/2);
+		sv.getLayoutParams().height = ((height - offset - statusTitleBar ) / 2) - spacer.getHeight();
 		sv.requestLayout();		
 		
-		//next.setVisibility(View.VISIBLE);
-		//prev.setVisibility(View.VISIBLE);
-		//spacer.setBackgroundColor(Color.parseColor("#070707"));
-		spacer.setVisibility(View.VISIBLE);
+		
 	}
 
 	@Override 
@@ -394,6 +413,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 
 			ShowData();
 			UpdateWatchedPosts();
+
 			
 		}
 	};
@@ -487,10 +507,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		tv.setClickable(false);
 		tv.scrollTo(0,0);
 		tv.requestLayout();		
-//		Pattern shackURLMatcher = Pattern.compile("href=\"http://www\\.shacknews\\.com/laryn\\.x\\?id=([0-9]*)#itemanchor_([0-9]*)(.*?)\">");
-//		String threadView = "content://com.stonedonkey.shackdroid/ActivityThreadedView";
-//		Linkify.addLinks(tv,shackURLMatcher,threadView,new ShackURLMatchFilter(), new ShackURLTransform());
-//		
+	
 		/*
 		Log.i("height", String.valueOf(tv.getHeight()));
 		tv.forceLayout();
@@ -583,9 +600,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		w.dismiss();
 
-		// NOTE: ListView's don't show the current selection when in TouchMode
-		//       so horray for hacks... because this is "intended" behavior.
-
 		TextView threadPreview = null;
 		View vi = (View) l.getChildAt(currentPosition - l.getFirstVisiblePosition());
 
@@ -607,15 +621,56 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 
 		currentPosition = position;
 		l.setFocusableInTouchMode(true);
-		//l.setChoiceMode(1);
-		//l.setItemChecked(position, true);
-		//l.setSelection(position);
-
-		//final ScrollView sv = (ScrollView) findViewById(R.id.textAreaScroller);
-		//sv.scrollTo(0, 0); 
 
 		UpdatePostText(position,true);
 	}
+	
+	@SuppressWarnings("unchecked")
+	private void setListItemPosition(int direction)
+	{
+		w.dismiss();
+		
+		if ((currentPosition + direction) < 0)
+			return;
+	
+		ListView l = getListView();
+		
+		if (currentPosition + direction >= l.getCount())
+			return;
+		
+		TextView threadPreview = null;
+		View vi = (View) l.getChildAt(currentPosition - l.getFirstVisiblePosition());
+
+		if (vi != null)
+			threadPreview = (TextView)vi.findViewById(R.id.TextViewThreadPreview);
+		if (threadPreview != null)
+			threadPreview.setBackgroundColor(Color.TRANSPARENT);
+
+		int position = currentPosition;
+		
+		vi = (View) l.getChildAt((position + direction) - l.getFirstVisiblePosition());
+		if (vi != null)
+			threadPreview = (TextView)vi.findViewById(R.id.TextViewThreadPreview);
+		if (threadPreview != null)
+			threadPreview.setBackgroundColor(Color.parseColor("#274FD3"));
+
+		// tell our adapter what the current row is, this is used to rehighlight
+		// the current topic during scrolling
+		final AdapterThreadedView tva = (AdapterThreadedView) getListAdapter();
+		tva.setSelectedRow(position+direction);
+		
+
+		currentPosition = position + direction;
+
+		l.setFocusableInTouchMode(true);
+		l.setSelection(position+direction);
+		
+		
+		UpdatePostText(position+direction,true);
+		
+		
+	}
+	
 	private void RemoveSpoiler()
 	{
 		UpdatePostText(currentPosition,false);
