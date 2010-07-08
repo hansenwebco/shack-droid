@@ -639,12 +639,15 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			return;
 		
 		TextView threadPreview = null;
-		View vi = (View) l.getChildAt(currentPosition - l.getFirstVisiblePosition());
+		View vi = (View) l.getChildAt(currentPosition - l.getFirstVisiblePosition()+1);
 
 		if (vi != null)
 			threadPreview = (TextView)vi.findViewById(R.id.TextViewThreadPreview);
 		if (threadPreview != null)
 			threadPreview.setBackgroundColor(Color.TRANSPARENT);
+		else {
+			int id = 1;
+		}
 
 		int position = currentPosition;
 		
