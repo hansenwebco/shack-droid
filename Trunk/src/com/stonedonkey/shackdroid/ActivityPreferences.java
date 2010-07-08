@@ -83,7 +83,7 @@ public class ActivityPreferences extends PreferenceActivity {
 						//finish();
 					}
 				}).show();
-				return false;
+				return true;
 			
 			}
 

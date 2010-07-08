@@ -65,9 +65,14 @@
 	android:layout_height="wrap_content"
 	android:paddingTop="8px"
 	android:layout_below="@+id/TextViewPost"
-
 	android:src="@drawable/button" android:layout_centerInParent="true"/>
-<TextView android:layout_below="@+id/ivPopupButton" android:id="@+id/tvSpacer" android:layout_width="fill_parent" android:layout_height="2dip" android:background="#00000000"></TextView>
+	
+	<RelativeLayout android:visibility="gone" android:background="@drawable/nav_background" android:layout_below="@+id/ivPopupButton" android:id="@+id/tvSpacer" android:layout_width="fill_parent" android:layout_height="40dip">
+		<ImageView  android:src="@drawable/nav_previous"   android:id="@+id/ImageViewPreviousPost" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
+		<ImageView  android:layout_toRightOf="@+id/ImageViewPreviousPost" android:src="@drawable/nav_next" android:id="@+id/ImageViewNextPost" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
+		<ImageView  android:layout_alignParentRight="true"  android:src="@drawable/nav_reload" android:id="@+id/ImageViewReload" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
+	</RelativeLayout>
+	
 	<ListView 
 		android:paddingTop="2px"
 		android:id="@android:id/list" 
@@ -79,9 +84,4 @@
 		android:dividerHeight="1px"
 		android:divider="#333333"
 		android:focusableInTouchMode="true"/>
-	
-
-
-
-
 </RelativeLayout>
