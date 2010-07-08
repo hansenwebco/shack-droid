@@ -13,7 +13,6 @@
 		android:textSize="12sp"
 		android:paddingLeft="8px"
 		android:paddingTop="3px"
-		
 		android:layout_alignParentLeft="true"	
 		>
 	</TextView>
@@ -39,38 +38,39 @@
 		>
 	</TextView>	
 
-		
+	<ScrollView 
+		android:id="@+id/textAreaScroller"
+		android:layout_width="fill_parent" 
+		android:layout_height="180px"
+		android:layout_below="@+id/TextViewThreadAuthor">
 		<TextView android:id="@+id/TextViewPost"
-			android:layout_below="@+id/TextViewThreadAuthor"
 			android:layout_width="fill_parent" 
-			android:layout_height="wrap_content"
+			android:layout_height="fill_parent"
 			android:text="" 
+			android:minHeight="180px"
 			android:textSize="12sp" 
 			android:paddingLeft="8px"
 			android:paddingRight="8px"
 			android:paddingBottom="10px"
 			android:textColorLink="#FFFFFF"
 			android:textColor="#FFFFFF"
-			android:minHeight="170dip"
-			android:maxHeight="210dip"
-			android:fadingEdgeLength="8dip"
-			android:fadingEdge="vertical"
-			android:scrollbars="vertical"
+			android:fadingEdge="none"
 			>
 		</TextView>
+		</ScrollView>
 	
 	<ImageView
 	android:id="@+id/ivPopupButton"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:paddingTop="8px"
-	android:layout_below="@+id/TextViewPost"
+	android:layout_below="@+id/textAreaScroller"
 	android:src="@drawable/button" android:layout_centerInParent="true"/>
 	
-	<RelativeLayout android:visibility="gone" android:background="@drawable/nav_background" android:layout_below="@+id/ivPopupButton" android:id="@+id/tvSpacer" android:layout_width="fill_parent" android:layout_height="40dip">
+	<RelativeLayout android:fadingEdge="none" android:visibility="invisible" android:background="@drawable/nav_background" android:layout_below="@+id/ivPopupButton" android:id="@+id/tvSpacer" android:layout_width="fill_parent" android:layout_height="40dip">
 		<ImageView  android:src="@drawable/nav_previous"   android:id="@+id/ImageViewPreviousPost" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
 		<ImageView  android:layout_toRightOf="@+id/ImageViewPreviousPost" android:src="@drawable/nav_next" android:id="@+id/ImageViewNextPost" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
-		<ImageView  android:layout_alignParentRight="true"  android:src="@drawable/nav_reload" android:id="@+id/ImageViewReload" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
+		<ImageView  android:layout_alignParentRight="true" android:layout_marginRight="5dip"  android:src="@drawable/nav_reload" android:id="@+id/ImageViewReload" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
 	</RelativeLayout>
 	
 	<ListView 
@@ -83,5 +83,6 @@
 		android:choiceMode="singleChoice"
 		android:dividerHeight="1px"
 		android:divider="#333333"
+		android:fadingEdge="none"
 		android:focusableInTouchMode="true"/>
 </RelativeLayout>
