@@ -639,8 +639,9 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			return;
 		
 		TextView threadPreview = null;
-		View vi = (View) l.getChildAt(currentPosition - l.getFirstVisiblePosition()+1);
-
+		
+	
+		View vi = (View) l.getChildAt(currentPosition - l.getFirstVisiblePosition());
 		if (vi != null)
 			threadPreview = (TextView)vi.findViewById(R.id.TextViewThreadPreview);
 		if (threadPreview != null)
@@ -651,6 +652,12 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 
 		int position = currentPosition;
 		
+		l.setFocusableInTouchMode(true);
+		l.setSelection(position+direction);
+		l.refreshDrawableState();
+		
+		vi = null;
+		threadPreview = null; // clear the last thread selection
 		vi = (View) l.getChildAt((position + direction) - l.getFirstVisiblePosition());
 		if (vi != null)
 			threadPreview = (TextView)vi.findViewById(R.id.TextViewThreadPreview);
@@ -662,12 +669,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		final AdapterThreadedView tva = (AdapterThreadedView) getListAdapter();
 		tva.setSelectedRow(position+direction);
 		
-
 		currentPosition = position + direction;
-
-		l.setFocusableInTouchMode(true);
-		l.setSelection(position+direction);
-		
 		
 		UpdatePostText(position+direction,true);
 		
