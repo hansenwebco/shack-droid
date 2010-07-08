@@ -56,6 +56,7 @@ import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -150,6 +151,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			}
 		}
 
+		//setWindowSizes();
+		
 		pop = new ShackPopup();
 		pop.addListener(this);
 		w = pop.Init(this, w);
@@ -196,6 +199,11 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 	PopupWindow w;
 	@Override
     public void onWindowFocusChanged(boolean hasFocus) { 
+		setWindowSizes();
+		
+	}
+
+	private void setWindowSizes() {
 		// Adjust the scroll view based on the size of the screen
 		// this doesn't account for the titlebar or the statusbar
 		// no methods appear to be available to determine them 
@@ -204,15 +212,20 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		
 		final int statusTitleBar = 0; // TODO: really would like to not hardcode this
 		
+		final RelativeLayout spacer = (RelativeLayout) findViewById(R.id.tvSpacer);
+		//final ImageButton next = (ImageButton)findViewById(R.id.ImageViewNextPost);
+		//final ImageButton prev = (ImageButton)findViewById(R.id.ImageViewPreviousPost);
+		
 		final int offset = tv.getTotalPaddingTop() + tv.getHeight() +  sv.getTop() ;
 		final int height = getWindowManager().getDefaultDisplay().getHeight();
 
-		sv.getLayoutParams().height = (height - offset - statusTitleBar) / 2;
+		sv.getLayoutParams().height = ((height - offset - statusTitleBar) / 2)- (spacer.getHeight()/2);
 		sv.requestLayout();		
 		
-		final TextView spacer = (TextView) findViewById(R.id.tvSpacer);
-		spacer.setBackgroundColor(Color.parseColor("#333333"));
-		
+		//next.setVisibility(View.VISIBLE);
+		//prev.setVisibility(View.VISIBLE);
+		//spacer.setBackgroundColor(Color.parseColor("#070707"));
+		spacer.setVisibility(View.VISIBLE);
 	}
 
 	@Override 
@@ -381,6 +394,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 
 			ShowData();
 			UpdateWatchedPosts();
+			
 		}
 	};
 	
