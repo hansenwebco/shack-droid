@@ -37,8 +37,8 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.Html.TagHandler;
+import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.util.Linkify;
 import android.text.util.Linkify.MatchFilter;
@@ -67,6 +67,7 @@ import android.widget.TextView.BufferType;
 
 import com.stonedonkey.shackdroid.ShackGestureListener.ShackGestureEvent;
 import com.stonedonkey.shackdroid.ShackPopup.ShackPopupEvent;
+import com.stonedonkey.shackdroid.SpoilerSpan;
 
 /**
  * @author markh
@@ -80,7 +81,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 	private String postID;
 	private String errorText = "";
 	private int currentPosition = 0;
-	private boolean spoilerText= false;
 	private Boolean threadLoaded = true;
 	private Boolean isNWS = false;
 
@@ -344,7 +344,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			final SAXParser sp = spf.newSAXParser();
 
 			//  Get the XMLReader of the SAXParser we created.
-			final XMLReader xr = sp.getXMLReader();
+			final XMLReader xr = sp.getXMLReader();
+
 			// Create a new ContentHandler and apply it to the XML-Reader
 			final SaxHandlerTopicView saxHandler = new SaxHandlerTopicView(this,"threaded");
 			xr.setContentHandler(saxHandler);
@@ -500,7 +501,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 
 		if (addSpoilerMarkers == true) 
 			SpoilerTextView();
-				// TODO: This was causing links to break for some reason, for instance
+		
+		// TODO: This was causing links to break for some reason, for instance
 		// http://pancake_humper.shackspace.com/
 		// it removes the pancake_ and goes to http://humper.shackspace... bug in linkify maybe??
 		Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
@@ -572,11 +574,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 						@Override
 						public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 							menu.setHeaderTitle("Post Options");
-							
-							if (spoilerText == true) {
-								menu.add(0, 10, 0, "Remove Spoiler");
-								//menu.add(0, 11, 0, "Copy Text"); // might be useful one day
-							}
 							menu.add(0,1,0,"Copy Post Url to Clipboard");
 							menu.add(0, -1, 0, "Cancel");
 						}
@@ -647,7 +644,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		if (threadPreview != null)
 			threadPreview.setBackgroundColor(Color.TRANSPARENT);
 		else {
-			int id = 1;
+			
 		}
 
 		int position = currentPosition;
@@ -676,26 +673,48 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		
 	}
 	
-	private void RemoveSpoiler()
-	{
-		UpdatePostText(currentPosition,false);
-	}
 	private void SpoilerTextView()
 	{
 		// We have to use the Spannable interface to handle spoilering text
 		// not the best but works.
-		spoilerText = false;
 		final TextView tv = (TextView) findViewById(R.id.TextViewPost);
+
 		final String text = tv.getText().toString();
-		int end = 0;
-		while (text.indexOf("!!-",end) >= 0)
+		
+		// early out if there are no spoilers in post
+		if (text.indexOf("!!-") == -1)
+			return;
+
+		// need to allow clicks on this TextView
+		tv.setMovementMethod(LinkMovementMethod.getInstance());
+
+		// avoid annoying orange flicker when clicking on spoiler
+		tv.setHighlightColor(Color.parseColor("#222222"));
+
+		// replace end marker with start marker so we can split on only one of the markers
+		String components[] = text.replaceAll("-!!", "!!-").split("!!-");
+
+		StringBuilder cleanText = new StringBuilder();
+		ArrayList<int[]> spoilerSections = new ArrayList<int[]>(); 
+
+		// build up a list of spoiler sections and a clean version of the post text (no !!- or -!! markers)
+		for (int i = 0; i < components.length; i++)
 		{
-			final int start = text.indexOf("!!-",end);
-			end = text.indexOf("-!!",start);
-			Spannable str = (Spannable) tv.getText();
-			str.setSpan(new BackgroundColorSpan(Color.parseColor("#383838")), start, end+3,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			spoilerText = true;
+			if (i % 2 == 1)	// odd strings in the list are the spoilers
+			{
+				// store start and length of spoiler section
+				spoilerSections.add(new int[] { cleanText.length(), components[i].length() });
+			}
+
+			cleanText.append(components[i]);
 		}
+
+		tv.setText(cleanText);
+
+		// add clickable spans to each spoiler section
+		Spannable str = (Spannable) tv.getText();
+		for (int[] section : spoilerSections)
+			str.setSpan(new SpoilerSpan(tv), section[0], section[0] + section[1], Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);		
 	}
 
 	private void setPostCategoryIcon(String postCat)
@@ -740,7 +759,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		// !!-text-!! like so, and then handle it on the appling text to the TextView
 		if (addSpoilerMarkers == true) {
 			text = text.replaceAll("<span class=\"jt_spoiler\"(.*?)>(.*?)</span>",
-			"<font color=\"#383838\">!!-$2-!!</font>");
+			"!!-$2-!!");
 		}
 		return text;
 	}
@@ -829,9 +848,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		w.dismiss();
 		switch (item.getItemId())
 		{
-			case 10: 
-				RemoveSpoiler();
-				return true;
 			case 1: {
 				//http://www.shacknews.com/laryn.x?id=23004466
 				final String url = "http://www.shacknews.com/laryn.x?id=" + postID;
@@ -936,13 +952,11 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		case ShackPopup.REPLY:
 			doReply();
 			break;
-		case ShackPopup.SPOIL:
-			RemoveSpoiler();
-			break;
 		}
 		w.dismiss();
 	}
-}/**
+}
+/**
  * Used to sort the post array based on the ID
  */
 
