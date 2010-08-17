@@ -38,7 +38,6 @@ import android.text.Spannable;
 import android.text.Spanned;
 import android.text.Html.TagHandler;
 import android.text.method.LinkMovementMethod;
-import android.text.method.ScrollingMovementMethod;
 import android.text.style.StrikethroughSpan;
 import android.text.util.Linkify;
 import android.text.util.Linkify.MatchFilter;
@@ -67,7 +66,6 @@ import android.widget.TextView.BufferType;
 
 import com.stonedonkey.shackdroid.ShackGestureListener.ShackGestureEvent;
 import com.stonedonkey.shackdroid.ShackPopup.ShackPopupEvent;
-import com.stonedonkey.shackdroid.SpoilerSpan;
 
 /**
  * @author markh
@@ -115,7 +113,34 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		TextView posterName = (TextView)findViewById(R.id.TextViewThreadAuthor);
 		TextView postDate = (TextView)findViewById(R.id.TextViewThreadViewPostDate);
 		
-		tv.setMovementMethod(new ScrollingMovementMethod());
+		final Boolean navBar = prefs.getBoolean("showNavigationBars", true);
+		if (navBar)
+		{
+			
+		}
+		else
+		{
+			final ImageView prev = (ImageView)findViewById(R.id.ImageViewPreviousPost);
+			final ImageView next = (ImageView)findViewById(R.id.ImageViewNextPost);
+			final ImageView reload = (ImageView)findViewById(R.id.ImageViewReload);
+			final RelativeLayout rl = (RelativeLayout)findViewById(R.id.tvSpacer);
+			
+			prev.setVisibility(View.GONE);
+			next.setVisibility(View.GONE);
+			reload.setVisibility(View.GONE);
+			
+			rl.setBackgroundDrawable(null);
+			rl.setBackgroundColor(Color.parseColor("#222222"));
+	
+			
+			//RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,4);
+			//rl.setLayoutParams(lp);
+
+		
+		}
+		
+		
+		//tv.setMovementMethod(new ScrollingMovementMethod());
 		tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 		tv.setTypeface(face);
 		posterName.setTypeface(face);

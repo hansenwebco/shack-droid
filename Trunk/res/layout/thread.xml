@@ -69,7 +69,7 @@
 	
 	<RelativeLayout android:fadingEdge="none" android:visibility="invisible" android:background="@drawable/nav_background" android:layout_below="@+id/textAreaScroller" android:id="@+id/tvSpacer" android:layout_width="fill_parent" android:layout_height="40dip">
 		<ImageView  android:src="@drawable/nav_previous"   android:id="@+id/ImageViewPreviousPost" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
-		<ImageView  android:layout_toRightOf="@+id/ImageViewPreviousPost" android:src="@drawable/nav_next" android:id="@+id/ImageViewNextPost" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
+		<ImageView android:layout_marginLeft="10dip" android:layout_toRightOf="@+id/ImageViewPreviousPost" android:src="@drawable/nav_next" android:id="@+id/ImageViewNextPost" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
 		<ImageView  android:layout_alignParentRight="true" android:layout_marginRight="5dip"  android:src="@drawable/nav_reload" android:id="@+id/ImageViewReload" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
 	</RelativeLayout>
 	
