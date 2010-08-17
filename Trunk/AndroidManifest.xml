@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.stonedonkey.shackdroid" android:versionCode="18" android:versionName="1.691"> <!-- android fail can't set versionName via strings.xml  -->
-    <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
+    <application android:restoreAnyVersion="true" android:backupAgent="com.stonedonkey.shackdroid.BackupAgent" android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
         <service android:process=":remote" android:name=".ActivityShackDroidServices" >
         </service>
        <receiver android:name=".ShackDroidServicesReceiver">
@@ -58,7 +58,7 @@
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 	<uses-permission android:name="android.permission.CAMERA"></uses-permission>
 	<uses-permission android:name="android.permission.BOOT_COMPLETED"></uses-permission>
-	<uses-sdk  android:minSdkVersion="3" android:targetSdkVersion="5"/>
+	<uses-sdk  android:minSdkVersion="3" android:targetSdkVersion="8"/>
 	<uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
@@ -68,4 +68,5 @@
 <supports-screens android:largeScreens="true" android:anyDensity="true" android:resizeable="true" android:smallScreens="true" android:normalScreens="true"></supports-screens>
 
 <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
+<uses-permission android:name="android.permission.BACKUP"></uses-permission>
 </manifest> 
