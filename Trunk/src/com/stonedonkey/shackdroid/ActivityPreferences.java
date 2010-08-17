@@ -2,6 +2,7 @@ package com.stonedonkey.shackdroid;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,6 +33,8 @@ public class ActivityPreferences extends PreferenceActivity {
 		this.setTitle("ShackDroid - Settings");
 				
 		addPreferencesFromResource(R.xml.preferences);
+
+
 		
 		//final String versionCode = getString(R.string.version_id);
 		final Preference version = (Preference)findPreference("version");
@@ -125,7 +128,8 @@ public class ActivityPreferences extends PreferenceActivity {
 	
 		Boolean result = super.onPreferenceTreeClick(preferenceScreen, preference);
 
-		
+		//if (Integer.parseInt(android.os.Build.VERSION.SDK) >= 8)
+		//	BackupManager.dataChanged("com.stonedonkey.shackdroid");
 		
 		if (preference.getKey().equals("NewVersion"))
 		{
@@ -170,6 +174,8 @@ public class ActivityPreferences extends PreferenceActivity {
 				
 			}, color);
 			cpd.show();
+			
+
 			return true;
 		}
 		
@@ -253,8 +259,7 @@ public class ActivityPreferences extends PreferenceActivity {
 			// do nothing
 		}
 	}
-	
-	
+
 	private void newVersionCheck(boolean showNoUpdate) {
 
 		String message = "Unable to complete version check, please try again later.";
@@ -291,6 +296,14 @@ public class ActivityPreferences extends PreferenceActivity {
 			.setPositiveButton("OK",null)
 			.setMessage(message).show();
 		}
+	}
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		
+	
+		
 	}
 	
 	
