@@ -112,6 +112,12 @@
 		>
 		</Preference>			
 
+         	<CheckBoxPreference 
+    		android:key="showNavigationBars" 
+    		android:title="Show Navigation Bars"
+    		android:defaultValue="true" 
+    		android:summary="Show on screen navigation bars in threads."/>
+
 		<Preference
 		android:key="clearWatchList"
 		android:title="Clear Watch List"
