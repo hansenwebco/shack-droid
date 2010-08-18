@@ -123,7 +123,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			final ImageView prev = (ImageView)findViewById(R.id.ImageViewPreviousPost);
 			final ImageView next = (ImageView)findViewById(R.id.ImageViewNextPost);
 			final ImageView reload = (ImageView)findViewById(R.id.ImageViewReload);
-			final RelativeLayout rl = (RelativeLayout)findViewById(R.id.tvSpacer);
+			final RelativeLayout rl = (RelativeLayout)findViewById(R.id.RelativeLayoutThreadNav);
 			
 			prev.setVisibility(View.GONE);
 			next.setVisibility(View.GONE);
@@ -260,7 +260,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		
 		final int statusTitleBar = 0; // TODO: really would like to not hardcode this
 		
-		final RelativeLayout spacer = (RelativeLayout) findViewById(R.id.tvSpacer);
+		final RelativeLayout spacer = (RelativeLayout) findViewById(R.id.RelativeLayoutThreadNav);
 		spacer.setVisibility(View.VISIBLE);
 		
 		final int offset = tv.getTotalPaddingTop() + tv.getHeight() +  sv.getTop() ;
