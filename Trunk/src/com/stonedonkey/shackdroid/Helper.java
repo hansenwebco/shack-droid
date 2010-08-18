@@ -46,6 +46,8 @@ import android.view.WindowManager;
 
 public class Helper {
 
+	static final Object[] dataLock = new Object[0];
+	
 	public static String FormatShackDate(String unformattedDate) 
 	{
 		String fixedDate  = null;

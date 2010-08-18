@@ -566,11 +566,13 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			if (getFileStreamPath("watch.cache").exists()) {
 
 				try {
-					final FileInputStream fileIn = openFileInput("watch.cache");
-					final ObjectInputStream in = new ObjectInputStream(fileIn);
-					watchCache = (ArrayList<ShackPost>)in.readObject();
-					in.close();
-					fileIn.close();
+					synchronized (Helper.dataLock) {
+						final FileInputStream fileIn = openFileInput("watch.cache");
+						final ObjectInputStream in = new ObjectInputStream(fileIn);
+						watchCache = (ArrayList<ShackPost>)in.readObject();
+						in.close();
+						fileIn.close();
+					}
 				}
 				catch (Exception ex){ Log.e("ShackDroid", "Error Loading watch.cache"); }
 			}
@@ -641,11 +643,13 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		
 		
 		try {
-			final FileInputStream fileIn = openFileInput("watch.cache");
-			final ObjectInputStream in = new ObjectInputStream(fileIn);
-			watchCache = (ArrayList<ShackPost>)in.readObject();
-			in.close();
-			fileIn.close();
+			synchronized (Helper.dataLock) {
+				final FileInputStream fileIn = openFileInput("watch.cache");
+				final ObjectInputStream in = new ObjectInputStream(fileIn);
+				watchCache = (ArrayList<ShackPost>)in.readObject();
+				in.close();
+				fileIn.close();
+			}
 		}
 		catch (Exception ex){ Log.e("ShackDroid", "Error Loading watch.cache"); }
 		
@@ -760,11 +764,13 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 
 	private void saveWatchCache(ArrayList<ShackPost> watchCache) throws IOException
 	{
-		final FileOutputStream fos = openFileOutput("watch.cache",MODE_PRIVATE);
-		final ObjectOutputStream os = new ObjectOutputStream(fos);
-		os.writeObject(watchCache);
-		os.close();
-		fos.close();
+		synchronized (Helper.dataLock) {
+			final FileOutputStream fos = openFileOutput("watch.cache",MODE_PRIVATE);
+			final ObjectOutputStream os = new ObjectOutputStream(fos);
+			os.writeObject(watchCache);
+			os.close();
+			fos.close();
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -897,11 +903,13 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			
 			
 			try {
-				final FileInputStream fileIn = openFileInput("watch.cache");
-				final ObjectInputStream in = new ObjectInputStream(fileIn);
-				watchCache = (ArrayList<ShackPost>) in.readObject();
-				in.close();
-				fileIn.close();
+				synchronized (Helper.dataLock) {
+					final FileInputStream fileIn = openFileInput("watch.cache");
+					final ObjectInputStream in = new ObjectInputStream(fileIn);
+					watchCache = (ArrayList<ShackPost>) in.readObject();
+					in.close();
+					fileIn.close();
+				}
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
