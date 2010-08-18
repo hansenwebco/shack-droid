@@ -2,12 +2,13 @@ package com.stonedonkey.shackdroid;
 
 import java.io.IOException;
 
+import android.app.backup.BackupAgentHelper;
 import android.app.backup.BackupDataInput;
 import android.app.backup.BackupDataOutput;
 import android.app.backup.SharedPreferencesBackupHelper;
 import android.os.ParcelFileDescriptor;
 
-public class ShackDroidBackupAgent extends BackupAgentHelperWrapper {
+public class ShackDroidBackupAgent extends BackupAgentHelper {
 
     static final String PREFS = "user_preferences";	  // The name of the SharedPreferences file
     static final String PREFS_BACKUP_KEY = "prefs";   // A key to uniquely identify the set of backup data
@@ -24,7 +25,8 @@ public class ShackDroidBackupAgent extends BackupAgentHelperWrapper {
 	public void onCreate() {
 		super.onCreate();
 		
-		SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(getBackupAgentInstance(),getDefaultSharedPreferencesName());
+		//SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(getBackupAgentInstance(),getDefaultSharedPreferencesName());
+		SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(this,getDefaultSharedPreferencesName());
 		addHelper(PREFS_BACKUP_KEY, helper);
 		
 		 //SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(this, PREFS);
