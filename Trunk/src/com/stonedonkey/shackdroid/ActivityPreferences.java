@@ -35,12 +35,9 @@ public class ActivityPreferences extends PreferenceActivity {
 		this.setTitle("ShackDroid - Settings");
 				
 		addPreferencesFromResource(R.xml.preferences);
-
-
-		
+	
 		//final String versionCode = getString(R.string.version_id);
 		final Preference version = (Preference)findPreference("version");
-		
 		
 		try {
 			final PackageInfo pi = this.getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -195,10 +192,12 @@ public class ActivityPreferences extends PreferenceActivity {
 				public void onClick(DialogInterface dialog, int whichButton) {
 				
 					try {
-						if (getFileStreamPath("watch.cache").exists()) { 
-							getFileStreamPath("watch.cache").delete();
-							Toast.makeText(getApplicationContext(),"Watch List Cleared",Toast.LENGTH_SHORT).show();
-							
+						synchronized (Helper.dataLock) {
+							if (getFileStreamPath("watch.cache").exists()) { 
+								getFileStreamPath("watch.cache").delete();
+								Toast.makeText(getApplicationContext(),"Watch List Cleared",Toast.LENGTH_SHORT).show();
+								
+							}
 						}
 					}
 					catch (Exception ex)

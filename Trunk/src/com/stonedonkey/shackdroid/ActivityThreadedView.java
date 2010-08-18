@@ -452,11 +452,13 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		if (getFileStreamPath("watch.cache").exists()) {
 
 			try {
-				final FileInputStream fileIn = openFileInput("watch.cache");
-				final ObjectInputStream in = new ObjectInputStream(fileIn);
-				watchCache = (ArrayList<ShackPost>)in.readObject();
-				in.close();
-				fileIn.close();
+				synchronized (Helper.dataLock) {
+					final FileInputStream fileIn = openFileInput("watch.cache");
+					final ObjectInputStream in = new ObjectInputStream(fileIn);
+					watchCache = (ArrayList<ShackPost>)in.readObject();
+					in.close();
+					fileIn.close();
+				}
 			}
 			catch (Exception ex){ Log.e("ShackDroid", "Thread Error Loading watch.cache"); }
 		}
@@ -476,11 +478,13 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			}
 		}
 		try {
-			final FileOutputStream fos = openFileOutput("watch.cache",MODE_PRIVATE);
-			final ObjectOutputStream os = new ObjectOutputStream(fos);
-			os.writeObject(watchCache);
-			os.close();
-			fos.close();
+			synchronized (Helper.dataLock) {
+				final FileOutputStream fos = openFileOutput("watch.cache",MODE_PRIVATE);
+				final ObjectOutputStream os = new ObjectOutputStream(fos);
+				os.writeObject(watchCache);
+				os.close();
+				fos.close();
+			}
 		} catch (Exception e) {
 		}
 

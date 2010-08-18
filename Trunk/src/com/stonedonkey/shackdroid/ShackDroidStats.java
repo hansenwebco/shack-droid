@@ -29,6 +29,7 @@ public class ShackDroidStats  implements Serializable {
 	private int viewedChatty = 0;			// *
 	private int viewedStats = 0;			// *
 	
+
 	
 	public static ShackDroidStats GetUserStats(Context context) throws StreamCorruptedException, IOException
 	{
@@ -36,15 +37,18 @@ public class ShackDroidStats  implements Serializable {
 			
 			ShackDroidStats stats = null;
 			
-			final FileInputStream fileIn = context.openFileInput("stats.cache");
-			final ObjectInputStream in = new ObjectInputStream(fileIn);
-			try {
-				stats = (ShackDroidStats) in.readObject();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+			synchronized (Helper.dataLock)
+			{
+				final FileInputStream fileIn = context.openFileInput("stats.cache");
+				final ObjectInputStream in = new ObjectInputStream(fileIn);
+				try {
+					stats = (ShackDroidStats) in.readObject();
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+				in.close();
+				fileIn.close();
 			}
-			in.close();
-			fileIn.close();
 			
 			return stats;
 		}
@@ -56,12 +60,15 @@ public class ShackDroidStats  implements Serializable {
 	{
 		if (stats == null)
 			stats = new  ShackDroidStats();
-				
-		final FileOutputStream fos = context.openFileOutput("stats.cache",Context.MODE_PRIVATE);
-		final ObjectOutputStream os = new ObjectOutputStream(fos);
-		os.writeObject(stats);
-		os.close();
-		fos.close();	
+			
+		synchronized (Helper.dataLock)
+		{
+			final FileOutputStream fos = context.openFileOutput("stats.cache",Context.MODE_PRIVATE);
+			final ObjectOutputStream os = new ObjectOutputStream(fos);
+			os.writeObject(stats);
+			os.close();
+			fos.close();	
+		}
 		
 	}
 	public static void AddPostsViewed(Context context)
