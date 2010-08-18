@@ -1,8 +1,10 @@
 package com.stonedonkey.shackdroid;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -127,9 +129,12 @@ public class ActivityPreferences extends PreferenceActivity {
 	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,	Preference preference) {
 	
 		Boolean result = super.onPreferenceTreeClick(preferenceScreen, preference);
-
-		//if (Integer.parseInt(android.os.Build.VERSION.SDK) >= 8)
-		//	BackupManager.dataChanged("com.stonedonkey.shackdroid");
+		
+		try {
+			doBackUp();
+		} catch (Exception e) {
+			// TODO: log
+		}
 		
 		if (preference.getKey().equals("NewVersion"))
 		{
@@ -226,6 +231,28 @@ public class ActivityPreferences extends PreferenceActivity {
 		}
 		return result;
 	}
+ 
+	
+	
+	private void doBackUp() throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException, ClassNotFoundException {
+		
+		Boolean backUpAvail = false;
+		try {
+			BackupAgentHelperWrapper.checkAvailable();
+			backUpAvail = true;
+		}
+		catch (Throwable t)
+		{
+			backUpAvail = false;
+		}
+		
+		if (backUpAvail)
+		{
+			 Method dataChanged = Class.forName("android.app.backup.BackupManager").getMethod("dataChanged", String.class);
+             dataChanged.invoke(null, "com.stonedonkey.shackdroid");
+		}
+	}
+	
 	private void CheckForUpdate(boolean force) {
 		// have we seen this update?
 		try {

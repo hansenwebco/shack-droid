@@ -2,13 +2,12 @@ package com.stonedonkey.shackdroid;
 
 import java.io.IOException;
 
-import android.app.backup.BackupAgentHelper;
 import android.app.backup.BackupDataInput;
 import android.app.backup.BackupDataOutput;
 import android.app.backup.SharedPreferencesBackupHelper;
 import android.os.ParcelFileDescriptor;
 
-public class BackupAgent extends BackupAgentHelper {
+public class ShackDroidBackupAgent extends BackupAgentHelperWrapper {
 
     static final String PREFS = "user_preferences";	  // The name of the SharedPreferences file
     static final String PREFS_BACKUP_KEY = "prefs";   // A key to uniquely identify the set of backup data
@@ -18,19 +17,18 @@ public class BackupAgent extends BackupAgentHelper {
     static final String FILE_STATS_CACHE = "stats.cache";
     static final String FILES_BACKUP_KEY = "caches";
     
-    private static boolean tryToBackupData = true;
+    //private static boolean tryToBackupData = true;
 
     
     @Override
 	public void onCreate() {
 		super.onCreate();
 		
-		SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(this,getDefaultSharedPreferencesName());
+		SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(getBackupAgentInstance(),getDefaultSharedPreferencesName());
 		addHelper(PREFS_BACKUP_KEY, helper);
 		
 		 //SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(this, PREFS);
-	     
-	
+
 	     //FileBackupHelper caches = new FileBackupHelper(this, FILE_WATCH_CACHE, FILE_SHACK_MESSAGE_CACHE,FILE_STATS_CACHE,FILES_BACKUP_KEY);
 	     //addHelper(FILES_BACKUP_KEY,caches);
 	     
@@ -48,8 +46,6 @@ public class BackupAgent extends BackupAgentHelper {
 	
 	}
    private String getDefaultSharedPreferencesName() {
-        // Transdroid uses the PreferenceManager.getDefaultPreferences() which, according
-        // to the Android source code, equals the package name + _preferences
         return this.getPackageName() + "_preferences";
     }
 
