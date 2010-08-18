@@ -67,19 +67,19 @@
 	android:layout_below="@+id/textAreaScroller"
 	android:src="@drawable/button" android:layout_centerInParent="true"/>
 	
-	<RelativeLayout android:fadingEdge="none" android:visibility="invisible" android:background="@drawable/nav_background" android:layout_below="@+id/ivPopupButton" android:id="@+id/tvSpacer" android:layout_width="fill_parent" android:layout_height="40dip">
-		<ImageView  android:src="@drawable/nav_previous"   android:id="@+id/ImageViewPreviousPost" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
-		<ImageView  android:layout_toRightOf="@+id/ImageViewPreviousPost" android:src="@drawable/nav_next" android:id="@+id/ImageViewNextPost" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
-		<ImageView  android:layout_alignParentRight="true" android:layout_marginRight="2dip"  android:src="@drawable/nav_reload" android:id="@+id/ImageViewReload" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
+	<RelativeLayout android:fadingEdge="none" android:visibility="invisible" android:background="@drawable/nav_background2" android:layout_below="@+id/textAreaScroller" android:id="@+id/RelativeLayoutThreadNav" android:layout_width="fill_parent" android:layout_height="40dip">
+		<ImageView  android:layout_marginLeft="4dip" android:src="@drawable/nav_previous2"   android:id="@+id/ImageViewPreviousPost" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
+		<ImageView  android:layout_marginLeft="10dip" android:layout_toRightOf="@+id/ImageViewPreviousPost" android:src="@drawable/nav_next2" android:id="@+id/ImageViewNextPost" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
+		<ImageView  android:layout_marginLeft="4dip" android:layout_alignParentRight="true" android:layout_marginRight="5dip"  android:src="@drawable/nav_reload2" android:id="@+id/ImageViewReload" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
 	</RelativeLayout>
 	
 	<ListView 
-		android:paddingTop="2px"
+		android:paddingTop="0px"
 		android:id="@android:id/list" 
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent" 
 		android:background="#000000"
-		android:layout_below="@+id/tvSpacer"
+		android:layout_below="@+id/RelativeLayoutThreadNav"
 		android:choiceMode="singleChoice"
 		android:dividerHeight="1px"
 		android:divider="#333333"
