@@ -678,8 +678,11 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 
 		int position = currentPosition;
 		
+		final int rows = l.getLastVisiblePosition() - l.getFirstVisiblePosition() ;
+		
 		l.setFocusableInTouchMode(true);
-		l.setSelection(position+direction);
+		l.setSelection(position + direction + - (rows/2));
+		
 		l.refreshDrawableState();
 		
 		vi = null;
