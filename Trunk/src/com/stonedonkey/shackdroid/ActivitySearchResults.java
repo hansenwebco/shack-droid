@@ -61,7 +61,7 @@ public class ActivitySearchResults extends ListActivity implements Runnable {
 	public void run() {
 		try {
 			
-			URL url = new URL("http://shackapi.stonedonkey.com/search/?SearchTerm=" + URLEncoder.encode(searchTerm,"UTF-8") + "&Author="+ author + "&ParentAuthor=" + parentAuthor + "&page=" + currentPage);
+			URL url = new URL("http://shackapi.stonedonkey.com/search/?SearchTerm=" + URLEncoder.encode(searchTerm,"UTF-8") + "&Author="+ URLEncoder.encode(author,"UTF-8") + "&ParentAuthor=" + URLEncoder.encode(parentAuthor,"UTF-8") + "&page=" + currentPage);
 			
 			//SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			//URL url = new URL(prefs.getString("shackFeedURL",getString(R.string.default_api)) + "/search/?SearchTerm=" + URLEncoder.encode(searchTerm,"UTF-8") + "&Author="+ author + "&ParentAuthor=" + parentAuthor + "&page=" + currentPage);
