@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+<ListView
+	android:id="@android:id/list" 
+	android:layout_width="wrap_content" 
+	android:layout_height="fill_parent" 
+	android:textColor="#FFFFFF"
+	android:dividerHeight="1px"
+	android:divider="#333333"
+	
+	/>
+  
+<SlidingDrawer 
+android:id="@+id/SlidingDrawer01" 
+     android:layout_width="fill_parent"
+     android:layout_height="fill_parent"
+	 android:animateOnClick="true"
+     android:handle="@+id/TextViewTrayHandle"
+     android:content="@+id/bookMarkParent" 
+     android:orientation="vertical" 
+     android:layout_alignParentBottom="true"
+     android:visibility="gone"
+     android:paddingTop="200dip">
+
+     
+<TextView
+	android:id="@+id/TextViewTrayHandle"
+	android:background="@drawable/darkgrey_gradient"
+ 	android:layout_width="fill_parent"
+     android:layout_height="35dip"
+     android:text="Watching 3 threads"
+     android:gravity="center_vertical"
+     android:focusable="false"
+     android:focusableInTouchMode="false"
+	>
+	</TextView>         
+<RelativeLayout
+         android:id="@id/bookMarkParent"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:background="#111111">
+	    
+         <ListView 
+         	android:id="@+id/ListViewWatchedThreads" 
+			android:layout_width="fill_parent" 
+			android:layout_height="fill_parent" 
+			android:textColor="#FFFFFF"
+			android:dividerHeight="1px"
+			android:divider="#333333">
+         </ListView>
+</RelativeLayout>
+</SlidingDrawer>
+
+</RelativeLayout>

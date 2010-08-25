@@ -1,0 +1,213 @@
+<PreferenceScreen  xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+            android:title="Account Settings">
+        <EditTextPreference
+                android:key="shackLogin"
+                android:title="Login"
+                android:summary="Set ShackNews Login"
+                android:singleLine="true"
+                android:dialogTitle="ShackNews Login" />
+            
+        <EditTextPreference
+                android:key="shackPassword"
+                android:title="Password"
+                android:summary="Set ShackNews Password"
+                android:dialogTitle="ShackNews Password" 
+                android:singleLine="true"
+                android:password="true"/>
+        	<CheckBoxPreference 
+    		android:key="allowShackMessages" 
+    		android:title="Enable Shack Messages"
+    		android:defaultValue="false" 
+    		android:textSize="10sp"
+    		android:summary="NOTE: This will pass your info to the API not directly to ShackNews."/>    
+    		
+    	 <CheckBoxPreference 
+    	 	android:key="allowCheckShackMessages" 
+    		android:title="Notify Shack Messages" 
+    		android:defaultValue="false"
+    		android:dependency="allowShackMessages"
+    		android:summary="Check for Shack Messages in the background, every 15 minutes."/>
+    		    		
+    		                
+    </PreferenceCategory>
+    
+    
+    <PreferenceCategory  android:title="Chatty Filters">    
+    
+    		<CheckBoxPreference 
+    		android:key="allowNWS" 
+    		android:title="Allow NWS" 
+    		android:defaultValue="true"
+    		android:summary="Show me posts with boobies."/>
+    		
+    		<CheckBoxPreference 
+    		android:key="allowPolitical" 
+    		android:title="Allow Political/Religious" 
+    		android:defaultValue="true"
+    		android:summary="Show me posts with arguments."/>    		
+    
+			<CheckBoxPreference 
+    		android:key="allowStupid" 
+    		android:title="Allow Stupid"
+    		android:defaultValue="true" 
+    		android:summary="Show me the best posts."/>    
+    
+    		<CheckBoxPreference 
+    		android:key="allowInteresting" 
+    		android:title="Allow Interesting"
+    		android:defaultValue="true" 
+    		android:summary="Show me the interesting posts."/>    
+    
+        	<CheckBoxPreference 
+    		android:key="allowOffTopic" 
+    		android:title="Allow Off Topic"
+    		android:defaultValue="true" 
+    		android:summary="Country songs backwards."/>    
+    
+    </PreferenceCategory>
+ <PreferenceCategory android:title="Chatty Settings">
+         
+             <ListPreference
+    			android:key="showAuthor"
+    			android:entryValues ="@array/showAuthorValues"
+    			android:entries="@array/showAuthor"
+    			android:title="Show Threads I've Posted In"
+    			android:summary="Add an indicator to threads I've replied to."
+    			android:defaultValue="count"
+    		/>    
+         
+         	<CheckBoxPreference 
+    		android:key="highlightUserThreads" 
+    		android:title="Highlight My Posts"
+    		android:defaultValue="true" 
+    		android:summary="Highlight my posts blue in threaded view."/>
+    		
+  		   		
+    		<ListPreference
+    			android:key="fontSize"
+    			android:entryValues ="@array/fontSizes"
+    			android:entries="@array/fontSizes"
+    			android:title="Font Size"
+    			android:summary="Set the font size post text."
+    			android:defaultValue="12"
+    		/>
+    		
+        	<ListPreference
+    			android:key="threadHighlight"
+    			android:entryValues ="@array/threadedViewValues"
+    			android:entries="@array/threadedView"
+    			android:title="Thread Highlighting"
+    			android:summary="Choose how ShackDroid highlights new posts in threads."
+    			android:defaultValue="1"
+    		/>	    	
+    		
+    	<Preference
+		android:key="chooseHighlightColor"
+		android:title="New Thread Highlight Color"
+		android:summary="Choose color to highlight new threads with."
+		android:dependency="threadHighlight"
+		android:defaultValue="#E5EF49"
+		
+		>
+		</Preference>			
+
+         	<CheckBoxPreference 
+    		android:key="showNavigationBars" 
+    		android:title="Show Navigation Bars"
+    		android:defaultValue="true" 
+    		android:summary="Show on screen navigation bars in threads."/>
+
+		<Preference
+		android:key="clearWatchList"
+		android:title="Clear Watch List"
+		android:summary="Clear the list of threads your currently watching.">
+		</Preference>		    		    
+    		    
+ </PreferenceCategory>   
+ 
+  <PreferenceCategory  android:title="Application Settings">
+    	
+    	
+             <ListPreference
+    			android:key="orientation"
+    			android:entryValues ="@array/orientationValues"
+    			android:entries="@array/orientation"
+    			android:title="Display Orientation"
+    			android:summary="Set the default orientation for ShackDroid."
+    			android:defaultValue="4"
+    		/>    
+    	 
+
+		<CheckBoxPreference 
+    		android:key="allowCheckForNewVersion" 
+    		android:title="New Version Notify" 
+    		android:defaultValue="true"
+    		android:summary="Notify me of new ShackDroid Versions, not a background service."/>
+
+		<CheckBoxPreference 
+    		android:key="allowMenuAnimations" 
+    		android:title="Allow Menu Animations" 
+    		android:defaultValue="true"
+    		android:summary="Enable or disable the background animation on the main menu."/>
+
+    	<CheckBoxPreference 
+    		android:key="allowFullScreen" 
+    		android:title="Full Screen Mode" 
+    		android:defaultValue="false"
+    		android:summary="Run ShackDroid Fullscreen."/>
+    		
+    	
+    <CheckBoxPreference android:title="Keep screen on" android:key="keepScreenOn" android:summary="Prevents the phone from sleeping when viewing a chatty."></CheckBoxPreference>
+</PreferenceCategory>
+  
+
+
+<PreferenceCategory android:title="Gestures"><CheckBoxPreference android:key="useGestures" android:title="Enable gestures" android:summary="Enable gestures for paging and refreshing"></CheckBoxPreference>
+<CheckBoxPreference android:key="useGestureVibrate" android:summary="Vibrate when a gesture is recognised." android:title="Vibrate on gesture recognition" android:dependency="useGestures"></CheckBoxPreference>
+<CheckBoxPreference android:key="gestureVisible" android:summary="Show gesture being drawn" android:title="Show gestures" android:dependency="useGestures"></CheckBoxPreference>
+</PreferenceCategory>
+
+<PreferenceCategory android:title="ShackDroid">
+	<Preference
+		android:key="version"
+		android:title="Version"
+		android:summary="Version of ShackDroid running.">
+	</Preference>
+	<Preference
+		android:key="NewVersion"
+		android:title="Check for Update"
+		android:summary="Check for ShackDroid update.">
+	</Preference>	
+	<Preference
+		android:key="WhatsNew"
+		android:title="What\'s New"
+		android:summary="What is new in this version of ShackDroid.">
+	</Preference>
+	<Preference
+		android:key="ChangeLog"
+		android:title="Show Full Change Log"
+		android:summary="Retreive the complete list of changes to ShackDroid.">
+	</Preference>	
+	<Preference
+		android:key="Stats"
+		android:title="Statistics"
+		android:summary="Show ShackDroid stats.">
+	</Preference>		
+</PreferenceCategory>
+     <PreferenceCategory android:title="Advanced">
+	    <ListPreference
+	     android:key="shackFeedURL"
+	     android:entries="@array/shackAPIDesc"
+		 android:entryValues="@array/shackAPIs"
+		 android:dialogTitle="Choose Shack API"
+		 android:summary="Change the API Url"
+		 android:title="Shack API"
+		 android:defaultValue="http://shackchatty.com"
+		 android:textSize="12sp"
+	    />
+
+
+</PreferenceCategory>
+
+</PreferenceScreen>
