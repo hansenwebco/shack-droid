@@ -58,7 +58,7 @@ public class HandlerExtendedSites extends Activity {
 		String result = "";
 		URL url;
 		try {
-			url = new URL("http://www.stonedonkey.com/ShackDroid/whatsnew_" + version + ".txt");
+			url = new URL("http://www.stonedonkey.com/ShackDroid/whatsnew.txt");
 			URLConnection conn = url.openConnection();
 			HttpURLConnection httpConnection = (HttpURLConnection) conn;
 

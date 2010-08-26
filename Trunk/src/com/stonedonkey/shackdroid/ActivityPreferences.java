@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,6 +22,10 @@ import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.text.Html;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.stonedonkey.shackdroid.ColorPickerDialog.OnColorChangedListener;
@@ -270,11 +275,20 @@ public class ActivityPreferences extends PreferenceActivity {
 			{
 				final String result = HandlerExtendedSites.WhatsNew(getResources().getString(R.string.version_id),this);
 
+				
+				Context mContext = getApplicationContext();
+				LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+				View layout = inflater.inflate(R.layout.whats_new_dialog,
+				                               (ViewGroup) findViewById(R.id.layout_root));
+
+				TextView text = (TextView) layout.findViewById(R.id.TextViewWhatsNewDialogText);
+				text.setText(Html.fromHtml(result));
+					
 				new AlertDialog.Builder(this)
 				.setTitle("What's New " + vc)
 				.setPositiveButton("OK",null)
 				.setIcon(R.drawable.icon)
-				.setMessage(Html.fromHtml(result)).show();
+				.setView(layout).show();
 
 				SharedPreferences.Editor editor = settings.edit();
 				editor.putBoolean("hasSeenUpdatedVersion" + vc, true);
@@ -284,7 +298,7 @@ public class ActivityPreferences extends PreferenceActivity {
 		}
 		catch (Exception ex)
 		{
-			// do nothing
+			int i = 1;
 		}
 	}
 
