@@ -464,9 +464,10 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		}
 
 
-		if (watchCache != null && watchCache.size() > 0)
+		try {
+		if (watchCache != null && watchCache.size() > 0 && posts != null)
 		{
-			// TODO: Not sure a loop is neccessary here
+			// TODO: Not sure a loop is necessary here
 			for(int counter= 0; counter < watchCache.size();counter++) {
 				if (watchCache.get(counter).getPostID().equals(postID))
 				{
@@ -477,6 +478,13 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 				}
 			}
 		}
+		}
+		catch (Exception ex)
+		{
+			Log.e("ShackDroid", "Error UpdateWatchedPosts() in ActivityThreadedView.java");
+		}
+		
+		
 		try {
 			synchronized (Helper.dataLock) {
 				final FileOutputStream fos = openFileOutput("watch.cache",MODE_PRIVATE);
