@@ -121,7 +121,7 @@
 		<Preference
 		android:key="clearWatchList"
 		android:title="Clear Watch List"
-		android:summary="Clear the list of threads your currently watching.">
+		android:summary="Clear the list of threads you are currently watching.">
 		</Preference>		    		    
     		    
  </PreferenceCategory>   
