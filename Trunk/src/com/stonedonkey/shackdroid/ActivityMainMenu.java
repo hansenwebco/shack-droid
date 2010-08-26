@@ -24,11 +24,14 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class ActivityMainMenu extends ListActivity  {
 
@@ -120,11 +123,19 @@ public class ActivityMainMenu extends ListActivity  {
 			{
 				final String result = HandlerExtendedSites.WhatsNew(getResources().getString(R.string.version_id),this);
 
+				Context mContext = getApplicationContext();
+				LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+				View layout = inflater.inflate(R.layout.whats_new_dialog,
+				                               (ViewGroup) findViewById(R.id.layout_root));
+
+				TextView text = (TextView) layout.findViewById(R.id.TextViewWhatsNewDialogText);
+				text.setText(Html.fromHtml(result));
+					
 				new AlertDialog.Builder(this)
 				.setTitle("What's New " + vc)
 				.setPositiveButton("OK",null)
 				.setIcon(R.drawable.icon)
-				.setMessage(Html.fromHtml(result)).show();
+				.setView(layout).show();
 				
 
 				SharedPreferences.Editor editor = settings.edit();
