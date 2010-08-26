@@ -55,13 +55,16 @@ import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
+import android.widget.AbsListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AbsListView.LayoutParams;
 import android.widget.TextView.BufferType;
 
 import com.stonedonkey.shackdroid.ShackGestureListener.ShackGestureEvent;
@@ -130,10 +133,14 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			reload.setVisibility(View.GONE);
 			
 			rl.setBackgroundDrawable(null);
-			rl.setBackgroundColor(Color.parseColor("#222222"));
+			rl.setBackgroundColor(Color.parseColor("#000000"));
+				
+			//rl.setVisibility(View.GONE);
 	
+			//AbsListView.LayoutParams lp2 = new AbsListView.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+			//getListView().setLayoutParams(lp2);
 			
-			//RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,4);
+			//RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(0,0);
 			//rl.setLayoutParams(lp);
 
 		
@@ -206,8 +213,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		w = pop.Init(this, w);
 		
 		// disabling for now.
-		ImageView b = (ImageView)findViewById(R.id.ivPopupButton);
-		b.setVisibility(View.GONE);
+		ImageView b;// = (ImageView)findViewById(R.id.ivPopupButton);
+		//b.setVisibility(View.GONE);
 		b =null;
 		if (b != null){
 			//b.setVisibility(View.GONE);
