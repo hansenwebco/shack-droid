@@ -690,7 +690,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		
 		l.setFocusableInTouchMode(true);
 		l.setSelection(position + direction + - (rows/2));
-		
+
 		l.refreshDrawableState();
 		
 		vi = null;

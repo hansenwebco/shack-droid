@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -122,7 +123,9 @@ public class ActivityMainMenu extends ListActivity  {
 				new AlertDialog.Builder(this)
 				.setTitle("What's New " + vc)
 				.setPositiveButton("OK",null)
-				.setMessage(result).show();
+				.setIcon(R.drawable.icon)
+				.setMessage(Html.fromHtml(result)).show();
+				
 
 				SharedPreferences.Editor editor = settings.edit();
 				editor.putBoolean("hasSeenUpdatedVersion" + vc, true);

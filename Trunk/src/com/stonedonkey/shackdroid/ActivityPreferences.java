@@ -19,6 +19,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
+import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -272,7 +273,8 @@ public class ActivityPreferences extends PreferenceActivity {
 				new AlertDialog.Builder(this)
 				.setTitle("What's New " + vc)
 				.setPositiveButton("OK",null)
-				.setMessage(result).show();
+				.setIcon(R.drawable.icon)
+				.setMessage(Html.fromHtml(result)).show();
 
 				SharedPreferences.Editor editor = settings.edit();
 				editor.putBoolean("hasSeenUpdatedVersion" + vc, true);
