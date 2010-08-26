@@ -157,6 +157,11 @@ class GetLOLsAsyncTask extends AsyncTask<Void,Void,Integer>{
 				context.setListAdapter(tva);
 			}
 		}
-		context.dismissDialog(1);
+		// wrap this dismiss in a try/catch this throws errors on occasion according to 
+		// error reports
+		try {
+			context.dismissDialog(1);
+		}
+		catch (Exception ex) { } 
 	}
 }
