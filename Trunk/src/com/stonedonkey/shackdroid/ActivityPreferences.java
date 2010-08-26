@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -298,7 +297,7 @@ public class ActivityPreferences extends PreferenceActivity {
 		}
 		catch (Exception ex)
 		{
-			int i = 1;
+			
 		}
 	}
 
