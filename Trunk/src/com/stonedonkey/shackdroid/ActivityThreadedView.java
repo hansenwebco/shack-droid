@@ -116,35 +116,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		TextView posterName = (TextView)findViewById(R.id.TextViewThreadAuthor);
 		TextView postDate = (TextView)findViewById(R.id.TextViewThreadViewPostDate);
 		
-		final Boolean navBar = prefs.getBoolean("showNavigationBars", true);
-		if (navBar)
-		{
-			
-		}
-		else
-		{
-			final ImageView prev = (ImageView)findViewById(R.id.ImageViewPreviousPost);
-			final ImageView next = (ImageView)findViewById(R.id.ImageViewNextPost);
-			final ImageView reload = (ImageView)findViewById(R.id.ImageViewReload);
-			final RelativeLayout rl = (RelativeLayout)findViewById(R.id.RelativeLayoutThreadNav);
-			
-			prev.setVisibility(View.GONE);
-			next.setVisibility(View.GONE);
-			reload.setVisibility(View.GONE);
-			
-			rl.setBackgroundDrawable(null);
-			rl.setBackgroundColor(Color.parseColor("#000000"));
-				
-			//rl.setVisibility(View.GONE);
-	
-			//AbsListView.LayoutParams lp2 = new AbsListView.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-			//getListView().setLayoutParams(lp2);
-			
-			//RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(0,0);
-			//rl.setLayoutParams(lp);
-
 		
-		}
 		
 		
 		//tv.setMovementMethod(new ScrollingMovementMethod());
@@ -259,6 +231,29 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 	}
 
 	private void setWindowSizes() {
+		
+		final Boolean navBar = prefs.getBoolean("showNavigationBars", true);
+		final ImageView prev = (ImageView)findViewById(R.id.ImageViewPreviousPost);
+		final ImageView next = (ImageView)findViewById(R.id.ImageViewNextPost);
+		final ImageView reload = (ImageView)findViewById(R.id.ImageViewReload);
+		final RelativeLayout rl = (RelativeLayout)findViewById(R.id.RelativeLayoutThreadNav);
+		
+		if (navBar)
+		{
+			prev.setVisibility(View.VISIBLE);
+			next.setVisibility(View.VISIBLE);
+			reload.setVisibility(View.VISIBLE);
+			rl.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			prev.setVisibility(View.GONE);
+			next.setVisibility(View.GONE);
+			reload.setVisibility(View.GONE);
+			rl.setVisibility(View.GONE);
+		}
+		
+		
 		// Adjust the scroll view based on the size of the screen
 		// this doesn't account for the titlebar or the statusbar
 		// no methods appear to be available to determine them 
@@ -267,15 +262,11 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		
 		final int statusTitleBar = 0; // TODO: really would like to not hardcode this
 		
-		final RelativeLayout spacer = (RelativeLayout) findViewById(R.id.RelativeLayoutThreadNav);
-		spacer.setVisibility(View.VISIBLE);
-		
 		final int offset = tv.getTotalPaddingTop() + tv.getHeight() +  sv.getTop() ;
 		final int height = getWindowManager().getDefaultDisplay().getHeight();
 
-		sv.getLayoutParams().height = ((height - offset - statusTitleBar ) / 2) - spacer.getHeight();
+		sv.getLayoutParams().height = ((height - offset - statusTitleBar ) / 2) - rl.getHeight();
 		sv.requestLayout();		
-		
 		
 	}
 
