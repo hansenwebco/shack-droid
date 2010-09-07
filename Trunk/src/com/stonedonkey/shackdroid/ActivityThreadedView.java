@@ -55,16 +55,13 @@ import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
-import android.widget.AbsListView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AbsListView.LayoutParams;
 import android.widget.TextView.BufferType;
 
 import com.stonedonkey.shackdroid.ShackGestureListener.ShackGestureEvent;
