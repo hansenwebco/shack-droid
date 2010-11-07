@@ -46,7 +46,7 @@ public class ActivityMainMenu extends ListActivity  {
 		setContentView(R.layout.mainmenu);
 		
 		JSONTopicView jv = new JSONTopicView(this, null, null);
-		jv.GetParsedPosts();
+		//jv.GetParsedPosts();
 
 		ArrayList<ShackMenuItem> menu = new ArrayList<ShackMenuItem>();
 

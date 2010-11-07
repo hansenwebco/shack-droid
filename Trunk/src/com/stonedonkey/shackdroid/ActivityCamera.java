@@ -2,6 +2,7 @@ package com.stonedonkey.shackdroid;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,57 +31,44 @@ import android.content.SharedPreferences;
 import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory.Options;
-import android.hardware.Camera;
-import android.hardware.Camera.AutoFocusCallback;
-import android.hardware.Camera.PictureCallback;
-import android.hardware.Camera.Size;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.util.Log;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.webkit.URLUtil;
-import android.widget.Button;
 import android.widget.Toast;
 
-public class ActivityCamera extends Activity implements AutoFocusCallback, SurfaceHolder.Callback, PictureCallback {
+public class ActivityCamera extends Activity {
 	
 	String _fileUri;
-	Camera _cam;
-	boolean _takingPicture;
+	Uri _localFileUri;
 	byte[] _pictureData;
-	double _scaleAmount = 1; // half size
+	boolean _scaleImage = false;
 	private boolean _highResAvailable;
 	private boolean _extraCompressionNeeded;
 	private boolean _askToPost = false;
 	private AsyncTask<byte[], String, String> uploadTask;
 	
 	public static final String UPLOADED_FILE_URL = "uploadedfileurl";
-	
-	private static final int MODE_TAKING_PICTURE = 0;
-	private static final int MODE_SHOWING_PICTURE = 1;	
+	public static final String TEMP_PICTURE_LOCATION = "/Android/data/com.stonedonkey.shackdroid/files/";
+
+	private static final int CAMERA_TAKE_PIC = 0;
+		
+	private static final int MAX_IMAGE_AREA = 3145728;	// ~3MP
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		Intent caller = getIntent();
-		setContentView(R.layout.camera);
-		
+
 		//If we have a calling intent see if it's passed us a content URI of an existing image
 		// if not then assume we're taking a nice new photo
+		Intent caller = getIntent();
 		Uri uri = caller.getData();
 		if (uri == null && caller.hasExtra(Intent.EXTRA_STREAM)){
 			uri = (Uri)caller.getExtras().get(Intent.EXTRA_STREAM);
@@ -92,13 +80,47 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 			new CompressShareAsyncTask().execute(uri);
 		}
 		else{
-			SurfaceHolder holder = ((SurfaceView)findViewById(R.id.SurfaceView01)).getHolder();
-			holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-			holder.addCallback(this);
-	
-			SetupButtons(MODE_TAKING_PICTURE);				
+			// TODO: optimally, we'd just write to the cache, but the camera
+			//	     application does not have the permissions to write to
+			//		 that location
+			
+			
+			if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+				Intent camera = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+				
+				//File picture = new File(getExternalFilesDir(), "temp.jpg");		// API level 8 only
+				//File picture = new File(getCacheDir(), "temp.jpg");
+				File picture = new File(Environment.getExternalStorageDirectory(), TEMP_PICTURE_LOCATION);
+				picture.mkdirs();
+				picture = new File(picture, "temp.jpg");
+				
+				_localFileUri = Uri.fromFile(picture);
+				camera.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, _localFileUri);
+				
+				startActivityForResult(camera, CAMERA_TAKE_PIC);
+			} else {
+				// TODO: write to internal storage
+				Toast.makeText(getApplicationContext(), "SD card not present or ready.", Toast.LENGTH_SHORT).show();
+				
+				finish();
+			}
 		}
 	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == CAMERA_TAKE_PIC) {
+			if (resultCode == RESULT_OK) {
+				//new CompressAsyncTask().execute(_localFileUri);
+				new CompressShareAsyncTask().execute(_localFileUri);
+			} else if (resultCode == RESULT_CANCELED) {
+				// Just close the activity
+				setResult(RESULT_CANCELED);
+				finish();
+			}
+		}
+	}
+
 
     protected Dialog onCreateDialog(int id) {
     	switch(id){
@@ -172,157 +194,36 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		
 		int size = width * height; 
 		
+		// The maximum image upload on Shackpics is closer to 2MB when logged 
+		// in, despite what the upload page says.
+		
+		// Why not resize to about 3MP for all cases as loading large images 
+		// on smartphones is kind of painful? 95% compression for users with 
+		// accounts should still be fine, though
+		
+		
 		//3 possible states
 		// 1: Can login (3Mb file max) so we're ok whatever at 95% compression
 		// 2: No login and greater than 3Megapixels so we need to try and scale down to 3Mp AND compress to 90%
 		// 3: No login 3Megapixel camera so we need to compress to 90%
 		if (login.length() > 0 && password.length() > 0){
 			_highResAvailable = true;
+			if (size > MAX_IMAGE_AREA) {
+				_scaleImage = true;
+			}
 		}
-		else if (size > 3145728){ //3 megapixels
+		else if (size > MAX_IMAGE_AREA){ //3 megapixels
 			_extraCompressionNeeded = true;
-			_scaleAmount = 2; //Math.floor(width / 2048);
+			_scaleImage = true;
+			//_scaleAmount = 2; //Math.floor(width / 2048);
 		}
 		else{
 			_extraCompressionNeeded = true;
 		}    	
     }
+
     
-    @Override 
-    protected void onPause(){
-    	super.onPause();
-    	_pictureData = null;
-    }
-
-	@Override
-	public void onAutoFocus(boolean arg0, Camera arg1) {
-		if (arg0 && _takingPicture){
-			arg1.takePicture(null, null, this);
-		}
-		else if (arg0 == false){
-			_takingPicture = false;
-			Toast.makeText(this, "Unable to focus", Toast.LENGTH_SHORT);
-		}
-	}
-
-	
-	
-	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width,	int height) {
-		
-		Camera.Parameters parameters= _cam.getParameters();
-
-		
-		// NOTE: So, if you have functions in this Activity that aren't available in 1.5 or 1.6 the whole thing
-		//       just bombs, so I moved them to their own static method in HelperAPI4... I have no idea if theres
-		//       another way.. now.. will it work?
-		if (Integer.parseInt(android.os.Build.VERSION.SDK) <=4)
-		{
-			// Possible fix for 1.5 - 1.6
-			parameters.setPreviewSize(parameters.getPreviewSize().width,parameters.getPreviewSize().height);
-			parameters.setPictureFormat(PixelFormat.JPEG);
-			_cam.setParameters(parameters);
-		}
-		else
-		{
-			_cam = HelperAPI4.setCameraParams(_cam);
-		}
-
-		
-		_cam.startPreview();
-			//-- Must add the following callback to allow the camera to autofocus.
-		_cam.autoFocus(new Camera.AutoFocusCallback(){
-			@Override
-			public void onAutoFocus(boolean success, Camera camera) {
-				Log.d("ShackDroid", "isAutofocus " +	Boolean.toString(success));					
-			}
-		} );
-		
-        
-        // TODO: this line seems to crash some phones see bug report.
-        // http://code.google.com/p/android/issues/detail?id=7909
-        //_cam.setParameters(parameters);
-        //_cam.startPreview();
-	}
-
-	@Override
-	public void surfaceCreated(SurfaceHolder holder) {
-		_cam = Camera.open();
-		
-		//Parameters params = _cam.getParameters();
-		//params.setPictureFormat(PixelFormat.JPEG);
-
-		//Setup(params.getPictureSize().width, params.getPictureSize().height);
-		
-		//_cam.setParameters(params);			
-		try {
-			_cam.setPreviewDisplay(holder);
-			//_cam.startPreview();
-			//_cam.autoFocus(this);				
-		} catch (IOException e) {
-			_cam.release();
-			_cam = null;
-		}		
-	}
-
-	@Override
-	public void surfaceDestroyed(SurfaceHolder holder) {
-		_cam.stopPreview();
-		_cam.release();
-		_cam = null;
-	}
-
-	@Override
-	public void onPictureTaken(byte[] data, Camera camera) {
-		
-		_pictureData = data;
-		_takingPicture = false;
-		SetupButtons(MODE_SHOWING_PICTURE);
-	}
-	
-	private void SetupButtons(int mode){
-		switch(mode){
-		case MODE_TAKING_PICTURE:
-			((Button)findViewById(R.id.takePicture)).setText("Oh snap");
-			((Button)findViewById(R.id.takePicture)).setOnClickListener(new OnClickListener(){
-				public void onClick(View v) {
-					_takingPicture = true;
-					_cam.autoFocus(ActivityCamera.this);
-				}
-			});				
-
-			((Button)findViewById(R.id.btnCancel)).setOnClickListener(new OnClickListener(){
-				@Override
-				public void onClick(View v) {
-					setResult(RESULT_CANCELED);
-					finish();
-				}});						
-			break;
-		case MODE_SHOWING_PICTURE:
-			((Button)findViewById(R.id.takePicture)).setText("Upload");
-			((Button)findViewById(R.id.takePicture)).setOnClickListener(new OnClickListener(){
-				public void onClick(View v) {
-					new CompressAsyncTask().execute(_pictureData);
-					
-				}
-			});
-			
-			((Button)findViewById(R.id.btnCancel)).setOnClickListener(new OnClickListener(){
-				@Override
-				public void onClick(View v) {
-					_takingPicture = false;
-					_pictureData = null;
-					
-					SetupButtons(MODE_TAKING_PICTURE);
-					_cam.startPreview();
-				}});				
-			break;
-		}
-	}
-
 	class CompressShareAsyncTask extends AsyncTask<Uri, byte[], byte[]>{
-
-		
 
 		@Override
 		protected byte[] doInBackground(Uri... params) {
@@ -335,8 +236,13 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 			
 			options.inJustDecodeBounds = true;
 			Bitmap pic;
+			int imgHeight; 
+			int imgWidth;
 			try {
 				pic = BitmapFactory.decodeStream(getContentResolver().openInputStream(params[0]), new Rect(-1,-1,-1,1), options);
+				
+				imgHeight = options.outHeight;
+				imgWidth = options.outWidth;
 				
 				Setup(options.outWidth, options.outHeight);
 				options.inJustDecodeBounds = false;
@@ -347,14 +253,25 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 			int compressionAmount = 95;
 			
 			//Try and scale down 2 == half size, 4 == quarter size etc.
-			options.inSampleSize = (int)_scaleAmount;
+			//options.inSampleSize = (int)_scaleAmount;
 			
+
+						
 			if (_extraCompressionNeeded){
 				compressionAmount = 90;
 			}
 			
 			try {
-				pic = BitmapFactory.decodeStream(getContentResolver().openInputStream(params[0]), new Rect(-1,-1,-1,1), options);
+				pic = BitmapFactory.decodeStream(getContentResolver().openInputStream(params[0]), new Rect(-1,-1,-1,1), null);
+				
+				if (_scaleImage) {
+					double ratio = (double) MAX_IMAGE_AREA / (double)(imgHeight * imgWidth);
+					int scaledHeight = (int)(imgHeight * ratio);
+					int scaledWidth = (int)(imgWidth * ratio);
+					
+					pic = Bitmap.createScaledBitmap(pic, scaledWidth, scaledHeight, true);
+				}
+				
 				ByteArrayOutputStream compressed = new ByteArrayOutputStream();
 				pic.compress(CompressFormat.JPEG, compressionAmount, compressed);  //Get it down
 				pic.recycle();
@@ -375,14 +292,15 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		}
 		
 		protected void onPreExecute(){
-			findViewById(R.id.takePicture).setEnabled(false);
+			//findViewById(R.id.takePicture).setEnabled(false);
 			showDialog(1);
 		}
 		
 		protected void onPostExecute(byte[] result) {
 		    dismissDialog(1);
 		    if (result != null){
-		     uploadTask = new UploadAsyncTask().execute(result);
+		    	uploadTask = new UploadAsyncTask().execute(result);
+		    	//new UploadAsyncTask().execute(result);
 		    }
 		    else{
 		    	Toast.makeText(getApplicationContext(), "Error compressing", Toast.LENGTH_SHORT);
@@ -390,59 +308,7 @@ public class ActivityCamera extends Activity implements AutoFocusCallback, Surfa
 		    }
 		}		
 	}
-	
-	class CompressAsyncTask extends AsyncTask<byte[], byte[], byte[]>{
 
-		@Override
-		protected byte[] doInBackground(byte[]... params) {
-			Size size = _cam.getParameters().getPictureSize();
-			Setup(size.width, size.height);
-			
-			Options options = new Options();
-			
-			int compressionAmount = 95;
-			//Try and scale down 2 == half size, 4 == quarter size etc.
-			options.inSampleSize = (int)_scaleAmount;
-			
-			if (_extraCompressionNeeded){
-				compressionAmount = 90;
-			}
-			
-			Bitmap pic = BitmapFactory.decodeByteArray(params[0], 0, params[0].length, options);
-			ByteArrayOutputStream compressed = new ByteArrayOutputStream();
-			pic.compress(CompressFormat.JPEG, compressionAmount, compressed);  //Get it down
-			pic.recycle();
-			
-			//byte[] data;
-			try{
-				_pictureData = compressed.toByteArray();
-				try {
-					compressed.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			catch(OutOfMemoryError err){
-				return null;
-			}
-			return _pictureData;
-		}
-		
-		protected void onPreExecute(){
-			findViewById(R.id.takePicture).setEnabled(false);
-			showDialog(1);
-		}
-		
-		protected void onPostExecute(byte[] result) {
-		    dismissDialog(1);
-		    if (result != null){
-		    	new UploadAsyncTask().execute(result);
-		    }
-		    else{
-		    	Toast.makeText(getApplicationContext(), "Error compressing", Toast.LENGTH_SHORT);		    
-		    }
-		}		
-	}
 	
 	class UploadAsyncTask extends AsyncTask<byte[], String, String>{
 
