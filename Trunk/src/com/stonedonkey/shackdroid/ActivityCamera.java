@@ -23,7 +23,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
+import android.app.Dialog;	
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,6 +36,7 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory.Options;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -57,9 +58,7 @@ public class ActivityCamera extends Activity {
 	
 	public static final String UPLOADED_FILE_URL = "uploadedfileurl";
 	public static final String TEMP_PICTURE_LOCATION = "/Android/data/com.stonedonkey.shackdroid/files/";
-
 	private static final int CAMERA_TAKE_PIC = 0;
-		
 	private static final int MAX_IMAGE_AREA = 3145728;	// ~3MP
 	
 	@Override
@@ -76,35 +75,70 @@ public class ActivityCamera extends Activity {
 			_askToPost = true;
 		}
 		
-		if (uri != null){
+		if (uri != null) {
 			new CompressShareAsyncTask().execute(uri);
 		}
-		else{
-			// TODO: optimally, we'd just write to the cache, but the camera
-			//	     application does not have the permissions to write to
-			//		 that location
+		else {
+			//File pictureLoc = new File(getExternalFilesDir(), "temp.jpg");		// API level 8 only
+			//File pictureLoc = new File(getCacheDir(), "temp.jpg");				// Can't write to this from Camera app
+
+			File pictureLoc;
+			pictureLoc = new File(Environment.getExternalStorageDirectory(), TEMP_PICTURE_LOCATION);
 			
-			
+			// SD card is mounted, hopefully we're all good
 			if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-				Intent camera = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+				prepareAndLaunchCamera(pictureLoc);
+			} else if (Build.MODEL.equalsIgnoreCase("ADR6300")) {
+				// Special case for HTC Incredible.  The device has 8GB of internal storage 
+				// and has symlink /emmc -> /mnt/emmc.  If the SD card is not mounted,
+				// /sdcard SHOULD point to /mnt/emmc (in order to preserve compatibility with 
+				// Environment.getExternalStorageDirectory()), but the method still returns
+				// /sdcard.  Thanks HTC, you numbnuts.
 				
-				//File picture = new File(getExternalFilesDir(), "temp.jpg");		// API level 8 only
-				//File picture = new File(getCacheDir(), "temp.jpg");
-				File picture = new File(Environment.getExternalStorageDirectory(), TEMP_PICTURE_LOCATION);
-				picture.mkdirs();
-				picture = new File(picture, "temp.jpg");
+				// TODO: Check if one of the newer API calls return the "correct" path,
+				// as the Incredible now ships with 2.2.
 				
-				_localFileUri = Uri.fromFile(picture);
-				camera.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, _localFileUri);
+				// More info at source.android.com/compatibility/android-2.2-cdd.pdf
+				// Page 17, section 8.15
+	
+				Log.d("ShackDroid", "Incredible workaround.  No SD card mounted, writing to internal storage.");
 				
-				startActivityForResult(camera, CAMERA_TAKE_PIC);
+				// Cannot find a way to get /mnt/emmc path programmatically.  So it'll have to
+				// be hard-coded.  Is TEMP_PICTURE_LOCATION even the right directory when stored
+				// in the internal storage?  Who the hell knows!
+				pictureLoc = new File("/emmc", TEMP_PICTURE_LOCATION);
+				prepareAndLaunchCamera(pictureLoc);
 			} else {
-				// TODO: write to internal storage
+				// No SD card mounted, no special cases accounted for.
+				Log.d("ShackDroid", "SD card not mounted");
 				Toast.makeText(getApplicationContext(), "SD card not present or ready.", Toast.LENGTH_SHORT).show();
 				
 				finish();
 			}
 		}
+	}
+	
+	private void prepareAndLaunchCamera(File pictureLoc) {
+		// Create directories if they do not exist.
+		pictureLoc.mkdirs();
+		
+		// Hide folder from media scanner
+		try {
+			File nomedia = new File(pictureLoc, ".nomedia");
+			nomedia.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+
+		pictureLoc = new File(pictureLoc, "temp.jpg");
+		_localFileUri = Uri.fromFile(pictureLoc);
+		
+		Intent camera = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+		camera.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, _localFileUri);
+		
+		Log.d("ShackDroid", _localFileUri.toString());
+		
+		startActivityForResult(camera, CAMERA_TAKE_PIC);
 	}
 	
 	@Override
@@ -255,8 +289,6 @@ public class ActivityCamera extends Activity {
 			//Try and scale down 2 == half size, 4 == quarter size etc.
 			//options.inSampleSize = (int)_scaleAmount;
 			
-
-						
 			if (_extraCompressionNeeded){
 				compressionAmount = 90;
 			}
