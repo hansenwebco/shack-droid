@@ -41,7 +41,7 @@ public class ActivityShackMarks extends ListActivity implements Runnable {
 		
 		setContentView(R.layout.notes);
 
-		fillSaxData();
+		fillSaxData(); 
 		
 		// add a listener to the default view to handle holding down
 		// on the screen to view or delete.. default cilck is still view.
