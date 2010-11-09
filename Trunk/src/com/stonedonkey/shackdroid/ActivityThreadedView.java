@@ -527,8 +527,14 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 				
 			}});
 		
-		if (tv != null)
+		ScrollView sv = (ScrollView) findViewById(R.id.textAreaScroller);
+		if (sv != null) {
+			sv.scrollTo(0, 0);
+		}
+		
+		if (tv != null) {
 			tv.setText(parsedText,BufferType.NORMAL);
+		}
 		//tv.setText(Html.fromHtml(postText),BufferType.SPANNABLE);
 
 		if (addSpoilerMarkers == true) 
@@ -539,7 +545,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		// it removes the pancake_ and goes to http://humper.shackspace... bug in linkify maybe??
 		Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
 		tv.setClickable(false);
-		tv.scrollTo(0,0);
+		//tv.scrollTo(0,0);
 		tv.requestLayout();		
 	
 		/*
