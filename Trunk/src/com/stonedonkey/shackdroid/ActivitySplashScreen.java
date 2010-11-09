@@ -37,7 +37,7 @@ public class ActivitySplashScreen extends Activity {
 		
 		TextView auth= (TextView)findViewById(R.id.TextViewAuthor);
 		auth.setTextSize(12);
-		auth.setText("written by: stonedonkey ~ chazums");
+		auth.setText("written by:\n stonedonkey ~ chazums ~ DrWaffles");
 		
 		TextView version= (TextView)findViewById(R.id.TextViewVersion);
 		version.setTextSize(12);
