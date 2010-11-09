@@ -129,8 +129,12 @@ public class ActivityPost extends Activity implements Runnable {
 		case CAMERA_RESULT:
 			if (resultCode == RESULT_OK) {
 				TextView tv = (TextView)findViewById(R.id.EditTextPost);
+				final String currentText = tv.getText().toString(); 
 				String url = data.getStringExtra(UPLOADED_FILE_URL);
-				tv.setText(url);
+				if (currentText != null && currentText.length() > 0)
+					tv.setText(currentText + "\n\n"  + url);
+				else
+					tv.setText(url);
 			}
 
 			break;
