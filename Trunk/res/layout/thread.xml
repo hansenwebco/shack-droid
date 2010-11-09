@@ -76,7 +76,7 @@
 	</RelativeLayout>
 
 	<ListView 
-		android:paddingTop="0px"
+		android:paddingTop="2px"
 		android:id="@android:id/list" 
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent" 
