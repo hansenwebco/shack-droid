@@ -329,7 +329,14 @@ public class ActivityCamera extends Activity {
 		}
 		
 		protected void onPostExecute(byte[] result) {
-		    dismissDialog(1);
+		   
+			try {
+				dismissDialog(1);
+			}
+			catch(Exception ex)
+			{
+				// dismissing dialogs sometimes fails, this traps it and ignores its 
+			}
 		    if (result != null){
 		    	uploadTask = new UploadAsyncTask().execute(result);
 		    	//new UploadAsyncTask().execute(result);
@@ -409,7 +416,7 @@ public class ActivityCamera extends Activity {
 					return null;
 				}
 			} catch (Exception e) {
-				Log.e("Camera upload", e.getMessage());
+				Log.e("ShackDroid", "Error on camera upload");
 				return null;
 			}
 			finally {
