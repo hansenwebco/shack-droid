@@ -261,12 +261,59 @@ public class ActivityCamera extends Activity {
 
 		@Override
 		protected byte[] doInBackground(Uri... params) {
+			
+			
+			// Ripped from:  http://stackoverflow.com/questions/477572/android-strange-out-of-memory-issue/823966#823966
+
+			try {
+			
+				BitmapFactory.Options o = new BitmapFactory.Options();
+				o.inJustDecodeBounds = true;
+				BitmapFactory.decodeStream(getContentResolver().openInputStream(params[0]), null, o);
+	
+				final int REQUIRED_SIZE = 800;
+				
+				int width_tmp = o.outWidth, height_tmp = o.outHeight;
+				int scale = 1;
+				while (true)
+				{
+					if (width_tmp/2< REQUIRED_SIZE || height_tmp/2< REQUIRED_SIZE)
+						break;
+					
+					width_tmp/=2;
+					height_tmp/=2;
+					scale*=2;
+				}
+				
+				// Decode with inSampleSize which prevents the memory error..
+				BitmapFactory.Options o2 = new BitmapFactory.Options();
+				o2.inSampleSize = scale;
+				
+				final Bitmap pic = BitmapFactory.decodeStream(getContentResolver().openInputStream(params[0]), new Rect(-1,-1,-1,1), o2);
+				ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				pic.compress(CompressFormat.JPEG, 75, bos);
+				return bos.toByteArray();
+				
+				
+			
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return null;
+			
+			
+			
+			/*
+			
 			//First we find out how big the pic is
 			//Then set setup our environment variables - scale factor etc
 			//Then we configure our compressor
 			//Then we compress and return.
 			
 			Options options = new Options();
+			
 			
 			options.inJustDecodeBounds = true;
 			Bitmap pic;
@@ -321,6 +368,10 @@ public class ActivityCamera extends Activity {
 			}
 
 			return _pictureData;
+			
+			
+			*/
+			
 		}
 		
 		protected void onPreExecute(){
@@ -416,6 +467,9 @@ public class ActivityCamera extends Activity {
 					return null;
 				}
 			} catch (Exception e) {
+				if (e.getMessage() != null)
+					Log.e("ShackDroid" , e.getMessage());
+					
 				Log.e("ShackDroid", "Error on camera upload");
 				return null;
 			}

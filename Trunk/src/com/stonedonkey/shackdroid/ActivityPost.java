@@ -49,7 +49,7 @@ public class ActivityPost extends Activity implements Runnable {
 		
 		setContentView(R.layout.post);
 		setTitle("ShackDroid - Post");
-		Log.e("ShackDroid",android.os.Build.VERSION.SDK);
+		//Log.e("ShackDroid",android.os.Build.VERSION.SDK);
 		ShowRulesWarning();
 
 		if (savedInstanceState != null) {
