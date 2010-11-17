@@ -1,0 +1,5 @@
+	<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android" android:layout_alignParentBottom="true" android:fadingEdge="none" android:visibility="gone" android:background="@drawable/nav_background2"  android:id="@+id/RelativeLayoutThreadNav" android:layout_width="fill_parent" android:layout_height="40dip">
+		<ImageView  android:layout_marginLeft="4dip" android:src="@drawable/nav_previous2"   android:id="@+id/ImageViewPreviousPost" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
+		<ImageView  android:layout_marginLeft="10dip" android:layout_toRightOf="@+id/ImageViewPreviousPost" android:src="@drawable/nav_next2" android:id="@+id/ImageViewNextPost" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
+		<ImageView  android:layout_marginLeft="4dip" android:layout_alignParentRight="true" android:layout_marginRight="5dip"  android:src="@drawable/nav_reload2" android:id="@+id/ImageViewReload" android:layout_width="40dip" android:layout_height="40dip"></ImageView>
+	</RelativeLayout>

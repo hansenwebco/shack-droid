@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/LolRow"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:paddingTop="5dip"
+  android:paddingBottom="5dip"
+  >
+  
+    <TextView
+	  	android:id="@+id/TextViewLolTagCount"
+	  	android:layout_width="40dip"
+		android:layout_height="40dip"
+		android:textColor="#FFFFFF"
+		android:textSize="12dip"
+		android:background="#00BFF3"
+		android:gravity="center"
+	/>
+	
+	<TextView
+	  	android:id="@+id/TextViewLolPosterName"
+	  	android:layout_toRightOf="@+id/TextViewTagCount"
+	  	android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textColor="#ffba00"
+		android:textSize="12dip"
+		android:paddingLeft="48dip"
+	/>
+	
+	<ImageView
+	android:id="@+id/ImageViewLolCat"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:paddingLeft="4dip"
+	android:paddingTop="5dip"
+	android:layout_toRightOf="@+id/TextViewLolPosterName"
+	/>
+	
+	<TextView
+		android:id="@+id/TextViewLOLDatePosted"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:gravity="right"
+		android:textSize="12dip"
+		android:layout_toRightOf="@+id/TextViewLolPosterName"
+		android:paddingRight="12dip"
+	/>	
+	  
+	<TextView
+		android:id="@+id/TextViewLolPostText"
+		android:layout_below="@+id/TextViewLolPosterName"
+		android:layout_toRightOf="@+id/TextViewTagCount"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingLeft="48dip"
+		android:paddingRight="8dip"
+		android:textSize="12dip"
+		android:textColor="#FFFFFF"	
+	/>
+  
+</RelativeLayout>
