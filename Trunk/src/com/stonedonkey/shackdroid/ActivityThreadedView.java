@@ -780,6 +780,13 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 	}
 	private String ParseShackText(String text,boolean addSpoilerMarkers) {
 
+		
+		// make a youtoobs thumbnail
+		//http://img.youtube.com/vi/{videoid}/default.jpg
+		//String test = "<img src='http://img.youtube.com/vi/4HrThGCs/default.jpg'>";
+		
+		//text = test + text; 
+		
 		//Convert the shack spans into HTML fonts since our TextView can convert stuff to HTML
 		// not sure if this is the best or most efficient, but works.
 		text = text.replaceAll("<span class=\"jt_red\">(.*?)</span>", "<font color=\"#ff0000\">$1</font>");	
