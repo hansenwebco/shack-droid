@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+android:id="@+id/LinearLayoutThreadRow"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:orientation="horizontal"
+xmlns:android="http://schemas.android.com/apk/res/android">
+
+<!-- 
+	<RelativeLayout
+		android:id="@+id/LayoutThreadCategoryBar"
+		android:layout_height="fill_parent"
+		android:layout_width="3dip"
+		android:background="@android:color/transparent"
+		android:singleLine="true"
+		android:layout_alignParentBottom="true"
+		>
+	</RelativeLayout>	
+ -->
+
+	<CheckedTextView 
+		android:id="@+id/TextViewThreadPreview"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:padding="5dip"
+		android:paddingRight="20dip"
+		android:textSize="12dip"
+		android:textColor="#FFFFFF"
+		android:ellipsize="end"
+		android:singleLine="true"
+
+		>
+	</CheckedTextView >
+
+</LinearLayout>
