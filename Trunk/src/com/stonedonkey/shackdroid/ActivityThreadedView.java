@@ -2,6 +2,7 @@ package com.stonedonkey.shackdroid;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.URL;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -26,6 +28,7 @@ import android.content.SharedPreferences;
 import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,6 +39,7 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.Spanned;
+import android.text.Html.ImageGetter;
 import android.text.Html.TagHandler;
 import android.text.method.LinkMovementMethod;
 import android.text.style.StrikethroughSpan;
@@ -501,7 +505,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		final TextView tv = (TextView) findViewById(R.id.TextViewPost);
 		final String postText = ParseShackText(posts.get(position).getPostText(),addSpoilerMarkers);
 		
-		final Spanned parsedText = Html.fromHtml(postText,null, new TagHandler(){
+		final Spanned parsedText = Html.fromHtml(postText,imgGetter, new TagHandler(){
 			int startPos = 0;
 			@Override
 			public void handleTag(boolean opening, String tag, Editable output,
@@ -783,9 +787,15 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		
 		// make a youtoobs thumbnail
 		//http://img.youtube.com/vi/{videoid}/default.jpg
-		//String test = "<img src='http://img.youtube.com/vi/4HrThGCs/default.jpg'>";
 		
-		//text = test + text; 
+		//Pattern p = Pattern.compile("href=.*>(.*www.youtube.com.*)</a>");
+		//Matcher m = p.matcher(text);
+		//if (m.find())
+		//{
+		//	String link =  m.group();		
+		//	link = text.replaceAll("http://www.youtube.com/watch\\?v=(.*?)\\W", "<img src='http://img.youtube.com/vi/$1/default.jpg'>");
+		//}
+				
 		
 		//Convert the shack spans into HTML fonts since our TextView can convert stuff to HTML
 		// not sure if this is the best or most efficient, but works.
@@ -934,7 +944,29 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		intent.setClass(this, ActivityShackMarks.class);
 		startActivity(intent);
 	}
-
+	private ImageGetter imgGetter = new Html.ImageGetter() {
+        @Override
+        public Drawable getDrawable(String source) {
+              Drawable drawable = null;
+              
+              try {
+              
+              InputStream is = (InputStream) new URL(source).getContent();
+              drawable = Drawable.createFromStream(is, "youtubes");
+              // Important
+              drawable.setBounds(0, 0, drawable.getIntrinsicWidth()*2, drawable
+                            .getIntrinsicHeight()*2);
+              
+              }
+              catch (Exception ex)
+              {
+               String exc = ex.getMessage();
+               int i = 1;
+              }
+              return drawable;
+        }
+	};
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
