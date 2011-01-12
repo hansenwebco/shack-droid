@@ -56,17 +56,26 @@ public class ActivityMainMenu extends ListActivity  {
 
 		ArrayList<ShackMenuItem> menu = new ArrayList<ShackMenuItem>();
 
-		menu.add(new ShackMenuItem("Latest Chatty","It gets you chicks, and diseases.",R.drawable.menu2_latestchatty));
-		menu.add(new ShackMenuItem("Latest Stories", "The \"Mos Eisley\" of chatties.",R.drawable.menu2_rss));
-		menu.add(new ShackMenuItem("Shack Search","For all your vanity needs.",R.drawable.menu2_search));
-		menu.add(new ShackMenuItem("Shack Messages","Stuff too shocking for even the Shack.",R.drawable.menu2_shackmessages2));
-		menu.add(new ShackMenuItem("Shack LOLs","You are not as popular as these people.",R.drawable.menu2_lol2));//
-		//menu.add(new ShackMenuItem("Shack Marks","Your mobile tranny porn Stash.",R.drawable.menu2_shackmarks2));
-		menu.add(new ShackMenuItem("Settings","Hay guys, am I doing this right?",R.drawable.menu2_settings));
-		//menu.add(new ShackMenuItem("Version Check","stonedonkey finally did something new!?!",R.drawable.menu2_vercheck));
-		//menu.add(new ShackMenuItem("What's New","How we most recently broke this thing.",R.drawable.menu2_cone));
-		//menu.add(new ShackMenuItem("Stats","Keeping score, it's how you know you're better.",R.drawable.menu2_stats));
-		//menu.add(new ShackMenuItem("Tester","Testing stuff before you can play with it!.",R.drawable.menu2_stats));
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean oldMenu = prefs.getBoolean("oldSchoolMenu", false);
+		
+		if (oldMenu) {
+			menu.add(new ShackMenuItem("Latest Chatty","It gets you chicks, and diseases.",R.drawable.menu2_latestchatty));
+			menu.add(new ShackMenuItem("Latest Stories", "The \"Mos Eisley\" of chatties.",R.drawable.menu2_rss));
+			menu.add(new ShackMenuItem("Shack Search","For all your vanity needs.",R.drawable.menu2_search));
+			menu.add(new ShackMenuItem("Shack Messages","Stuff too shocking for even the Shack.",R.drawable.menu2_shackmessages2));
+			menu.add(new ShackMenuItem("Shack LOLs","You are not as popular as these people.",R.drawable.menu2_lol2));//
+			menu.add(new ShackMenuItem("Settings","Hay guys, am I doing this right?",R.drawable.menu2_settings));
+		}
+		else
+		{
+			menu.add(new ShackMenuItem("Latest Chatty","It gets you chicks, and diseases."));
+			menu.add(new ShackMenuItem("Latest Stories", "The \"Mos Eisley\" of chatties."));
+			menu.add(new ShackMenuItem("Shack Search","For all your vanity needs."));
+			menu.add(new ShackMenuItem("Shack Messages","Stuff too shocking for even the Shack."));
+			menu.add(new ShackMenuItem("Shack LOLs","You are not as popular as these people."));//
+			menu.add(new ShackMenuItem("Settings","Hay guys, am I doing this right?"));			
+		}
 
 		AdapterMainMenu mm = new AdapterMainMenu(this,R.layout.mainmenu_row, menu);
 
