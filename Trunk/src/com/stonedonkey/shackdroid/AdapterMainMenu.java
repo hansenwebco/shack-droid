@@ -3,6 +3,7 @@ package com.stonedonkey.shackdroid;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,7 +57,14 @@ public class AdapterMainMenu extends BaseAdapter {
 		
 		menuTitle.setText(menuList.get(position).getMenuTitle().toString());
 		menuSubTitle.setText(menuList.get(position).getMenuSubTitle().toString());
-		menuIcon.setImageResource(menuList.get(position).getMenuIcon());
+		
+		if (menuList.get(position).getMenuIcon() != 0) 
+			menuIcon.setImageResource(menuList.get(position).getMenuIcon());
+		else {
+			menuIcon.setImageResource(-1);
+			menuTitle.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+			menuSubTitle.setTextColor(Color.parseColor("#555555"));
+		}
 		
 		menuTitle.setTypeface(face);
 		menuSubTitle.setTypeface(face);

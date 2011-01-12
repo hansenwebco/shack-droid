@@ -15,6 +15,14 @@ public class ShackMenuItem {
 		this.menuTitle = menuTitle;
 		
 	}
+	
+	public ShackMenuItem(String menuTitle, String menuSubTitle)
+	{
+		this.menuSubTitle = menuSubTitle;
+		this.menuTitle = menuTitle;
+		this.icon = 0;
+	}
+	
 	public String getMenuTitle() {
 		return menuTitle;
 	}
