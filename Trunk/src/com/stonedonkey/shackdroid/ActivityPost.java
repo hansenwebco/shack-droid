@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -435,24 +434,33 @@ public class ActivityPost extends Activity implements Runnable {
 		// create a URL to post to
 		try {
 
-			String data = URLEncoder.encode("iuser", "UTF-8") + "="
-						+ URLEncoder.encode(login, "UTF-8") + "&"
-						+ URLEncoder.encode("ipass", "UTF-8") + "="
-						+ URLEncoder.encode(password, "UTF-8") + "&"
-						+ URLEncoder.encode("group", "UTF-8") + "="
+			String data = URLEncoder.encode("content_type_id", "UTF-8") + "="
+						+ URLEncoder.encode("2", "UTF-8") + "&"
+						+ URLEncoder.encode("content_id", "UTF-8") + "="
 						+ URLEncoder.encode(storyID, "UTF-8") + "&"
 						+ URLEncoder.encode("body", "UTF-8") + "="
 						+ URLEncoder.encode(postText, "UTF-8");
 
 			if (postID != null && postID.length() > 0)
 			{
-				data = data + "&" + URLEncoder.encode("parent", "UTF-8") + "="
+				data = data + "&" + URLEncoder.encode("parent_id", "UTF-8") + "="
 				+ URLEncoder.encode(postID, "UTF-8");
 			}
 			
+		
+
+	
+		String userPassword = login + ":" + password;
+
+		String encoding = Base64.encodeBytes(userPassword.getBytes());
+		
+		
 			// post to ShackNews
-			URL url = new URL("http://www.shacknews.com/extras/post_laryn_iphone.x");
+			URL url = new URL("http://new.shacknews.com/api/chat/create/17.json");
 			URLConnection conn = url.openConnection();
+			conn.setRequestProperty("Authorization", "Basic " + encoding);
+			conn.setRequestProperty("User-Agent", Helper.getUserAgentString(this));
+
 			conn.setDoOutput(true);
 
 			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
