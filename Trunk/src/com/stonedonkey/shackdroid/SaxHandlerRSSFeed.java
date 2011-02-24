@@ -50,7 +50,7 @@ public class SaxHandlerRSSFeed extends DefaultHandler {
 		if ("link".equalsIgnoreCase(localName))
 			this.link = true;
 		
-		if ("date".equalsIgnoreCase(localName))
+		if ("pubDate".equalsIgnoreCase(localName))
 			this.datePosted = true;
 				
 		
@@ -68,7 +68,7 @@ public class SaxHandlerRSSFeed extends DefaultHandler {
 		if ("link".equalsIgnoreCase(localName))
 			this.link = false;
 		
-		if ("date".equalsIgnoreCase(localName))
+		if ("pubDate".equalsIgnoreCase(localName))
 			this.datePosted = false;
 		
 		if ("item".equalsIgnoreCase(localName))

@@ -31,7 +31,7 @@ public class ActivityRSS extends ListActivity implements Runnable {
 	private ArrayList<ShackRSS> rssItems = null; 
 	private ProgressDialog pd;
 	private int feedID = 0;
-	private String feedURL = "http://feed.shacknews.com/shackfeed.xml";
+	private String feedURL = "http://www.shacknews.com/rss?recent_articles=1";
 	private String feedDesc = "Front Page";
 
 	
@@ -186,7 +186,7 @@ public class ActivityRSS extends ListActivity implements Runnable {
 				
 					String link = rssItems.get(itemPosition).getLink();
 					String[] story = link.split("/");
-					String storyID = story[story.length-1];
+					String storyID = story[story.length-2];
 					intent.putExtra("StoryID",storyID );
 					intent.setClass(this, ActivityTopicView.class);
 					startActivity(intent);
