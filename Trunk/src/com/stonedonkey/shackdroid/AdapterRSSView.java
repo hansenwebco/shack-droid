@@ -50,7 +50,7 @@ public class AdapterRSSView extends BaseAdapter {
 		
 		// TODO: lets think about this more later
 		String[] story = link.split("/");
-		long storyID = Long.parseLong(story[story.length-1]);
+		long storyID = Long.parseLong(story[story.length-2]);
 		
 		return storyID;
 		
