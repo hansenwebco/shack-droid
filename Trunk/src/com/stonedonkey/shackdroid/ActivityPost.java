@@ -435,7 +435,7 @@ public class ActivityPost extends Activity implements Runnable {
 		try {
 
 			String data = URLEncoder.encode("content_type_id", "UTF-8") + "="
-						+ URLEncoder.encode("2", "UTF-8") + "&"
+						+ URLEncoder.encode("17", "UTF-8") + "&"
 						+ URLEncoder.encode("content_id", "UTF-8") + "="
 						+ URLEncoder.encode(storyID, "UTF-8") + "&"
 						+ URLEncoder.encode("body", "UTF-8") + "="
