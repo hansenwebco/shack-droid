@@ -224,10 +224,10 @@ public class ActivityMessages extends ListActivity implements Runnable {
         case 1:
         	
         	
-        	String[] boxes = new String[3];
+        	String[] boxes = new String[2];
         	boxes[0] = "Inbox";
         	boxes[1] = "Sent";
-        	boxes[2] = "Archived";
+        	//boxes[2] = "Archived";
         	
         	return new AlertDialog.Builder(ActivityMessages.this)
             .setTitle("Choose Feed")
