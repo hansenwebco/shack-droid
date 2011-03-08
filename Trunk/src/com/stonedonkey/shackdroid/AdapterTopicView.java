@@ -1,5 +1,8 @@
 package com.stonedonkey.shackdroid;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -73,6 +76,7 @@ public class AdapterTopicView extends BaseAdapter {
 	TextView postText;
 	ImageView viewCat;
 	RelativeLayout topicRow;
+	ImageView postTimer;
 	}
 	
 	@Override
@@ -93,13 +97,15 @@ public class AdapterTopicView extends BaseAdapter {
 		holder.postText = (TextView)convertView.findViewById(R.id.TextViewPostText);
 		holder.viewCat = (ImageView)convertView.findViewById(R.id.ImageViewCat);
 		holder.topicRow = (RelativeLayout)convertView.findViewById(R.id.TopicRow);
-	
+		holder.postTimer = (ImageView)convertView.findViewById(R.id.ImageViewTopicTimer);
+		
 		holder.posterName.setTypeface(face);
 		holder.datePosted.setTypeface(face);
 		holder.replyCount.setTypeface(face);
 		holder.newPosts.setTypeface(face);
 		holder.postText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 		holder.postText.setTypeface(face);
+
 		
 		convertView.setTag(holder);
 	}
@@ -107,6 +113,9 @@ public class AdapterTopicView extends BaseAdapter {
 		holder = (ViewHolder)convertView.getTag();
 	}
 			
+			
+		holder.postTimer.setImageResource(GetTimeLeftDrawable(post.getPostDate()));
+	
 		holder.posterName.setText(post.getPosterName());
 		
 		if (shackLogin.equalsIgnoreCase(post.getPosterName()))
@@ -202,6 +211,35 @@ public class AdapterTopicView extends BaseAdapter {
 	}
 
 
+
+	private int GetTimeLeftDrawable(String postDate) {
+		
+		final DateFormat dfm = new SimpleDateFormat("MMM d, y hh:mmaa z");
+		
+		try {
+			final Date conDate = dfm.parse(postDate);
+			Date date = new Date();
+			
+			long timeStampPostDate = conDate.getTime() / 1000;
+			final long currentTimeStamp = date.getTime() / 1000;
+			
+			final long timeDifference =  currentTimeStamp - timeStampPostDate;
+			if (timeDifference < 57600) // 8 hours
+				return R.drawable.hourblank;
+			else if (timeDifference > 57600 && timeDifference < 79200 ) // two to eight
+				return R.drawable.hourfull; 
+			else if (timeDifference > 79200 && timeDifference < 82800 ) // one hour to two
+				return R.drawable.hourmid;
+			else if (timeDifference > 82800) // less than an hour
+				return R.drawable.hourlow;
+		
+		} catch (Exception ex) {
+			return R.drawable.hourblank; 
+		}
+		
+		return R.drawable.hourblank;
+		
+	}
 
 	public int getTotalNewPosts() {
 		return totalNewPosts;
