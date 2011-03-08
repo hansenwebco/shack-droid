@@ -26,6 +26,7 @@
         android:ellipsize="marquee"
         android:textSize="11dip"
         android:gravity="top"
+        android:textColor="#F3E7B5"
         />
 
     <TextView
@@ -39,7 +40,7 @@
         android:id="@+id/MainMenuTitle"
         android:textSize="20dip"
          android:textStyle="bold"
-
+		android:textColor="#EFEFEF"
         android:gravity="bottom"
       />
 </RelativeLayout>
