@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -32,11 +33,26 @@ public class ActivityPostMessage extends Activity implements Runnable {
 		
 		setContentView(R.layout.messages_post);
 
+		final Typeface face = Typeface.createFromAsset(getAssets(), "fonts/arial.ttf");
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		final int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
+
+		final EditText to = (EditText)findViewById(R.id.EditTextSMTo);
+		to.setTypeface(face);
+		to.setTextSize(fontSize);
+		
+		final EditText sub = (EditText)findViewById(R.id.EditTextSMSubject);
+		sub.setTypeface(face);
+		sub.setTextSize(fontSize);
+		
+		final EditText post = (EditText)findViewById(R.id.EditTextSMMessage);
+		post.setTypeface(face);
+		post.setTextSize(fontSize);
+		
 		Bundle extras = this.getIntent().getExtras();
 		if (extras != null) {
 			String sendTo = extras.getString("postto");
 			if (sendTo != null && sendTo.length() > 0){
-				EditText to = (EditText)findViewById(R.id.EditTextSMTo);
 				to.setText(sendTo);				
 			}
 			else{
@@ -44,17 +60,18 @@ public class ActivityPostMessage extends Activity implements Runnable {
 	
 				if (msg !=null)
 				{
-					EditText to = (EditText)findViewById(R.id.EditTextSMTo);
 					to.setText(msg.getName());
-	
+					to.setTypeface(face);
+					to.setTextSize(fontSize);
+					
 					String msgSub= msg.getMsgSubject();
-					EditText sub = (EditText)findViewById(R.id.EditTextSMSubject);
+
 					if (msgSub.startsWith("Re: ") == false)
 						sub.setText("Re: " + msgSub);
 					else
 						sub.setText(msgSub);
 	
-					EditText post = (EditText)findViewById(R.id.EditTextSMMessage);
+
 					StringBuilder quote = new StringBuilder();
 					quote.append("\n\n/[" + msg.getName() + " Wrote:\n");
 					quote.append("-----\n");
