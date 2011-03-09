@@ -533,8 +533,8 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 				
 				final String postID = posts.get(itemPosition).getPostID();
 				
-				//http://www.shacknews.com/laryn.x?id=23004466
-				final String url = "http://www.shacknews.com/laryn.x?id=" + postID;
+				//http://www.shacknews.com/chatty?id=25445895
+				final String url = "http://www.shacknews.com/chatty?id=" + postID;
 				final ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 				clipboard.setText(url);
 				Toast.makeText(this, "Link to post copied to clipboard.", Toast.LENGTH_SHORT).show();
