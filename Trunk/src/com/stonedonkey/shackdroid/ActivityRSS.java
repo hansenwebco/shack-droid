@@ -135,8 +135,8 @@ public class ActivityRSS extends ListActivity implements Runnable {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		
 		
-		menu.add(0, 1, 1, "Home").setIcon(R.drawable.menu_home);
-		menu.add(0, 2, 1, "Choose Feed").setIcon(R.drawable.menu_rss_feed);
+		//menu.add(0, 1, 1, "Home").setIcon(R.drawable.menu_home);
+		//menu.add(0, 2, 1, "Choose Feed").setIcon(R.drawable.menu_rss_feed);
 		
 		return super.onCreateOptionsMenu(menu);
 		

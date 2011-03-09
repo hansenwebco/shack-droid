@@ -16,6 +16,19 @@ android:layout_height="fill_parent">
 	android:textColor="#ffba00"
 	/>
 	
+		<TextView
+	android:id="@+id/TextViewRssDescription"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:paddingLeft="4px"
+	android:paddingRight="4px"
+	android:paddingBottom="4px"
+	android:textSize="12sp"
+	android:layout_below="@+id/TextViewRssTitle"
+	android:textColor="#FFFFFF"
+	android:textColorLink="#FFFFFF"
+	/>
+	
 	<TextView
 	android:id="@+id/TextViewRssDatePosted"
 	android:layout_width="fill_parent"
@@ -24,24 +37,14 @@ android:layout_height="fill_parent">
 	android:paddingLeft="4px"
 	android:gravity="left"
 	android:textSize="12sp"
-	android:layout_below="@+id/TextViewRssTitle"
+	android:layout_below="@+id/TextViewRssDescription"
 	android:textColor="#FFFFFF"
+
 	/>
 
 
 
-	<TextView
-	android:id="@+id/TextViewRssDescription"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:paddingLeft="4px"
-	android:paddingRight="4px"
-	android:paddingBottom="4px"
-	android:textSize="12sp"
-	android:layout_below="@+id/TextViewRssDatePosted"
-	android:textColor="#FFFFFF"
-	android:textColorLink="#FFFFFF"
-	/>
+
 
 
 	
