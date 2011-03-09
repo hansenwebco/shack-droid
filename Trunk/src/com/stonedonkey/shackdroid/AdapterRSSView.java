@@ -74,8 +74,8 @@ public class AdapterRSSView extends BaseAdapter {
 		
 		TextView date = (TextView)v.findViewById(R.id.TextViewRssDatePosted);
 		
-		String formattedDate = Helper.FormShackRSSDate(rss.getDatePosted());
-		
+		//String formattedDate = Helper.FormShackRSSDate(rss.getDatePosted());
+		String formattedDate = rss.getDatePosted();
 		date.setText(formattedDate);
 		date.setTypeface(face);		
 		
