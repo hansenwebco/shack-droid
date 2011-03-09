@@ -26,17 +26,24 @@
 	/>	
 	<TextView 
 		android:id="@+id/TextViewThreadViewPostDate"
-		android:layout_width="fill_parent" 
-		android:layout_height="wrap_content"
-		android:text="" 
-		android:gravity="right" 
-		android:layout_toRightOf="@+id/TextViewThreadAuthor"
-		android:layout_toLeftOf="@+id/btnPopup"
-		android:textSize="12sp"
-		android:paddingTop="3px"
-		android:paddingRight="12px"
+		android:layout_width="wrap_content"
+		android:layout_height="fill_parent"
+		android:layout_marginRight="3dip"
+		android:textSize="12dip"
+		android:paddingTop="3dip"
+		android:gravity="right"
+		android:layout_toLeftOf="@+id/ImageViewThreadTimer"
 		>
 	</TextView>	
+
+	<ImageView
+	android:id="@+id/ImageViewThreadTimer"
+	android:layout_width="8dip"
+	android:layout_height="8dip"
+	android:layout_marginTop="7dip"
+	android:layout_marginRight="8dip"
+	android:layout_alignParentRight="true"
+	/>
 
 	<ScrollView 
 		android:id="@+id/textAreaScroller"
