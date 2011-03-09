@@ -911,8 +911,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		switch (item.getItemId())
 		{
 			case 1: {
-				//http://www.shacknews.com/laryn.x?id=23004466
-				final String url = "http://www.shacknews.com/laryn.x?id=" + postID;
+				//http://www.shacknews.com/chatty?id=25445895
+				final String url = "http://www.shacknews.com/chatty?id=" + postID;
 				final ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 				clipboard.setText(url);
 				Toast.makeText(this, "Link to post copied to clipboard.", Toast.LENGTH_SHORT).show();
