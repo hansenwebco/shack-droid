@@ -511,6 +511,30 @@ public class Helper {
 			return "Story could not be loaded at this time.";
 		
 	}
-	
+	public static int GetTimeLeftDrawable(String postDate) {
+		final DateFormat dfm = new SimpleDateFormat("MMM d, y hh:mmaa z");
+		try {
+			final Date conDate = dfm.parse(postDate);
+			Date date = new Date();
+			
+			long timeStampPostDate = conDate.getTime() / 1000;
+			final long currentTimeStamp = date.getTime() / 1000;
+			
+			final long timeDifference =  currentTimeStamp - timeStampPostDate;
+			if (timeDifference < 57600) // 8 hours
+				return R.drawable.hourblank;
+			else if (timeDifference > 57600 && timeDifference < 79200 ) // two to eight
+				return R.drawable.hourfull; 
+			else if (timeDifference > 79200 && timeDifference < 82800 ) // one hour to two
+				return R.drawable.hourmid;
+			else if (timeDifference > 82800) // less than an hour
+				return R.drawable.hourlow;
+		
+		} catch (Exception ex) {
+			return R.drawable.hourblank; 
+		}
+		
+		return R.drawable.hourblank;
+	}
 
 }
