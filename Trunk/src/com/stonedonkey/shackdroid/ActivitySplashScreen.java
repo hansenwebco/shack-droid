@@ -2,8 +2,10 @@ package com.stonedonkey.shackdroid;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +24,17 @@ public class ActivitySplashScreen extends Activity {
 		Helper.SetWindowState(getWindow(),this,1);
 		
 		setContentView(R.layout.splash);
+		
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		final String feedURL = prefs.getString("shackFeedURL",getString(R.string.default_api));
+		if (feedURL.contains("shackchatty"))
+		{
+			final SharedPreferences settings= PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+			SharedPreferences.Editor editor = settings.edit();
+			editor.putString("shackFeedURL","http://shackapi.stonedonkey.com");
+			editor.commit(); 
+			
+		}
 		
 		ImageView iv = (ImageView)findViewById(R.id.ImageViewSplashText);
 		iv.setImageResource(R.drawable.shackdroid_splash2);
