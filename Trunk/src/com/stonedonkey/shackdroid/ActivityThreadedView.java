@@ -630,9 +630,16 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		}
 		else
 		{
+			try {
 			if (errorText.length() > 0) {
 				new AlertDialog.Builder(this).setTitle("Error").setPositiveButton("OK", null)
 				.setMessage(errorText).show();
+			}
+			}
+			catch (Exception ex)
+			{
+				// problem throwing up alert
+			
 			}
 		}
 
