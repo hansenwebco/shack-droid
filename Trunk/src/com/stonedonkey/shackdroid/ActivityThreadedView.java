@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -117,8 +116,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		TextView posterName = (TextView)findViewById(R.id.TextViewThreadAuthor);
 		TextView postDate = (TextView)findViewById(R.id.TextViewThreadViewPostDate);
 		
-		
-		
+
 		
 		//tv.setMovementMethod(new ScrollingMovementMethod());
 		tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
@@ -589,6 +587,12 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			final AdapterThreadedView tva = new AdapterThreadedView(this,	R.layout.thread_row, posts,currentPosition);
 			setListAdapter(tva);
 
+			if (posts.size() > 0) {
+				final ImageView threadTime = (ImageView)findViewById(R.id.ImageViewThreadTimer);
+				threadTime.setImageResource(Helper.GetTimeLeftDrawable(posts.get(0).getPostDate()));
+			}
+			
+			
 			UpdatePostText(currentPosition,true);
 
 			final ListView lv = getListView();
@@ -960,8 +964,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
               }
               catch (Exception ex)
               {
-               String exc = ex.getMessage();
-               int i = 1;
+               //String exc = ex.getMessage();
+               //int i = 1;
               }
               return drawable;
         }
