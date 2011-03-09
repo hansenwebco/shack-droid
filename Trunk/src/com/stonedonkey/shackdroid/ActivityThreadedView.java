@@ -547,6 +547,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		// it removes the pancake_ and goes to http://humper.shackspace... bug in linkify maybe??
 		Linkify.addLinks(tv, Linkify.ALL); // make all hyperlinks clickable
 		tv.setClickable(false);
+		tv.setMovementMethod(LinkMovementMethod.getInstance());
 		//tv.scrollTo(0,0);
 		tv.requestLayout();		
 	
@@ -808,6 +809,17 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		//	link = text.replaceAll("http://www.youtube.com/watch\\?v=(.*?)\\W", "<img src='http://img.youtube.com/vi/$1/default.jpg'>");
 		//}
 				
+		// fix for links from main site page
+		text = text.replaceAll("Comment on <a href=\"/article/", "Comment on <a href=\"http://www.shacknews.com/article/");
+		
+//		String regex = "Comment on <a href=\"(/article/[0-9]*/(.*?)\")>.*?</a>";
+//		Pattern pattern = Pattern.compile(regex,Pattern.DOTALL|Pattern.MULTILINE);
+//		Matcher matcher= pattern.matcher(text);
+//		
+//		if (matcher.find())
+//		{
+//			text = matcher.replaceAll("http://www.shacknews.com" + matcher.group(1));
+//		}
 		
 		//Convert the shack spans into HTML fonts since our TextView can convert stuff to HTML
 		// not sure if this is the best or most efficient, but works.
