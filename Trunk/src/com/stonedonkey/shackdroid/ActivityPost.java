@@ -15,11 +15,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,6 +53,11 @@ public class ActivityPost extends Activity implements Runnable {
 		//Log.e("ShackDroid",android.os.Build.VERSION.SDK);
 		ShowRulesWarning();
 
+		final Typeface face = Typeface.createFromAsset(getAssets(), "fonts/arial.ttf");
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		final int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
+		
+		
 		if (savedInstanceState != null) {
 			// savedInstanceState.getLong("storyID");
 			postID = savedInstanceState.getString("postID");
@@ -66,7 +73,10 @@ public class ActivityPost extends Activity implements Runnable {
 		// configure our TextField
 		EditText et = (EditText) findViewById(R.id.EditTextPost);
 		et.setVerticalScrollBarEnabled(true);
-
+		
+		et.setTypeface(face);
+		et.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+		
 		// onClick for Post
 		final Button postButton = (Button) findViewById(R.id.ButtonPost);
 		postButton.setOnClickListener(new Button.OnClickListener() {
