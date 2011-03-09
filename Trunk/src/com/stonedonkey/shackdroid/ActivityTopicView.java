@@ -447,6 +447,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			      //menu.add(0, 0, 0, "Show Story");
 			      menu.add(0, 1, 0, "Copy Post Url to Clipboard");
 			      menu.add(0, 2, 0, "Watch Thread");
+			      menu.add(0,3,0,"Thread Expires In?");
 			      menu.add(0,-1,0,"Cancel");
 			    }
 			  }); 
@@ -592,6 +593,8 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 						break;
 					}
 				}
+					
+			
 			}
 
 			if (inCache == false) {
@@ -625,7 +628,23 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 
 			// 3. Update the user when threads get updates.. how do to this hrm.
 
-			return true;			
+			return true;
+		case 3:
+			
+			final AdapterContextMenuInfo inf = (AdapterContextMenuInfo) item.getMenuInfo();
+			final int itemPos = inf.position;
+			final ShackPost post = posts.get(itemPos);
+			
+			
+			
+			new AlertDialog.Builder(this)
+			.setTitle("Thread Will Expire In:")
+			.setMessage(Helper.GetTimeLeftString(post.getPostDate()))
+			.setNegativeButton("OK", null).show();
+			
+			
+			return true;
+			
 		}
 
 		return false;

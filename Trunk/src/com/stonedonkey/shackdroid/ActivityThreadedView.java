@@ -621,6 +621,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 						public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 							menu.setHeaderTitle("Post Options");
 							menu.add(0,1,0,"Copy Post Url to Clipboard");
+						    menu.add(0,3,0,"Thread Expires In?");
 							menu.add(0, -1, 0, "Cancel");
 						}
 					});
@@ -922,10 +923,21 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 				String linkID = posts.get(currentPosition).getPostID();
 				
 				//http://www.shacknews.com/laryn.x?id=23005222#itemanchor_23005222
-				final String url = "http://www.shacknews.com/laryn.x?id=" + linkID + "#itemanchor_" + linkID;
+				final String url = "http://www.shacknews.com/chatty?id=" + linkID + "#itemanchor_" + linkID;
 				final ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 				clipboard.setText(url);
 				Toast.makeText(this, "Link to post copied to clipboard.", Toast.LENGTH_SHORT).show();
+			}
+			case 3:
+			{
+				String datePosted = posts.get(currentPosition).getPostDate();
+
+				new AlertDialog.Builder(this)
+				.setTitle("Thread Will Expire In:")
+				.setMessage(Helper.GetTimeLeftString(datePosted))
+				.setNegativeButton("OK", null).show();
+			
+				return true;
 			}
 		}
 		
