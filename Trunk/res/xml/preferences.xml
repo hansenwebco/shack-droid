@@ -185,11 +185,6 @@
 		android:key="WhatsNew"
 		android:title="What\'s New"
 		android:summary="What is new in this version of ShackDroid.">
-	</Preference>
-	<Preference
-		android:key="ChangeLog"
-		android:title="Show Full Change Log"
-		android:summary="Retreive the complete list of changes to ShackDroid.">
 	</Preference>	
 	<Preference
 		android:key="Stats"
@@ -205,9 +200,7 @@
 		 android:dialogTitle="Choose Shack API"
 		 android:summary="Change the API Url"
 		 android:title="Shack API"
-		 android:defaultValue="http://shackchatty.com"
-		 android:textSize="12sp"
-	    />
+		 android:defaultValue="http://shackapi.stonedonkey.com" android:textSize="12sp"/>
 
 
 </PreferenceCategory>
