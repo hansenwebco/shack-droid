@@ -536,5 +536,50 @@ public class Helper {
 		
 		return R.drawable.hourblank;
 	}
+	public static String GetTimeLeftString(String postDate)
+	{
+		final DateFormat dfm = new SimpleDateFormat("MMM d, y hh:mmaa z");
+		try {
+			final Date conDate = dfm.parse(postDate);
+			Date date = new Date();
+			long timeStampPostDate = conDate.getTime();
+			final long currentTimeStamp = date.getTime();
+			final long timeDifference = 86400000 -(currentTimeStamp - timeStampPostDate);
+			
+			if (timeDifference < 0)
+				return "Thread expired.";
+			else
+			{
+			long x = timeDifference / 1000;
+			x /= 60;
+			final int minutes = (int) (x % 60);
+			x /= 60;
+			final int hours = (int) (x % 24);
+				
+			String hourString = " hours ";
+			String minuteString = " minutes";
+			
+			if (hours == 1)
+				hourString = " hour ";
+			
+			if (minutes == 1)
+				minuteString = " minute";
+			
+			if (hours > 0)
+				return hours + hourString + minutes +  minuteString;
+			else 
+				return minutes + minuteString;
 
+			}
+
+			
+			
+			
+		}
+		catch (Exception ex)
+		{
+			return ex.getMessage(); 
+		}	
+	}
+	
 }
