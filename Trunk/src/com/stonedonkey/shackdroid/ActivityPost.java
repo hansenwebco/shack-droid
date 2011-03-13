@@ -1,20 +1,13 @@
 package com.stonedonkey.shackdroid;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.DialogInterface.OnClickListener;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -440,53 +433,14 @@ public class ActivityPost extends Activity implements Runnable {
 
 		EditText ev = (EditText) findViewById(R.id.EditTextPost);
 		String postText = ev.getText().toString();
-		
-		// create a URL to post to
-		try {
+		try{
+			String result = HelperShackApi.doPost(Helper.getUserAgentString(this), 
+													login, 
+													password,
+													storyID,
+													postID,
+													postText);
 
-			String data = URLEncoder.encode("content_type_id", "UTF-8") + "="
-						+ URLEncoder.encode("17", "UTF-8") + "&"
-						+ URLEncoder.encode("content_id", "UTF-8") + "="
-						+ URLEncoder.encode(storyID, "UTF-8") + "&"
-						+ URLEncoder.encode("body", "UTF-8") + "="
-						+ URLEncoder.encode(postText, "UTF-8");
-
-			if (postID != null && postID.length() > 0)
-			{
-				data = data + "&" + URLEncoder.encode("parent_id", "UTF-8") + "="
-				+ URLEncoder.encode(postID, "UTF-8");
-			}
-			
-		
-
-	
-		String userPassword = login + ":" + password;
-
-		String encoding = Base64.encodeBytes(userPassword.getBytes());
-		
-		
-			// post to ShackNews
-			URL url = new URL("http://new.shacknews.com/api/chat/create/17.json");
-			URLConnection conn = url.openConnection();
-			conn.setRequestProperty("Authorization", "Basic " + encoding);
-			conn.setRequestProperty("User-Agent", Helper.getUserAgentString(this));
-
-			conn.setDoOutput(true);
-
-			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-
-			wr.write(data);
-			wr.flush();
-
-			// Capture reponse for handling
-			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			String line;
-			String result = "";
-			while ((line = rd.readLine()) != null) {
-				result = result + line;
-			}
-			wr.close();
-			rd.close();
 
 			// show an error messages to the user if needed
 			// Shack sends back a <script> with a bunch of script.. so.. we look for error messages.. eh...
