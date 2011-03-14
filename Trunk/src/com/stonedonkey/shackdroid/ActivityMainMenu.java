@@ -1,14 +1,9 @@
 package com.stonedonkey.shackdroid;
 
-import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
@@ -229,26 +224,7 @@ public class ActivityMainMenu extends ListActivity  {
 		case 6: // tester
 		{
 			
-			try {
-			final URL url= new URL("http://shackapi.stonedonkey.com/thread/23141803.json");
-			
-			final InputStream json= HttpHelper.HttpRequestWithGzip(url.toString(),this);
-			String jsonResult = convertStreamToString(json);
-			
-
-			JSONTopicView jv = new JSONTopicView(this, null, null);
-			jv.GetParsedPostsAndroid(jsonResult);
-			jv.GetParsedPostsJson(jsonResult);
-			
-			
-			}
-			catch (Exception ex)
-			{
-				
-			}
-			
-			return;
-			
+		
 		}
 		}	
 
@@ -257,32 +233,7 @@ public class ActivityMainMenu extends ListActivity  {
 
 		
 	}
-	private static String convertStreamToString(InputStream is) {
-        /*
-         * To convert the InputStream to String we use the BufferedReader.readLine()
-         * method. We iterate until the BufferedReader return null which means
-         * there's no more data to read. Each line will appended to a StringBuilder
-         * and returned as String.
-         */
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-
-        String line = null;
-        try {
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return sb.toString();
-    }
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
