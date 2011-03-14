@@ -1,0 +1,98 @@
+<resources>
+	<string-array name="feeds">
+		<item>Front Page</item>
+		<item>Latest Features</item>
+		<item>Xbox 360</item>
+		<item>PC</item>
+		<item>Playstation 3</item>
+		<item>Nintendo Wii</item>
+		<item>Playstation 2</item>
+		<item>PSP</item>
+		<item>XBLA</item>
+		<item>Rumor</item>
+	</string-array>
+	<string-array name="showAuthor">
+		<item>None</item>
+		<item>Highlight Post Count</item>
+		<item>Highlight Topic</item>
+	</string-array>
+	<string-array name="showAuthorValues">
+		<item>none</item>
+		<item>count</item>
+		<item>topic</item>
+	</string-array>
+	<string-array name="orientation">
+		<item>sensor</item>
+		<item>portrait</item>
+		<item>landscape</item>
+	</string-array>
+	<string-array name="orientationValues">
+		<item>4</item>
+		<item>1</item>
+		<item>0</item>
+	</string-array>
+	<string-array name="threadedView">
+		<item>Black and White (Classic)</item>
+		<item>Custom Color</item>
+	</string-array>
+	<string-array name="threadedViewValues">
+		<item>1</item>
+		<item>2</item>
+	</string-array>	
+	<string-array name="feedsURls">
+		<item>http://feed.shacknews.com/shackfeed.xml</item>
+		<item>http://www.shacknews.com/shackfeed_content.xml</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/Xbox+360</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/PC</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/PlayStation+3</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/Nintendo+Wii</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/PlayStation+2</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/PSP</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/XBLA</item>
+		<item>http://feed.shacknews.com/extras/tag_rss.x/Rumor</item>
+	</string-array>
+		<string-array name="shackAPIDesc">
+		<item>stonedonkey\'s</item>
+	</string-array>	
+	<string-array name="shackAPIs">
+		<item>http://shackapi.stonedonkey.com</item>
+	</string-array>
+	<string-array name="fontSizes">
+		<item>12</item>
+		<item>14</item>
+		<item>16</item>
+		<item>18</item>
+		<item>20</item>
+	</string-array>
+	<string-array name="lolViews">
+		<item>latest lol\'s</item>
+		<item>stuff you wrote</item>
+		<item>stuff you LOL\'d</item>
+	</string-array>	
+	<string-array name="titles">
+		<item>Suck it Trebek!</item>
+		<item>Stay a while and listen.</item>
+		<item>Not Pony Safe</item>
+		<item>Lamp, Sand, Lime!</item>
+		<item>*golf clap*</item>
+		<item>Spy\'s sappin\' mah phone!</item>
+		<item>You are not the father!</item>
+		<item>Putting NWS in NeWS.</item>
+		<item>What?</item>
+		<item>Stealing your bike.</item>
+		<item>thanks.txt</item>
+		<item>ILTC</item>
+		<item>Pics+Divx</item>
+		<item>Because work is over rated.</item>
+		<item>Better than real life.</item>
+		<item>I see what you did there.</item>
+		<item>It has already been posted.</item>
+		<item>Not Radio Shack.</item>
+		<item>Makes pooping at work fun.</item>
+		<item>Here be escape goats.</item>
+		<item>I lied.</item>
+		<item>Gary Busey is watching.</item>
+		<item>Spyware free since 2008.</item>
+		<item>Leaving without saying goodbye?</item>
+	</string-array>	
+</resources>
