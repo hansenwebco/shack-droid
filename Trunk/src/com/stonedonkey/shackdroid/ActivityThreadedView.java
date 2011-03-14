@@ -501,7 +501,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			return; 
 		
 		final TextView tv = (TextView) findViewById(R.id.TextViewPost);
-		final String postText = ParseShackText(posts.get(position).getPostText(),addSpoilerMarkers);
+		final String postText = Helper.ParseShackText(posts.get(position).getPostText(),addSpoilerMarkers);
 		
 		final Spanned parsedText = Html.fromHtml(postText,imgGetter, new TagHandler(){
 			int startPos = 0;
@@ -795,56 +795,7 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			img.setImageDrawable(null);
 		}
 	}
-	private String ParseShackText(String text,boolean addSpoilerMarkers) {
 
-		
-		// make a youtoobs thumbnail
-		//http://img.youtube.com/vi/{videoid}/default.jpg
-		
-		//Pattern p = Pattern.compile("href=.*>(.*www.youtube.com.*)</a>");
-		//Matcher m = p.matcher(text);
-		//if (m.find())
-		//{
-		//	String link =  m.group();		
-		//	link = text.replaceAll("http://www.youtube.com/watch\\?v=(.*?)\\W", "<img src='http://img.youtube.com/vi/$1/default.jpg'>");
-		//}
-				
-		// fix for links from main site page
-		text = text.replaceAll("Comment on <a href=\"/article/", "Comment on <a href=\"http://www.shacknews.com/article/");
-		
-//		String regex = "Comment on <a href=\"(/article/[0-9]*/(.*?)\")>.*?</a>";
-//		Pattern pattern = Pattern.compile(regex,Pattern.DOTALL|Pattern.MULTILINE);
-//		Matcher matcher= pattern.matcher(text);
-//		
-//		if (matcher.find())
-//		{
-//			text = matcher.replaceAll("http://www.shacknews.com" + matcher.group(1));
-//		}
-		
-		//Convert the shack spans into HTML fonts since our TextView can convert stuff to HTML
-		// not sure if this is the best or most efficient, but works.
-		text = text.replaceAll("<span class=\"jt_red\">(.*?)</span>", "<font color=\"#ff0000\">$1</font>");	
-		text = text.replaceAll("<span class=\"jt_green\">(.*?)</span>",	"<font color=\"#8dc63f\">$1</font>");
-		text = text.replaceAll("<span class=\"jt_pink\">(.*?)</span>", "<font color=\"#f49ac1\">$1</font>");
-		text = text.replaceAll("<span class=\"jt_olive\">(.*?)</span>",	"<font color=\"#808000\">$1</font>");
-		text = text.replaceAll("<span class=\"jt_fuchsia\">(.*?)</span>", "<font color=\"#c0ffc0\">$1</font>");
-		text = text.replaceAll("<span class=\"jt_yellow\">(.*?)</span>", "<font color=\"#ffde00\">$1</font>");
-		text = text.replaceAll("<span class=\"jt_blue\">(.*?)</span>", "<font color=\"#44aedf\">$1</font>");
-		text = text.replaceAll("<span class=\"jt_lime\">(.*?)</span>",	"<font color=\"#c0ffc0\">$1</font>");
-		text = text.replaceAll("<span class=\"jt_orange\">(.*?)</span>", "<font color=\"#f7941c\">$1</font>");
-		text = text.replaceAll("<span class=\"jt_bold\">(.*?)</span>", "<b>$1</b>");
-		text = text.replaceAll("<span class=\"jt_italic\">(.*?)</span>", "<i>$1</i>");
-		text = text.replaceAll("<span class=\"jt_underline\">(.*?)</span>", "<u>$1</u>");
-		text = text.replaceAll("<span class=\"jt_strike\">(.*?)</span>", "<s>$1</s>");
-
-		// You can only do "highlights" on the actual TextView itself, so we mark up spoilers 
-		// !!-text-!! like so, and then handle it on the appling text to the TextView
-		if (addSpoilerMarkers == true) {
-			text = text.replaceAll("<span class=\"jt_spoiler\"(.*?)>(.*?)</span>",
-			"!!-$2-!!");
-		}
-		return text;
-	}
 
 	// menu creation
 	@Override
