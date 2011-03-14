@@ -122,7 +122,7 @@
 			android:key="enableVolumeNav" 
 			android:defaultValue="false" 
 			android:title="Volume Key Navigation" 
-			android:summary="Enable volume key navigation between posts in a thread."/>
+			android:summary="Enable volume key navigation between posts in a thread." android:enabled="true"/>
 
 		<Preference
 		android:key="clearWatchList"
