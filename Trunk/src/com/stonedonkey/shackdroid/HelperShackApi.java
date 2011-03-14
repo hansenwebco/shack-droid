@@ -28,6 +28,11 @@ public class HelperShackApi {
 				data = data + "&" + URLEncoder.encode("parent_id", "UTF-8") + "="
 				+ URLEncoder.encode(postID, "UTF-8");
 			}
+			else
+			{
+				data = data + "&" + URLEncoder.encode("parent_id", "UTF-8") + "="
+				+ URLEncoder.encode("0", "UTF-8");
+			}
 
 			String userPassword = login + ":" + password;
 			String encoding = Base64.encodeBytes(userPassword.getBytes());
@@ -41,7 +46,7 @@ public class HelperShackApi {
 	private static String jsonPost(String userAgent, String userPass, String data) throws IOException{
 		// post to ShackNews
 		///http://www.shacknews.com/api/chat/create/17.json
-		URL url =  new URL(Uri.withAppendedPath(API_BASE, "create/17.json").toString());//  new URL("http://www.shacknews.com/api/chat/create/17.json");
+		URL url =  new URL(Uri.withAppendedPath(API_BASE, "chat/create/17.json").toString());//  new URL("http://www.shacknews.com/api/chat/create/17.json");
 		
 		URLConnection conn = url.openConnection();
 		conn.setRequestProperty("Authorization", "Basic " + userPass);

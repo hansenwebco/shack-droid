@@ -82,8 +82,10 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		}
 
 		final Bundle extras = this.getIntent().getExtras();
-		if (extras != null)
+		if (extras != null && !extras.getString("StoryID").equals("17") )
 			loadStoryID = extras.getString("StoryID");
+		
+		
 		
 		if (savedInstanceState == null) {
 			try {
