@@ -118,6 +118,12 @@
     		android:defaultValue="true" 
     		android:summary="Show on screen navigation bars in threads."/>
 
+		<CheckBoxPreference 
+			android:key="enableVolumeNav" 
+			android:defaultValue="false" 
+			android:title="Volume Key Navigation" 
+			android:summary="Enable volume key navigation between posts in a thread."/>
+
 		<Preference
 		android:key="clearWatchList"
 		android:title="Clear Watch List"
