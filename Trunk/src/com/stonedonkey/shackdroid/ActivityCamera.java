@@ -23,7 +23,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;	
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,7 +33,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory.Options;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -52,14 +51,12 @@ public class ActivityCamera extends Activity {
 	byte[] _pictureData;
 	boolean _scaleImage = false;
 	private boolean _highResAvailable;
-	private boolean _extraCompressionNeeded;
 	private boolean _askToPost = false;
 	private AsyncTask<byte[], String, String> uploadTask;
 	
 	public static final String UPLOADED_FILE_URL = "uploadedfileurl";
 	public static final String TEMP_PICTURE_LOCATION = "/Android/data/com.stonedonkey.shackdroid/files/";
 	private static final int CAMERA_TAKE_PIC = 0;
-	private static final int MAX_IMAGE_AREA = 3145728;	// ~3MP
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -221,43 +218,7 @@ public class ActivityCamera extends Activity {
     	return null;
     }
 
-    private void Setup(int width, int height){
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		String login = prefs.getString("shackLogin", "");
-		String password = prefs.getString("shackPassword", "");
-		
-		int size = width * height; 
-		
-		// The maximum image upload on Shackpics is closer to 2MB when logged 
-		// in, despite what the upload page says.
-		
-		// Why not resize to about 3MP for all cases as loading large images 
-		// on smartphones is kind of painful? 95% compression for users with 
-		// accounts should still be fine, though
-		
-		
-		//3 possible states
-		// 1: Can login (3Mb file max) so we're ok whatever at 95% compression
-		// 2: No login and greater than 3Megapixels so we need to try and scale down to 3Mp AND compress to 90%
-		// 3: No login 3Megapixel camera so we need to compress to 90%
-		if (login.length() > 0 && password.length() > 0){
-			_highResAvailable = true;
-			if (size > MAX_IMAGE_AREA) {
-				_scaleImage = true;
-			}
-		}
-		else if (size > MAX_IMAGE_AREA){ //3 megapixels
-			_extraCompressionNeeded = true;
-			_scaleImage = true;
-			//_scaleAmount = 2; //Math.floor(width / 2048);
-		}
-		else{
-			_extraCompressionNeeded = true;
-		}    	
-    }
-
-    
-	class CompressShareAsyncTask extends AsyncTask<Uri, byte[], byte[]>{
+    class CompressShareAsyncTask extends AsyncTask<Uri, byte[], byte[]>{
 
 		@Override
 		protected byte[] doInBackground(Uri... params) {
