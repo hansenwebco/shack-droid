@@ -377,7 +377,7 @@ public class ActivityCamera extends Activity {
 					String password = prefs.getString("shackPassword", "");
 					
 					if (login.length() > 0 && password.length() > 0){
-						HttpPost req = new HttpPost("http://www.shackpics.com/users.x?act=login_go");
+						HttpPost req = new HttpPost("http://chattypics.com/users.x?act=login_go");
 						List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
 						
 						nameValuePairs.add(new BasicNameValuePair("user_name", login));
@@ -387,13 +387,13 @@ public class ActivityCamera extends Activity {
 						 String response = httpClient.execute(req, responseHandler);
 						 
 						if (!response.contains("You have successfully been logged in")){
-							Log.e("shackpics login failure", response);
+							Log.e("chattypics login failure", response);
 							// Do something here to re-size the image again?
 						}
 					}
 				}
 				
-				HttpPost request = new HttpPost("http://www.shackpics.com/upload.x");
+				HttpPost request = new HttpPost("http://chattypics.com/upload.php");
 
 				//List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
 				//nameValuePairs.add(new BasicNameValuePair("filename","droidUpload.jpg"));
@@ -404,7 +404,8 @@ public class ActivityCamera extends Activity {
 				//request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 				MultipartEntity  entity = new MultipartEntity();
-				entity.addPart("filename",new StringBody("droidUpload.jpg"));
+				//entity.addPart("filename",new StringBody("droidUpload.jpg"));
+				entity.addPart("type", new StringBody("direct"));
 				entity.addPart("userfile[]", new InputStreamBody(new ByteArrayInputStream(data), "droidUpload.jpg"));
 				request.setEntity(entity);
 
@@ -412,7 +413,7 @@ public class ActivityCamera extends Activity {
 				String response = httpClient.execute(request,responseHandler);
 
 				// Tested with: http://www.fileformat.info/tool/regex.htm
-				Pattern p = Pattern.compile("http\\:\\/\\/www\\.shackpics\\.com\\/viewer\\.x\\?file=.*?\\.jpg");
+				Pattern p = Pattern.compile("http\\:\\/\\/chattypics\\.com\\/viewer\\.x\\?file=.*?\\.jpg");
 				Matcher m = p.matcher(response);
 				
 				if (m.find()){
