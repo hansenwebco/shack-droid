@@ -14,12 +14,12 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
@@ -405,7 +405,7 @@ public class ActivityCamera extends Activity {
 				//nameValuePairs.add(new BasicNameValuePair("userfile[]",Base64.encodeBytes(data)));
 				//request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-				MultipartEntity  entity = new MultipartEntity();
+				MultipartEntity  entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 				//entity.addPart("filename",new StringBody("droidUpload.jpg"));
 				entity.addPart("type", new StringBody("direct"));
 				entity.addPart("userfile[]", new InputStreamBody(new ByteArrayInputStream(data), "droidUpload.jpg"));
