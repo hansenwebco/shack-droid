@@ -1,10 +1,16 @@
 package com.stonedonkey.shackdroid;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -14,10 +20,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.InputStreamBody;
-import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -394,34 +396,110 @@ public class ActivityCamera extends Activity {
 					}
 				}
 				
-				HttpPost request = new HttpPost("http://chattypics.com/upload2.php");
-				request.setHeader("Referer", "http://chattypics.com/");
+//				HttpPost request = new HttpPost("http://chattypics.com/upload2.php");
+//				request.setHeader("Referer", "http://chattypics.com/");
+//				
+//				//List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
+//				//nameValuePairs.add(new BasicNameValuePair("filename","droidUpload.jpg"));
+//				
+//				// *Tried changing this to encode data.  Hangs on setEntity() :(
+//				// Maybe we need to escape the [ and ]
+//				//nameValuePairs.add(new BasicNameValuePair("userfile[]",Base64.encodeBytes(data)));
+//				//request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//
+//				MultipartEntity  entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+//				//entity.addPart("filename",new StringBody("droidUpload.jpg"));
+//				entity.addPart("type", new StringBody("direct"));
+//				entity.addPart("userfile[]", new InputStreamBody(new ByteArrayInputStream(data), "droidUpload.jpg"));
+//				request.setEntity(entity);
 				
-				//List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
-				//nameValuePairs.add(new BasicNameValuePair("filename","droidUpload.jpg"));
+				HttpURLConnection connection = null;
+				DataOutputStream outputStream = null;
+
+
+				String pathToOurFile = "droidUpload.jpg";
+
+				String urlServer = "http://chattypics.com/upload.php";
+				String lineEnd = "\r\n";
+				String twoHyphens = "--";
+				String boundary =  "*****";
+
+				int bytesRead, bytesAvailable, bufferSize;
+				byte[] buffer;
+				int maxBufferSize = 1*1024*1024;
 				
-				// *Tried changing this to encode data.  Hangs on setEntity() :(
-				// Maybe we need to escape the [ and ]
-				//nameValuePairs.add(new BasicNameValuePair("userfile[]",Base64.encodeBytes(data)));
-				//request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+	
+				// TODO: convert the byte[] of data to FileInputStream somehow
+				//FileInputStream fileInputStream = new FileInputStream(someFile);
+				ByteArrayInputStream fileInputStream = new ByteArrayInputStream(data);
+				
+				URL url = new URL(urlServer);
+				connection = (HttpURLConnection) url.openConnection();
 
-				MultipartEntity  entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-				//entity.addPart("filename",new StringBody("droidUpload.jpg"));
-				entity.addPart("type", new StringBody("direct"));
-				entity.addPart("userfile[]", new InputStreamBody(new ByteArrayInputStream(data), "droidUpload.jpg"));
-				request.setEntity(entity);
+				
+				// Allow Inputs & Outputs
+				connection.setDoInput(true);
+				connection.setDoOutput(true);
+				connection.setUseCaches(false);
 
+				// Enable POST method
+				connection.setRequestMethod("POST");
 
-				String response = httpClient.execute(request,responseHandler);
+				connection.setRequestProperty("Connection", "Keep-Alive");
+				connection.setRequestProperty("Content-Type", "multipart/form-data;boundary="+boundary);
+
+				outputStream = new DataOutputStream( connection.getOutputStream() );
+				outputStream.writeBytes(twoHyphens + boundary + lineEnd);
+				outputStream.writeBytes("Content-Disposition: form-data; name=\"userfile[]\";filename=\"" + pathToOurFile +"\"" + lineEnd);
+				outputStream.writeBytes(lineEnd);
+
+				bytesAvailable = fileInputStream.available();
+				bufferSize = Math.min(bytesAvailable, maxBufferSize);
+				buffer = new byte[bufferSize];
+
+				// Read file
+				bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+				while (bytesRead > 0)
+				{
+				outputStream.write(buffer, 0, bufferSize);
+				bytesAvailable = fileInputStream.available();
+				bufferSize = Math.min(bytesAvailable, maxBufferSize);
+				bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+				}
+
+				outputStream.writeBytes(lineEnd);
+				outputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+				//Get Response	
+			      InputStream is =  connection.getInputStream();
+			      BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+			      String line;
+			      StringBuffer response = new StringBuffer(); 
+			      while((line = rd.readLine()) != null) {
+			        response.append(line);
+			        response.append('\r');
+			      }
+			      rd.close();
+				
+				
+
+				fileInputStream.close();
+				outputStream.flush();
+				outputStream.close();
+
+				
+				
+				//String response = httpClient.execute(request,responseHandler);
 
 				// Tested with: http://www.fileformat.info/tool/regex.htm
-				Pattern p = Pattern.compile("http\\:\\/\\/chattypics\\.com\\/viewer\\.x\\?file=.*?\\.jpg");
-				Matcher m = p.matcher(response);
+				Pattern p = Pattern.compile("http\\:\\/\\/chattypics\\.com\\/viewer\\.php\\?file=.*?\\.jpg");
+				Matcher m = p.matcher(response.toString());
 				
 				if (m.find()){
-					String url = m.group();
-					if (URLUtil.isValidUrl(url)){
-						return url;
+					String urlfind = m.group();
+					if (URLUtil.isValidUrl(urlfind)){
+						return urlfind;
 					}
 					else{
 						return null;
