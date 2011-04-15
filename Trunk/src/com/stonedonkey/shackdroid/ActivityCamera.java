@@ -19,6 +19,7 @@ import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
@@ -393,8 +394,9 @@ public class ActivityCamera extends Activity {
 					}
 				}
 				
-				HttpPost request = new HttpPost("http://chattypics.com/upload.php");
-
+				HttpPost request = new HttpPost("http://chattypics.com/upload2.php");
+				request.setHeader("Referer", "http://chattypics.com/");
+				
 				//List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
 				//nameValuePairs.add(new BasicNameValuePair("filename","droidUpload.jpg"));
 				
@@ -409,7 +411,7 @@ public class ActivityCamera extends Activity {
 				entity.addPart("userfile[]", new InputStreamBody(new ByteArrayInputStream(data), "droidUpload.jpg"));
 				request.setEntity(entity);
 
-				
+
 				String response = httpClient.execute(request,responseHandler);
 
 				// Tested with: http://www.fileformat.info/tool/regex.htm
