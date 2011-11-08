@@ -53,9 +53,11 @@
 	</string-array>
 		<string-array name="shackAPIDesc">
 		<item>stonedonkey\'s</item>
+		<item>devnullgt\'s</item>
 	</string-array>	
 	<string-array name="shackAPIs">
 		<item>http://shackapi.stonedonkey.com</item>
+		<item>http://shackapi.misreply.org</item>
 	</string-array>
 	<string-array name="fontSizes">
 		<item>12</item>
