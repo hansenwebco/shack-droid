@@ -296,7 +296,7 @@ class CheckForNewShackDroidAsyncTask extends AsyncTask<Void,Void,Integer>{
 				String ns = Context.NOTIFICATION_SERVICE;
 				NotificationManager nm = (NotificationManager)context.getSystemService(ns);
 
-				int icon = R.drawable.shack_logo;
+				int icon = R.drawable.shack_logo_notify;
 				CharSequence tickerText = "ShackDroid Update Available";
 
 				Notification note = new Notification(icon,tickerText,0);
