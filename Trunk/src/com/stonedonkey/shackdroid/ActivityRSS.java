@@ -33,6 +33,7 @@ public class ActivityRSS extends ListActivity implements Runnable {
 	private int feedID = 0;
 	private String feedURL = "http://www.shacknews.com/rss?recent_articles=1";
 	private String feedDesc = "Front Page";
+	private Boolean threadLoaded = true;
 
 	
 	URL url;
@@ -44,7 +45,24 @@ public class ActivityRSS extends ListActivity implements Runnable {
 		Helper.SetWindowState(getWindow(),this);
 		
 		setContentView(R.layout.rss);
-		fillSaxData();
+		
+		if (savedInstanceState == null) {
+			try {
+				// setRequestedOrientation(ActivityInfo.
+				// SCREEN_ORIENTATION_LANDSCAPE);
+				fillSaxData();
+			} catch (Exception e) {
+				new AlertDialog.Builder(this).setTitle("Error")
+						.setPositiveButton("OK", null).setMessage(
+								"There was an error connecting to the API.")
+						.show();
+				try {
+					dismissDialog(1);
+				} catch (Exception ex) {
+					// dialog could not be killed for some reason
+				}
+			}
+		}
 	
 		registerForContextMenu(getListView());
 	}
@@ -61,10 +79,38 @@ public class ActivityRSS extends ListActivity implements Runnable {
 	};			
 	
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
+	protected void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+		
+		savedInstanceState.putSerializable("posts", rssItems);
+		savedInstanceState.putBoolean("threadLoaded", threadLoaded);
+		savedInstanceState.putInt("scrollPos", getListView().getFirstVisiblePosition());
+		
 	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
 
+		rssItems = (ArrayList<ShackRSS>) savedInstanceState.getSerializable("posts");
+		threadLoaded = savedInstanceState.getBoolean("threadLoaded");
+		
+		// If we change orientation in the middle of a thread loading we end up with 
+		// the last loaded posts, this forces a new pull on orientation change.
+		if (threadLoaded == false)
+			fillSaxData();  
+		
+		threadLoaded = true;
+			
+		ShowData();
+		
+		final int position = savedInstanceState.getInt("scrollPos");
+		final ListView lv = getListView();
+		lv.requestFocusFromTouch();
+		lv.setSelection(position);
+	
+		//savedInstanceState.clear(); // we'll resave it if we do something again
+		
+	}
 
 
 	private void fillSaxData() {
@@ -80,6 +126,7 @@ public class ActivityRSS extends ListActivity implements Runnable {
 	@Override
 	public void run() {
 	
+		threadLoaded = false;
 	
 		try {
 			url = new URL(feedURL);
@@ -100,6 +147,8 @@ public class ActivityRSS extends ListActivity implements Runnable {
 	
 			// get the RSS items
 			rssItems = saxHandler.getRssItems();
+			
+			threadLoaded = true;
 		
 		} catch (Exception e) {
 

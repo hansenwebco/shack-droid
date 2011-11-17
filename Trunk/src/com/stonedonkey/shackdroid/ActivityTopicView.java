@@ -124,6 +124,7 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		savedInstanceState.putInt("storyPages", storyPages);
 		savedInstanceState.putString("storyID", storyID);
 		savedInstanceState.putBoolean("threadLoaded", threadLoaded);
+		savedInstanceState.putInt("scrollPos", getListView().getFirstVisiblePosition());
 		
 
 	}
@@ -141,11 +142,18 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 		// the last loaded posts, this forces a new pull on orientation change.
 		if (threadLoaded == false)
 			fillDataSAX();  
-
-		threadLoaded = true;
-		savedInstanceState.clear(); // we'll resave it if we do something again
 		
+		threadLoaded = true;
+			
 		ShowData();
+		
+		final int position = savedInstanceState.getInt("scrollPos");
+		final ListView lv = getListView();
+		lv.requestFocusFromTouch();
+		lv.setSelection(position);
+	
+		//savedInstanceState.clear(); // we'll resave it if we do something again
+		
 	}
 
 	@Override
