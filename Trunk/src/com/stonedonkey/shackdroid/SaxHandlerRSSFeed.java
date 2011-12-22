@@ -20,12 +20,13 @@ public class SaxHandlerRSSFeed extends DefaultHandler {
 	private Boolean description = false;
 	private Boolean link = false;
 	private Boolean datePosted = false;
+	private Boolean id = false;
 
 	private String titleText = "";
 	private String descriptionText ="";
 	private String linkText = "";
 	private String datePostedText = "";
-
+	private String idText = "";
 	
 	public SaxHandlerRSSFeed(Context context) {
 		this.context =context;
@@ -38,20 +39,23 @@ public class SaxHandlerRSSFeed extends DefaultHandler {
 	@Override
 	public void startElement(final String nsURL, final String localName, final String rawName,final Attributes attributes) throws SAXException
 	{
-		if ("item".equalsIgnoreCase(localName))
+		if ("story".equalsIgnoreCase(localName))
 			this.item = true;
 		
-		if ("title".equalsIgnoreCase(localName))
+		if ("name".equalsIgnoreCase(localName))
 			this.title = true;
 		
-		if ("description".equalsIgnoreCase(localName))
+		if ("preview".equalsIgnoreCase(localName))
 			this.description = true;
 
-		if ("link".equalsIgnoreCase(localName))
+		if ("url".equalsIgnoreCase(localName))
 			this.link = true;
 		
-		if ("pubDate".equalsIgnoreCase(localName))
+		if ("date".equalsIgnoreCase(localName))
 			this.datePosted = true;
+		
+		if ("id".equalsIgnoreCase(localName))
+			this.id = true;
 				
 		
 	}
@@ -59,25 +63,29 @@ public class SaxHandlerRSSFeed extends DefaultHandler {
 	public void endElement(final String nsURI, final String localName,final String rawName)throws SAXException 
 	{
 		
-		if ("title".equalsIgnoreCase(localName))
+		if ("name".equalsIgnoreCase(localName))
 			this.title = false;
 		
-		if ("description".equalsIgnoreCase(localName))
+		if ("preview".equalsIgnoreCase(localName))
 			this.description = false;
 
-		if ("link".equalsIgnoreCase(localName))
+		if ("url".equalsIgnoreCase(localName))
 			this.link = false;
 		
-		if ("pubDate".equalsIgnoreCase(localName))
+		if ("date".equalsIgnoreCase(localName))
 			this.datePosted = false;
 		
-		if ("item".equalsIgnoreCase(localName))
+		if ("id".equalsIgnoreCase(localName))
+			this.id = false;
+		
+		if ("story".equalsIgnoreCase(localName))
 		{
 			this.item = false;
 			
-			ShackRSS rssItem = new ShackRSS(titleText, descriptionText, linkText, datePostedText);
+			ShackRSS rssItem = new ShackRSS(titleText, descriptionText, linkText, datePostedText,idText);
 			rssItems.add(rssItem);
 			
+			idText= "";
 			titleText="";
 			descriptionText="";
 			linkText="";
@@ -91,6 +99,9 @@ public class SaxHandlerRSSFeed extends DefaultHandler {
 	{
 		if (title && item)
 			titleText = titleText +  new String(ch,start,length);
+		
+		if (id && item)
+			idText = idText +  new String(ch,start,length);
 		
 		if (description && item)
 			descriptionText = descriptionText +  new String(ch,start,length);

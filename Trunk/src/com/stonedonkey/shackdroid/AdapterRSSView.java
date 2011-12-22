@@ -46,11 +46,11 @@ public class AdapterRSSView extends BaseAdapter {
 	public long getItemId(int position) {
 
 		ShackRSS rss = rssItems.get(position);
-		String link = rss.getLink();
+		String id = rss.getID();
 		
 		// TODO: lets think about this more later
-		String[] story = link.split("/");
-		long storyID = Long.parseLong(story[story.length-2]);
+		//String[] story = link.split("/");
+		long storyID = Long.parseLong(id);
 		
 		return storyID;
 		
