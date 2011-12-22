@@ -14,10 +14,13 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.DialogInterface.OnCancelListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,7 +34,8 @@ public class ActivityRSS extends ListActivity implements Runnable {
 	private ArrayList<ShackRSS> rssItems = null; 
 	private ProgressDialog pd;
 	private int feedID = 0;
-	private String feedURL = "http://www.shacknews.com/rss?recent_articles=1";
+	//private String feedURL = "http://www.shacknews.com/rss?recent_articles=1";
+	private  String feedURL;
 	private String feedDesc = "Front Page";
 	private Boolean threadLoaded = true;
 
@@ -43,8 +47,11 @@ public class ActivityRSS extends ListActivity implements Runnable {
 				
 		super.onCreate(savedInstanceState);
 		Helper.SetWindowState(getWindow(),this);
-		
 		setContentView(R.layout.rss);
+		
+		
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		feedURL = prefs.getString("shackFeedURL",getString(R.string.default_api)) + "/stories.xml";
 		
 		if (savedInstanceState == null) {
 			try {
@@ -115,7 +122,9 @@ public class ActivityRSS extends ListActivity implements Runnable {
 
 	private void fillSaxData() {
 		// show a progress dialog
-		pd = ProgressDialog.show(this, null, "Loading Story feed...", true, true); 
+		//pd = ProgressDialog.show(this, null, "Loading Story feed...", true, true); 
+		showDialog(2);
+	
 		
 		this.setTitle("ShackDroid - " + feedDesc);
 		
@@ -151,7 +160,7 @@ public class ActivityRSS extends ListActivity implements Runnable {
 			threadLoaded = true;
 		
 		} catch (Exception e) {
-
+			String message = e.getMessage();
 		}
 		progressBarHandler.sendEmptyMessage(0);
 		
@@ -163,7 +172,7 @@ public class ActivityRSS extends ListActivity implements Runnable {
 			// we implement a handler because most UI items 
 			// won't update within a thread
 			try {
-			pd.dismiss();
+				dismissDialog(2);
 			}
 			catch (Exception ex)
 			{
@@ -233,10 +242,11 @@ public class ActivityRSS extends ListActivity implements Runnable {
 				case 4: 
 					intent = new Intent();
 				
-					String link = rssItems.get(itemPosition).getLink();
-					String[] story = link.split("/");
-					String storyID = story[story.length-2];
-					intent.putExtra("StoryID",storyID );
+					String storyID = rssItems.get(itemPosition).getID();
+					
+					//String[] story = link.split("/");
+					//String storyID = story[story.length-2];
+					intent.putExtra("StoryID",storyID.toString() );
 					intent.setClass(this, ActivityTopicView.class);
 					startActivity(intent);
 					return true;
@@ -277,6 +287,23 @@ public class ActivityRSS extends ListActivity implements Runnable {
                     }
                 })
                .create(); 
+	        case 2:
+	        	{
+				final ProgressDialog dialog = new ProgressDialog(this);
+				dialog.setMessage("loading, please wait...");
+				dialog.setTitle(null);
+				dialog.setIndeterminate(true);
+				dialog.setCancelable(true);
+				
+				dialog.setOnCancelListener(new OnCancelListener(){
+					@Override
+					public void onCancel(DialogInterface arg0) {
+						finish();
+					}
+				});
+				
+				return dialog;
+				}
 	        }
 			return null;
         }
