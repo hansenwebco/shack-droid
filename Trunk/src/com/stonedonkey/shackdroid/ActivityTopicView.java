@@ -458,7 +458,8 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			      menu.add(0, 1, 0, "Copy Post Url to Clipboard");
 			      menu.add(0, 2, 0, "Watch Thread");
 			      menu.add(0,3,0,"Thread Expires In?");
-			      menu.add(0,-1,0,"Cancel");
+			      menu.add(0, 4, 0, "Shacker's Chatty Profile");
+			      //menu.add(0, -1, 0, "Cancel"); //unnecessary? with back button and click outside of options..
 			    }
 			  }); 
 			
@@ -653,6 +654,18 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 			.setNegativeButton("OK", null).show();
 			
 			
+			return true;
+
+		case 4:
+			final AdapterContextMenuInfo inf2 = (AdapterContextMenuInfo) item.getMenuInfo();
+			final int itemPos2 = inf2.position;
+			final String shackname = posts.get(itemPos2).getPosterName();
+					
+			final Intent intent = new Intent();
+			intent.putExtra("shackname", shackname);
+			intent.setClass(this,ActivityProfile.class);
+			startActivity(intent);
+		
 			return true;
 			
 		}
