@@ -53,6 +53,7 @@
 			    <data android:scheme="http" android:host="shacknews.com" android:pathPattern=".*chatty*"/>          
             </intent-filter>
 </activity>
+<activity android:name="ActivityProfile" android:label="ShackDroid - ChattyProfil.es" android:screenOrientation="sensor"></activity>
 <meta-data android:name="com.google.android.backup.api_key" android:value="AEdPqrEAAAAIXKrNAEkV-aYUISu5HDbNO6nxa0H9bM4-mG0mOA" />
 </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
