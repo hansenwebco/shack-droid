@@ -2,5 +2,6 @@
  <resources>  
      <drawable name="blue">#0000ff</drawable>
      <drawable name="white">#ffffff</drawable> 
-     <drawable name="lightblue">#00BFF3</drawable>   
+     <drawable name="lightblue">#00BFF3</drawable>
+     <color name="shackRedOrange">#FFF02E01</color>   
  </resources> 

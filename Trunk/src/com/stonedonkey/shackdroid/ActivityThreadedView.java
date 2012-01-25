@@ -605,7 +605,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 			      menu.setHeaderTitle("Options");
 			      menu.add(0, 2, 0, "Copy Post Url to Clipboard");
-			      menu.add(0,-1,0,"Cancel");
+			      menu.add(0, 4, 0, "Shacker's Chatty Profile");
+			      //menu.add(0, -1, 0, "Cancel"); //unnecessary? with back button and click outside of options..
 			    }
 			  }); 
 			
@@ -622,8 +623,9 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 						public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 							menu.setHeaderTitle("Post Options");
 							menu.add(0,1,0,"Copy Post Url to Clipboard");
-						    menu.add(0,3,0,"Thread Expires In?");
-							menu.add(0, -1, 0, "Cancel");
+							menu.add(0, 3, 0, "Thread Expires In?");
+							menu.add(0, 4, 0, "Shacker's Chatty Profile");
+							//menu.add(0, -1, 0, "Cancel"); //unnecessary? with back button and click outside of options..
 						}
 					});
 			
@@ -906,6 +908,17 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 				.setTitle("Thread Will Expire In:")
 				.setMessage(Helper.GetTimeLeftString(datePosted))
 				.setNegativeButton("OK", null).show();
+			
+				return true;
+			}
+			case 4:
+			{
+				String shackname = posts.get(currentPosition).getPosterName();
+						
+				Intent intent = new Intent();
+				intent.putExtra("shackname", shackname);
+				intent.setClass(this,ActivityProfile.class);
+				startActivity(intent);
 			
 				return true;
 			}
