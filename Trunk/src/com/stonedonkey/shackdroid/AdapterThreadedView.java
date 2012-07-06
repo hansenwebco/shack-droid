@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class AdapterThreadedView<TopicRow> extends BaseAdapter {
+public class AdapterThreadedView extends BaseAdapter {
 
 	private final List<ShackPost> topicList;
 	private final int rowResouceID;

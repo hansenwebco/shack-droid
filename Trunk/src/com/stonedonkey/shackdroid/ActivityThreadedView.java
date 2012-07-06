@@ -22,9 +22,9 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.DialogInterface.OnCancelListener;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -36,10 +36,10 @@ import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.text.Editable;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.Spanned;
 import android.text.Html.ImageGetter;
 import android.text.Html.TagHandler;
+import android.text.Spannable;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.StrikethroughSpan;
 import android.text.util.Linkify;
@@ -48,24 +48,23 @@ import android.text.util.Linkify.TransformFilter;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextMenu;
-import android.view.Gravity;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.TextView.BufferType;
+import android.widget.Toast;
 
 import com.stonedonkey.shackdroid.ShackGestureListener.ShackGestureEvent;
 import com.stonedonkey.shackdroid.ShackPopup.ShackPopupEvent;
@@ -176,50 +175,12 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 				.show();
 			}
 		}
-
-		//setWindowSizes();
 		
 		pop = new ShackPopup();
 		pop.addListener(this);
 		w = pop.Init(this, w);
 		
-		// disabling for now.
-		ImageView b;// = (ImageView)findViewById(R.id.ivPopupButton);
-		//b.setVisibility(View.GONE);
-		b =null;
-		if (b != null){
-			//b.setVisibility(View.GONE);
-			
-			b.setOnClickListener(new OnClickListener(){
-	
-				@Override
-				public void onClick(View arg0) {
-					if (w.isShowing()){
-						w.dismiss();
-					}
-					else{
-						int wi = getWindowManager().getDefaultDisplay().getWidth();
-						int hi = getWindowManager().getDefaultDisplay().getHeight();
-						int extra = (hi>wi?24:-2);
-						
-						if (pop.isSmallScreen){
-							if (extra >0){
-								extra -= 30;
-							}
-							wi = (wi/2) - 120;
-							hi = ((hi/2) - 64) - extra;							
-						}
-						else{
-							wi = (wi/2) - 240;
-							hi = ((hi/2) - 130) - extra;
-						}
-						w.showAtLocation(arg0, Gravity.NO_GRAVITY, wi, hi);
-						//w.showAsDropDown(arg0, 0, -2);
-					}
-				}});
-			
-			
-		}
+
 	}
 	ShackPopup pop;
 	PopupWindow w;
@@ -579,7 +540,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		ShackDroidStats.AddPostsViewed(this);
 	}
 
-	@SuppressWarnings("unchecked")
 	private void ShowData() {
 
 		if (posts != null)
@@ -648,7 +608,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 	}
 
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		w.dismiss();
@@ -678,7 +637,6 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		UpdatePostText(position,true);
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void setListItemPosition(int direction)
 	{
 		w.dismiss();
