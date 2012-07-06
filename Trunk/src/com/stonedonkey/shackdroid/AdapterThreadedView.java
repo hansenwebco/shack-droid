@@ -82,7 +82,7 @@ public class AdapterThreadedView extends BaseAdapter {
 		if (convertView == null){
 			convertView = inflate.inflate(rowResouceID,parent,false);
 			holder = new ViewHolder();
-			holder.posterName = (TextView)convertView.findViewById(R.id.TextViewPosterNamePreview);;
+			//holder.posterName = (TextView)convertView.findViewById(R.id.TextViewPosterNamePreview);
 			holder.threadPreview = (TextView)convertView.findViewById(R.id.TextViewThreadPreview);
 			
 			if (holder.posterName != null){
