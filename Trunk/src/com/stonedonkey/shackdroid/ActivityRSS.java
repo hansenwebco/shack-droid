@@ -32,9 +32,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 public class ActivityRSS extends ListActivity implements Runnable {
 
 	private ArrayList<ShackRSS> rssItems = null; 
-	private ProgressDialog pd;
 	private int feedID = 0;
-	//private String feedURL = "http://www.shacknews.com/rss?recent_articles=1";
 	private  String feedURL;
 	private String feedDesc = "Front Page";
 	private Boolean threadLoaded = true;
@@ -160,7 +158,7 @@ public class ActivityRSS extends ListActivity implements Runnable {
 			threadLoaded = true;
 		
 		} catch (Exception e) {
-			String message = e.getMessage();
+			
 		}
 		progressBarHandler.sendEmptyMessage(0);
 		
