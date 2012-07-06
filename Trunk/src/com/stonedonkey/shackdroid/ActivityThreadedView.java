@@ -565,7 +565,8 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 			    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 			      menu.setHeaderTitle("Options");
 			      menu.add(0, 2, 0, "Copy Post Url to Clipboard");
-			      menu.add(0, -1, 0, "Cancel");
+			      menu.add(0, 4, 0, "Shacker's Chatty Profile");
+			      //menu.add(0, -1, 0, "Cancel");
 			    }
 			  }); 
 			
