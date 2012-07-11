@@ -69,7 +69,8 @@ public class ActivityMainMenu extends ListActivity  {
 			menu.add(new ShackMenuItem("Shack Search","For all your vanity needs."));
 			menu.add(new ShackMenuItem("Shack Messages","Stuff too shocking for even the Shack."));
 			menu.add(new ShackMenuItem("Shack LOLs","You are not as popular as these people."));//
-			menu.add(new ShackMenuItem("Settings","Hay guys, am I doing this right?"));			
+			menu.add(new ShackMenuItem("Settings","Hay guys, am I doing this right?"));
+			menu.add(new ShackMenuItem("Lime!?","Hurrrrrr!!"));		
 		}
 
 		AdapterMainMenu mm = new AdapterMainMenu(this,R.layout.mainmenu_row, menu);
@@ -224,7 +225,8 @@ public class ActivityMainMenu extends ListActivity  {
 		case 6: // tester
 		{
 			
-		
+			intent.setClass(this,ActivityLimeriffic.class);
+			break;
 		}
 		}	
 

@@ -43,6 +43,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 public class Helper {
 
@@ -580,6 +581,12 @@ public class Helper {
 		{
 			return ex.getMessage(); 
 		}	
+	}
+	public static void ShowToastMessage(Context context,String message, int duration)
+	{
+		CharSequence text = message;
+		Toast toast = Toast.makeText(context, text, duration);
+		toast.show();
 	}
 	public static String ParseShackText(String text,boolean addSpoilerMarkers) {
 
