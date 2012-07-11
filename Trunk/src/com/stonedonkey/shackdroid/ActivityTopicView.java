@@ -409,18 +409,6 @@ public class ActivityTopicView extends ListActivity implements Runnable, ShackGe
 
 			}
 
-			// TODO: Passing this as a new HashTable seems very ugly and a waste
-			// of memory
-			// Unfortunately I can't find a a way to get the Adapter to update
-			// before I call
-			// the UpdatePostCache below.. that update occurs before the
-			// ListAdapter is set
-			// apparently. I can't find anything else to put the Update , so for
-			// now we'll
-			// create a new Hashtable.. ick.
-
-			// chazums maybe tva.notifyDataSetChanged() ?
-
 			if (postCounts != null)
 				tempHash = new Hashtable<String, String>(postCounts);
 
