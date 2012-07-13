@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -63,15 +64,22 @@ public class ActivityLimeriffic extends ListActivity {
 	}
 
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
+	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-		
-		//ListView lv= getListView();
-		//lv.setSelectionFromTop(position,0);
-		
-		
-	
-		
+
+		final String cat = posts.get(position).getPostCategory();
+
+		final Intent intent = new Intent();
+		intent.setClass(getApplicationContext(), ActivityThreadedView.class);
+		intent.putExtra("postID", Long.toString(id)); // the value must be a
+														// string
+		intent.putExtra("storyID", storyID);
+		if (cat.equalsIgnoreCase("nws"))
+			intent.putExtra("isNWS", true);
+		else
+			intent.putExtra("isNWS", false);
+
+		startActivity(intent);
 	}
 
 	private void ShowData() {
@@ -110,6 +118,8 @@ public class ActivityLimeriffic extends ListActivity {
 			});
 
 			setListAdapter(tva);
+			
+			
 
 			// update the reply counts for the listing of topics
 			try {

@@ -26,9 +26,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/TextViewLimePostText"
-        android:layout_toLeftOf="@+id/TextViewLimePosts"
+        android:layout_alignParentRight="true"
         android:paddingBottom="5dip"
-        android:paddingRight="20dip"
+        android:paddingRight="10dip"
         android:textColor="#FF8800" />
     
     <TextView
@@ -45,8 +45,8 @@
         android:id="@+id/TextViewLimeNewPosts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/TextViewLimePostText"
         android:layout_below="@+id/TextViewLimePostText"
+        android:layout_toLeftOf="@+id/TextViewLimePostDate"
         android:paddingBottom="5dip"
         android:paddingRight="10dip"
         android:textColor="#9933CC" />    
