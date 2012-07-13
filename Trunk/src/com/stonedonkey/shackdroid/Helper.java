@@ -82,6 +82,44 @@ public class Helper {
 		}
 		return fixedDate;
 	}
+	public static String FormatShackDateToTimePassed(String unformattedDate)
+	{
+		
+		String textDate = "?";
+		
+		try {
+		DateFormat dfm = new SimpleDateFormat("MMM d, y hh:mmaa z");
+		Date datePost = (Date)dfm.parse(unformattedDate);
+		Date dateNow = new Date();
+		long seconds = 0;
+		seconds = (dateNow.getTime() - datePost.getTime())/1000;
+		
+		if (seconds < 60) // less than a minute show seconds
+		{
+			textDate = Long.toString(seconds) + "s";
+		}
+		else if (seconds > 59 && seconds < 3600) // less than an hour show minutes 
+		{
+			seconds = Math.round(seconds / 60);
+			textDate = Long.toString(seconds) + "m";
+		}
+		else if (seconds > 3599 && seconds < 86400 ) // less than one day show hours and minutes?
+		{
+			long hours = Math.round(seconds/3600);
+			long minutes = Math.round((seconds - (hours*3600))/60);
+			textDate = Long.toString(hours) + "h " + Long.toString(minutes) + "m";
+		}
+		}
+		
+		
+		catch (Exception e)
+		{
+			// TODO: handle parse error
+		}
+		
+		
+		return textDate;
+	}
 	
 	// TODO: We can probably combine these i'm just lazy today
 	public static String FormShackRSSDate(String unformattedDate)
