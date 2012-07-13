@@ -29,6 +29,7 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 public class ActivityLimeriffic extends ListActivity {
@@ -51,6 +52,23 @@ public class ActivityLimeriffic extends ListActivity {
 		GetChattyAsyncTask chatty = new GetChattyAsyncTask(this);
 		chatty.execute();
 
+		if (threadLoaded)
+		{
+		
+		}
+		
+	}
+
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+		
+		ListView lv= getListView();
+		lv.setSelectionFromTop(position,0);
+		
+		
+		
+		
 	}
 
 	private void ShowData() {
