@@ -89,8 +89,8 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 		if (convertView == null) {
 			convertView = inflate.inflate(rowResouceID, parent, false);
 			holder = new ViewHolder();
-//			holder.posterName = (TextView) convertView.findViewById(R.id.TextViewPosterName);
-//			holder.datePosted = (TextView) convertView.findViewById(R.id.TextViewDatePosted);
+			holder.posterName = (TextView) convertView.findViewById(R.id.TextViewLimeAuthor);
+			holder.datePosted = (TextView) convertView.findViewById(R.id.TextViewLimePostDate);
 //			holder.replyCount = (TextView) convertView.findViewById(R.id.TextViewReplyCount);
 //			holder.newPosts = (TextView) convertView.findViewById(R.id.TextViewNewPosts);
 			holder.postText = (TextView) convertView.findViewById(R.id.TextViewLimePostText);
@@ -113,14 +113,14 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 
 //		holder.postTimer.setImageResource(Helper.GetTimeLeftDrawable(post.getPostDate()));
 //
-//		holder.posterName.setText(post.getPosterName());
+		holder.posterName.setText(post.getPosterName());
 //
 //		if (shackLogin.equalsIgnoreCase(post.getPosterName()))
 //			holder.posterName.setTextColor(Color.parseColor("#00BFF3"));
 //		else
 //			holder.posterName.setTextColor(Color.parseColor("#ffba00"));
 //
-//		holder.datePosted.setText(Helper.FormatShackDate(post.getPostDate()));
+		holder.datePosted.setText(Helper.FormatShackDate(post.getPostDate()));
 //		holder.replyCount.setText(post.getReplyCount());
 //
 //		if (showAuthor.equalsIgnoreCase("count") && post.getIsAuthorInThread())
@@ -172,6 +172,7 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 			preview = preview.substring(0, 99);
 
 		holder.postText.setText(preview);
+
 //
 //		if (showAuthor.equalsIgnoreCase("topic") && post.getIsAuthorInThread()) {
 //			final Drawable d = r.getDrawable(R.drawable.background_gradient_blue);

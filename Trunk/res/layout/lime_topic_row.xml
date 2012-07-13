@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    
     <TextView
         android:id="@+id/TextViewLimePostText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:minHeight="20dip"
         android:maxLength="99"
-        android:padding="10dip"
-         />
+        android:minHeight="20dip"
+        android:padding="10dip" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/TextViewLimeAuthor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TextViewLimePostText"
+        android:paddingBottom="5dip"
+        android:paddingLeft="10dip"
+        android:textColor="#0099CC" />
+
+    <TextView
+        android:id="@+id/TextViewLimePostDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/TextViewLimePostText"
+        android:layout_below="@+id/TextViewLimePostText"
+        android:paddingBottom="5dip"
+        android:paddingRight="20dip"
+        android:textColor="#FF8800" />
+
+</RelativeLayout>
