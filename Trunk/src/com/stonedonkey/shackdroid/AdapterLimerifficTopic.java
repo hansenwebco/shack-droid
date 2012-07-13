@@ -91,8 +91,8 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 			holder = new ViewHolder();
 			holder.posterName = (TextView) convertView.findViewById(R.id.TextViewLimeAuthor);
 			holder.datePosted = (TextView) convertView.findViewById(R.id.TextViewLimePostDate);
-//			holder.replyCount = (TextView) convertView.findViewById(R.id.TextViewReplyCount);
-//			holder.newPosts = (TextView) convertView.findViewById(R.id.TextViewNewPosts);
+			holder.replyCount = (TextView) convertView.findViewById(R.id.TextViewLimePosts);
+			holder.newPosts = (TextView) convertView.findViewById(R.id.TextViewLimeNewPosts);
 			holder.postText = (TextView) convertView.findViewById(R.id.TextViewLimePostText);
 //			holder.viewCat = (ImageView) convertView.findViewById(R.id.ImageViewCat);
 //			holder.topicRow = (RelativeLayout) convertView.findViewById(R.id.TopicRow);
@@ -120,52 +120,52 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 //		else
 //			holder.posterName.setTextColor(Color.parseColor("#ffba00"));
 //
-		holder.datePosted.setText(Helper.FormatShackDate(post.getPostDate()));
-//		holder.replyCount.setText(post.getReplyCount());
+		holder.datePosted.setText(Helper.FormatShackDateToTimePassed(post.getPostDate()));
+		holder.replyCount.setText(post.getReplyCount());
 //
 //		if (showAuthor.equalsIgnoreCase("count") && post.getIsAuthorInThread())
 //			holder.replyCount.setTextColor(Color.parseColor("#0099CC"));
 //		else
 //			holder.replyCount.setTextColor(Color.parseColor("#FFFFFF"));
 
-//		if (post.getOrginalReplyCount() != null) // we are showing watched
-//													// messages
-//		{
-//			Integer newPosts = 0;
-//
-//			if (postCache != null && postCache.get(post.getPostID()) != null) {
-//				final String cacheposts = postCache.get(post.getPostID());
-//				newPosts = Integer.parseInt(cacheposts) - post.getOrginalReplyCount();
-//			}
-//
-//			if (newPosts > 0) {
-//				totalNewPosts = totalNewPosts + newPosts;
-//				holder.newPosts.setText("+" + newPosts.toString());
-//			}
-//			else
-//				holder.newPosts.setText(null);
-//
-//		}
-//		else // show the number of new posts since the last refresh
-//		{
-//			if (postCache != null && postCache.get(post.getPostID()) != null) {
-//
-//				final String cacheposts = postCache.get(post.getPostID());
-//				final Integer newPosts = Integer.parseInt(post.getReplyCount()) - Integer.parseInt(cacheposts);
-//
-//				if (newPosts > 0 && Integer.parseInt(post.getReplyCount()) > 0) {
-//					holder.newPosts.setText("+" + newPosts.toString());
-//				}
-//				else
-//					holder.newPosts.setText(null);
-//
-//			}
-//			else // we don't have a cached version of this in the post cache
-//					// reset the view
-//			{
-//				holder.newPosts.setText(null);
-//			}
-//		}
+		if (post.getOrginalReplyCount() != null) // we are showing watched
+													// messages
+		{
+			Integer newPosts = 0;
+
+			if (postCache != null && postCache.get(post.getPostID()) != null) {
+				final String cacheposts = postCache.get(post.getPostID());
+				newPosts = Integer.parseInt(cacheposts) - post.getOrginalReplyCount();
+			}
+
+			if (newPosts > 0) {
+				totalNewPosts = totalNewPosts + newPosts;
+				holder.newPosts.setText("+" + newPosts.toString());
+			}
+			else
+				holder.newPosts.setText(null);
+
+		}
+		else // show the number of new posts since the last refresh
+		{
+			if (postCache != null && postCache.get(post.getPostID()) != null) {
+
+				final String cacheposts = postCache.get(post.getPostID());
+				final Integer newPosts = Integer.parseInt(post.getReplyCount()) - Integer.parseInt(cacheposts);
+
+				if (newPosts > 0 && Integer.parseInt(post.getReplyCount()) > 0) {
+					holder.newPosts.setText("+" + newPosts.toString());
+				}
+				else
+					holder.newPosts.setText(null);
+
+			}
+			else // we don't have a cached version of this in the post cache
+					// reset the view
+			{
+				holder.newPosts.setText(null);
+			}
+		}
 
 		String preview = post.getPostPreview();
 		if (preview.length() > 99)

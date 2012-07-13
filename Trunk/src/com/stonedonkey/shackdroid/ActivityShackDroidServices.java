@@ -64,11 +64,14 @@ public class ActivityShackDroidServices extends Service  {
 				 Helper.CheckForNewShackMessages(context);
 				} 
 			catch (Exception e) {
-				Log.d("ShackDroid", e.getMessage());	
+				if (e.getMessage() !=null )
+					Log.d("ShackDroid", e.getMessage());	
+				else
+					Log.d("ShachDroid","Service Fail!");
 			}
 		}
 		else{
-			Log.d("ShackDroid", "Network too old and busted for SM check.");
+			//Log.d("ShackDroid", "Network too old and busted for SM check.");
 		}
 		
 		
