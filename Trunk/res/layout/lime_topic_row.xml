@@ -10,45 +10,67 @@
         android:layout_height="wrap_content"
         android:maxLength="99"
         android:minHeight="20dip"
-        android:padding="10dip" />
+        android:padding="10dip"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:id="@+id/TextViewLimeAuthor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/TextViewLimePostText"
-        android:paddingBottom="5dip"
+        android:paddingBottom="10dip"
         android:paddingLeft="10dip"
         android:textColor="#0099CC" />
+
+    <TextView
+        android:id="@+id/TextViewPosted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TextViewLimePostText"
+        android:layout_toRightOf="@+id/TextViewLimeAuthor"
+        android:paddingBottom="10dip"
+        android:text=" posted " />
 
     <TextView
         android:id="@+id/TextViewLimePostDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/TextViewLimePostText"
-        android:layout_alignParentRight="true"
-        android:paddingBottom="5dip"
+        android:layout_toRightOf="@+id/TextViewPosted"
+        android:paddingBottom="10dip"
         android:paddingRight="10dip"
         android:textColor="#FF8800" />
+
+    
     
     <TextView
         android:id="@+id/TextViewLimePosts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/TextViewLimePostDate"
+        android:layout_marginRight="3dip"
         android:layout_below="@+id/TextViewLimePostText"
+        android:layout_marginBottom="15dip"
         android:layout_toLeftOf="@+id/TextViewLimeNewPosts"
-        android:paddingBottom="5dip"
-        android:paddingRight="5dip"
-         />    
-        
+        android:background="#BBBBBB"
+        android:padding="3dip"
+        android:minWidth="25dip"
+        android:gravity="center"
+        android:textColor="#000000" />
+
     <TextView
         android:id="@+id/TextViewLimeNewPosts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/TextViewLimePostDate"
         android:layout_below="@+id/TextViewLimePostText"
-        android:layout_toLeftOf="@+id/TextViewLimePostDate"
-        android:paddingBottom="5dip"
-        android:paddingRight="10dip"
-        android:textColor="#9933CC" />    
+        android:layout_marginBottom="15dip"
+        android:layout_marginRight="10dip"
+        android:background="#669900"
+        android:padding="3dip"
+        android:minWidth="25dip"
+        android:gravity="center"
+        android:layout_alignParentRight="true"
+        android:textColor="#000000" />
 
 </RelativeLayout>
