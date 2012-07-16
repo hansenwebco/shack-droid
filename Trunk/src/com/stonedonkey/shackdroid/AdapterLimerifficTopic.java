@@ -73,7 +73,7 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 		TextView replyCount;
 		TextView newPosts;
 		TextView postText;
-		ImageView viewCat;
+		TextView viewCat;
 		RelativeLayout topicRow;
 		ImageView postTimer;
 	}
@@ -94,7 +94,7 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 			holder.replyCount = (TextView) convertView.findViewById(R.id.TextViewLimePosts);
 			holder.newPosts = (TextView) convertView.findViewById(R.id.TextViewLimeNewPosts);
 			holder.postText = (TextView) convertView.findViewById(R.id.TextViewLimePostText);
-//			holder.viewCat = (ImageView) convertView.findViewById(R.id.ImageViewCat);
+			holder.viewCat = (TextView) convertView.findViewById(R.id.TextViewLimeModTag);
 //			holder.topicRow = (RelativeLayout) convertView.findViewById(R.id.TopicRow);
 //			holder.postTimer = (ImageView) convertView.findViewById(R.id.ImageViewTopicTimer);
 
@@ -188,6 +188,35 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 //		}
 //		else
 //			holder.topicRow.setBackgroundDrawable(null);
+		
+		
+		// TODO: clean this up a little / also replicated in ShackDroidThread ick
+		final String postCat = post.getPostCategory();
+		holder.viewCat.setVisibility(View.VISIBLE);
+		
+		if (postCat.equals("offtopic"))  {
+			holder.viewCat.setText("offtopic");
+			holder.viewCat.setBackgroundColor(Color.parseColor("#444444"));
+		}
+		else if (postCat.equals("nws")) {
+			holder.viewCat.setText("nws");
+			holder.viewCat.setBackgroundColor(Color.parseColor("#FF0000"));
+		}
+		else if (postCat.equals("political")) {
+			holder.viewCat.setText("political");
+			holder.viewCat.setBackgroundColor(Color.parseColor("#FF6633"));
+		}
+		else if (postCat.equals("stupid")) {
+			holder.viewCat.setText("stupid");
+			holder.viewCat.setBackgroundColor(Color.GREEN);
+		}
+		else if (postCat.equals("informative")) {
+			holder.viewCat.setText("interesting");
+			holder.viewCat.setBackgroundColor(Color.BLUE);
+		}
+		else 
+			holder.viewCat.setVisibility(View.GONE);		
+		
 
 		return convertView;
 	}
