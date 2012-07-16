@@ -31,6 +31,8 @@ import android.view.ContextMenu;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
 import android.view.Window;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -56,6 +58,33 @@ public class ActivityLimeriffic extends ListActivity {
 		GetChattyAsyncTask chatty = new GetChattyAsyncTask(this);
 		chatty.execute();
 
+		ListView lv= getListView();
+		lv.setOnScrollListener(new OnScrollListener() {
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				
+				// start loading the next page
+				if (threadLoaded && firstVisibleItem + visibleItemCount + 3 > totalItemCount)
+				{
+					// get the list of topics
+					GetChattyAsyncTask chatty = new GetChattyAsyncTask(getApplicationContext());
+					chatty.execute();
+					currentPage++;
+					ShowData();
+				}
+			}
+
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				
+				
+			}
+			
+		});
+		
+		
+		
 		if (threadLoaded)
 		{
 		
@@ -204,6 +233,8 @@ public class ActivityLimeriffic extends ListActivity {
 		@Override
 		protected Void doInBackground(String... params) {
 
+			threadLoaded = false;
+			
 			try {
 				final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
 				final String feedURL = prefs.getString("shackFeedURL", getString(R.string.default_api));
@@ -250,6 +281,7 @@ public class ActivityLimeriffic extends ListActivity {
 			catch (Exception ex) {
 				// TODO: implement error handling
 			}
+			threadLoaded = true;
 
 			return null;
 		}
