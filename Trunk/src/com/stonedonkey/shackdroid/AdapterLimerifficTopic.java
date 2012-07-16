@@ -121,6 +121,7 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 //			holder.posterName.setTextColor(Color.parseColor("#ffba00"));
 //
 		holder.datePosted.setText(Helper.FormatShackDateToTimePassed(post.getPostDate()));
+		
 		holder.replyCount.setText(post.getReplyCount());
 //
 //		if (showAuthor.equalsIgnoreCase("count") && post.getIsAuthorInThread())
@@ -141,9 +142,12 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 			if (newPosts > 0) {
 				totalNewPosts = totalNewPosts + newPosts;
 				holder.newPosts.setText("+" + newPosts.toString());
+				holder.newPosts.setVisibility(View.VISIBLE);
 			}
-			else
+			else {
 				holder.newPosts.setText(null);
+				holder.newPosts.setVisibility(View.INVISIBLE);
+			}
 
 		}
 		else // show the number of new posts since the last refresh
@@ -155,14 +159,18 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 
 				if (newPosts > 0 && Integer.parseInt(post.getReplyCount()) > 0) {
 					holder.newPosts.setText("+" + newPosts.toString());
+					holder.newPosts.setVisibility(View.VISIBLE);
 				}
-				else
+				else {
 					holder.newPosts.setText(null);
+					holder.newPosts.setVisibility(View.INVISIBLE);
+				}
 
 			}
 			else // we don't have a cached version of this in the post cache
 					// reset the view
 			{
+				holder.newPosts.setVisibility(View.INVISIBLE);
 				holder.newPosts.setText(null);
 			}
 		}

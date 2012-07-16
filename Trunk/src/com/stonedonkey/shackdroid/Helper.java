@@ -106,8 +106,9 @@ public class Helper {
 		else if (seconds > 3599 && seconds < 86400 ) // less than one day show hours and minutes?
 		{
 			long hours = Math.round(seconds/3600);
-			long minutes = Math.round((seconds - (hours*3600))/60);
-			textDate = Long.toString(hours) + "h " + Long.toString(minutes) + "m";
+			//long minutes = Math.round((seconds - (hours*3600))/60);
+			//textDate = Long.toString(hours) + "h " + Long.toString(minutes) + "m";
+			textDate = Long.toString(hours) + "h";
 		}
 		}
 		
