@@ -19,7 +19,6 @@
         android:id="@+id/TextViewLimePostText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:maxLength="99"
         android:minHeight="20dip"
         android:padding="10dip"
         android:layout_below="@+id/TextViewLimeModTag"

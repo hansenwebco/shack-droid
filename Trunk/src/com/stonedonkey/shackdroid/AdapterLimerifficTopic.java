@@ -176,8 +176,8 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 		}
 
 		String preview = post.getPostPreview();
-		if (preview.length() > 99)
-			preview = preview.substring(0, 99);
+		//if (preview.length() > 99)
+		//	preview = preview.substring(0, 99);
 
 		holder.postText.setText(preview);
 
@@ -200,19 +200,19 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 		}
 		else if (postCat.equals("nws")) {
 			holder.viewCat.setText("nws");
-			holder.viewCat.setBackgroundColor(Color.parseColor("#FF0000"));
+			holder.viewCat.setBackgroundColor(Color.parseColor("#CC0000"));
 		}
 		else if (postCat.equals("political")) {
 			holder.viewCat.setText("political");
-			holder.viewCat.setBackgroundColor(Color.parseColor("#FF6633"));
+			holder.viewCat.setBackgroundColor(Color.parseColor("#FF8800"));
 		}
 		else if (postCat.equals("stupid")) {
 			holder.viewCat.setText("stupid");
-			holder.viewCat.setBackgroundColor(Color.GREEN);
+			holder.viewCat.setBackgroundColor(Color.parseColor("#669900"));
 		}
 		else if (postCat.equals("informative")) {
 			holder.viewCat.setText("interesting");
-			holder.viewCat.setBackgroundColor(Color.BLUE);
+			holder.viewCat.setBackgroundColor(Color.parseColor("#0099CC"));
 		}
 		else 
 			holder.viewCat.setVisibility(View.GONE);		
