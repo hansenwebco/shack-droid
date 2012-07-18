@@ -33,10 +33,12 @@ import android.view.View.OnCreateContextMenuListener;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
-public class ActivityLimeriffic extends ListActivity {
+import com.stonedonkey.shackdroid.ShackGestureListener.ShackGestureEvent;
+
+public class ActivityLimeriffic extends ListActivity implements ShackGestureEvent {
 
 	private ArrayList<ShackPost> posts;
 	private String storyID = null;
@@ -47,12 +49,21 @@ public class ActivityLimeriffic extends ListActivity {
 	private String loadStoryID = null;
 	private Boolean threadLoaded = true;
 	private Hashtable<String, String> postCounts = null;
+	private AdapterLimerifficTopic tva;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
+		final ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.topics, this);
+		if (listener != null)
+		{
+			listener.addListener(this);
+		}
+		
+		
 		
 		// get the list of topics
 		GetChattyAsyncTask chatty = new GetChattyAsyncTask(this);
@@ -65,13 +76,13 @@ public class ActivityLimeriffic extends ListActivity {
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 				
 				// start loading the next page
-				if (threadLoaded && firstVisibleItem + visibleItemCount + 3 > totalItemCount)
+				if (threadLoaded && firstVisibleItem + visibleItemCount >= totalItemCount && currentPage + 1 <= storyPages)
 				{
 					// get the list of topics
+					currentPage++;
 					GetChattyAsyncTask chatty = new GetChattyAsyncTask(getApplicationContext());
 					chatty.execute();
-					currentPage++;
-					ShowData();
+					//ShowData();
 				}
 			}
 
@@ -131,9 +142,20 @@ public class ActivityLimeriffic extends ListActivity {
 			}
 			if (postCounts != null)
 				tempHash = new Hashtable<String, String>(postCounts);
-
-			final AdapterLimerifficTopic tva = new AdapterLimerifficTopic(getApplicationContext(), R.layout.lime_topic_row, posts, login, fontSize, tempHash);
-
+			
+			int pos = getListView().getScrollY();
+			
+			if (tva == null) {
+				tva = new AdapterLimerifficTopic(getApplicationContext(), R.layout.lime_topic_row, posts, login, fontSize, tempHash);
+				setListAdapter(tva);
+			}
+			else {
+				tva.SetPosts(posts);
+				tva.notifyDataSetChanged();
+				//getListView().scrollTo(0, pos);
+			}
+			
+			
 			final ListView lv = getListView();
 			lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
 				@Override
@@ -146,7 +168,7 @@ public class ActivityLimeriffic extends ListActivity {
 				}
 			});
 
-			setListAdapter(tva);
+			
 			
 			
 
@@ -235,6 +257,7 @@ public class ActivityLimeriffic extends ListActivity {
 
 			threadLoaded = false;
 			
+			
 			try {
 				final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
 				final String feedURL = prefs.getString("shackFeedURL", getString(R.string.default_api));
@@ -260,14 +283,20 @@ public class ActivityLimeriffic extends ListActivity {
 				// Get the XMLReader of the SAXParser we created.
 				final XMLReader xr = sp.getXMLReader();
 				// Create a new ContentHandler and apply it to the XML-Reader
-				final SaxHandlerTopicView saxHandler = new SaxHandlerTopicView(c, "topic");
+				SaxHandlerTopicView saxHandler = new SaxHandlerTopicView(c, "topic");
+				
 				xr.setContentHandler(saxHandler);
 
 				// Parse the xml-data from our URL.
 				xr.parse(new InputSource(HttpHelper.HttpRequestWithGzip(url.toString(), c)));
 
 				// Our ExampleHandler now provides the parsed data to us.
-				posts = saxHandler.GetParsedPosts();
+				if (posts == null) {
+					posts = saxHandler.GetParsedPosts();
+				}
+				else
+					posts.addAll(posts.size(), saxHandler.GetParsedPosts());
+				
 				storyID = saxHandler.getStoryID();
 				storyName = saxHandler.getStoryTitle();
 				storyPages = saxHandler.getStoryPageCount();
@@ -280,8 +309,9 @@ public class ActivityLimeriffic extends ListActivity {
 			}
 			catch (Exception ex) {
 				// TODO: implement error handling
+				
 			}
-			threadLoaded = true;
+			
 
 			return null;
 		}
@@ -289,17 +319,38 @@ public class ActivityLimeriffic extends ListActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-
-			dialog = ProgressDialog.show(ActivityLimeriffic.this, "Loading", "La la la la la", true, true);
+			
+			if (currentPage == 1 )
+				dialog = ProgressDialog.show(ActivityLimeriffic.this, "Loading", "La la la la la", true, true);
+			else
+				SetLoaderVisibility(View.VISIBLE);
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
+		
 			ShowData();
+			
+			SetLoaderVisibility(View.GONE);
+			
+			try {
 			dialog.dismiss();
+			}
+			catch(Exception e) {}
+			
 		}
 
+	}
+	protected void SetLoaderVisibility(int visibility)
+	{
+		RelativeLayout loader = (RelativeLayout)findViewById(R.id.TopicLoader);
+		loader.setVisibility(visibility);		
+	}
+	@Override
+	public void eventRaised(int eventType) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

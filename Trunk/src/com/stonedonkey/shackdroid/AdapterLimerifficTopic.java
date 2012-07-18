@@ -22,7 +22,7 @@ import android.widget.TextView;
 public class AdapterLimerifficTopic extends BaseAdapter {
 
 	// private Context context;
-	private final List<ShackPost> topicList;
+	private List<ShackPost> topicList;
 	private final int rowResouceID;
 	private final String shackLogin;
 	private final Typeface face;
@@ -49,7 +49,10 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 
 		inflate = LayoutInflater.from(context);
 	}
-
+	public void SetPosts(List<ShackPost> posts)
+	{
+		topicList = posts;
+	}
 	@Override
 	public int getCount() {
 		return topicList.size();
