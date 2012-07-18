@@ -18,7 +18,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -30,19 +29,22 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
-import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.stonedonkey.shackdroid.ShackGestureListener.ShackGestureEvent;
 
-public class ActivityLimeriffic extends ListActivity implements ShackGestureEvent {
+public class ActivityLimeriffic extends SherlockListActivity implements ShackGestureEvent {
 
 	private ArrayList<ShackPost> posts;
 	private String storyID = null;
-	private String storyName;
+
 	private String errorText = "";
 	private Integer currentPage = 1;
 	private Integer storyPages = 1;
@@ -55,16 +57,18 @@ public class ActivityLimeriffic extends ListActivity implements ShackGestureEven
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		final ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.topics, this);
 		if (listener != null) {
 			listener.addListener(this);
 		}
 
-		// get the list of topics
-		GetChattyAsyncTask chatty = new GetChattyAsyncTask(this);
-		chatty.execute();
+		if (savedInstanceState == null)
+		{
+			// 	get the list of topics
+			GetChattyAsyncTask chatty = new GetChattyAsyncTask(this);
+			chatty.execute();
+		}
 
 		ListView lv = getListView();
 		lv.setOnScrollListener(new OnScrollListener() {
@@ -74,11 +78,12 @@ public class ActivityLimeriffic extends ListActivity implements ShackGestureEven
 
 				// start loading the next page
 				if (threadLoaded && firstVisibleItem + visibleItemCount >= totalItemCount && currentPage + 1 <= storyPages) {
+				
 					// get the list of topics
 					currentPage++;
 					GetChattyAsyncTask chatty = new GetChattyAsyncTask(getApplicationContext());
 					chatty.execute();
-					// ShowData();
+
 				}
 			}
 
@@ -91,6 +96,97 @@ public class ActivityLimeriffic extends ListActivity implements ShackGestureEven
 
 		if (threadLoaded) {
 
+		}
+
+	}
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+
+		try
+		{
+			// UpdatePostCache();
+			dismissDialog(1);
+		} catch (Exception ex)
+		{
+			// dialog could not be killed for some reason
+		}
+
+		// Dear Android devs... please make this more of a pain in the ass for
+		// orientation changes.. KAHNNN!!!!
+		savedInstanceState.putSerializable("posts", posts);
+		//savedInstanceState.putString("storyName", storyName);
+		savedInstanceState.putInt("currentPage", currentPage);
+		savedInstanceState.putInt("storyPages", storyPages);
+		savedInstanceState.putString("storyID", storyID);
+		savedInstanceState.putBoolean("threadLoaded", threadLoaded);
+		savedInstanceState.putInt("scrollPos", getListView().getFirstVisiblePosition());
+		
+
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		//storyName = savedInstanceState.getString("storyName");
+		currentPage = savedInstanceState.getInt("currentPage");
+		storyPages = savedInstanceState.getInt("storyPages");
+		storyID = savedInstanceState.getString("storyID");
+		posts = (ArrayList<ShackPost>) savedInstanceState.getSerializable("posts");
+		threadLoaded = savedInstanceState.getBoolean("threadLoaded");
+
+		// If we change orientation in the middle of a thread loading we end up
+		// with
+		// the last loaded posts, this forces a new pull on orientation change.
+		if (threadLoaded == false) {
+			GetChattyAsyncTask chatty = new GetChattyAsyncTask(getApplicationContext());
+			chatty.execute();
+		}
+
+		threadLoaded = true;
+
+		ShowData();
+
+		final int position = savedInstanceState.getInt("scrollPos");
+		final ListView lv = getListView();
+		lv.requestFocusFromTouch();
+		lv.setSelection(position);
+
+		// savedInstanceState.clear(); // we'll resave it if we do something
+		// again
+
+	}	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		// return super.onCreateOptionsMenu(menu);
+
+		MenuInflater inflater = getSupportMenuInflater();
+		inflater.inflate(R.menu.topic_menu, menu);
+		return true;
+
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+		switch (item.getItemId())
+		{
+		case R.id.topic_menu_newpost: // Launch post form
+			intent = new Intent();
+			intent.setClass(this, ActivityPost.class);
+			intent.putExtra("storyID", storyID);
+			intent.putExtra("postID", "");
+			startActivity(intent);
+			return true;
+		case R.id.topic_menu_refresh: // refresh
+			currentPage = 1;
+			// get the list of topics
+			posts.clear();
+			tva = null;
+			GetChattyAsyncTask chatty = new GetChattyAsyncTask(this);
+			chatty.execute();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
 
 	}
@@ -119,8 +215,6 @@ public class ActivityLimeriffic extends ListActivity implements ShackGestureEven
 		if (posts != null) {
 			Hashtable<String, String> tempHash = null;
 
-			// storyName is set during FillData above
-			setTitle("ShackDroid - " + storyName + " - " + currentPage.toString() + " of " + this.storyPages.toString());
 
 			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			final String login = prefs.getString("shackLogin", "");
@@ -277,16 +371,19 @@ public class ActivityLimeriffic extends ListActivity implements ShackGestureEven
 				if (posts == null) {
 					posts = saxHandler.GetParsedPosts();
 				}
-				else
-					posts.addAll(posts.size(), saxHandler.GetParsedPosts());
+				else {
+					ArrayList<ShackPost> newPosts = saxHandler.GetParsedPosts();
+					newPosts.removeAll(posts);
+					posts.addAll(posts.size(),newPosts );
+					
+				}
 
 				storyID = saxHandler.getStoryID();
-				storyName = saxHandler.getStoryTitle();
+				
 				storyPages = saxHandler.getStoryPageCount();
 
 				if (storyPages == 0) // XML returns a 0 for stories with only
-										// one
-										// page
+										// one page
 					storyPages = 1;
 
 			}
@@ -297,7 +394,7 @@ public class ActivityLimeriffic extends ListActivity implements ShackGestureEven
 
 			return null;
 		}
-
+	
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();

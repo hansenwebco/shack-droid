@@ -1,74 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout 
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-<ListView
-	android:id="@android:id/list" 
-	android:layout_width="fill_parent" 
-	android:layout_height="fill_parent" 
-	android:textColor="#FFFFFF"
-	android:dividerHeight="1px"
-	android:divider="#333333"
-	/>
-  
-	
-<SlidingDrawer 
-android:id="@+id/SlidingDrawer01" 
-     android:layout_width="fill_parent"
-     android:layout_height="fill_parent"
-	 android:animateOnClick="true"
-     android:handle="@+id/TextViewTrayHandle"
-     android:content="@+id/bookMarkParent" 
-     android:orientation="vertical" 
-     android:layout_alignParentBottom="true"
-     android:visibility="gone">
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/TopicLoader"
+        android:divider="#333333"
+        android:dividerHeight="1dip"
+        android:textColor="#FFFFFF" />
 
-<TextView
-	android:id="@+id/TextViewTrayHandle"
-	android:background="@drawable/darkgrey_gradient"
- 	android:layout_width="fill_parent"
-     android:layout_height="35dip"
-     android:text="Watching 3 threads"
-     android:gravity="center_vertical"
-     android:focusable="false"
-     android:focusableInTouchMode="false"
-	>
-	</TextView>         
-<RelativeLayout
-         android:id="@id/bookMarkParent"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:background="#222222">
-	    
-         <ListView 
-         	android:id="@+id/ListViewWatchedThreads" 
-			android:layout_width="fill_parent" 
-			android:layout_height="fill_parent" 
-			android:textColor="#FFFFFF"
-			android:dividerHeight="1px"
-			android:divider="#333333">
-         
-         </ListView>
-         
-	<!-- <ViewStub 
-		android:id="@+id/bookmarkStub"
-		android:inflatedId="@+id/bookmarked"
-		android:layout="@layout/topic_row" 
-		android:layout_width="fill_parent" 
-		android:layout_height="wrap_content"
-		android:layout_toLeftOf="@+id/bookmarkRemove"
-		></ViewStub> 
-     <ImageView
-         android:id="@id/bookmarkRemove"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content" 
-         android:layout_alignParentRight="true"
-         android:src="@drawable/removebookmark" 
-         android:paddingLeft="10dip" 
-         android:layout_centerVertical="true"/>		
-	-->         	
-</RelativeLayout>
-</SlidingDrawer>
+    <RelativeLayout
+        android:id="@+id/TopicLoader"
+        android:layout_width="fill_parent"
+        android:layout_height="35dip"
+        android:layout_alignParentBottom="true" 
+         android:visibility="gone">
+
+        <TextView
+            android:id="@+id/TextViewTopicLoaderText"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="center_vertical"
+            android:text="Loading" 
+           >
+        </TextView>
+    </RelativeLayout>
+
+    <SlidingDrawer
+        android:id="@+id/SlidingDrawer01"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/TopicLoader"
+        android:animateOnClick="true"
+        android:content="@+id/bookMarkParent"
+        android:handle="@+id/TextViewTrayHandle"
+        android:orientation="vertical"
+        android:paddingTop="200dip"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/TextViewTrayHandle"
+            android:layout_width="fill_parent"
+            android:layout_height="35dip"
+            android:background="@drawable/darkgrey_gradient"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="center_vertical" >
+        </TextView>
+
+        <RelativeLayout
+            android:id="@id/bookMarkParent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#111111" >
+
+            <ListView
+                android:id="@+id/ListViewWatchedThreads"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:divider="#333333"
+                android:dividerHeight="1dip"
+                android:textColor="#FFFFFF" >
+            </ListView>
+        </RelativeLayout>
+    </SlidingDrawer>
+
 </RelativeLayout>
