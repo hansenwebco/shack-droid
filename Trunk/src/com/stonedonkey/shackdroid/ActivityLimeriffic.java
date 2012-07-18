@@ -56,51 +56,43 @@ public class ActivityLimeriffic extends ListActivity implements ShackGestureEven
 		super.onCreate(savedInstanceState);
 
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		
+
 		final ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.topics, this);
-		if (listener != null)
-		{
+		if (listener != null) {
 			listener.addListener(this);
 		}
-		
-		
-		
+
 		// get the list of topics
 		GetChattyAsyncTask chatty = new GetChattyAsyncTask(this);
 		chatty.execute();
 
-		ListView lv= getListView();
+		ListView lv = getListView();
 		lv.setOnScrollListener(new OnScrollListener() {
 
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				
+
 				// start loading the next page
-				if (threadLoaded && firstVisibleItem + visibleItemCount >= totalItemCount && currentPage + 1 <= storyPages)
-				{
+				if (threadLoaded && firstVisibleItem + visibleItemCount >= totalItemCount && currentPage + 1 <= storyPages) {
 					// get the list of topics
 					currentPage++;
 					GetChattyAsyncTask chatty = new GetChattyAsyncTask(getApplicationContext());
 					chatty.execute();
-					//ShowData();
+					// ShowData();
 				}
 			}
 
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				
-				
+
 			}
-			
+
 		});
-		
-		
-		
-		if (threadLoaded)
-		{
-		
+
+		if (threadLoaded) {
+
 		}
-		
+
 	}
 
 	@Override
@@ -142,9 +134,7 @@ public class ActivityLimeriffic extends ListActivity implements ShackGestureEven
 			}
 			if (postCounts != null)
 				tempHash = new Hashtable<String, String>(postCounts);
-			
-			int pos = getListView().getScrollY();
-			
+
 			if (tva == null) {
 				tva = new AdapterLimerifficTopic(getApplicationContext(), R.layout.lime_topic_row, posts, login, fontSize, tempHash);
 				setListAdapter(tva);
@@ -152,10 +142,8 @@ public class ActivityLimeriffic extends ListActivity implements ShackGestureEven
 			else {
 				tva.SetPosts(posts);
 				tva.notifyDataSetChanged();
-				//getListView().scrollTo(0, pos);
 			}
-			
-			
+
 			final ListView lv = getListView();
 			lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
 				@Override
@@ -167,10 +155,6 @@ public class ActivityLimeriffic extends ListActivity implements ShackGestureEven
 					menu.add(0, 4, 0, "Shacker's Chatty Profile");
 				}
 			});
-
-			
-			
-			
 
 			// update the reply counts for the listing of topics
 			try {
@@ -256,8 +240,7 @@ public class ActivityLimeriffic extends ListActivity implements ShackGestureEven
 		protected Void doInBackground(String... params) {
 
 			threadLoaded = false;
-			
-			
+
 			try {
 				final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
 				final String feedURL = prefs.getString("shackFeedURL", getString(R.string.default_api));
@@ -284,7 +267,7 @@ public class ActivityLimeriffic extends ListActivity implements ShackGestureEven
 				final XMLReader xr = sp.getXMLReader();
 				// Create a new ContentHandler and apply it to the XML-Reader
 				SaxHandlerTopicView saxHandler = new SaxHandlerTopicView(c, "topic");
-				
+
 				xr.setContentHandler(saxHandler);
 
 				// Parse the xml-data from our URL.
@@ -296,7 +279,7 @@ public class ActivityLimeriffic extends ListActivity implements ShackGestureEven
 				}
 				else
 					posts.addAll(posts.size(), saxHandler.GetParsedPosts());
-				
+
 				storyID = saxHandler.getStoryID();
 				storyName = saxHandler.getStoryTitle();
 				storyPages = saxHandler.getStoryPageCount();
@@ -309,9 +292,8 @@ public class ActivityLimeriffic extends ListActivity implements ShackGestureEven
 			}
 			catch (Exception ex) {
 				// TODO: implement error handling
-				
+
 			}
-			
 
 			return null;
 		}
@@ -319,9 +301,9 @@ public class ActivityLimeriffic extends ListActivity implements ShackGestureEven
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			
-			if (currentPage == 1 )
-				dialog = ProgressDialog.show(ActivityLimeriffic.this, "Loading", "La la la la la", true, true);
+
+			if (currentPage == 1)
+				dialog = ProgressDialog.show(ActivityLimeriffic.this, null, "Loading Chatty", true, true);
 			else
 				SetLoaderVisibility(View.VISIBLE);
 		}
@@ -329,28 +311,30 @@ public class ActivityLimeriffic extends ListActivity implements ShackGestureEven
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-		
+
 			ShowData();
-			
+
 			SetLoaderVisibility(View.GONE);
-			
+
 			try {
-			dialog.dismiss();
+				dialog.dismiss();
 			}
-			catch(Exception e) {}
-			
+			catch (Exception e) {
+			}
+
 		}
 
 	}
-	protected void SetLoaderVisibility(int visibility)
-	{
-		RelativeLayout loader = (RelativeLayout)findViewById(R.id.TopicLoader);
-		loader.setVisibility(visibility);		
+
+	protected void SetLoaderVisibility(int visibility) {
+		RelativeLayout loader = (RelativeLayout) findViewById(R.id.TopicLoader);
+		loader.setVisibility(visibility);
 	}
+
 	@Override
 	public void eventRaised(int eventType) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
