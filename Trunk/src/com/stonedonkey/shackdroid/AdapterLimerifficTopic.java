@@ -184,7 +184,7 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 
 		holder.postText.setText(preview);
 
-//
+
 //		if (showAuthor.equalsIgnoreCase("topic") && post.getIsAuthorInThread()) {
 //			final Drawable d = r.getDrawable(R.drawable.background_gradient_blue);
 //			holder.topicRow.setBackgroundDrawable(d);

@@ -20,7 +20,7 @@
 	
 	<TextView
 	  	android:id="@+id/TextViewLolPosterName"
-	  	android:layout_toRightOf="@+id/TextViewTagCount"
+	  	android:layout_toRightOf="@+id/TextViewLolTagCount"
 	  	android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:textColor="#ffba00"
@@ -50,7 +50,7 @@
 	<TextView
 		android:id="@+id/TextViewLolPostText"
 		android:layout_below="@+id/TextViewLolPosterName"
-		android:layout_toRightOf="@+id/TextViewTagCount"
+		android:layout_toRightOf="@+id/TextViewLolTagCount"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:paddingLeft="48dip"

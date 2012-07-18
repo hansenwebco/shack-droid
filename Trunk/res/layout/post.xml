@@ -27,14 +27,14 @@ android:layout_height="wrap_content"
 android:layout_centerHorizontal="true">
     <Button
     android:id="@+id/ButtonPost"
-    android:layout_width="75dip"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="Post"
     >
     </Button>
     <Button
     android:id="@+id/ButtonCancel"
-    android:layout_width="75dip"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_toRightOf="@+id/ButtonPost"
     android:text="Cancel"
@@ -43,7 +43,7 @@ android:layout_centerHorizontal="true">
 
     <Button
     android:id="@+id/ButtonCamera"
-    android:layout_width="75dip"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="Camera"
     android:layout_toRightOf="@+id/ButtonCancel">
@@ -51,7 +51,7 @@ android:layout_centerHorizontal="true">
 
     <Button
     android:id="@+id/ButtonUpload"
-    android:layout_width="75dip"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="Upload"
     android:layout_toRightOf="@+id/ButtonCamera">
