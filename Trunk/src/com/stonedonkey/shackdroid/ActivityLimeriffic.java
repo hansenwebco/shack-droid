@@ -29,8 +29,12 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -56,6 +60,7 @@ public class ActivityLimeriffic extends SherlockListActivity implements ShackGes
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 
 
 		final ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.topics, this);
@@ -97,6 +102,14 @@ public class ActivityLimeriffic extends SherlockListActivity implements ShackGes
 		if (threadLoaded) {
 
 		}
+		
+		RotateAnimation anim = new RotateAnimation(0f, 359f, RotateAnimation.RELATIVE_TO_SELF, 0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+		anim.setInterpolator(new LinearInterpolator());
+		anim.setRepeatCount(Animation.INFINITE);
+		anim.setDuration(700);
+		
+		ImageView loader = (ImageView)findViewById(R.id.ImageViewTopicLoader);
+		loader.setAnimation(anim);
 
 	}
 	@Override
