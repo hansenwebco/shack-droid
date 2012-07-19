@@ -17,6 +17,8 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
+import com.stonedonkey.shackdroid.ShackGestureListener.ShackGestureEvent;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -25,10 +27,16 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnCreateContextMenuListener;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
@@ -38,13 +46,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-import com.stonedonkey.shackdroid.ShackGestureListener.ShackGestureEvent;
-
-public class ActivityLimeriffic extends SherlockListActivity implements ShackGestureEvent {
+public class FragmentTopicView extends ListFragment implements ShackGestureEvent {
 
 	private ArrayList<ShackPost> posts;
 	private String storyID = null;
@@ -57,21 +59,36 @@ public class ActivityLimeriffic extends SherlockListActivity implements ShackGes
 	private Hashtable<String, String> postCounts = null;
 	private AdapterLimerifficTopic tva;
 
+	public FragmentTopicView() {
+
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 
+		this.setRetainInstance(true);
+	}
 
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		final ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.topics, this);
+		return inflater.inflate(R.layout.topics, null);
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		final ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.topics, getActivity());
 		if (listener != null) {
 			listener.addListener(this);
 		}
 
-		if (savedInstanceState == null)
-		{
-			// 	get the list of topics
-			GetChattyAsyncTask chatty = new GetChattyAsyncTask(this);
+		if (savedInstanceState == null) {
+			// get the list of topics
+			GetChattyAsyncTask chatty = new GetChattyAsyncTask(getActivity());
 			chatty.execute();
 		}
 
@@ -83,10 +100,10 @@ public class ActivityLimeriffic extends SherlockListActivity implements ShackGes
 
 				// start loading the next page
 				if (threadLoaded && firstVisibleItem + visibleItemCount >= totalItemCount && currentPage + 1 <= storyPages) {
-				
+
 					// get the list of topics
 					currentPage++;
-					GetChattyAsyncTask chatty = new GetChattyAsyncTask(getApplicationContext());
+					GetChattyAsyncTask chatty = new GetChattyAsyncTask(getActivity());
 					chatty.execute();
 
 				}
@@ -102,79 +119,44 @@ public class ActivityLimeriffic extends SherlockListActivity implements ShackGes
 		if (threadLoaded) {
 
 		}
-		
+
 		RotateAnimation anim = new RotateAnimation(0f, 359f, RotateAnimation.RELATIVE_TO_SELF, 0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f);
 		anim.setInterpolator(new LinearInterpolator());
 		anim.setRepeatCount(Animation.INFINITE);
 		anim.setDuration(700);
-		
-		ImageView loader = (ImageView)findViewById(R.id.ImageViewTopicLoader);
+
+		ImageView loader = (ImageView) getView().findViewById(R.id.ImageViewTopicLoader);
 		loader.setAnimation(anim);
 
 	}
+
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 
-		try
-		{
+		try {
 			// UpdatePostCache();
-			dismissDialog(1);
-		} catch (Exception ex)
-		{
+			getActivity().dismissDialog(1);
+		}
+		catch (Exception ex) {
 			// dialog could not be killed for some reason
 		}
 
-		// Dear Android devs... please make this more of a pain in the ass for
-		// orientation changes.. KAHNNN!!!!
 		savedInstanceState.putSerializable("posts", posts);
-		//savedInstanceState.putString("storyName", storyName);
 		savedInstanceState.putInt("currentPage", currentPage);
 		savedInstanceState.putInt("storyPages", storyPages);
 		savedInstanceState.putString("storyID", storyID);
 		savedInstanceState.putBoolean("threadLoaded", threadLoaded);
 		savedInstanceState.putInt("scrollPos", getListView().getFirstVisiblePosition());
-		
 
 	}
-	@SuppressWarnings("unchecked")
+
 	@Override
-	public void onRestoreInstanceState(Bundle savedInstanceState) {
-		//storyName = savedInstanceState.getString("storyName");
-		currentPage = savedInstanceState.getInt("currentPage");
-		storyPages = savedInstanceState.getInt("storyPages");
-		storyID = savedInstanceState.getString("storyID");
-		posts = (ArrayList<ShackPost>) savedInstanceState.getSerializable("posts");
-		threadLoaded = savedInstanceState.getBoolean("threadLoaded");
-
-		// If we change orientation in the middle of a thread loading we end up
-		// with
-		// the last loaded posts, this forces a new pull on orientation change.
-		if (threadLoaded == false) {
-			GetChattyAsyncTask chatty = new GetChattyAsyncTask(getApplicationContext());
-			chatty.execute();
-		}
-
-		threadLoaded = true;
-
-		ShowData();
-
-		final int position = savedInstanceState.getInt("scrollPos");
-		final ListView lv = getListView();
-		lv.requestFocusFromTouch();
-		lv.setSelection(position);
-
-		// savedInstanceState.clear(); // we'll resave it if we do something
-		// again
-
-	}	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
 		// return super.onCreateOptionsMenu(menu);
 
-		MenuInflater inflater = getSupportMenuInflater();
+		// MenuInflater i = getSupportMenuInflater();
 		inflater.inflate(R.menu.topic_menu, menu);
-		return true;
 
 	}
 
@@ -185,7 +167,7 @@ public class ActivityLimeriffic extends SherlockListActivity implements ShackGes
 		{
 		case R.id.topic_menu_newpost: // Launch post form
 			intent = new Intent();
-			intent.setClass(this, ActivityPost.class);
+			intent.setClass(getActivity(), ActivityPost.class);
 			intent.putExtra("storyID", storyID);
 			intent.putExtra("postID", "");
 			startActivity(intent);
@@ -195,7 +177,7 @@ public class ActivityLimeriffic extends SherlockListActivity implements ShackGes
 			// get the list of topics
 			posts.clear();
 			tva = null;
-			GetChattyAsyncTask chatty = new GetChattyAsyncTask(this);
+			GetChattyAsyncTask chatty = new GetChattyAsyncTask(getActivity());
 			chatty.execute();
 			return true;
 		default:
@@ -211,7 +193,7 @@ public class ActivityLimeriffic extends SherlockListActivity implements ShackGes
 		final String cat = posts.get(position).getPostCategory();
 
 		final Intent intent = new Intent();
-		intent.setClass(getApplicationContext(), ActivityThreadedView.class);
+		intent.setClass(getActivity(), ActivityThreadedView.class);
 		intent.putExtra("postID", Long.toString(id)); // the value must be a
 														// string
 		intent.putExtra("storyID", storyID);
@@ -228,8 +210,7 @@ public class ActivityLimeriffic extends SherlockListActivity implements ShackGes
 		if (posts != null) {
 			Hashtable<String, String> tempHash = null;
 
-
-			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 			final String login = prefs.getString("shackLogin", "");
 			final int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
 
@@ -243,7 +224,7 @@ public class ActivityLimeriffic extends SherlockListActivity implements ShackGes
 				tempHash = new Hashtable<String, String>(postCounts);
 
 			if (tva == null) {
-				tva = new AdapterLimerifficTopic(getApplicationContext(), R.layout.lime_topic_row, posts, login, fontSize, tempHash);
+				tva = new AdapterLimerifficTopic(getActivity(), R.layout.lime_topic_row, posts, login, fontSize, tempHash);
 				setListAdapter(tva);
 			}
 			else {
@@ -277,7 +258,7 @@ public class ActivityLimeriffic extends SherlockListActivity implements ShackGes
 			if (errorText.length() > 0) {
 
 				try {
-					new AlertDialog.Builder(this).setTitle("Error").setPositiveButton("OK", null).setMessage(errorText).show();
+					new AlertDialog.Builder(getActivity()).setTitle("Error").setPositiveButton("OK", null).setMessage(errorText).show();
 				}
 				catch (Exception ex) {
 					// could not create a alert for the error for one reason
@@ -291,20 +272,20 @@ public class ActivityLimeriffic extends SherlockListActivity implements ShackGes
 
 	@SuppressWarnings("unchecked")
 	public Hashtable<String, String> GetPostCache() throws StreamCorruptedException, IOException {
-		if (getFileStreamPath("posts.cache").exists()) {
+		if (getActivity().getFileStreamPath("posts.cache").exists()) {
 
 			Hashtable<String, String> postCounts = null;
 
 			// if the day is different we delete and recreate the file
-			final long lastMod = getFileStreamPath("posts.cache").lastModified();
+			final long lastMod = getActivity().getFileStreamPath("posts.cache").lastModified();
 			final Date lastDateMod = new Date(lastMod);
 			final Date currentDate = new Date();
 			if (lastDateMod.getDay() != currentDate.getDay()) {
-				getFileStreamPath("posts.cache").delete();
+				getActivity().getFileStreamPath("posts.cache").delete();
 				return null;
 			}
 
-			final FileInputStream fileIn = openFileInput("posts.cache");
+			final FileInputStream fileIn = getActivity().openFileInput("posts.cache");
 			final ObjectInputStream in = new ObjectInputStream(fileIn);
 			try {
 				postCounts = (Hashtable<String, String>) in.readObject();
@@ -328,7 +309,7 @@ public class ActivityLimeriffic extends SherlockListActivity implements ShackGes
 		for (int x = 0; x < posts.size(); x++)
 			postCounts.put(posts.get(x).getPostID(), posts.get(x).getReplyCount());
 
-		final FileOutputStream fos = openFileOutput("posts.cache", MODE_PRIVATE);
+		final FileOutputStream fos = getActivity().openFileOutput("posts.cache", getActivity().MODE_PRIVATE);
 		final ObjectOutputStream os = new ObjectOutputStream(fos);
 		os.writeObject(postCounts);
 		os.close();
@@ -387,12 +368,12 @@ public class ActivityLimeriffic extends SherlockListActivity implements ShackGes
 				else {
 					ArrayList<ShackPost> newPosts = saxHandler.GetParsedPosts();
 					newPosts.removeAll(posts);
-					posts.addAll(posts.size(),newPosts );
-					
+					posts.addAll(posts.size(), newPosts);
+
 				}
 
 				storyID = saxHandler.getStoryID();
-				
+
 				storyPages = saxHandler.getStoryPageCount();
 
 				if (storyPages == 0) // XML returns a 0 for stories with only
@@ -407,13 +388,13 @@ public class ActivityLimeriffic extends SherlockListActivity implements ShackGes
 
 			return null;
 		}
-	
+
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
 
 			if (currentPage == 1)
-				dialog = ProgressDialog.show(ActivityLimeriffic.this, null, "Loading Chatty", true, true);
+				dialog = ProgressDialog.show(getActivity(), null, "Loading Chatty", true, true);
 			else
 				SetLoaderVisibility(View.VISIBLE);
 		}
@@ -437,7 +418,7 @@ public class ActivityLimeriffic extends SherlockListActivity implements ShackGes
 	}
 
 	protected void SetLoaderVisibility(int visibility) {
-		RelativeLayout loader = (RelativeLayout) findViewById(R.id.TopicLoader);
+		RelativeLayout loader = (RelativeLayout) getView().findViewById(R.id.TopicLoader);
 		loader.setVisibility(visibility);
 	}
 

@@ -227,7 +227,7 @@ public class ActivityMainMenu extends ListActivity  {
 		case 6: // tester
 		{
 			
-			intent.setClass(this,ActivityLimeriffic.class);
+			intent.setClass(this,FragmentActivityTopic.class);
 			break;
 		}
 		}	
