@@ -3,8 +3,8 @@
     android:id="@+id/RelativeLayoutThread"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="#000000" >
+    android:background="#000000"
+    android:orientation="vertical" >
 
     <RelativeLayout
         android:id="@+id/ThreadTextWrap"
@@ -19,8 +19,7 @@
             android:layout_alignParentLeft="true"
             android:paddingLeft="8px"
             android:paddingTop="3px"
-            android:textColor="#ffba00"
-            android:textSize="12sp" >
+            android:textColor="#000000" >
         </TextView>
 
         <ImageView
@@ -38,8 +37,7 @@
             android:layout_marginRight="3dip"
             android:layout_toLeftOf="@+id/ImageViewThreadTimer"
             android:gravity="right"
-            android:paddingTop="3dip"
-            android:textSize="12dip" >
+            android:paddingTop="3dip" >
         </TextView>
 
         <ImageView
@@ -67,8 +65,7 @@
                 android:paddingRight="8px"
                 android:text=""
                 android:textColor="#FFFFFF"
-                android:textColorLink="#FFFFFF"
-                android:textSize="12sp" >
+                android:textColorLink="#FFFFFF" >
             </TextView>
         </ScrollView>
     </RelativeLayout>
@@ -109,7 +106,11 @@
             android:src="@drawable/nav_reload2" >
         </ImageView>
     </RelativeLayout>
-
+    <View
+        android:layout_height="3dip"
+        android:layout_width="fill_parent"
+        android:background="#000000">
+    </View>
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
