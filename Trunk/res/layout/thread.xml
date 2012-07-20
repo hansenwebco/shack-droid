@@ -60,9 +60,9 @@
                 android:layout_height="fill_parent"
                 android:fadingEdge="none"
                 android:minHeight="180px"
-                android:paddingBottom="10px"
-                android:paddingLeft="8px"
-                android:paddingRight="8px"
+                android:layout_marginBottom="10px"
+                android:layout_marginLeft="8px"
+                android:layout_marginRight="8px"
                 android:text=""
                 android:textColor="#FFFFFF"
                 android:textColorLink="#FFFFFF" >
