@@ -63,6 +63,7 @@ public class ActivityMainMenu extends ListActivity  {
 			menu.add(new ShackMenuItem("Shack Messages","Stuff too shocking for even the Shack.",R.drawable.menu2_shackmessages2));
 			menu.add(new ShackMenuItem("Shack LOLs","You are not as popular as these people.",R.drawable.menu2_lol2));//
 			menu.add(new ShackMenuItem("Settings","Hay guys, am I doing this right?",R.drawable.menu2_settings));
+			menu.add(new ShackMenuItem("Operation Lime","Lamp, Sand, LIME!"));	
 		}
 		else
 		{
