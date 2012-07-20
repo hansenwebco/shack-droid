@@ -16,6 +16,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,6 +41,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.text.util.Linkify.MatchFilter;
+import android.text.util.Linkify.TransformFilter;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
@@ -676,6 +679,40 @@ public class Helper {
 			"!!-$2-!!");
 		}
 		return text;
+	}	
+	public static class SortByPostIDComparator implements Comparator<ShackPost>
+	{
+		@Override
+		public int compare(ShackPost object1, ShackPost object2) {
+			return Integer.valueOf(object2.getPostID()) - Integer.valueOf(object1.getPostID());
+		}
+
+		/**
+		 * Used to sort the post array based on the OrderID
+		 */}
+	public static class SortByOrderIDComparator implements Comparator<ShackPost>
+	{
+		@Override
+		public int compare(ShackPost object1, ShackPost object2) {
+			return object1.getOrderID() - object2.getOrderID();
+		}
+
+	}
+	public static class ShackURLMatchFilter implements MatchFilter {
+		@Override
+		public boolean acceptMatch(CharSequence s, int start, int end) {
+			return true;
+		}
+	}
+	public static class ShackURLTransform implements TransformFilter {
+
+		@Override
+		public String transformUrl(Matcher match, String url) {
+
+			//String test = url;
+			
+			return null;
+		}
 	}	
 	
 }

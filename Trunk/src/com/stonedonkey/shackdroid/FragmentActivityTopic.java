@@ -11,6 +11,8 @@ public class FragmentActivityTopic extends FragmentActivity {
 		super.onCreate(arg0);
 		
 		setContentView(R.layout.mixed);
+		
+		
 	}
 
 

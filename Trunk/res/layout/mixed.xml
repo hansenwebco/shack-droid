@@ -7,11 +7,20 @@
     android:id="@+id/LinearLayoutMixed">
 
     <fragment
-        android:id="@+id/MixedThreads"
+        android:id="@+id/MixedTopics"
         android:layout_width="400dip"
         android:layout_height="fill_parent"
         class="com.stonedonkey.shackdroid.FragmentTopicView"
         >
     </fragment>
+    
+
+    <fragment
+        android:id="@+id/MixedThreads"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        class="com.stonedonkey.shackdroid.FragmentThreadedView"
+        >
+    </fragment>    
 
 </LinearLayout>
