@@ -72,7 +72,7 @@ public class ActivityMainMenu extends ListActivity  {
 			menu.add(new ShackMenuItem("Shack Messages","Stuff too shocking for even the Shack."));
 			menu.add(new ShackMenuItem("Shack LOLs","You are not as popular as these people."));//
 			menu.add(new ShackMenuItem("Settings","Hay guys, am I doing this right?"));
-			menu.add(new ShackMenuItem("Lime!?","Hurrrrrr!!"));		
+			menu.add(new ShackMenuItem("Operation Lime","Lamp, Sand, LIME!"));		
 		}
 
 		AdapterMainMenu mm = new AdapterMainMenu(this,R.layout.mainmenu_row, menu);

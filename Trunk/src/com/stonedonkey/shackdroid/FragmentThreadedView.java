@@ -49,6 +49,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -574,7 +575,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 			
 			
 			// set the post background color to be more "shack" like
-			final RelativeLayout layout = (RelativeLayout)getActivity().findViewById(R.id.RelativeLayoutThread);
+			final LinearLayout layout = (LinearLayout)getActivity().findViewById(R.id.RelativeLayoutThread);
 			layout.setBackgroundColor(Color.parseColor("#222222"));
 			
 			// add a listener for removing spoilers and maybe adding "copy" functionality later
