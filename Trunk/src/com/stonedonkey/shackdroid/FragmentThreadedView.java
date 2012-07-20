@@ -17,6 +17,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -79,6 +80,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 	private  SharedPreferences prefs;// = PreferenceManager.getDefaultSharedPreferences(this);
 	private  String login;// = prefs.getString("shackLogin", "");	
 	
+	private ProgressDialog dialog;
 	
 	
 	@Override
@@ -110,8 +112,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 		
 		prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		login = prefs.getString("shackLogin", "");
-		int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
-		Typeface face = Typeface.createFromAsset(getActivity().getAssets(), "fonts/arial.ttf");
+
 		
 		TextView tv = (TextView)getActivity().findViewById(R.id.TextViewPost);
 		TextView posterName = (TextView)getActivity().findViewById(R.id.TextViewThreadAuthor);
@@ -119,11 +120,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 		
 
 		
-		//tv.setMovementMethod(new ScrollingMovementMethod());
-		tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-		tv.setTypeface(face);
-		posterName.setTypeface(face);
-		postDate.setTypeface(face);
+
 		
 		
 		final ImageView next = (ImageView)getActivity().findViewById(R.id.ImageViewNextPost);
@@ -185,8 +182,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 		
 
 	}
-	ShackPopup pop;
-	PopupWindow w;
+
 //	@Override
 //    public void onWindowFocusChanged(boolean hasFocus) { 
 //		setWindowSizes();
@@ -238,7 +234,8 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 	{
 
 		try {
-			getActivity().dismissDialog(1);
+			//getActivity().dismissDialog(1);
+			dialog.dismiss();
 		} catch (Exception ex) {
 			// dialog could not be killed for some reason
 		}
@@ -246,7 +243,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 		savedInstanceState.putSerializable("posts", posts);
 		savedInstanceState.putString("storyID", getStoryID());
 		savedInstanceState.putString("postID", getPostID());
-		savedInstanceState.putInt("currentPosition", currentPosition);
+		savedInstanceState.putInt("currentPosition", getCurrentPosition());
 		savedInstanceState.putBoolean("threadLoaded", threadLoaded);
 	}
 
@@ -300,8 +297,9 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 //	}
 	public void fillSaxData(String postID) {
 		// show a progress dialog
-		getActivity().showDialog(1);
-
+		//getActivity().showDialog(1);
+		dialog = ProgressDialog.show(getActivity(), null, "Loading thread...", true, true);
+		
 		// use the class run() method to do work
 		final Thread thread = new Thread(this); 
 		thread.start();
@@ -380,7 +378,8 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 		@Override
 		public void handleMessage(Message msg) {
 			try {
-				getActivity().dismissDialog(1);
+				//getActivity().dismissDialog(1);
+				dialog.dismiss();
 			}
 			catch (Exception ex)
 			{
@@ -393,7 +392,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 				if (getPostID().equalsIgnoreCase(posts.get(0).getPostID()) == false)
 					for(int x=0;x<posts.size();x++)
 						if (posts.get(x).getPostID().equalsIgnoreCase(getPostID())){
-							currentPosition = x;
+							setCurrentPosition(x);
 							break;
 						}
 
@@ -548,7 +547,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 		if (posts != null)
 		{
 			// this is where we bind our fancy ArrayList of posts
-			final AdapterThreadedView tva = new AdapterThreadedView(getActivity(),	R.layout.thread_row, posts,currentPosition);
+			final AdapterThreadedView tva = new AdapterThreadedView(getActivity(),	R.layout.thread_row, posts,getCurrentPosition());
 			setListAdapter(tva);
 
 			if (posts.size() > 0) {
@@ -557,10 +556,10 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 			}
 			
 			
-			UpdatePostText(currentPosition,true);
+			UpdatePostText(getCurrentPosition(),true);
 
 			final ListView lv = getListView();
-			lv.setSelection(currentPosition);
+			lv.setSelection(getCurrentPosition());
 
 			
 			lv.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
@@ -617,7 +616,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 		//w.dismiss();
 
 		TextView threadPreview = null;
-		View vi = (View) l.getChildAt(currentPosition - l.getFirstVisiblePosition());
+		View vi = (View) l.getChildAt(getCurrentPosition() - l.getFirstVisiblePosition());
 
 		if (vi != null)
 			threadPreview = (TextView)vi.findViewById(R.id.TextViewThreadPreview);
@@ -635,7 +634,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 		final AdapterThreadedView tva = (AdapterThreadedView) getListAdapter();
 		tva.setSelectedRow(position);
 
-		currentPosition = position;
+		setCurrentPosition(position);
 		l.setFocusableInTouchMode(true);
 
 		UpdatePostText(position,true);
@@ -643,20 +642,20 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 	
 	private void setListItemPosition(int direction)
 	{
-		w.dismiss();
 		
-		if ((currentPosition + direction) < 0)
+		
+		if ((getCurrentPosition() + direction) < 0)
 			return;
 	
 		ListView l = getListView();
 		
-		if (currentPosition + direction >= l.getCount())
+		if (getCurrentPosition() + direction >= l.getCount())
 			return;
 		
 		TextView threadPreview = null;
 		
 	
-		View vi = (View) l.getChildAt(currentPosition - l.getFirstVisiblePosition());
+		View vi = (View) l.getChildAt(getCurrentPosition() - l.getFirstVisiblePosition());
 		if (vi != null)
 			threadPreview = (TextView)vi.findViewById(R.id.TextViewThreadPreview);
 		if (threadPreview != null)
@@ -665,7 +664,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 			
 		}
 
-		int position = currentPosition;
+		int position = getCurrentPosition();
 		
 		final int rows = l.getLastVisiblePosition() - l.getFirstVisiblePosition() ;
 		
@@ -687,7 +686,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 		final AdapterThreadedView tva = (AdapterThreadedView) getListAdapter();
 		tva.setSelectedRow(position+direction);
 		
-		currentPosition = position + direction;
+		setCurrentPosition(position + direction);
 		
 		UpdatePostText(position+direction,true);
 		
@@ -785,7 +784,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 //	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		w.dismiss();
+		
 		Intent intent;
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		String login = "";
@@ -803,7 +802,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 			getActivity().finish();
 			return true;
 		case 3:
-			this.currentPosition =0;
+			this.setCurrentPosition(0);
 			this.fillSaxData(getPostID());
 			return true;
 		case 6:
@@ -841,7 +840,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		w.dismiss();
+		
 		switch (item.getItemId())
 		{
 			case 1: {
@@ -853,7 +852,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 			}
 			case 2: {
 				
-				String linkID = posts.get(currentPosition).getPostID();
+				String linkID = posts.get(getCurrentPosition()).getPostID();
 				
 				//http://www.shacknews.com/laryn.x?id=23005222#itemanchor_23005222
 				final String url = "http://www.shacknews.com/chatty?id=" + linkID + "#itemanchor_" + linkID;
@@ -863,7 +862,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 			}
 			case 3:
 			{
-				String datePosted = posts.get(currentPosition).getPostDate();
+				String datePosted = posts.get(getCurrentPosition()).getPostDate();
 
 				new AlertDialog.Builder(getActivity())
 				.setTitle("Thread Will Expire In:")
@@ -874,7 +873,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 			}
 			case 4:
 			{
-				String shackname = posts.get(currentPosition).getPosterName();
+				String shackname = posts.get(getCurrentPosition()).getPosterName();
 						
 				Intent intent = new Intent();
 				intent.putExtra("shackname", shackname);
@@ -1003,7 +1002,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 		
 		switch(eventType){
 		case ShackPopup.MESSAGE:
-			ShackPost post = posts.get(currentPosition);//.getPostText();
+			ShackPost post = posts.get(getCurrentPosition());//.getPostText();
 			Intent intent = new Intent();
 			intent.putExtra("postto", post.getPosterName());
 			intent.setClass(getActivity(), ActivityPostMessage.class);
@@ -1016,7 +1015,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 			doReply();
 			break;
 		}
-		w.dismiss();
+	
 	}
 
 	public String getPostID() {
@@ -1041,6 +1040,14 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 
 	public void setIsNWS(Boolean isNWS) {
 		this.isNWS = isNWS;
+	}
+
+	public int getCurrentPosition() {
+		return currentPosition;
+	}
+
+	public void setCurrentPosition(int currentPosition) {
+		this.currentPosition = currentPosition;
 	}
 }
 /**

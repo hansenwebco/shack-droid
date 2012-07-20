@@ -210,6 +210,7 @@ public class FragmentTopicView extends ListFragment implements ShackGestureEvent
 		else {
 			threadView.setPostID(Long.toString(id));
 			threadView.setStoryID(storyID);
+			threadView.setCurrentPosition(0);
 			if (cat.equalsIgnoreCase("nws"))
 				threadView.setIsNWS(true);
 			else
