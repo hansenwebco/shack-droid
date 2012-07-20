@@ -35,7 +35,7 @@ public class AdapterThreadedView extends BaseAdapter {
 		this.rowResouceID = rowResouceID;
 		this.selectedRow = selectedRow;
 		
-		face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
+		//face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		login = prefs.getString("shackLogin", "");
 		

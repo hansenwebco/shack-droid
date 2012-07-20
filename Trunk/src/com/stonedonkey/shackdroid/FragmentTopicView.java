@@ -195,8 +195,8 @@ public class FragmentTopicView extends ListFragment implements ShackGestureEvent
 		final String cat = posts.get(position).getPostCategory();
 
 		if (threadView == null) {
-			final Intent intent = new Intent();
-			intent.setClass(getActivity(), FragmentThreadedView.class);
+			 Intent intent = new Intent(getActivity(), FragmentActivityThread.class);
+			
 			intent.putExtra("postID", Long.toString(id)); // the value must be a string
 			intent.putExtra("storyID", storyID);
 
