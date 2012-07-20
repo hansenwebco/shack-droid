@@ -81,10 +81,10 @@ public class FragmentTopicView extends ListFragment implements ShackGestureEvent
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		final ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.topics, getActivity());
-		if (listener != null) {
-			listener.addListener(this);
-		}
+//		final ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.topics, getActivity());
+//		if (listener != null) {
+//			listener.addListener(this);
+//		}
 
 		if (savedInstanceState == null) {
 			// get the list of topics
