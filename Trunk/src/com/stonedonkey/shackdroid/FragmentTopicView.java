@@ -190,19 +190,35 @@ public class FragmentTopicView extends ListFragment implements ShackGestureEvent
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 
+		FragmentThreadedView threadView = (FragmentThreadedView) getFragmentManager().findFragmentById(R.id.MixedThreads);
+
 		final String cat = posts.get(position).getPostCategory();
 
-		final Intent intent = new Intent();
-		intent.setClass(getActivity(), ActivityThreadedView.class);
-		intent.putExtra("postID", Long.toString(id)); // the value must be a
-														// string
-		intent.putExtra("storyID", storyID);
-		if (cat.equalsIgnoreCase("nws"))
-			intent.putExtra("isNWS", true);
-		else
-			intent.putExtra("isNWS", false);
+		if (threadView == null) {
+			final Intent intent = new Intent();
+			intent.setClass(getActivity(), FragmentThreadedView.class);
+			intent.putExtra("postID", Long.toString(id)); // the value must be a string
+			intent.putExtra("storyID", storyID);
 
-		startActivity(intent);
+			if (cat.equalsIgnoreCase("nws"))
+				intent.putExtra("isNWS", true);
+			else
+				intent.putExtra("isNWS", false);
+
+			startActivity(intent);
+		}
+		else {
+			threadView.setPostID(Long.toString(id));
+			threadView.setStoryID(storyID);
+			if (cat.equalsIgnoreCase("nws"))
+				threadView.setIsNWS(true);
+			else
+				threadView.setIsNWS(false);
+			
+			threadView.fillSaxData(Long.toString(id));
+		
+		}
+
 	}
 
 	private void ShowData() {
