@@ -13,13 +13,27 @@
         android:layout_weight="1" >
 
         <TextView
+            android:id="@+id/TextViewThreadModTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dip"
+            android:background="#FF0000"
+            android:padding="2dip"
+            android:textColor="#000000"
+            android:textSize="10dip"
+            android:visibility="gone" />
+
+        <TextView
             android:id="@+id/TextViewThreadAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:paddingLeft="8px"
-            android:paddingTop="3px"
-            android:textColor="#000000" >
+            android:layout_below="@+id/TextViewThreadModTag"
+            android:paddingLeft="10dip"
+            android:paddingTop="3dip"
+            android:textColor="#0099CC"
+            android:textSize="16sp" >
         </TextView>
 
         <ImageView
@@ -28,17 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/TextViewThreadAuthor"
             android:paddingLeft="4px"
-            android:paddingTop="8px" />
-
-        <TextView
-            android:id="@+id/TextViewThreadViewPostDate"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_marginRight="3dip"
-            android:layout_toLeftOf="@+id/ImageViewThreadTimer"
-            android:gravity="right"
-            android:paddingTop="3dip" >
-        </TextView>
+            android:paddingTop="8px"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/ImageViewThreadTimer"
@@ -52,33 +57,45 @@
             android:id="@+id/textAreaScroller"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/TextViewThreadViewPostDate"
             android:layout_below="@+id/TextViewThreadAuthor" >
 
             <TextView
                 android:id="@+id/TextViewPost"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:layout_marginBottom="10sp"
+                android:layout_marginLeft="10sp"
+                android:layout_marginRight="8sp"
                 android:fadingEdge="none"
                 android:minHeight="180px"
-                android:layout_marginBottom="10px"
-                android:layout_marginLeft="8px"
-                android:layout_marginRight="8px"
                 android:text=""
-                android:textSize="14sp"
                 android:textColor="#FFFFFF"
-                android:textColorLink="#FFFFFF" >
+                android:textColorLink="#FFFFFF"
+                android:textSize="14sp" >
             </TextView>
         </ScrollView>
+
+        <TextView
+            android:id="@+id/TextViewThreadViewPostDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="5sp"
+            android:layout_marginRight="3sp"
+            android:textColor="#FF8800" >
+        </TextView>
     </RelativeLayout>
 
-
     <View
-        android:layout_height="1dip"
         android:layout_width="fill_parent"
-       android:background="#33B5E5"
-       android:layout_marginTop="2dip"
-       android:layout_marginBottom="2dip">
+        android:layout_height="1dip"
+        android:layout_marginBottom="2dip"
+        android:layout_marginTop="2dip"
+        android:background="#33B5E5" >
     </View>
+
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"

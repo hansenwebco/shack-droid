@@ -362,10 +362,11 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 		if (login.equalsIgnoreCase(post.getPosterName()))
 			posterName.setTextColor(Color.parseColor("#00BFF3"));
 		else
-			posterName.setTextColor(Color.parseColor("#FFBA00"));
+			posterName.setTextColor(Color.parseColor("#0099CC"));
 
 		final TextView postDate = (TextView) getActivity().findViewById(R.id.TextViewThreadViewPostDate);
-		postDate.setText(Helper.FormatShackDate(post.getPostDate()));
+		//postDate.setText(Helper.FormatShackDate(post.getPostDate()));
+		postDate.setText(Helper.FormatShackDateToTimePassed(post.getPostDate()) + " ago");
 
 		final String postCat = post.getPostCategory();
 		setPostCategoryIcon(postCat);
@@ -558,24 +559,35 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 	}
 
 	private void setPostCategoryIcon(String postCat) {
-		final ImageView img = (ImageView) getActivity().findViewById(R.id.ImageViewCatTopic);
-		// TODO: clean this up a little / also duplicated in Topic View Adapter
-		// ick
-		if (postCat.equals("offtopic"))
-			img.setImageResource(R.drawable.offtopic);
-		else if (postCat.equals("nws"))
-			img.setImageResource(R.drawable.nws);
-		else if (postCat.equals("political"))
-			img.setImageResource(R.drawable.political);
-		else if (postCat.equals("stupid"))
-			img.setImageResource(R.drawable.stupid);
-		else if (postCat.equals("informative"))
-			img.setImageResource(R.drawable.interesting);
-		else {
-			// chazums, commented out as throwing an exception
-			// img.setImageResource(-1);
-			img.setImageDrawable(null);
+		final TextView viewCat = (TextView) getActivity().findViewById(R.id.TextViewThreadModTag);
+		
+		viewCat.setVisibility(View.VISIBLE);
+		
+		if (postCat.equals("offtopic"))  {
+			viewCat.setText("offtopic");
+			viewCat.setBackgroundColor(Color.parseColor("#444444"));
 		}
+		else if (postCat.equals("nws")) {
+			viewCat.setText("nws");
+			viewCat.setBackgroundColor(Color.parseColor("#CC0000"));
+		}
+		else if (postCat.equals("political")) {
+			viewCat.setText("political");
+			viewCat.setBackgroundColor(Color.parseColor("#FF8800"));
+		}
+		else if (postCat.equals("stupid")) {
+			viewCat.setText("stupid");
+			viewCat.setBackgroundColor(Color.parseColor("#669900"));
+		}
+		else if (postCat.equals("informative")) {
+			viewCat.setText("interesting");
+			viewCat.setBackgroundColor(Color.parseColor("#0099CC"));
+		}
+		else 
+			viewCat.setVisibility(View.GONE);	
+		
+		
+		
 	}
 
 	// menu creation
