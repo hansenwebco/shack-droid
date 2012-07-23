@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 public class ActivitySplashScreen extends Activity {
 
-		private final int SPLASH_LENGTH = 5000;
+		private final int SPLASH_LENGTH = 1000;
 		Boolean skip = false;
 		
 	@Override
