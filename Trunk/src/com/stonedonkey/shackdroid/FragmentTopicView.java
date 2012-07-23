@@ -77,19 +77,16 @@ public class FragmentTopicView extends ListFragment implements ShackGestureEvent
 		return inflater.inflate(R.layout.topics, null);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-//		final ShackGestureListener listener = Helper.setGestureEnabledContentView(R.layout.topics, getActivity());
-//		if (listener != null) {
-//			listener.addListener(this);
-//		}
-
-		if (savedInstanceState == null) {
-			// get the list of topics
+		if (posts == null) {
+			currentPage = 1;
 			GetChattyAsyncTask chatty = new GetChattyAsyncTask(getActivity());
 			chatty.execute();
+
 		}
 
 		ListView lv = getListView();
@@ -127,26 +124,6 @@ public class FragmentTopicView extends ListFragment implements ShackGestureEvent
 
 		ImageView loader = (ImageView) getView().findViewById(R.id.ImageViewTopicLoader);
 		loader.setAnimation(anim);
-
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle savedInstanceState) {
-
-		try {
-			// UpdatePostCache();
-			getActivity().dismissDialog(1);
-		}
-		catch (Exception ex) {
-			// dialog could not be killed for some reason
-		}
-
-		savedInstanceState.putSerializable("posts", posts);
-		savedInstanceState.putInt("currentPage", currentPage);
-		savedInstanceState.putInt("storyPages", storyPages);
-		savedInstanceState.putString("storyID", storyID);
-		savedInstanceState.putBoolean("threadLoaded", threadLoaded);
-		savedInstanceState.putInt("scrollPos", getListView().getFirstVisiblePosition());
 
 	}
 
@@ -195,9 +172,10 @@ public class FragmentTopicView extends ListFragment implements ShackGestureEvent
 		final String cat = posts.get(position).getPostCategory();
 
 		if (threadView == null) {
-			 Intent intent = new Intent(getActivity(), FragmentActivityThread.class);
-			
-			intent.putExtra("postID", Long.toString(id)); // the value must be a string
+			Intent intent = new Intent(getActivity(), FragmentActivityThread.class);
+
+			intent.putExtra("postID", Long.toString(id)); // the value must be a
+															// string
 			intent.putExtra("storyID", storyID);
 
 			if (cat.equalsIgnoreCase("nws"))
@@ -215,9 +193,9 @@ public class FragmentTopicView extends ListFragment implements ShackGestureEvent
 				threadView.setIsNWS(true);
 			else
 				threadView.setIsNWS(false);
-			
+
 			threadView.fillSaxData(Long.toString(id));
-		
+
 		}
 
 	}
@@ -393,8 +371,7 @@ public class FragmentTopicView extends ListFragment implements ShackGestureEvent
 
 				storyPages = saxHandler.getStoryPageCount();
 
-				if (storyPages == 0) // XML returns a 0 for stories with only
-										// one page
+				if (storyPages == 0) // XML returns a 0 for stories with only one page
 					storyPages = 1;
 
 			}
