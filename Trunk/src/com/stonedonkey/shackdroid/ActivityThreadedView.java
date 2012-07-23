@@ -124,30 +124,30 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 		posterName.setTypeface(face);
 		postDate.setTypeface(face);
 		
-		
-		final ImageView next = (ImageView)findViewById(R.id.ImageViewNextPost);
-		next.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				setListItemPosition(1);
-			}
-		});
-		
-		final ImageView prev = (ImageView)findViewById(R.id.ImageViewPreviousPost);
-		prev.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				setListItemPosition(-1);
-			}
-		});
-		
-		final ImageView reload = (ImageView)findViewById(R.id.ImageViewReload);
-		reload.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				fillSaxData(postID);
-			}
-		});
+//		
+//		final ImageView next = (ImageView)findViewById(R.id.ImageViewNextPost);
+//		next.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				setListItemPosition(1);
+//			}
+//		});
+//		
+//		final ImageView prev = (ImageView)findViewById(R.id.ImageViewPreviousPost);
+//		prev.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				setListItemPosition(-1);
+//			}
+//		});
+//		
+//		final ImageView reload = (ImageView)findViewById(R.id.ImageViewReload);
+//		reload.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View arg0) {
+//				fillSaxData(postID);
+//			}
+//		});
 		
 		if (getIntent() != null && 
 				getIntent().getAction() != null && 
