@@ -16,14 +16,6 @@ public class FragmentActivityTopic extends FragmentActivity {
 		
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-
-		menu.add(0, 0, 1, "New Post").setIcon(R.drawable.menu_addpost);
-		menu.add(0, 1, 2, "Refresh").setIcon(R.drawable.menu_reload);
-
-		return true;
-	}
+	
 	
 }
