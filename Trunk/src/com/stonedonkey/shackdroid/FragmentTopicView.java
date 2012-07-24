@@ -65,10 +65,11 @@ public class FragmentTopicView extends ListFragment implements ShackGestureEvent
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 
 		this.setRetainInstance(true);
+		this.setHasOptionsMenu(true);
+
 	}
 
 	@Override

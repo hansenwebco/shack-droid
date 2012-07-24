@@ -272,7 +272,15 @@ public final class R {
         public static final int TextViewXFire=0x7f0c0063;
         public static final int TextViewXboxLive=0x7f0c0060;
         public static final int TextViewYahoo=0x7f0c0069;
+        public static final int ThreadINF=0x7f0c00bf;
+        public static final int ThreadLOL=0x7f0c00be;
+        public static final int ThreadLOLThread=0x7f0c00bd;
+        public static final int ThreadRefresh=0x7f0c00bb;
+        public static final int ThreadReply=0x7f0c00bc;
+        public static final int ThreadSettings=0x7f0c00c2;
+        public static final int ThreadTag=0x7f0c00c1;
         public static final int ThreadTextWrap=0x7f0c0096;
+        public static final int ThreadUNF=0x7f0c00c0;
         public static final int TopicLoader=0x7f0c00a8;
         public static final int TopicRow=0x7f0c00a0;
         public static final int TopicRowRss=0x7f0c006d;
@@ -289,8 +297,8 @@ public final class R {
         public static final int layout_root=0x7f0c00b8;
         public static final int takePicture=0x7f0c0002;
         public static final int textAreaScroller=0x7f0c009b;
-        public static final int topic_menu_newpost=0x7f0c00bb;
-        public static final int topic_menu_refresh=0x7f0c00bc;
+        public static final int topic_menu_newpost=0x7f0c00c3;
+        public static final int topic_menu_refresh=0x7f0c00c4;
         public static final int tvPopupMessage=0x7f0c003f;
         public static final int tvPopupRefresh=0x7f0c0039;
         public static final int tvPopupReply=0x7f0c0037;
@@ -336,7 +344,8 @@ public final class R {
         public static final int whats_new_dialog=0x7f03001e;
     }
     public static final class menu {
-        public static final int topic_menu=0x7f0b0000;
+        public static final int thread_menu=0x7f0b0000;
+        public static final int topic_menu=0x7f0b0001;
     }
     public static final class raw {
         public static final int alert1=0x7f060000;

@@ -42,6 +42,8 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -76,6 +78,15 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setRetainInstance(true);
+		this.setHasOptionsMenu(true);
+		this.setMenuVisibility(false);
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+		inflater.inflate(R.menu.thread_menu, menu);
+
 	}
 
 	@Override
@@ -95,12 +106,11 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 		prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		login = prefs.getString("shackLogin", "");
 
-
 		if (getActivity().getIntent() != null && getActivity().getIntent().getAction() != null && getActivity().getIntent().getAction().equals(Intent.ACTION_VIEW)) {
 			final Uri uri = getActivity().getIntent().getData();
 
 			setPostID(uri.getQueryParameter("id"));
-			setStoryID(null); 
+			setStoryID(null);
 		}
 		else {
 			final Bundle extras = getActivity().getIntent().getExtras();
@@ -122,29 +132,6 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 
 	}
 
-	// @Override
-	// protected Dialog onCreateDialog(int id) {
-	// switch (id) {
-	// case 1: {
-	// final ProgressDialog dialog = new ProgressDialog(getActivity());
-	// dialog.setMessage("loading, please wait...");
-	// dialog.setTitle(null);
-	// dialog.setIndeterminate(true);
-	// dialog.setCancelable(true);
-	//
-	// dialog.setOnCancelListener(new OnCancelListener(){
-	// @Override
-	// public void onCancel(DialogInterface arg0) {
-	// getActivity().finish();
-	// }
-	// });
-	//
-	// return dialog;
-	// }
-	// }
-	// return null;
-	//
-	// }
 	public void fillSaxData(String postID) {
 		// show a progress dialog
 		// getActivity().showDialog(1);
@@ -246,6 +233,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 						}
 
 			ShowData();
+			setMenuVisibility(true);
 			UpdateWatchedPosts();
 
 		}
@@ -365,7 +353,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 			posterName.setTextColor(Color.parseColor("#0099CC"));
 
 		final TextView postDate = (TextView) getActivity().findViewById(R.id.TextViewThreadViewPostDate);
-		//postDate.setText(Helper.FormatShackDate(post.getPostDate()));
+		// postDate.setText(Helper.FormatShackDate(post.getPostDate()));
 		postDate.setText(Helper.FormatShackDateToTimePassed(post.getPostDate()) + " ago");
 
 		final String postCat = post.getPostCategory();
@@ -560,10 +548,10 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 
 	private void setPostCategoryIcon(String postCat) {
 		final TextView viewCat = (TextView) getActivity().findViewById(R.id.TextViewThreadModTag);
-		
+
 		viewCat.setVisibility(View.VISIBLE);
-		
-		if (postCat.equals("offtopic"))  {
+
+		if (postCat.equals("offtopic")) {
 			viewCat.setText("offtopic");
 			viewCat.setBackgroundColor(Color.parseColor("#444444"));
 		}
@@ -583,94 +571,48 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 			viewCat.setText("interesting");
 			viewCat.setBackgroundColor(Color.parseColor("#0099CC"));
 		}
-		else 
-			viewCat.setVisibility(View.GONE);	
-		
-		
-		
+		else
+			viewCat.setVisibility(View.GONE);
+
 	}
 
-	// menu creation
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// super.onCreateOptionsMenu(menu);
-	//
-	// menu.add(1, 0, 4, "Reply").setIcon(R.drawable.menu_reply);
-	// //menu.add(1, 1, 1, "Settings").setIcon(R.drawable.menu_settings);
-	// menu.add(1, 2, 1, "Back").setIcon(R.drawable.menu_back);
-	// menu.add(1, 3, 2, "Refresh").setIcon(R.drawable.menu_reload);
-	//
-	// SubMenu sub = menu.addSubMenu(1, 4, 3,
-	// "LOL/INF/UNF/TAG").setIcon(R.drawable.menu_lolinf);
-	// sub.add(0,8,0,"LOL Post");
-	// sub.add(0,9,1, "INF Post");
-	// sub.add(0,11,1, "UNF Post");
-	// sub.add(0,12,1, "TAG Post");
-	// sub.add(0,10,2, "Cancel");
-	//
-	// //sub = menu.addSubMenu(1, 5, 5,
-	// "ShackMarks").setIcon(R.drawable.menu_mark);
-	// //sub.add(0,6,0,"View saved ShackMarks");
-	// //sub.add(0,7,1,
-	// "Save to ShackMarks").setIcon(R.drawable.menu_shacktags);
-	//
-	// return true;
-	// }
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
-		Intent intent;
-		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		String login = "";
 		switch (item.getItemId())
 		{
-		case 0: // Launch post form
-			doReply();
-			return true;
-		case 1:
-			// show settings dialog
-			intent = new Intent();
-			intent.setClass(getActivity(), ActivityPreferences.class);
-			startActivity(intent);
-			return true;
-		case 2:
-			getActivity().finish();
-			return true;
-		case 3:
+		case R.id.ThreadRefresh:
 			this.setCurrentPosition(0);
 			this.fillSaxData(getPostID());
 			return true;
-		case 6:
-			LaunchNotesIntent();
-			return true;
-		case 7: // sub menu for ShackMarks
-			HandlerExtendedSites.AddRemoveShackMark(getActivity(), getPostID(), false);
-			return true;
-		case 8:
-			// lol post
+		case R.id.ThreadLOL:
 			login = prefs.getString("shackLogin", "");
 			HandlerExtendedSites.INFLOLPost(getActivity(), login, getPostID(), "LOL");
 			return true;
-		case 9:
-			// inf post
+		case R.id.ThreadINF:
 			login = prefs.getString("shackLogin", "");
 			HandlerExtendedSites.INFLOLPost(getActivity(), login, getPostID(), "INF");
 			return true;
-		case 10: // cancel lol/unf/tag/ing
-			return true;
-		case 11:
-			// unf post
-			login = prefs.getString("shackLogin", "");
-			HandlerExtendedSites.INFLOLPost(getActivity(), login, getPostID(), "UNF");
-			return true;
-		case 12:
-			// tag post
+		case R.id.ThreadTag:
 			login = prefs.getString("shackLogin", "");
 			HandlerExtendedSites.INFLOLPost(getActivity(), login, getPostID(), "TAG");
 			return true;
-
+		case R.id.ThreadUNF:
+			login = prefs.getString("shackLogin", "");
+			HandlerExtendedSites.INFLOLPost(getActivity(), login, getPostID(), "UNF");
+			return true;
+		case R.id.ThreadReply:
+			doReply();
+			return true;
+		case R.id.ThreadSettings:
+			Intent intent = new Intent();
+			intent.setClass(getActivity(), ActivityPreferences.class);
+			startActivity(intent);
+			return true;
+		default:
+			return false;
 		}
-		return false;
+
 	}
 
 	@Override
