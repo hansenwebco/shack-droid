@@ -46,7 +46,8 @@ public class ActivityMainMenu extends ListActivity  {
 		
 	
 		setContentView(R.layout.mainmenu);
-
+		
+		StartSMService();
 		
 		//JSONTopicView jv = new JSONTopicView(this, null, null);
 		//jv.GetParsedPosts();
@@ -57,23 +58,23 @@ public class ActivityMainMenu extends ListActivity  {
 		boolean oldMenu = prefs.getBoolean("oldSchoolMenu", false);
 		
 		if (oldMenu) {
-			menu.add(new ShackMenuItem("Latest Chatty","It gets you chicks, and diseases.",R.drawable.menu2_latestchatty));
+			menu.add(new ShackMenuItem("Operation Lime","It gets you chicks, and diseases.",R.drawable.menu2_latestchatty));
 			menu.add(new ShackMenuItem("Latest Stories", "The \"Mos Eisley\" of chatties.",R.drawable.menu2_rss));
 			menu.add(new ShackMenuItem("Shack Search","For all your vanity needs.",R.drawable.menu2_search));
 			menu.add(new ShackMenuItem("Shack Messages","Stuff too shocking for even the Shack.",R.drawable.menu2_shackmessages2));
 			menu.add(new ShackMenuItem("Shack LOLs","You are not as popular as these people.",R.drawable.menu2_lol2));//
 			menu.add(new ShackMenuItem("Settings","Hay guys, am I doing this right?",R.drawable.menu2_settings));
-			menu.add(new ShackMenuItem("Operation Lime","Lamp, Sand, LIME!"));	
+			//menu.add(new ShackMenuItem("Operation Lime","Lamp, Sand, LIME!"));	
 		}
 		else
 		{
-			menu.add(new ShackMenuItem("Latest Chatty","It gets you chicks, and diseases."));
+			menu.add(new ShackMenuItem("Operation Lime","It gets you chicks, and diseases."));
 			menu.add(new ShackMenuItem("Latest Stories", "The \"Mos Eisley\" of chatties."));
 			menu.add(new ShackMenuItem("Shack Search","For all your vanity needs."));
 			menu.add(new ShackMenuItem("Shack Messages","Stuff too shocking for even the Shack."));
 			menu.add(new ShackMenuItem("Shack LOLs","You are not as popular as these people."));//
 			menu.add(new ShackMenuItem("Settings","Hay guys, am I doing this right?"));
-			menu.add(new ShackMenuItem("Operation Lime","Lamp, Sand, LIME!"));		
+			//menu.add(new ShackMenuItem("Operation Lime","Lamp, Sand, LIME!"));		
 		}
 
 		AdapterMainMenu mm = new AdapterMainMenu(this,R.layout.mainmenu_row, menu);
@@ -120,7 +121,20 @@ public class ActivityMainMenu extends ListActivity  {
 			}
 		}
 	}
-
+	protected void StartSMService()
+	{
+		// start the service that checks for new shack messages
+		if (Helper.CheckAllowSMService(this)) {
+			Log.d("ShackDroid", "Starting SM Alarm");
+			Helper.setSMAlarm(getApplicationContext());
+			//startService(new Intent(ActivitySplashScreen.this, ActivityShackDroidServices.class));
+		}
+		else {
+			Log.d("ShackDroid", "Stopping SM Alarm");
+			Helper.clearSMAlarm(getApplicationContext());
+			//stopService(new Intent(ActivitySplashScreen.this, ActivityShackDroidServices.class));
+		}
+	}
 	// TODO: this is copied in ActivityPreferences, need to move to it's own class
 	private void CheckForUpdate(boolean force) {
 		// have we seen this update?
@@ -175,7 +189,9 @@ public class ActivityMainMenu extends ListActivity  {
 		case 0: // LatestChatty
 		{
 			ShackDroidStats.AddViewedChatty(this);
-			intent.setClass(this, ActivityTopicView.class);
+//			intent.setClass(this, ActivityTopicView.class);
+//			break;
+			intent.setClass(this,FragmentActivityTopic.class);
 			break;
 		}
 		case 1: // RSS

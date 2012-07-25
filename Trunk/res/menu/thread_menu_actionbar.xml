@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <item android:id="@+id/ThreadLOLThread" android:title="LOLs" android:showAsAction="ifRoom|withText" android:icon="@drawable/ic_action_rating_good">
+        <menu>
+            <item android:id="@+id/ThreadLOL" android:title="LOL" />
+            <item android:id="@+id/ThreadINF" android:title="INF" />
+            <item android:id="@+id/ThreadUNF" android:title="UNF" />
+            <item android:id="@+id/ThreadTag" android:title="TAG" />
+        </menu>
+    </item><item android:id="@+id/ThreadReply" android:title="Reply" android:showAsAction="ifRoom|withText" android:icon="@drawable/ic_action_reply"></item><item android:id="@+id/ThreadRefresh" android:title="Refresh Thread" android:icon="@drawable/ic_action_refresh" android:showAsAction="always"></item>
+    <item android:id="@+id/ThreadSettings" android:title="Settings" android:icon="@drawable/ic_action_settings" android:enabled="false"></item>
+    
+    
+
+</menu>

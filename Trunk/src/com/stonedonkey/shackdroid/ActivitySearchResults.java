@@ -129,7 +129,7 @@ public class ActivitySearchResults extends ListActivity implements Runnable {
 		String storyID = search.getStoryID();
 		
 		Intent intent = new Intent();
-		intent.setClass(this, ActivityThreadedView.class);
+		intent.setClass(this, FragmentActivityThread.class);
 		intent.putExtra("postID", postID); // the value must be a string
 		intent.putExtra("storyID", storyID);
 		startActivity(intent);

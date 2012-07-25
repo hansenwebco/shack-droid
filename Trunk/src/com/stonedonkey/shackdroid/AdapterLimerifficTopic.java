@@ -98,7 +98,7 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 			holder.newPosts = (TextView) convertView.findViewById(R.id.TextViewLimeNewPosts);
 			holder.postText = (TextView) convertView.findViewById(R.id.TextViewLimePostText);
 			holder.viewCat = (TextView) convertView.findViewById(R.id.TextViewLimeModTag);
-//			holder.topicRow = (RelativeLayout) convertView.findViewById(R.id.TopicRow);
+			holder.topicRow = (RelativeLayout) convertView.findViewById(R.id.LimeTopicRow);
 //			holder.postTimer = (ImageView) convertView.findViewById(R.id.ImageViewTopicTimer);
 
 //			holder.posterName.setTypeface(face);
@@ -185,12 +185,12 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 		holder.postText.setText(preview);
 
 
-//		if (showAuthor.equalsIgnoreCase("topic") && post.getIsAuthorInThread()) {
-//			final Drawable d = r.getDrawable(R.drawable.background_gradient_blue);
-//			holder.topicRow.setBackgroundDrawable(d);
-//		}
-//		else
-//			holder.topicRow.setBackgroundDrawable(null);
+		if (showAuthor.equalsIgnoreCase("topic") && post.getIsAuthorInThread()) {
+			final Drawable d = r.getDrawable(R.drawable.background_gradient_blue);
+			holder.topicRow.setBackgroundDrawable(d);
+		}
+		else
+			holder.topicRow.setBackgroundDrawable(null);
 		
 		
 		// TODO: clean this up a little / also replicated in ShackDroidThread ick
