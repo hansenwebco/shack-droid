@@ -56,7 +56,7 @@ public class ActivityLOL extends ListActivity {
 		super.onListItemClick(l, v, position, id);
 		
 		Intent intent = new Intent();
-		intent.setClass(this, ActivityThreadedView.class);
+		intent.setClass(this, FragmentActivityThread.class);
 		intent.putExtra("postID", String.valueOf(id)); // the value must be a string
 		startActivity(intent);
 	} 

@@ -85,7 +85,11 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-		inflater.inflate(R.menu.thread_menu, menu);
+		FragmentTopicView topicView = (FragmentTopicView) getFragmentManager().findFragmentById(R.id.MixedTopics);
+		if (topicView ==null)
+			inflater.inflate(R.menu.thread_menu_actionbar, menu);	
+		else
+			inflater.inflate(R.menu.thread_menu, menu);
 
 	}
 

@@ -93,7 +93,7 @@ public class AdapterThreadedView extends BaseAdapter {
 				holder.posterName.setTextColor(Color.parseColor("#ffba00"));
 			}
 			if (position == selectedRow)
-				holder.posterName.setBackgroundColor(Color.parseColor("#274FD3"));
+				holder.posterName.setBackgroundColor(Color.parseColor("#33B5E5"));
 			else
 				holder.posterName.setBackgroundColor(Color.TRANSPARENT);
 		}
@@ -101,7 +101,7 @@ public class AdapterThreadedView extends BaseAdapter {
 		if (holder.threadPreview != null) {
 			// chazums
 			// Now just moves the text box to the right instead of padding text.
-			postIndent = 10 * post.getIndent(); // avoid multiple lookups
+			postIndent = 5 + (10 * post.getIndent()); // avoid multiple lookups
 
 			holder.threadPreview.setPadding(postIndent, holder.threadPreview.getPaddingTop(), holder.threadPreview.getPaddingBottom(), holder.threadPreview.getPaddingRight());
 
@@ -137,7 +137,7 @@ public class AdapterThreadedView extends BaseAdapter {
 			}
 
 			if (position == selectedRow)
-				holder.threadPreview.setBackgroundColor(Color.parseColor("#274FD3"));
+				holder.threadPreview.setBackgroundColor(Color.parseColor("#33B5E5"));
 			else
 				holder.threadPreview.setBackgroundColor(Color.TRANSPARENT);
 
