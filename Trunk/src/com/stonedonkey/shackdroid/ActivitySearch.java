@@ -81,7 +81,7 @@ public class ActivitySearch extends Activity {
 		EditText parent = (EditText)findViewById(R.id.EditTextParentAuthor);
 				
 		Intent intent = new Intent();
-		intent.setClass(this, ActivitySearchResults.class);
+		intent.setClass(this, FragmentActivitySearchResults.class);
 		intent.putExtra("searchTerm" , search.getText().toString()); 
 		intent.putExtra("author" , author.getText().toString());
 		intent.putExtra("parentAuthor" , parent.getText().toString());

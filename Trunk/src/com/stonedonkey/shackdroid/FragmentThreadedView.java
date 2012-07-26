@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.text.ClipboardManager;
 import android.text.Editable;
@@ -85,12 +86,11 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-		FragmentTopicView topicView = (FragmentTopicView) getFragmentManager().findFragmentById(R.id.MixedTopics);
+		Fragment topicView = (Fragment) getFragmentManager().findFragmentById(R.id.MixedTopics);
 		if (topicView ==null)
 			inflater.inflate(R.menu.thread_menu_actionbar, menu);	
 		else
 			inflater.inflate(R.menu.thread_menu, menu);
-
 	}
 
 	@Override
@@ -120,12 +120,12 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 			final Bundle extras = getActivity().getIntent().getExtras();
 			if (extras == null)
 				return;
-
+			
 			setPostID(extras.getString("postID"));
 			setStoryID(extras.getString("storyID"));
 			setIsNWS(extras.getBoolean("isNWS"));
 		}
-		if (savedInstanceState == null) {
+		if (savedInstanceState == null && getPostID() != null) {
 			try {
 				fillSaxData(getPostID());
 			}

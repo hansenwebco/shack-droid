@@ -168,10 +168,11 @@ public class FragmentTopicView extends ListFragment implements ShackGestureEvent
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 
-		FragmentThreadedView threadView = (FragmentThreadedView) getFragmentManager().findFragmentById(R.id.MixedThreads);
+		
 
 		final String cat = posts.get(position).getPostCategory();
-
+		
+		FragmentThreadedView threadView = (FragmentThreadedView) getFragmentManager().findFragmentById(R.id.MixedThreads);
 		if (threadView == null) {
 			Intent intent = new Intent(getActivity(), FragmentActivityThread.class);
 
