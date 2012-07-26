@@ -32,7 +32,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.AbsListView.OnScrollListener;
 
-public class FragmentSearchResults extends ListFragment  {
+public class FragmentSearchResults extends ListFragment {
 	private ProgressDialog pd;
 	private ArrayList<ShackSearch> searchResults;
 	private String searchTerm = "";
@@ -43,7 +43,7 @@ public class FragmentSearchResults extends ListFragment  {
 	private int currentPage = 1;
 	private AdapterSearchResults tva;
 	private Boolean threadLoaded = true;
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -53,11 +53,10 @@ public class FragmentSearchResults extends ListFragment  {
 		searchTerm = extras.getString("searchTerm");
 		author = extras.getString("author");
 		parentAuthor = extras.getString("parentAuthor");
-			
 
 		fillSaxData();
-		
-		ListView lv= getListView();
+
+		ListView lv = getListView();
 		lv.setOnScrollListener(new OnScrollListener() {
 
 			@Override
@@ -79,7 +78,7 @@ public class FragmentSearchResults extends ListFragment  {
 			}
 
 		});
-		
+
 		RotateAnimation anim = new RotateAnimation(0f, 359f, RotateAnimation.RELATIVE_TO_SELF, 0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f);
 		anim.setInterpolator(new LinearInterpolator());
 		anim.setRepeatCount(Animation.INFINITE);
@@ -88,18 +87,18 @@ public class FragmentSearchResults extends ListFragment  {
 		ImageView loader = (ImageView) getView().findViewById(R.id.ImageViewTopicLoader);
 		loader.setAnimation(anim);
 	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		return inflater.inflate(R.layout.searchresults, null);
 	}
+
 	private void fillSaxData() {
 		GetSearchResultsAsyncTask chatty = new GetSearchResultsAsyncTask(getActivity());
 		chatty.execute();
 
 	}
-
-
 
 	private Handler progressBarHandler = new Handler() {
 		@Override
@@ -113,28 +112,25 @@ public class FragmentSearchResults extends ListFragment  {
 
 			}
 
-			//ShowData();
+			// ShowData();
 		}
 	};
-	
 
 	private void ShowData() {
 
 		getActivity().setTitle("Search Results - " + currentPage + " of " + this.totalPages + " - " + this.totalResults + " results.");
 
-		
 		if (tva == null) {
 			tva = new AdapterSearchResults(getActivity(), searchResults, R.layout.searchresults_row);
 			setListAdapter(tva);
 		}
-		else
-		{
+		else {
 			tva.SetPosts(searchResults);
 			tva.notifyDataSetChanged();
 		}
-		
+
 		threadLoaded = true;
-		
+
 	}
 
 	@Override
@@ -180,7 +176,7 @@ public class FragmentSearchResults extends ListFragment  {
 			super.onPreExecute();
 
 			threadLoaded = false;
-			
+
 			if (currentPage == 1)
 				dialog = ProgressDialog.show(getActivity(), null, "Loading Search Results", true, true);
 			else
@@ -220,7 +216,7 @@ public class FragmentSearchResults extends ListFragment  {
 					searchResults.addAll(searchResults.size(), newPosts);
 
 				}
-	
+
 				totalPages = saxHandler.getTotalPages();
 				totalResults = saxHandler.getTotalResults();
 

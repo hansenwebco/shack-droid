@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <fragment
+        android:id="@+id/MixedTopics"
+        android:layout_width="400dip"
+        android:layout_height="fill_parent"
+        class="com.stonedonkey.shackdroid.FragmentSearchResults" >
+    </fragment>
+
+    <View
+        android:layout_width="1dip"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="2dip"
+        android:layout_marginRight="2dip"
+        android:background="#33B5E5" >
+    </View>
+
+    <fragment
+        android:id="@+id/MixedThreads"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        class="com.stonedonkey.shackdroid.FragmentThreadedView" >
+    </fragment>
+
+</LinearLayout>
