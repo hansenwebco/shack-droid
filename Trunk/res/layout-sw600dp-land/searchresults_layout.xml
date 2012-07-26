@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/LinearLayoutMixed"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="horizontal" >
+    android:layout_height="fill_parent" >
 
     <fragment
         android:id="@+id/MixedTopics"
         android:layout_width="400dip"
         android:layout_height="fill_parent"
-        class="com.stonedonkey.shackdroid.FragmentTopicView" >
+        class="com.stonedonkey.shackdroid.FragmentSearchResults" >
     </fragment>
 
     <View

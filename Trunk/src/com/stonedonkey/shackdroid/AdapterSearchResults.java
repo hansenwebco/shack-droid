@@ -1,6 +1,7 @@
 package com.stonedonkey.shackdroid;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -33,7 +34,10 @@ public class AdapterSearchResults  extends BaseAdapter {
 		face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
 	}
 	
-	
+	public void SetPosts(List<ShackSearch> searchItems)
+	{
+		searchItems = searchItems;
+	}
 	@Override
 	public int getCount() {
 		return searchItems.size();
