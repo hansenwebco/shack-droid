@@ -27,16 +27,12 @@ public class AdapterSearchResults  extends BaseAdapter {
 		this.context = context;
 		this.searchItems = rssItems;
 		this.rowResouceID = rowResouceID;
-		
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
-				
-		face = Typeface.createFromAsset(context.getAssets(), "fonts/arial.ttf");
+
 	}
 	
-	public void SetPosts(List<ShackSearch> searchItems)
+	public void SetPosts(ArrayList<ShackSearch> searchItems)
 	{
-		searchItems = searchItems;
+		this.searchItems = searchItems;
 	}
 	@Override
 	public int getCount() {
@@ -62,20 +58,41 @@ public class AdapterSearchResults  extends BaseAdapter {
 			
 		View v = inflate.inflate(rowResouceID,parent,false);
 
-		TextView auth = (TextView)v.findViewById(R.id.TextViewSearchAuthor);
-		auth.setText(searchItem.getAuthor());
-		auth.setTypeface(face);
-		
-		TextView dp =  (TextView)v.findViewById(R.id.TextViewSearchDatePosted);
-		dp.setText(searchItem.getDatePosted());
-		dp.setTypeface(face);
-		
-		TextView rt = (TextView)v.findViewById(R.id.TextViewSearchBody);
+		TextView postText = (TextView)v.findViewById(R.id.TextViewLimePostText);
 		String result = searchItem.getResultText();
-		rt.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 		result = result.replaceAll("(\r\n|\r|\n|\n\r)", "");
-		rt.setText(result);
-		rt.setTypeface(face);
+		postText.setText(result);
+		
+		TextView poster = (TextView)v.findViewById(R.id.TextViewLimeAuthor);
+		poster.setText(searchItem.getAuthor());
+		
+		TextView datePosted = (TextView)v.findViewById(R.id.TextViewLimePostDate);
+		String timePassed = Helper.FormatShackDateToTimePassed(searchItem.getDatePosted());
+		datePosted.setText(timePassed);
+		
+		TextView tag = (TextView)v.findViewById(R.id.TextViewLimeModTag);
+		tag.setVisibility(View.GONE);
+		
+		TextView newPosts = (TextView)v.findViewById(R.id.TextViewLimeNewPosts);
+		newPosts.setVisibility(View.GONE);
+		
+		TextView posts = (TextView)v.findViewById(R.id.TextViewLimePosts);
+		posts.setVisibility(View.GONE);
+		
+		
+//		TextView auth = (TextView)v.findViewById(R.id.TextViewSearchAuthor);
+//		auth.setText(searchItem.getAuthor());
+//
+//		
+//		TextView dp =  (TextView)v.findViewById(R.id.TextViewSearchDatePosted);
+//		dp.setText(searchItem.getDatePosted());
+//
+//		
+//		TextView rt = (TextView)v.findViewById(R.id.TextViewSearchBody);
+//		String result = searchItem.getResultText();
+//		result = result.replaceAll("(\r\n|\r|\n|\n\r)", "");
+//		rt.setText(result);
+	
 		
 		
 		return v;

@@ -125,7 +125,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 			setStoryID(extras.getString("storyID"));
 			setIsNWS(extras.getBoolean("isNWS"));
 		}
-		if (savedInstanceState == null && getPostID() != null) {
+		if (posts == null) {
 			try {
 				fillSaxData(getPostID());
 			}
