@@ -168,10 +168,8 @@ public class FragmentTopicView extends ListFragment implements ShackGestureEvent
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 
-		
-
 		final String cat = posts.get(position).getPostCategory();
-		
+
 		FragmentThreadedView threadView = (FragmentThreadedView) getFragmentManager().findFragmentById(R.id.MixedThreads);
 		if (threadView == null) {
 			Intent intent = new Intent(getActivity(), FragmentActivityThread.class);
@@ -209,7 +207,7 @@ public class FragmentTopicView extends ListFragment implements ShackGestureEvent
 
 			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 			final String login = prefs.getString("shackLogin", "");
-			final int fontSize = Integer.parseInt(prefs.getString("fontSize", "12"));
+			
 
 			try {
 				postCounts = GetPostCache();
@@ -221,7 +219,7 @@ public class FragmentTopicView extends ListFragment implements ShackGestureEvent
 				tempHash = new Hashtable<String, String>(postCounts);
 
 			if (tva == null) {
-				tva = new AdapterLimerifficTopic(getActivity(), R.layout.lime_topic_row, posts, login, fontSize, tempHash);
+				tva = new AdapterLimerifficTopic(getActivity(), R.layout.lime_topic_row, posts, login, tempHash);
 				setListAdapter(tva);
 			}
 			else {
@@ -402,12 +400,13 @@ public class FragmentTopicView extends ListFragment implements ShackGestureEvent
 			ShowData();
 
 			SetLoaderVisibility(View.GONE);
-
+			
 			try {
+			if (dialog.isShowing())
 				dialog.dismiss();
 			}
-			catch (Exception e) {
-			}
+			catch(Exception ex) { } 
+			
 
 		}
 

@@ -26,7 +26,6 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 	private final int rowResouceID;
 	private final String shackLogin;
 	private final Typeface face;
-	private final int fontSize;
 	private final Hashtable<String, String> postCache;
 	private final String showAuthor;
 	private final Resources r;
@@ -34,11 +33,10 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 
 	LayoutInflater inflate;// = LayoutInflater.from(context);
 
-	public AdapterLimerifficTopic(Context context, int rowResouceID, List<ShackPost> topicList, String shackLogin, int fontSize, Hashtable<String, String> postCache) {
+	public AdapterLimerifficTopic(Context context, int rowResouceID, List<ShackPost> topicList, String shackLogin, Hashtable<String, String> postCache) {
 		this.topicList = topicList;
 		this.rowResouceID = rowResouceID;
 		this.shackLogin = shackLogin;
-		this.fontSize = fontSize;
 		this.postCache = postCache;
 		this.r = context.getResources();
 
@@ -105,7 +103,6 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 //			holder.datePosted.setTypeface(face);
 //			holder.replyCount.setTypeface(face);
 //			holder.newPosts.setTypeface(face);
-			holder.postText.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
 //			holder.postText.setTypeface(face);
 
 			convertView.setTag(holder);
