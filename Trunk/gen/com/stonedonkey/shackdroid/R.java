@@ -192,6 +192,7 @@ public final class R {
         public static final int TableLayoutShackTags=0x7f0c0048;
         public static final int TextViewAIM=0x7f0c0069;
         public static final int TextViewAge=0x7f0c0065;
+        public static final int TextViewAgo=0x7f0c000d;
         public static final int TextViewAuthor=0x7f0c0086;
         public static final int TextViewCheckedForNewVersion=0x7f0c0092;
         public static final int TextViewDatePosted=0x7f0c00a7;
@@ -208,7 +209,7 @@ public final class R {
         public static final int TextViewLimeAuthor=0x7f0c000b;
         public static final int TextViewLimeModTag=0x7f0c0009;
         public static final int TextViewLimeNewPosts=0x7f0c000f;
-        public static final int TextViewLimePostDate=0x7f0c000d;
+        public static final int TextViewLimePostDate=0x7f0c000c;
         public static final int TextViewLimePostText=0x7f0c000a;
         public static final int TextViewLimePosts=0x7f0c000e;
         public static final int TextViewLocation=0x7f0c0067;
@@ -227,7 +228,6 @@ public final class R {
         public static final int TextViewPost=0x7f0c00a1;
         public static final int TextViewPostError=0x7f0c0047;
         public static final int TextViewPostText=0x7f0c00a9;
-        public static final int TextViewPosted=0x7f0c000c;
         public static final int TextViewPosterName=0x7f0c00a5;
         public static final int TextViewPostsMade=0x7f0c008b;
         public static final int TextViewPostsPerDay=0x7f0c005f;

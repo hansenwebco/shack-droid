@@ -121,7 +121,7 @@ public class FragmentSearchResults extends ListFragment {
 		getActivity().setTitle("Search Results - " + currentPage + " of " + this.totalPages + " - " + this.totalResults + " results.");
 
 		if (tva == null) {
-			tva = new AdapterSearchResults(getActivity(), searchResults, R.layout.searchresults_row);
+			tva = new AdapterSearchResults(getActivity(), searchResults, R.layout.lime_topic_row);
 			setListAdapter(tva);
 		}
 		else {

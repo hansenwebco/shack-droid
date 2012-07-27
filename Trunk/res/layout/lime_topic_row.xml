@@ -32,28 +32,29 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/TextViewLimePostText"
         android:paddingBottom="10dip"
+        android:paddingRight="5dip"
         android:paddingLeft="10dip"
         android:textColor="#0099CC" />
 
-    <TextView
-        android:id="@+id/TextViewPosted"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/TextViewLimePostText"
-        android:layout_toRightOf="@+id/TextViewLimeAuthor"
-        android:paddingBottom="10dip"
-        android:text=" posted " />
+
 
     <TextView
         android:id="@+id/TextViewLimePostDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/TextViewLimePostText"
-        android:layout_toRightOf="@+id/TextViewPosted"
+        android:layout_toRightOf="@+id/TextViewLimeAuthor"
         android:paddingBottom="10dip"
-        android:paddingRight="10dip"
         android:textColor="#FF8800" />
 
+        <TextView
+        android:id="@+id/TextViewAgo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TextViewLimePostText"
+        android:layout_toRightOf="@+id/TextViewLimePostDate"
+        android:paddingBottom="10dip"
+        android:text=" ago" />
     
     
     <TextView
