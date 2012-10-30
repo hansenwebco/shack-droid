@@ -469,7 +469,8 @@ public class ActivityPost extends Activity implements Runnable {
 				{
 					Intent intent = new Intent();
 					intent.putExtra("StoryID",storyID );
-					intent.setClass(this, ActivityTopicView.class);
+					intent.setClass(this, FragmentActivityTopic.class);
+					//intent.setClass(this, ActivityTopicView.class);
 					startActivity(intent);
 				}
 				progressBarHandler.sendEmptyMessage(0);

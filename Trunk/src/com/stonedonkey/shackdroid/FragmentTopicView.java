@@ -153,8 +153,8 @@ public class FragmentTopicView extends ListFragment implements ShackGestureEvent
 		case R.id.topic_menu_refresh: // refresh
 			currentPage = 1;
 			// get the list of topics
-			posts.clear();
 			tva = null;
+			posts.clear();
 			GetChattyAsyncTask chatty = new GetChattyAsyncTask(getActivity());
 			chatty.execute();
 			return true;
