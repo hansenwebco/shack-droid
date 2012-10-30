@@ -86,6 +86,9 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
+		if (getFragmentManager() == null)
+			return;
+		
 		Fragment topicView = (Fragment) getFragmentManager().findFragmentById(R.id.MixedTopics);
 		if (topicView ==null)
 			inflater.inflate(R.menu.thread_menu_actionbar, menu);	
@@ -139,6 +142,7 @@ public class FragmentThreadedView extends ListFragment implements Runnable, Shac
 	public void fillSaxData(String postID) {
 		// show a progress dialog
 		// getActivity().showDialog(1);
+		if (dialog != null)
 		dialog = ProgressDialog.show(getActivity(), null, "Loading thread...", true, true);
 
 		// use the class run() method to do work

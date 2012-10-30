@@ -76,7 +76,8 @@
                 android:layout_height="fill_parent"
                 android:divider="#333333"
                 android:dividerHeight="1dip"
-                android:textColor="#FFFFFF" >
+                android:textColor="#FFFFFF"
+                android:background="#000000" >
             </ListView>
         </RelativeLayout>
     </SlidingDrawer>
