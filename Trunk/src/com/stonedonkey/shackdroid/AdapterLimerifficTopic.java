@@ -85,7 +85,11 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 		// TextView tmp;
 		// final View v;
 		ViewHolder holder;
-		final ShackPost post = topicList.get(position);
+		
+		if (position > topicList.size())
+			return convertView;
+		
+		 ShackPost post = topicList.get(position);
 
 		if (convertView == null) {
 			convertView = inflate.inflate(rowResouceID, parent, false);
