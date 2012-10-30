@@ -117,12 +117,12 @@ public class ActivityMainMenu extends ListActivity {
 		// start the service that checks for new shack messages
 		if (Helper.CheckAllowSMService(this)) {
 			Log.d("ShackDroid", "Starting SM Alarm");
-			Helper.setSMAlarm(getApplicationContext());
+			Helper.setSMAlarm(getBaseContext());
 			// startService(new Intent(ActivitySplashScreen.this, ActivityShackDroidServices.class));
 		}
 		else {
 			Log.d("ShackDroid", "Stopping SM Alarm");
-			Helper.clearSMAlarm(getApplicationContext());
+			Helper.clearSMAlarm(getBaseContext());
 			// stopService(new Intent(ActivitySplashScreen.this, ActivityShackDroidServices.class));
 		}
 	}
