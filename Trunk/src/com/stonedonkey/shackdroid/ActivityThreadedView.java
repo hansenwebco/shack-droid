@@ -250,8 +250,13 @@ public class ActivityThreadedView extends ListActivity implements Runnable, Shac
 	}
 
 	private void fillSaxData(String postID) {
+
+		if (postID == null)
+			return;
+		
 		// show a progress dialog
 		showDialog(1);
+
 
 		// use the class run() method to do work
 		final Thread thread = new Thread(this);
