@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -78,6 +79,7 @@ public class AdapterLimerifficTopic extends BaseAdapter {
 		RelativeLayout topicRow;
 		ImageView postTimer;
 	}
+	
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
