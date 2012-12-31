@@ -54,7 +54,7 @@ public class ActivityMainMenu extends ListActivity {
 		boolean oldMenu = prefs.getBoolean("oldSchoolMenu", false);
 
 		if (oldMenu) {
-			menu.add(new ShackMenuItem("Operation Lime", "It gets you chicks, and diseases.", R.drawable.menu2_latestchatty));
+			menu.add(new ShackMenuItem("Chatty", "It gets you chicks, and diseases.", R.drawable.menu2_latestchatty));
 			menu.add(new ShackMenuItem("Shack Search", "For all your vanity needs.", R.drawable.menu2_search));
 			menu.add(new ShackMenuItem("Latest Stories", "The \"Mos Eisley\" of chatties.", R.drawable.menu2_rss));
 			menu.add(new ShackMenuItem("Shack Messages", "Stuff too shocking for even the Shack.", R.drawable.menu2_shackmessages2));
@@ -63,7 +63,7 @@ public class ActivityMainMenu extends ListActivity {
 			// menu.add(new ShackMenuItem("Operation Lime","Lamp, Sand, LIME!"));
 		}
 		else {
-			menu.add(new ShackMenuItem("Operation Lime", "It gets you chicks, and diseases."));
+			menu.add(new ShackMenuItem("Chatty", "It gets you chicks, and diseases."));
 			menu.add(new ShackMenuItem("Shack Search", "For all your vanity needs."));
 			menu.add(new ShackMenuItem("Latest Stories", "The \"Mos Eisley\" of chatties."));
 			menu.add(new ShackMenuItem("Shack Messages", "Stuff too shocking for even the Shack."));
